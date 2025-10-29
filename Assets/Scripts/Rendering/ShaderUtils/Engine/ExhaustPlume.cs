@@ -26,7 +26,7 @@ public class ExhaustPlume : MonoBehaviour
         if(_lastPowerValue == value) return;
 
         _lastPowerValue = value;
-        _sr.GetPropertyBlock(_matBlock);
+        //_sr.GetPropertyBlock(_matBlock);
         _matBlock.SetFloat(_masterThrustID, value);
         _sr.SetPropertyBlock(_matBlock);
     }

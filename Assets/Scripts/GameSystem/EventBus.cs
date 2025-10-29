@@ -1,3 +1,4 @@
+using Enviroment;
 using Player;
 using System;
 using UnityEngine;
@@ -11,8 +12,10 @@ namespace GameSystem
         public static Action<MainEngine> UpdateMainEngine { get; set; }
         public static Action<SideEngines> UpdateSideEngines { get; set; }
         public static Action<DampingModule> UpdateDampingModule { get; set; }
-
         public static Action ToggleDamper { get; set; }
+
+        public static Action<TwinkleStar> DestroyStar { get; set; }
+        public static Func<string, TwinkleStar> GetStar { get; set; }
     }
 }
 

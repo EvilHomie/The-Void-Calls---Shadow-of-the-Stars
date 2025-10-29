@@ -15,6 +15,8 @@ namespace GameSystem
         private IPlayerInput _input;
         private Vector2 _mouseDirection;
         private Vector2 _inputValue;
+        private Camera _camera;
+        private PlayerShipData _playerShipData;
         private Rigidbody2D _shipRB;
         private Transform _shipTransform;
         private ShipMovementData _movementData;
@@ -28,8 +30,6 @@ namespace GameSystem
         private float _rotateSpeed;
 
         private float _targetSpeed;
-        private float _prevDirectSpeed;
-        private float _prevSideSpeed;
 
         private bool _inertiaDampingLastState;
         private float _lastThrottleWithDamping;
@@ -38,8 +38,14 @@ namespace GameSystem
         public void Construct(IPlayerInput playerInput, PlayerShipData ship, Camera camera)
         {
             _input = playerInput;
-            _input.Init(ship, camera);
-            OnUpdateShip(ship);
+            _playerShipData = ship;
+            _camera = camera;
+        }
+
+        protected override void Init()
+        {
+            _input.Init(_playerShipData, _camera);
+            OnUpdateShip(_playerShipData);
         }
 
         protected override void Subscribe()
@@ -272,7 +278,7 @@ namespace GameSystem
                         _movementData.SideAcceleration = 0;
                         return;
                     }
-                   
+
                     _movementData.SideAcceleration = Mathf.Sign(-sideVel);
                 }
 
@@ -303,6 +309,8 @@ namespace GameSystem
             }
         }
 
+
+
         //private void Update() //Тестовая часть 
         //{
         //    if (Keyboard.current.qKey.wasPressedThisFrame)
@@ -327,247 +335,3 @@ namespace GameSystem
         //}
     }
 }
-
-/* Старая логика (вдруг пригодится)
- //// регулятор мощностей двигателя
-        //private void UpdatePower(in float input, EngineBase engine, in float fixedDT)
-        //{
-        //    if (input != 0)
-        //    {
-        //        float targetSign = Mathf.Sign(input);
-
-        //        if (Mathf.Sign(engine.PowerValue) == targetSign || engine.PowerValue == 0f)
-        //        {
-        //            // направление совпадает → обычный разгон
-        //            engine.PowerValue += targetSign * fixedDT / engine.FullPowerTime;
-        //        }
-        //        else
-        //        {
-        //            // направление противоположное → ускоренное торможение
-        //            // скорость сброса = DisableTime + сила в противоположном направлении
-        //            float brakeRate = fixedDT / engine.DisableTime + fixedDT / engine.FullPowerTime;
-        //            engine.PowerValue = Mathf.MoveTowards(engine.PowerValue, 0f, brakeRate);
-        //        }
-
-        //        engine.PowerValue = Mathf.Clamp(engine.PowerValue, -1f, 1f);
-        //    }
-        //    else
-        //    {
-        //        // кнопка отпущена → сброс к 0 через DisableTime
-        //        engine.PowerValue = Mathf.MoveTowards(engine.PowerValue, 0f, fixedDT / engine.DisableTime);
-        //    }
-        //}
-
-
-логика приложения сил с учетом linearDamping
-private const float _dampMod = 10; // модификатор набора скорости при dampinge меньше 1
-private void ApplyMoveForces()
-        {
-            Vector2 localForce = Vector2.zero;
-
-            // --- Главный двигатель ---
-            if (_inputDirection.y != 0)
-            {
-                float forwardPower = _shipMovementData.ForvardPowerValue;
-                float mainPower = forwardPower > 0
-              ? forwardPower * _mainEngine.ForwardForce
-              : forwardPower * _mainEngine.ReverseForce;
-
-                if (_shipRB.linearDamping >= 1f)
-                {
-                    mainPower *= _shipRB.linearDamping; // просто усиливаем силу
-                }
-                else if (_shipRB.linearDamping > 0f && mainPower != 0)
-                {
-                    float t = Mathf.Abs(_shipRB.linearVelocity.y) / Mathf.Abs(mainPower);
-                    float modifier = Mathf.Lerp(_dampMod, 1f, t);
-                    mainPower *= modifier * _shipRB.linearDamping; // адаптивный модификатор
-                }
-                // else: linearDamping == 0 → mainForce напрямую
-
-                localForce += Vector2Up * mainPower;
-            }
-
-            // --- Боковые ускорители ---
-            if (_inputDirection.x != 0)
-            {
-                float sideForce = _shipMovementData.SidePowerValue * _sideEngines.SideForce;
-
-                // модификатор для боковых
-                if (_shipRB.linearDamping >= 1f)
-                {
-                    sideForce *= _shipRB.linearDamping;
-                }
-                else if (_shipRB.linearDamping > 0f && sideForce != 0)
-                {
-                    float t = Mathf.Abs(_shipRB.linearVelocity.x) / Mathf.Abs(sideForce);
-                    float modifier = Mathf.Lerp(_dampMod, 1f, t);
-                    sideForce *= modifier * _shipRB.linearDamping;
-                }
-                // else: linearDamping == 0 → sideForce напрямую
-
-                localForce += Vector2Right * sideForce;
-            }
-
-
-            _shipRB.AddRelativeForce(localForce, ForceMode2D.Force);
-        }
-
-private void ApplyThrust(in Vector2 input, in float fixedDT, ref float forwardVel, ref float sideVel)
-        {
-            // --- Главный двигатель ---
-            if (input.y != 0)
-            {
-                float desiredAccel = (input.y > 0f
-                    ? _relativeForwardForce
-                    : -_relativeReverseForce)
-                    * fixedDT / _mainEngine.FullPowerTime;
-
-                forwardVel += desiredAccel;
-            }
-
-            // --- Боковые ускорители ---
-            if (input.x != 0)
-            {
-                float desiredAccel = (input.x > 0f
-                    ? _relativeSideForce
-                    : -_relativeSideForce)
-                    * fixedDT / _sideEngines.FullPowerTime;
-
-                sideVel += desiredAccel;
-            }
-        }
-
-логика движения (основной двигатель) как в X4 до рефактора
-private void ApplyMainEngineThrust(float fixedDT, ref float forwardVel)
-        {
-
-            if (_movementData.InertiaDamping)
-            {
-                float speedDiff = _targetSpeed - forwardVel;
-
-                if (speedDiff == 0) return;
-
-                float absSpeedDiff = Mathf.Abs(speedDiff);
-                float targetSpeedDir = Mathf.Sign(speedDiff);
-
-                float baseAccelStep = (targetSpeedDir > 0f
-                    ? _directAcceleration
-                    : _reverseAcceleration)
-                    * fixedDT;
-
-                // логика сглаживания ускорения при скорости близкой к желаемой
-                float smoothAccelStep = SmoothAcceleration(baseAccelStep, absSpeedDiff);
-                forwardVel = Mathf.MoveTowards(forwardVel, _targetSpeed, smoothAccelStep);
-
-                // логика записи данных о движении 
-                float currentAcceleration = forwardVel - _prevSpeed;
-                float accelerationRatio = currentAcceleration / baseAccelStep;
-
-
-                if (_targetSpeed != 0f && Mathf.Abs(accelerationRatio) < _stabilizationSpeedMod)
-                {
-                    _movementData.ForwardAccelerationMod = _stabilizationSpeedMod * targetSpeedDir;
-                }
-                else
-                {
-                    _movementData.ForwardAccelerationMod = accelerationRatio;
-                }
-
-                _prevSpeed = forwardVel;
-                return;
-            }
-
-            if (_movementData.Throttle == 0)
-            {
-                _movementData.ForwardAccelerationMod = _movementData.Throttle;
-            }
-            else
-            {
-                float maxSpeed = _movementData.Throttle > 0f
-                    ? _directMaxSpeed
-                    : -_reverseMaxSpeed;
-
-                float speedDiff = maxSpeed - forwardVel;
-
-                if (speedDiff == 0f) return;
-
-                float absSpeedDiff = Mathf.Abs(speedDiff);
-
-                float baseAccelStep = (_movementData.Throttle > 0f
-                    ? _directAcceleration
-                    : -_reverseAcceleration)
-                    * fixedDT * _movementData.Throttle;
-
-                // логика сглаживания ускорения при скорости близкой к максимальной
-                float smoothAccelStep = SmoothAcceleration(baseAccelStep, absSpeedDiff);
-                forwardVel = Mathf.MoveTowards(forwardVel, maxSpeed, smoothAccelStep);
-
-                // логика записи данных о движении 
-                _movementData.ForwardAccelerationMod = _movementData.Throttle * smoothAccelStep / baseAccelStep;
-
-                _prevSpeed = forwardVel;
-            }
-        }
-
-
-
-
-        //private void ApplyMainEngineThrust(float fixedDT, ref float forwardVel)
-        //{
-        //    //TODO Может довавить проверку что если разгон от нуля то более вязко, будто преодолевает инерцию
-        //    float targetSpeed;
-        //    float accelBase;
-        //    float accelSign;
-        //    float throttle = _movementData.Throttle;
-
-        //    if (_movementData.InertiaDamping)
-        //    {
-        //        targetSpeed = _targetSpeed;
-        //        accelSign = Mathf.Sign(targetSpeed - forwardVel);
-        //        accelBase = accelSign > 0f ? _directAcceleration : _reverseAcceleration;
-        //    }
-        //    else
-        //    {
-        //        if (throttle == 0)
-        //        {
-        //            _movementData.DirectAcceleration = 0f;
-        //            return;
-        //        }
-
-        //        accelSign = Mathf.Sign(throttle);
-        //        targetSpeed = accelSign > 0f ? _directMaxSpeed : -_reverseMaxSpeed;
-        //        accelBase = accelSign > 0f ? _directAcceleration : _reverseAcceleration;
-        //        accelBase *= Mathf.Abs(throttle);
-        //    }
-
-        //    float speedDiff = targetSpeed - forwardVel;
-        //    if (speedDiff == 0)           // можно раскомитить для лучшей производительности, но тогда не показывается поддержание мощности двигателя при включенном гасителе и при достижении макс скорости
-        //        return;
-
-        //    float absDiff = Mathf.Abs(speedDiff);
-        //    float baseStep = accelBase * fixedDT;
-
-        //    // --- Сглаживание ---
-        //    float smoothStep = SmoothAcceleration(baseStep, absDiff);
-        //    forwardVel = Mathf.MoveTowards(forwardVel, targetSpeed, smoothStep);
-
-        //    // --- Расчет ускорения ---
-        //    float currentAccel = forwardVel - _prevDirectSpeed;
-        //    float accelRatio = baseStep != 0f ? currentAccel / baseStep : 0f;
-
-        //    // --- Стабилизация ---
-        //    if (_movementData.InertiaDamping)
-        //    {
-        //        if (targetSpeed != 0f && Mathf.Abs(accelRatio) < _stabilizationSpeedMod)
-        //            accelRatio = _stabilizationSpeedMod * accelSign;
-        //    }
-        //    else
-        //    {
-        //        accelRatio = throttle * smoothStep / baseStep;
-        //    }
-
-        //    _movementData.DirectAcceleration = accelRatio;
-        //    _prevDirectSpeed = forwardVel;
-        //}
-*/
