@@ -68,8 +68,10 @@ namespace GameSystem
             float directAccel = 0;
             float reversAccel = 0;
 
-            if (_shipMovementData.DirectAcceleration > 0) directAccel = _shipMovementData.DirectAcceleration;
-            else if (_shipMovementData.DirectAcceleration < 0) reversAccel = _shipMovementData.DirectAcceleration;
+            _shipMovementData.DirectAccelerationPower = Math.Clamp(_shipMovementData.DirectAccelerationPower, -1, 1);
+
+            if (_shipMovementData.DirectAccelerationPower > 0) directAccel = _shipMovementData.DirectAccelerationPower;
+            else if (_shipMovementData.DirectAccelerationPower < 0) reversAccel = _shipMovementData.DirectAccelerationPower;
 
             _shipMovementView.MainEngine.SetThrustValue(directAccel);
             foreach (var engine in _shipMovementView.ReverseMainEngines)

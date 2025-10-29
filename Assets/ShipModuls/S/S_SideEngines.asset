@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: S_SideEngines
   m_EditorClassIdentifier: 
   <StrafeThrust>k__BackingField: 5
-  <RotateThrust>k__BackingField: 2
+  <RotateThrust>k__BackingField: 4

@@ -7,6 +7,7 @@ namespace GameSystem
     {
         public static Action<float> GameTick { get; set; }
         public static Action<float> FixedGameTick { get; set; }
+        public static Action<float> LateGameTick { get; set; }
         public static Action<GameState> GameStateChange { get; set; }
 
         void Update()
@@ -16,6 +17,11 @@ namespace GameSystem
         private void FixedUpdate()
         {
             FixedGameTick?.Invoke(Time.fixedDeltaTime);
+        }
+
+        private void LateUpdate()
+        {
+            LateGameTick?.Invoke(Time.deltaTime);
         }
 
 

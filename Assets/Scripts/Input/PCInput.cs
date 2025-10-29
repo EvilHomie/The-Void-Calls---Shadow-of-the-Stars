@@ -30,6 +30,7 @@ namespace Player
             _inputActions.Player.LeftClick.performed += OnAttack;
             _inputActions.Player.LeftClick.canceled += OnEndAttack;
             EventBus.UpdateShip += OnUpdateShip;
+            _inputActions.Player.ToggleDamper.performed += ToggleDamper;
         }
 
         public void Unsubscribe()
@@ -39,6 +40,7 @@ namespace Player
             _inputActions.Player.LeftClick.performed -= OnAttack;
             _inputActions.Player.LeftClick.canceled -= OnEndAttack;
             EventBus.UpdateShip -= OnUpdateShip;
+            _inputActions.Player.ToggleDamper.performed -= ToggleDamper;
         }
 
         private void OnUpdateShip(PlayerShipData ship)
@@ -83,6 +85,10 @@ namespace Player
         private void OnEndAttack(InputAction.CallbackContext context)
         {
             ChangeAtackState?.Invoke(false);
+        }
+        private void ToggleDamper(InputAction.CallbackContext context)
+        {
+            EventBus.ToggleDamper?.Invoke();
         }
     }
 }

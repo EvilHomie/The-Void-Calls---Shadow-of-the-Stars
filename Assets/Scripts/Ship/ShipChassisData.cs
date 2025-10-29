@@ -10,5 +10,6 @@ namespace Ship
         [field: SerializeField] public float DirectDrag { get; private set; }
         [field: SerializeField] public float ReverseDrag { get; private set; }
         [field: SerializeField] public float StrafeDrag { get; private set; }
+        [field: SerializeField] public float RotateDrag { get; private set; }
     }
 }

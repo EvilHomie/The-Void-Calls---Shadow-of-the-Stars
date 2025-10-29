@@ -11,6 +11,8 @@ namespace GameSystem
         public static Action<MainEngine> UpdateMainEngine { get; set; }
         public static Action<SideEngines> UpdateSideEngines { get; set; }
         public static Action<DampingModule> UpdateDampingModule { get; set; }
+
+        public static Action ToggleDamper { get; set; }
     }
 }
 

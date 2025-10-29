@@ -13,7 +13,7 @@ namespace Ship
         [field: SerializeField] public float Throttle { get; set; }
         [field: SerializeField] public bool InertiaDamping { get; set; }
         [field: SerializeField] public float RotatePowerValue { get; set; }
-        [field: SerializeField] public float DirectAcceleration { get; set; }
+        [field: SerializeField] public float DirectAccelerationPower { get; set; }
         [field: SerializeField] public float SideAcceleration { get; set; }
     }
 }
