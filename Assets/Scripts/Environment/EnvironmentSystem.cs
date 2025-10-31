@@ -1,6 +1,7 @@
 using DI;
 using Enviroment;
 using Player;
+using System.Linq;
 using UnityEngine;
 
 namespace GameSystem
@@ -11,9 +12,10 @@ namespace GameSystem
         private Rigidbody2D _shipRB;
         private Transform _shipT;
         private PlayerShipData _shipData;
+        private Transform _starryCanvasParent;
 
         [Inject]
-        public void Construct(PlayerShipData ship)
+        public void Construct(PlayerShipData ship, Camera camera)
         {
             _shipData = ship;
         }
@@ -24,6 +26,8 @@ namespace GameSystem
             {
                 starryCanvas.Init();
             }
+
+            _starryCanvasParent = _starryCanvasTwinkleViews.First().transform.parent;
 
             OnUpdateShip(_shipData);
         }
@@ -50,12 +54,13 @@ namespace GameSystem
 
         private void UpdateStarView(float fixDeltaTime)
         {
+            _starryCanvasParent.position = _shipT.position;
+
             if (_shipRB.linearVelocity == Constants.Vector2Zero) return;
 
             foreach (var starryCanvas in _starryCanvasTwinkleViews)
             {
                 starryCanvas.LastOffset += fixDeltaTime * starryCanvas.SpeedMod * _shipRB.linearVelocity;
-                starryCanvas.Transform.position = _shipT.position;
                 starryCanvas.Material.SetVector(StarryCanvasTwinkleView.OffsetID, starryCanvas.LastOffset);
             }
         }
