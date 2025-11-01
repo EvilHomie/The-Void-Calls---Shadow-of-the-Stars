@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3758822994478707255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4800526495164559870}
+  - component: {fileID: 6575446007508554907}
+  m_Layer: 0
+  m_Name: AsteroidsClusterGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4800526495164559870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758822994478707255}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.62, y: 0.94, z: -0.045464274}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6575446007508554907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3758822994478707255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e222759ab5f85741af5cebe30c426e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _containedAsteroids:
+    <WeightedAsteroid>k__BackingField:
+    - Prefab: {fileID: 5523111450782268480, guid: 2fc8f6b797d43e94a8a705a0829b2fc5, type: 3}
+      SpawnWeight: 1
+    - Prefab: {fileID: 72494188183028475, guid: b8e3acffeff3329409c7f442f5b5d692, type: 3}
+      SpawnWeight: 0.5
+    - Prefab: {fileID: 7863458149921933340, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
+      SpawnWeight: 0.4
+    - Prefab: {fileID: 8124298471664025412, guid: 31bb4eeaad8097a40b525212252a101a, type: 3}
+      SpawnWeight: 0.3
+    - Prefab: {fileID: 5470517541155264483, guid: 463a6f3aff92d9b418e0165f842063a0, type: 3}
+      SpawnWeight: 0.2
+    - Prefab: {fileID: 4416990920378949209, guid: 6ffcd653f061c1f418801d54964ca5ce, type: 3}
+      SpawnWeight: 0.1
+  _fieldRadius: 10
+  _maxAttempts: 100
+  _asteroidCount: 50
+  _minScale: 0.5
+  _maxScale: 3

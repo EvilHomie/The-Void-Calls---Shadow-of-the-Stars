@@ -45,7 +45,7 @@ namespace GamePool
         {
             foreach (var item in _pendingReleases)
             {
-                FindPool(item.ObjectName).Release(item);
+                FindPool(item.PoolName).Release(item);
                 ActiveItems.Remove(item);
             }
 
@@ -63,11 +63,11 @@ namespace GamePool
         protected void CreateItemPool(T prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1) 
         {
             prefab.gameObject.SetActive(false);
-            _prefabByName.Add(prefab.ObjectName, prefab);
+            _prefabByName.Add(prefab.PoolName, prefab);
 
             var newPool = new ObjectPool<T>(
 
-                   createFunc: () => OnCreate(prefab.ObjectName, parent),
+                   createFunc: () => OnCreate(prefab.PoolName, parent),
                    actionOnGet: OnGet,
                    actionOnRelease: OnRelease,
                    actionOnDestroy: OnDestroyItem,
@@ -75,8 +75,8 @@ namespace GamePool
                    maxSize: maxCapacity
                );
 
-            _parentByName.Add(prefab.ObjectName, parent);
-            _poolByName.Add(prefab.ObjectName, newPool);
+            _parentByName.Add(prefab.PoolName, parent);
+            _poolByName.Add(prefab.PoolName, newPool);
             PrewarmPool(newPool, prewarmCount);
         }        
 
@@ -107,12 +107,13 @@ namespace GamePool
 
         private void OnGet(T item)
         {
+            item.ResetParams();
             ActiveItems.Add(item);
         }
         private void OnRelease(T item)
         {
             ActiveItems.Remove(item);
-            item.CachedTransform.SetParent(_parentByName[item.ObjectName]);
+            item.CachedTransform.SetParent(_parentByName[item.PoolName]);
         }
 
         private void OnDestroyItem(T item)

@@ -1,7 +1,8 @@
 using DI;
 using Enviroment;
 using Player;
-using System.Linq;
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameSystem
@@ -9,15 +10,15 @@ namespace GameSystem
     public class EnvironmentSystem : GameSystemBase
     {
         [SerializeField] StarryCanvasTwinkleView[] _starryCanvasTwinkleViews;
+        [SerializeField] Transform _starryCanvasParent;
         private Rigidbody2D _shipRB;
         private Transform _shipT;
-        private PlayerShipData _shipData;
-        private Transform _starryCanvasParent;
+        private PlayerShip _playerShip;
 
         [Inject]
-        public void Construct(PlayerShipData ship, Camera camera)
+        public void Construct(PlayerShip ship)
         {
-            _shipData = ship;
+            _playerShip = ship;
         }
 
         protected override void Init()
@@ -27,28 +28,30 @@ namespace GameSystem
                 starryCanvas.Init();
             }
 
-            _starryCanvasParent = _starryCanvasTwinkleViews.First().transform.parent;
-
-            OnUpdateShip(_shipData);
+            _shipRB = _playerShip.Rigidbody;
+            _shipT = _playerShip.transform;
         }
 
         protected override void Subscribe()
         {
             GameFlow.GameTick += OnGameTick;
+            EventBus.ChangeCameraOrtoSize += OnChangeCameraOrtoSize;
         }
+
         protected override void Unsubscribe()
         {
             GameFlow.GameTick -= OnGameTick;
-        }
-        private void OnUpdateShip(PlayerShipData ship)
-        {
-            _shipRB = ship.Rigidbody;
-            _shipT = _shipRB.transform;
+            EventBus.ChangeCameraOrtoSize -= OnChangeCameraOrtoSize;
         }
 
         private void OnGameTick(float fixDeltaTime)
         {
             UpdateStarView(fixDeltaTime);
+        }
+
+        private void OnChangeCameraOrtoSize(float value)
+        {
+            _starryCanvasParent.localScale = Constants.Vector3One * value / 5;
         }
 
 

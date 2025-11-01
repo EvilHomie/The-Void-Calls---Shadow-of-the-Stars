@@ -7,10 +7,9 @@ public static class Constants
     public static readonly Vector2 Vector2Left = Vector2.left;
     public static readonly Vector2 Vector2Down = Vector2.down;
     public static readonly Vector2 Vector2Zero = Vector2.zero;
+    public static readonly Vector3 Vector3Zero = Vector3.zero;
+    public static readonly Vector3 Vector3One = Vector3.one;
     public static readonly SideEnginesPower SideEnginesPowerZero = new();
 
-    //[Range(0.9f, 0.99f)]
-    //public float _dampingStrengthMin = 1f; // базовая сила гашения
-    //[Range(0.97f, 0.999f)]
-    //public float _dampingStrengthMax = 1f; // базовая сила гашения
+    public static readonly int WorldUnitMod = 100; // модификатор мирового пространства. т.е. при скорости 100 и модификаторе 10 движение в 1 юнит будто 10 м/с
 }

@@ -7,16 +7,17 @@ namespace GameSystem
 {
     public class PlayerMovementSystem : GameSystemBase
     {
-        public const int _rotateMod = 90; // базовая скорость поворота при силе равной массе
+        public const int _rotateMod = 45; // базовая скорость поворота при силе равной сопротивлению
+        public const int _rotateAngleTreshhold = 2; // отбраковка минимального угла поворота
         private const float _stabilizationPower = 0.6f; // модификатор при движении без ускорения при включеном гасителе инерции. Будто мощность для поддержания скорости
-        private const float _smoothZone = 0.1f; // чем больше тем раньше начнется плавность
+        private const float _smoothZone = 0.5f; // чем больше тем раньше начнется плавность
         private const float _maxSmooth = 0.05f; // чем меньше тем более плавно (дольше) добираются последние "метры" скорости
 
         private IPlayerInput _input;
         private Vector2 _mouseDirection;
         private Vector2 _inputValue;
         private Camera _camera;
-        private PlayerShipData _playerShipData;
+        private PlayerShip _playerShip;
         private Rigidbody2D _shipRB;
         private Transform _shipTransform;
         private ShipMovementData _movementData;
@@ -35,17 +36,20 @@ namespace GameSystem
         private float _lastThrottleWithDamping;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, PlayerShipData ship, Camera camera)
+        public void Construct(IPlayerInput playerInput, PlayerShip ship, Camera camera)
         {
             _input = playerInput;
-            _playerShipData = ship;
+            _playerShip = ship;
             _camera = camera;
         }
 
         protected override void Init()
         {
-            _input.Init(_playerShipData, _camera);
-            OnUpdateShip(_playerShipData);
+            _input.Init(_playerShip, _camera);
+            _shipRB = _playerShip.Rigidbody;
+            _shipTransform = _shipRB.transform;
+
+            OnPlayerChangeShip(_playerShip.ShipData);
         }
 
         protected override void Subscribe()
@@ -53,9 +57,9 @@ namespace GameSystem
             _input.Subscrube();
             _input.MoveInputAction += OnMoveInputAction;
             _input.TrackMouseAction += OnTrackMouseAction;
+            _input.ToggleDamperAction += OnToggleDamper;
             GameFlow.FixedGameTick += OnFixedGameTick;
-            EventBus.UpdateShip += OnUpdateShip;
-            EventBus.ToggleDamper += OnToggleDamper;
+            EventBus.PlayerChangeShip += OnPlayerChangeShip;
         }
 
         protected override void Unsubscribe()
@@ -63,25 +67,24 @@ namespace GameSystem
             _input.Unsubscribe();
             _input.MoveInputAction -= OnMoveInputAction;
             _input.TrackMouseAction -= OnTrackMouseAction;
+            _input.ToggleDamperAction -= OnToggleDamper;
             GameFlow.FixedGameTick -= OnFixedGameTick;
-            EventBus.UpdateShip -= OnUpdateShip;
-            EventBus.ToggleDamper -= OnToggleDamper;
+            EventBus.PlayerChangeShip -= OnPlayerChangeShip;
         }
 
-        private void OnUpdateShip(PlayerShipData ship)
+        private void OnPlayerChangeShip(ShipData shipData)
         {
-            _shipRB = ship.Rigidbody;
-            _shipTransform = _shipRB.transform;
-            _movementData = ship.MovementData;
-            _inertiaDampingLastState = ship.MovementData.InertiaDamping;
+            _movementData = shipData.MovementData;
+            _inertiaDampingLastState = shipData.MovementData.InertiaDamping;
+            _shipRB.mass = shipData.ChassisData.Mass;
 
-            _directMaxSpeed = ship.MovementData.MainEngine.DirectThrust / ship.ChassisData.DirectDrag;
-            _directAcceleration = ship.MovementData.MainEngine.DirectThrust / ship.ChassisData.Mass;
-            _reverseMaxSpeed = ship.MovementData.MainEngine.ReverseThrust / ship.ChassisData.ReverseDrag;
-            _reverseAcceleration = ship.MovementData.MainEngine.ReverseThrust / ship.ChassisData.Mass;
-            _strafeMaxSpeed = ship.MovementData.SideEngines.StrafeThrust / ship.ChassisData.StrafeDrag;
-            _strafeAcceleration = ship.MovementData.SideEngines.StrafeThrust / ship.ChassisData.Mass;
-            _rotateSpeed = _rotateMod * ship.MovementData.SideEngines.RotateThrust / ship.ChassisData.RotateDrag;
+            _directMaxSpeed = shipData.MovementData.MainEngine.DirectThrust / shipData.ChassisData.DirectDrag / Constants.WorldUnitMod;
+            _directAcceleration = shipData.MovementData.MainEngine.DirectThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _reverseMaxSpeed = shipData.MovementData.MainEngine.ReverseThrust / shipData.ChassisData.ReverseDrag / Constants.WorldUnitMod;
+            _reverseAcceleration = shipData.MovementData.MainEngine.ReverseThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _strafeMaxSpeed = shipData.MovementData.SideEngines.StrafeThrust / shipData.ChassisData.StrafeDrag / Constants.WorldUnitMod;
+            _strafeAcceleration = shipData.MovementData.SideEngines.StrafeThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _rotateSpeed = shipData.MovementData.SideEngines.RotateThrust / shipData.ChassisData.RotateDrag;
         }
 
         private void OnTrackMouseAction(Vector2 dir) { _mouseDirection = dir; }
@@ -173,13 +176,15 @@ namespace GameSystem
             }
 
             float angleDiff = Vector2.SignedAngle(_shipTransform.up, _mouseDirection);
-            float absAngle = Mathf.Abs(angleDiff);
+            float absAngleDiff = Mathf.Abs(angleDiff);
             float direction = Mathf.Sign(angleDiff);
 
             // --- плавное уменьшение скорости в начале и в конце ---
-            float mod = Mathf.InverseLerp(0f, 10f, absAngle);
-            _movementData.RotatePowerValue = mod * direction;
-            _shipRB.angularVelocity = _movementData.RotatePowerValue * _rotateSpeed;
+            float anleMod = Mathf.InverseLerp(0f, 10f, absAngleDiff);
+            float power = anleMod * direction;
+            float targetTorque = _rotateSpeed * power;
+            _shipRB.angularVelocity = Mathf.MoveTowards(_shipRB.angularVelocity, targetTorque, _rotateSpeed);
+            _movementData.RotatePowerValue = power;
         }
 
         private void HandleMovement(float fixedDT)

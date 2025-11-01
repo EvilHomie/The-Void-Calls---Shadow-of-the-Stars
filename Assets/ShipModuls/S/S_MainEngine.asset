@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b414911938450a2429c3e5e202ca1fda, type: 3}
   m_Name: S_MainEngine
   m_EditorClassIdentifier: 
-  <DirectThrust>k__BackingField: 10
-  <ReverseThrust>k__BackingField: 10
+  <DirectThrust>k__BackingField: 500
+  <ReverseThrust>k__BackingField: 500

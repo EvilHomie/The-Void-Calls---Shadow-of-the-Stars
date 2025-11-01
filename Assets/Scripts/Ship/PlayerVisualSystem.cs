@@ -7,37 +7,35 @@ namespace GameSystem
 {
     public class PlayerVisualSystem : GameSystemBase
     {
-        [SerializeField] float _rotateVelocityTreshhold;
-
         private SideEnginesPower _currentThrustersPower;
-        private PlayerShipData _playerShipData;
+        private PlayerShip _playerShip;
         private ShipMovementView _shipMovementView;
         private ShipMovementData _shipMovementData;
 
         [Inject]
-        public void Construct(PlayerShipData ship)
+        public void Construct(PlayerShip ship)
         {
-            _playerShipData = ship;
+            _playerShip = ship;
         }
 
         protected override void Init()
         {
-            OnUpdateShip(_playerShipData);
+            OnUpdateShip(_playerShip.ShipData);
         }
 
         protected override void Subscribe()
         {
             GameFlow.FixedGameTick += OnFixedGameTick;
-            EventBus.UpdateShip += OnUpdateShip;
+            EventBus.PlayerChangeShip += OnUpdateShip;
         }
 
         protected override void Unsubscribe()
         {
             GameFlow.FixedGameTick -= OnFixedGameTick;
-            EventBus.UpdateShip -= OnUpdateShip;
+            EventBus.PlayerChangeShip -= OnUpdateShip;
         }
 
-        private void OnUpdateShip(PlayerShipData ship)
+        private void OnUpdateShip(ShipData ship)
         {
             _shipMovementData = ship.MovementData;
             _shipMovementView = ship.MovementView;
@@ -83,7 +81,7 @@ namespace GameSystem
                 _currentThrustersPower.FrontRight = -_shipMovementData.SideAcceleration;
             }
 
-            if (Mathf.Abs(_shipMovementData.RotatePowerValue) > _rotateVelocityTreshhold)
+            if (_shipMovementData.RotatePowerValue != 0)
             {
                 if (_shipMovementData.RotatePowerValue > 0)
                 {

@@ -1,5 +1,4 @@
-using Enviroment;
-using Player;
+using Ship;
 using System;
 using UnityEngine;
 
@@ -7,15 +6,10 @@ namespace GameSystem
 {
     public class EventBus : MonoBehaviour
     {
-        //PlayerShip
-        public static Action<PlayerShipData> UpdateShip { get; set; }
-        public static Action<MainEngine> UpdateMainEngine { get; set; }
-        public static Action<SideEngines> UpdateSideEngines { get; set; }
-        public static Action<DampingModule> UpdateDampingModule { get; set; }
-        public static Action ToggleDamper { get; set; }
+        public static Action<ShipData> PlayerChangeShip { get; set; }        
+        public static Action<float> ChangeCameraOrtoSize { get; set; }        
 
-        public static Action<TwinkleStar> DestroyStar { get; set; }
-        public static Func<string, TwinkleStar> GetStar { get; set; }
+
     }
 }
 

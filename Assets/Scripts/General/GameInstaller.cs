@@ -4,13 +4,13 @@ using Player;
 
 public class GameInstaller : Installer
 {
-    [SerializeField] PlayerShipData _playerShip;
+    [SerializeField] PlayerShip _playerShip;
     [SerializeField] Camera _camera;
     [SerializeField] MouseCursor _mouseCursor;
 
     protected override void InstallBindings()
     {
-        Container.Bind<PlayerShipData>().FromInstance(_playerShip);
+        Container.Bind<PlayerShip>().FromInstance(_playerShip);
         Container.Bind<Camera>().FromInstance(_camera);
         Container.Bind<MouseCursor>().FromInstance(_mouseCursor);
 

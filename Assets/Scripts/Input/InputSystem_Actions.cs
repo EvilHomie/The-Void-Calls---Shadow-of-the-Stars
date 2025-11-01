@@ -126,6 +126,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseScroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""b6931c67-0311-42e2-becb-c665c93261b2"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -258,6 +267,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""ToggleDamper"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43e4f6da-09f2-46c7-ae04-bfee2a6197ae"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""MouseScroll"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1323,6 +1343,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
         m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
         m_Player_ToggleDamper = m_Player.FindAction("ToggleDamper", throwIfNotFound: true);
+        m_Player_MouseScroll = m_Player.FindAction("MouseScroll", throwIfNotFound: true);
         // PlayerOriginal
         m_PlayerOriginal = asset.FindActionMap("PlayerOriginal", throwIfNotFound: true);
         m_PlayerOriginal_Move = m_PlayerOriginal.FindAction("Move", throwIfNotFound: true);
@@ -1432,6 +1453,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_LeftClick;
     private readonly InputAction m_Player_RightClick;
     private readonly InputAction m_Player_ToggleDamper;
+    private readonly InputAction m_Player_MouseScroll;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1459,6 +1481,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ToggleDamper".
         /// </summary>
         public InputAction @ToggleDamper => m_Wrapper.m_Player_ToggleDamper;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/MouseScroll".
+        /// </summary>
+        public InputAction @MouseScroll => m_Wrapper.m_Player_MouseScroll;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1497,6 +1523,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleDamper.started += instance.OnToggleDamper;
             @ToggleDamper.performed += instance.OnToggleDamper;
             @ToggleDamper.canceled += instance.OnToggleDamper;
+            @MouseScroll.started += instance.OnMouseScroll;
+            @MouseScroll.performed += instance.OnMouseScroll;
+            @MouseScroll.canceled += instance.OnMouseScroll;
         }
 
         /// <summary>
@@ -1520,6 +1549,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleDamper.started -= instance.OnToggleDamper;
             @ToggleDamper.performed -= instance.OnToggleDamper;
             @ToggleDamper.canceled -= instance.OnToggleDamper;
+            @MouseScroll.started -= instance.OnMouseScroll;
+            @MouseScroll.performed -= instance.OnMouseScroll;
+            @MouseScroll.canceled -= instance.OnMouseScroll;
         }
 
         /// <summary>
@@ -2032,6 +2064,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleDamper(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MouseScroll" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMouseScroll(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerOriginal" which allows adding and removing callbacks.

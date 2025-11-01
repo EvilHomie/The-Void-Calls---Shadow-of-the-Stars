@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c106c0dce505154da651ba9c897c7f3, type: 3}
   m_Name: S_SideEngines
   m_EditorClassIdentifier: 
-  <StrafeThrust>k__BackingField: 5
-  <RotateThrust>k__BackingField: 4
+  <StrafeThrust>k__BackingField: 500
+  <RotateThrust>k__BackingField: 200
