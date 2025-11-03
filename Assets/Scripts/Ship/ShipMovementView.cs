@@ -6,8 +6,8 @@ namespace Ship
     [Serializable]
     public class ShipMovementView
     {
-        [field: SerializeField] public ExhaustPlume MainEngine { get; private set; }
-        [field: SerializeField] public ExhaustPlume[] ReverseMainEngines { get; private set; }
+        [field: SerializeField] public ExhaustPlume[] DirectEngines { get; private set; }
+        [field: SerializeField] public ExhaustPlume[] ReverseEngines { get; private set; }
         [field: SerializeField] public ExhaustPlume SideEngineFL { get; private set; }
         [field: SerializeField] public ExhaustPlume SideEngineFR { get; private set; }
         [field: SerializeField] public ExhaustPlume SideEngineBL { get; private set; }
@@ -15,15 +15,19 @@ namespace Ship
 
         public void Init()
         {
-            MainEngine.Init();
             SideEngineFL.Init();
             SideEngineFR.Init();
             SideEngineBL.Init();
             SideEngineBR.Init();
 
-            foreach (var item in ReverseMainEngines)
+            foreach (var engine in ReverseEngines)
             {
-                item.Init();
+                engine.Init();
+            }
+
+            foreach (var engine in DirectEngines)
+            {
+                engine.Init();
             }
         }
     }
