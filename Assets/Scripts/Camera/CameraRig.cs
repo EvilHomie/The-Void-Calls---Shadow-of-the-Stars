@@ -2,7 +2,6 @@ using DI;
 using GameSystem;
 using Player;
 using Ship;
-using System;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -13,7 +12,6 @@ public class CameraRig : GameSystemBase
     [SerializeField] CinemachineCamera _cinemachineCamera;
     [SerializeField] float _changeOrtSizeSpeed;
     [SerializeField] float _changeOrtSizeStep;
-    private Camera _mainCamera;
     private Transform _mouseCursor;
     private PlayerShip _playerShip;
     private IPlayerInput _input;
@@ -21,9 +19,8 @@ public class CameraRig : GameSystemBase
     private float targetOrtSize;
 
     [Inject]
-    public void Construct(Camera camera, MouseCursor mouseCursor, PlayerShip playerShip, IPlayerInput playerInput)
+    public void Construct(MouseCursor mouseCursor, PlayerShip playerShip, IPlayerInput playerInput)
     {
-        _mainCamera = camera;
         _mouseCursor = mouseCursor.transform;
         _playerShip = playerShip;
         _input = playerInput;
@@ -80,7 +77,7 @@ public class CameraRig : GameSystemBase
         if (_cinemachineCamera.Lens.OrthographicSize != targetOrtSize)
         {
             _cinemachineCamera.Lens.OrthographicSize = Mathf.MoveTowards(_cinemachineCamera.Lens.OrthographicSize, targetOrtSize, dTime * _changeOrtSizeSpeed);
-            EventBus.ChangeCameraOrtoSize?.Invoke(_cinemachineCamera.Lens.OrthographicSize);
+            OnChangeOrtoSize();
         }
     }
 
@@ -89,7 +86,13 @@ public class CameraRig : GameSystemBase
         _minMaxOrtSize = data.MinMaxViewDistance;
         targetOrtSize = (_minMaxOrtSize.x + _minMaxOrtSize.y) / 2;
         _cinemachineCamera.Lens.OrthographicSize = targetOrtSize;
+        OnChangeOrtoSize();
+    }
+
+    private void OnChangeOrtoSize()
+    {
         EventBus.ChangeCameraOrtoSize?.Invoke(_cinemachineCamera.Lens.OrthographicSize);
+        _mouseCursor.localScale = Constants.Vector3One * _cinemachineCamera.Lens.OrthographicSize / Constants.DeffCameraOrtoSize;
     }
 
     private void OnLateGameTick(float dTime)
@@ -99,10 +102,7 @@ public class CameraRig : GameSystemBase
 
     private void UpdateCursorPos()
     {
-        var pos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        pos.z = 0;
-
-        _mouseCursor.position = pos;
+        _mouseCursor.position = _playerShip.MousePos;
     }
     private void OnMouseScroll(float value)
     {

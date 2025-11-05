@@ -39,7 +39,6 @@ namespace GameSystem
         {
             _shipMovementData = ship.MovementData;
             _shipMovementView = ship.MovementView;
-            _shipMovementView.Init();
         }
 
 

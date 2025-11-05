@@ -1,8 +1,6 @@
 using DI;
 using Enviroment;
 using Player;
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameSystem
@@ -51,7 +49,7 @@ namespace GameSystem
 
         private void OnChangeCameraOrtoSize(float value)
         {
-            _starryCanvasParent.localScale = Constants.Vector3One * value / 5;
+            _starryCanvasParent.localScale = Constants.Vector3One * value / Constants.DeffCameraOrtoSize;
         }
 
 

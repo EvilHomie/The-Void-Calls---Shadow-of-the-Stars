@@ -12,5 +12,16 @@ namespace Ship
         [field: SerializeField] public ShipChassisData ChassisData { get; private set; }
         [field: SerializeField] public ShipMovementData MovementData { get; private set; }
         [field: SerializeField] public ShipMovementView MovementView { get; private set; }
+        [field: SerializeField] public ShipWeaponData WeaponData { get; private set; }
+
+        private void Start()
+        {
+            InitAllModuls();
+        }
+        private void InitAllModuls()
+        {
+            MovementView.Init();
+            WeaponData.Init();
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace Player
         public Action<float> MouseScrollAction { get; set; }
 
         private InputSystem_Actions _inputActions;
+        private PlayerShip _playerShip;
         private Transform _playerTransform;
         private Camera _camera;
         private bool _isActive;
@@ -21,6 +22,7 @@ namespace Player
         public void Init(PlayerShip ship, Camera camera)
         {
             _inputActions = new InputSystem_Actions();
+            _playerShip = ship;
             _playerTransform = ship.transform;
             _camera = camera;
         }
@@ -64,6 +66,8 @@ namespace Player
         private void TrackMouse()
         {
             Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorld.z = 0;
+            _playerShip.MousePos = mouseWorld;
             Vector2 direction = (mouseWorld - _playerTransform.position).normalized;
             TrackMouseAction?.Invoke(direction);
         }

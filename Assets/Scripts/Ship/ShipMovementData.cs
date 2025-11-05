@@ -6,8 +6,8 @@ namespace Ship
     [Serializable]
     public class ShipMovementData
     {
-        [field: SerializeField] public MainEngine MainEngine { get; private set; }
-        [field: SerializeField] public SideEngines SideEngines { get; private set; }
+        [field: SerializeField] public MainEngine MainEngine { get; set; }
+        [field: SerializeField] public SideEngines SideEngines { get; set; }
 
         // отображение в инспекторе сугубо для дебага
         [field: SerializeField] public float Throttle { get; set; }

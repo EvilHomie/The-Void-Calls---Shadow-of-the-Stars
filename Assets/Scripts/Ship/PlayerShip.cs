@@ -7,5 +7,7 @@ namespace Player
     {
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public ShipData ShipData { get; private set; }
+
+        public Vector3 MousePos { get; set; }
     }
 }

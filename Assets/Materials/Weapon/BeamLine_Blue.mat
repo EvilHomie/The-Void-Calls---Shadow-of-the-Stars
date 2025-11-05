@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LaserBeam_Blue
+  m_Name: BeamLine_Blue
   m_Shader: {fileID: -6465566751694194690, guid: 317b61d26aecdd8458d39961735020f6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
