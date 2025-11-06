@@ -7,12 +7,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ExhaustPlume_Blue
-  m_Shader: {fileID: -6465566751694194690, guid: 66ae13051ba07524b9a893616d1be32a, type: 3}
+  m_Name: Projectile_Yellow
+  m_Shader: {fileID: -6465566751694194690, guid: e52348c85d6e07740939af6021e6aadb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ENABLEEFFECTS
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -25,7 +24,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 4906295d398558a489618dd52730844d, type: 3}
+        m_Texture: {fileID: 2800000, guid: 37de8d56c989d6343bc533452bf5de85, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -41,20 +40,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _ENABLEEFFECTS: 1
-    - _EnginePower: 0.718
-    - _MasterThrust: 0.962
-    - _NarrowFactor: 1
-    - _NoiseSpeed: 2
-    - _NoiseTiling: 2.6
+    m_Floats: []
     m_Colors:
-    - _Color: {r: 8.3, g: 0.7695961, b: 0, a: 0}
-    - _MainColor: {r: 0, g: 0.90199935, b: 2.9960785, a: 0}
-    - _SecondColor: {r: 0, g: 0.1713798, b: 47.93725, a: 0}
+    - _Color: {r: 11.984312, g: 11.984312, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &5637424231163629858
+--- !u!114 &403369325192163424
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

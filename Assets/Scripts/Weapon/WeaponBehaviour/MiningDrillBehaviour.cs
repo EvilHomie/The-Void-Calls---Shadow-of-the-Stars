@@ -1,3 +1,4 @@
+using GameSystem;
 using UnityEngine;
 
 namespace Weapon
@@ -8,14 +9,17 @@ namespace Weapon
         {
             ProceedShoot(weapon, 0);
             weapon.BeamLineGO.SetActive(true);
-            weapon.ShootSpot.Play();
-
+            weapon.ShootSpotPS.Play();
+            weapon.IsShooting = true;
+            EventBus.WeaponChangeState?.Invoke(weapon, true);
         }
 
         public void CancelShoot(MiningDrill weapon)
         {
+            EventBus.WeaponChangeState?.Invoke(weapon, false);
             weapon.BeamLineGO.SetActive(false);
-            weapon.ShootSpot.Stop();
+            weapon.ShootSpotPS.Stop();
+            weapon.IsShooting = false;
         }
 
         public void ProceedShoot(MiningDrill weapon, float dTime)
@@ -28,17 +32,16 @@ namespace Weapon
                 weapon.HitSpotT.position = hit.point;
                 weapon.HitParticleAccumulator += weapon.SparksRate * dTime;
                 int emitCount = Mathf.FloorToInt(weapon.HitParticleAccumulator);
-                weapon.HitSpot.Emit(emitCount);
+                weapon.HitSpotPS.Emit(emitCount);
                 weapon.HitParticleAccumulator -= emitCount;
             }
             else
             {
-                weapon.HitPos = weapon.CTransform.up * weapon.MaxDistance;
-                
+                weapon.HitPos = weapon.CTransform.position + weapon.CTransform.up * weapon.MaxDistance;
             }
 
-            weapon.BeamLine.SetPosition(0, weapon.CTransform.position);
-            weapon.BeamLine.SetPosition(1, weapon.HitPos);
+            weapon.BeamLineLR.SetPosition(0, weapon.CTransform.position);
+            weapon.BeamLineLR.SetPosition(1, weapon.HitPos);
         }
     }
 }

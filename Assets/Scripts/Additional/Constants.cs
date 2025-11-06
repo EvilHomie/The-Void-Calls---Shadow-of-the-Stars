@@ -13,6 +13,6 @@ public static class Constants
     public static readonly Vector3 Vector3Back = Vector3.back;
     public static readonly SideEnginesPower SideEnginesPowerZero = new();
 
-    public static readonly int WorldUnitMod = 100; // модификатор мирового пространства. т.е. при скорости 100 и модификаторе 10 движение в 1 юнит будто 10 м/с
+    public static readonly int WorldUnitMod = 100; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров
     public static readonly float DeffCameraOrtoSize = 5f;
 }

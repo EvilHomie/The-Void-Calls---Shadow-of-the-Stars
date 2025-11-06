@@ -4801,7 +4801,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -20
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -5699,7 +5699,7 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
@@ -9817,7 +9817,7 @@ GameObject:
   - component: {fileID: 8000789201367927090}
   - component: {fileID: 487062553001907700}
   m_Layer: 0
-  m_Name: Mining_Array_S
+  m_Name: S_MiningDrill_Mk1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9853,6 +9853,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49788d04f724094a852ecb1e5ff207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Size>k__BackingField: 0
+  <WeaponName>k__BackingField: S_MiningDrill_Mk1
   <MaxRotateAngle>k__BackingField: 25
   <RotateSpeed>k__BackingField: 25
   <CTransform>k__BackingField: {fileID: 8000789201367927090}
@@ -9861,10 +9863,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <HitPos>k__BackingField: {x: 0, y: 0, z: 0}
-  <BeamLine>k__BackingField: {fileID: 8208887166145653116}
+  <BeamLineLR>k__BackingField: {fileID: 8208887166145653116}
   <BeamLineGO>k__BackingField: {fileID: 2184953884915563217}
-  <ShootSpot>k__BackingField: {fileID: 1158179561885953847}
-  <HitSpot>k__BackingField: {fileID: 1515215191792676714}
+  <ShootSpotPS>k__BackingField: {fileID: 1158179561885953847}
+  <HitSpotPS>k__BackingField: {fileID: 1515215191792676714}
   <HitSpotT>k__BackingField: {fileID: 3661464610588513740}
   <SparksRate>k__BackingField: 10
 --- !u!1 &6305653399485739902
@@ -14725,7 +14727,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -20
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0

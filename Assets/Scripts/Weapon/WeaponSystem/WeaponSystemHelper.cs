@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Weapon;
 
@@ -32,44 +31,7 @@ namespace Helper
         {
             Ray ray = new(weapon.CTransform.position, weapon.CTransform.up);
             return Physics.Raycast(ray, weapon.MaxDistance, hitLayers);
-        }     
-        
-        public static WeaponInvoker CreateInvoker(WeaponType type, object behaviour)
-        {
-            switch (type)
-            {
-                case WeaponType.MiningDrill:
-                    var drillBehaviour = (IWeaponBehaviour<MiningDrill>)behaviour;
-                    return new WeaponInvoker(
-                        w => drillBehaviour.StartShoot((MiningDrill)w),
-                        w => drillBehaviour.CancelShoot((MiningDrill)w),
-                        (w, dt) => drillBehaviour.ProceedShoot((MiningDrill)w, dt)
-                    );
-
-                // case WeaponType.PlasmaRifle: ...
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-        }
-    }
-
-    public class WeaponInvoker
-    {
-        private readonly Action<WeaponBase> _start;
-        private readonly Action<WeaponBase> _cancel;
-        private readonly Action<WeaponBase, float> _proceed;
-
-        public WeaponInvoker(Action<WeaponBase> start, Action<WeaponBase> cancel, Action<WeaponBase, float> proceed)
-        {
-            _start = start;
-            _cancel = cancel;
-            _proceed = proceed;
-        }
-
-        public void StartShoot(WeaponBase w) => _start(w);
-        public void CancelShoot(WeaponBase w) => _cancel(w);
-        public void ProceedShoot(WeaponBase w, float dTime) => _proceed(w, dTime);
+        }    
     }
 }
 

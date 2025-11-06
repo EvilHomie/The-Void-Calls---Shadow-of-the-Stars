@@ -3,15 +3,15 @@ using Helper;
 using Player;
 using Ship;
 using System.Collections.Generic;
-using UnityEngine;
 using Weapon;
 
 namespace GameSystem
 {
     public class WeaponSystem : GameSystemBase
     {
-        private readonly Dictionary<WeaponType, WeaponInvoker> _invokers = new();
-        private readonly HashSet<WeaponBase> _activeWeapons = new();
+        private WeaponsBehaviour _weaponsBehaviour;
+        private readonly HashSet<WeaponBase> _activeWeapons = new(200);
+        private readonly HashSet<WeaponBase> _weaponsPendingRemoval = new(200);
         private PlayerShip _playerShip;
         private IPlayerInput _playerInput;
 
@@ -20,54 +20,50 @@ namespace GameSystem
         {
             _playerShip = ship;
             _playerInput = playerInput;
-            RegisterInvokers();
+            _weaponsBehaviour = new WeaponsBehaviour();
         }
 
         protected override void Init()
         {
-            
+
         }
 
         protected override void Subscribe()
         {
             GameFlow.FixedGameTick += OnFixedGameTick;
             _playerInput.ChangeAtackState += PlayerToggleAtack;
-            EventBus.CreateWeaponAction += CancelShoot;
+            EventBus.CreateWeaponAction += _weaponsBehaviour.CancelShoot;
+            EventBus.WeaponChangeState += OnWeaponChangeState;
         }
 
         protected override void Unsubscribe()
         {
             GameFlow.FixedGameTick -= OnFixedGameTick;
             _playerInput.ChangeAtackState -= PlayerToggleAtack;
-            EventBus.CreateWeaponAction -= CancelShoot;
+            EventBus.CreateWeaponAction -= _weaponsBehaviour.CancelShoot;
+            EventBus.WeaponChangeState -= OnWeaponChangeState;
         }
 
-        private void RegisterInvokers()
-        {
-            MiningDrillBehaviour miningDrillBehaviour = new();
-            var invoker = WeaponSystemHelper.CreateInvoker(WeaponType.MiningDrill, miningDrillBehaviour);
-            _invokers[WeaponType.MiningDrill] = invoker;
-        }
-
-        private void StartShoot(WeaponBase weapon)
-            => _invokers[weapon.WeaponType].StartShoot(weapon);
-
-        private void CancelShoot(WeaponBase weapon)
-            => _invokers[weapon.WeaponType].CancelShoot(weapon);
-
-        private void ProceedShoot(WeaponBase weapon, float dTime)
-            => _invokers[weapon.WeaponType].ProceedShoot(weapon, dTime);
+        
 
         private void OnFixedGameTick(float dTime)
         {
+            UpdateActiveWeapons(dTime);
             PlayerAim(dTime);
-
-            foreach (var weapon in _activeWeapons)
-            {
-                ProceedShoot(weapon, dTime);
-            }
-
             EnemyAim();
+        }
+
+        private void UpdateActiveWeapons(float dTime)
+        {
+            foreach (var weapon in _weaponsPendingRemoval) _activeWeapons.Remove(weapon);
+            _weaponsPendingRemoval.Clear();
+            foreach (var weapon in _activeWeapons) _weaponsBehaviour.ProceedShoot(weapon, dTime);
+        }
+
+        private void OnWeaponChangeState(WeaponBase weapon, bool activeState)
+        {
+            if (activeState) _activeWeapons.Add(weapon);
+            else _weaponsPendingRemoval.Add(weapon);
         }
 
         private void PlayerToggleAtack(bool state)
@@ -79,35 +75,21 @@ namespace GameSystem
         {
             foreach (var weaponSlot in shipWeaponData.WeaponSlots)
             {
-                if (weaponSlot.IsActive)
-                {
-                    OnWeaponChangeState(weaponSlot.Weapon, state);
-                }
+                if (weaponSlot.IsActive) SwitchWeaponShootingState(weaponSlot.Weapon, state);
             }
         }
 
-        private void OnWeaponChangeState(WeaponBase weapon, bool state)
+        private void SwitchWeaponShootingState(WeaponBase weapon, bool state)
         {
-            if (state)
-            {
-                StartShoot(weapon);
-                _activeWeapons.Add(weapon);
-            }
-            else
-            {
-                CancelShoot(weapon);
-                _activeWeapons.Remove(weapon);
-            }
+            if (state) _weaponsBehaviour.StartShoot(weapon);
+            else _weaponsBehaviour.CancelShoot(weapon);
         }
 
         private void PlayerAim(float dTime)
         {
             foreach (var weaponSlot in _playerShip.ShipData.WeaponData.WeaponSlots)
             {
-                if (weaponSlot.IsActive)
-                {
-                    WeaponSystemHelper.AimAtTarget(weaponSlot.Weapon, dTime, _playerShip.MousePos);
-                }
+                if (weaponSlot.IsActive) WeaponSystemHelper.AimAtTarget(weaponSlot.Weapon, dTime, _playerShip.MousePos);
             }
         }
 
