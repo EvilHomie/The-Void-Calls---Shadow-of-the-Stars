@@ -1,7 +1,34 @@
+using GameSystem;
+using Projectile;
 using UnityEngine;
 
-public class DamageSystem : MonoBehaviour
+public class DamageSystem : GameSystemBase
 {
+
+    protected override void Init()
+    {
+
+    }
+
+    protected override void Subscribe()
+    {
+        EventBus.ProjectileHit += OnProjectileHit;
+    }
+
+   
+
+    protected override void Unsubscribe()
+    {
+        EventBus.ProjectileHit -= OnProjectileHit;
+    }
+
+    private void OnProjectileHit(ProjectileBase projectile, Collider2D collider)
+    {
+        EventBus.ReturnProjectile(projectile);
+    }
+
+
+
     //public static void ApplyDamage(IDamageable target, float amount, DamageType type)
     //{
     //    ref var profile = target.DamageProfile; // ссылка на данные
@@ -46,4 +73,5 @@ public class DamageSystem : MonoBehaviour
     //{
     //    profile.Structure -= amount;
     //}
+
 }

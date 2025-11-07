@@ -17,6 +17,7 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI CurrentDirectSpeedText;
     [SerializeField] TextMeshProUGUI CurrentStrafeSpeedText;
     [SerializeField] TextMeshProUGUI ThrottleText;
+    [SerializeField] TextMeshProUGUI FPSText;
 
     private PlayerShip _playerShip;
 
@@ -29,6 +30,7 @@ public class VisualDebug : MonoBehaviour
     private void Update()
     {
         OnUpdateShip(_playerShip);
+        ShowFPS();
     }
 
     private void OnUpdateShip(PlayerShip ship)
@@ -73,5 +75,20 @@ public class VisualDebug : MonoBehaviour
         ReverseAcceleration.text = $"RevAccel: {reverseAcceleration:F0} м/с²";
         StrafeAcceleration.text = $"StrAccel: {strafeAcceleration:F0} м/с²";
         RotateSpeed.text = $"RotSpeed: {rotateSpeed:F0} °";
+
+
+    }
+
+    float fpsTickRate = 5;
+    float FPSCooldown;
+    void ShowFPS()
+    {
+        FPSCooldown -= Time.deltaTime;
+
+        if (FPSCooldown <= 0)
+        {
+            FPSCooldown = 1 / fpsTickRate;
+            FPSText.text = $"FPS: {1 / Time.deltaTime:F0}";
+        }
     }
 }

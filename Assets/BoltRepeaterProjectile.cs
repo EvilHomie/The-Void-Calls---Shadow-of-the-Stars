@@ -1,7 +1,13 @@
+using GameSystem;
 using UnityEngine;
 
-public class BoltRepeaterProjectile : MonoBehaviour
+namespace Projectile
 {
-    [field: SerializeField] public Rigidbody2D RigidBody { get; private set; }
-    [field: SerializeField] public Transform CTransform { get; private set; }
+    public class BoltRepeaterProjectile : ProjectileBase
+    {
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            EventBus.ProjectileHit?.Invoke(this, other);
+        }
+    }
 }

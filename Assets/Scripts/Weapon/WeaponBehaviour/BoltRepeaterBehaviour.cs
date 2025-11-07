@@ -13,21 +13,30 @@ namespace Weapon
         public void CancelShoot(BoltRepeater weapon)
         {
             weapon.IsShooting = false;
-            EventBus.WeaponChangeState?.Invoke(weapon, false);
+            
         }
 
         public void ProceedShoot(BoltRepeater weapon, float dTime)
         {
-            weapon.FireCooldown -= dTime;
-
             if (weapon.FireCooldown <= 0)
             {
+                if (!weapon.IsShooting)
+                {
+                    EventBus.WeaponChangeState?.Invoke(weapon, false);
+                    return;
+                }
+
                 weapon.ShootSpotPS.Emit(1);
                 weapon.FireCooldown = weapon.TimePerShot;
 
-                var projectile = Object.Instantiate(weapon.ProjectilePF, weapon.ShootSpotT.position, weapon.CTransform.rotation);
+                var projectile = EventBus.GetProjectile(weapon.ProjectilePF.PoolData.PoolName);
+                projectile.CachedTransform.SetPositionAndRotation(weapon.ShootSpotT.position, weapon.CTransform.rotation);
                 projectile.RigidBody.linearVelocity = (Vector2)weapon.CTransform.up * weapon.ProjectileSpeed;
+                projectile.Weapon = weapon;
+                projectile.LifeTime = weapon.MaxDistance / weapon.ProjectileSpeed;
             }
+
+            weapon.FireCooldown -= dTime;
         }
     }
 }

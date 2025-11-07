@@ -1,6 +1,8 @@
-using Weapon;
-
-public class BeamEmitter : WeaponBase
+namespace Weapon
 {
-    public override WeaponType WeaponType => WeaponType.BeamEmitter;
+    public class BeamEmitter : WeaponBase
+    {
+        public override WeaponType WeaponType => WeaponType.BeamEmitter;
+    }
 }
+

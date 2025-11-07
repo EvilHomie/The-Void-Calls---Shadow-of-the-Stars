@@ -7,14 +7,14 @@ namespace GamePool
 {
     public abstract class AbstractPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolable
     {
-        public readonly HashSet<T> ActiveItems = new();
+        //public readonly HashSet<T> ActiveItems = new();
         //protected Config Config;
         //protected GameEventBus EventBus;
         //protected GameFlowSystem GameFlowSystem;
         private readonly Dictionary<string, ObjectPool<T>> _poolByName = new();
         private readonly Dictionary<string, T> _prefabByName = new();
         private readonly Dictionary<string, Transform> _parentByName = new();
-        private readonly List<T> _pendingReleases = new();
+        //private readonly List<T> _pendingReleases = new();
 
         //[Inject]
         //public void Construct(Config config, GameEventBus eventBus, GameFlowSystem gameFlowSystem)    //пока закоммитил. Скорее всего буду использовать конфиги.
@@ -23,6 +23,10 @@ namespace GamePool
         //    EventBus = eventBus;
         //    GameFlowSystem = gameFlowSystem;
         //}
+        private void Awake()
+        {
+            AwakeInit();
+        }
 
         private void OnEnable()
         {
@@ -36,21 +40,27 @@ namespace GamePool
 
         protected abstract void Subscribe();
         protected abstract void Unsubscribe();
+        protected abstract void AwakeInit();
 
         public T Getitem(string itemName)
         {
             return FindPool(itemName).Get();
         }
-        public void ReleasePendingItems()
-        {
-            foreach (var item in _pendingReleases)
-            {
-                FindPool(item.PoolName).Release(item);
-                ActiveItems.Remove(item);
-            }
 
-            _pendingReleases.Clear();
+        public void Release(T item)
+        {
+            FindPool(item.PoolData.PoolName).Release(item);
         }
+        //public void ReleasePendingItems()
+        //{
+        //    foreach (var item in _pendingReleases)
+        //    {
+        //        FindPool(item.PoolName).Release(item);
+        //        ActiveItems.Remove(item);
+        //    }
+
+        //    _pendingReleases.Clear();
+        //}
 
         protected void CreateItemPools(T[] prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
@@ -60,14 +70,14 @@ namespace GamePool
             }
         }
 
-        protected void CreateItemPool(T prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1) 
+        protected void CreateItemPool(T prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
             prefab.gameObject.SetActive(false);
-            _prefabByName.Add(prefab.PoolName, prefab);
+            _prefabByName.Add(prefab.PoolData.PoolName, prefab);
 
             var newPool = new ObjectPool<T>(
 
-                   createFunc: () => OnCreate(prefab.PoolName, parent),
+                   createFunc: () => OnCreate(prefab.PoolData.PoolName, parent),
                    actionOnGet: OnGet,
                    actionOnRelease: OnRelease,
                    actionOnDestroy: OnDestroyItem,
@@ -75,45 +85,49 @@ namespace GamePool
                    maxSize: maxCapacity
                );
 
-            _parentByName.Add(prefab.PoolName, parent);
-            _poolByName.Add(prefab.PoolName, newPool);
+            _parentByName.Add(prefab.PoolData.PoolName, parent);
+            _poolByName.Add(prefab.PoolData.PoolName, newPool);
             PrewarmPool(newPool, prewarmCount);
-        }        
+        }
 
-        protected void ScheduleForRelease(T item)
-        {
-            _pendingReleases.Add(item);
-            item.CachedGameObject.SetActive(false);
-        }       
+        //protected void ScheduleForRelease(T item)
+        //{
+        //    _pendingReleases.Add(item);
+        //    item.CachedGameObject.SetActive(false);
+        //}       
 
-        protected void ReleaseAll()
-        {
-            foreach (var item in ActiveItems)
-            {
-                ScheduleForRelease(item);
-            }
+        //protected void ReleaseAll()
+        //{
+        //    foreach (var item in ActiveItems)
+        //    {
+        //        ScheduleForRelease(item);
+        //    }
 
-            ActiveItems.Clear();
-            ReleasePendingItems();
-        }        
+        //    ActiveItems.Clear();
+        //    ReleasePendingItems();
+        //}        
 
         private T OnCreate(string itemName, Transform parent)
         {
             var prefab = _prefabByName[itemName];
-            var instance = Instantiate(prefab, parent);            
+            var instance = Instantiate(prefab, parent);
             instance.Init();
             return instance;
         }
 
         private void OnGet(T item)
         {
-            item.ResetParams();
-            ActiveItems.Add(item);
+            item.InPool = false;
+            item.CachedTransform.SetParent(null);
+            item.CachedGameObject.SetActive(true);
+            //ActiveItems.Add(item);
         }
         private void OnRelease(T item)
         {
-            ActiveItems.Remove(item);
-            item.CachedTransform.SetParent(_parentByName[item.PoolName]);
+            //ActiveItems.Remove(item);
+            item.InPool = true;
+            item.CachedTransform.SetParent(_parentByName[item.PoolData.PoolName]);
+            item.CachedGameObject.SetActive(false);
         }
 
         private void OnDestroyItem(T item)
@@ -145,6 +159,6 @@ namespace GamePool
             }
 
             return pool;
-        }  
+        }
     }
 }

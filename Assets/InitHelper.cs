@@ -1,6 +1,7 @@
 using GameSystem;
 using Ship;
 using UnityEngine;
+using Weapon;
 
 namespace Helper
 {
