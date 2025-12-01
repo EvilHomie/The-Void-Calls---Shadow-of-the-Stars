@@ -1201,7 +1201,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 6129766998309369433}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
@@ -2595,29 +2595,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1569448766 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1237531300013582031, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-  m_PrefabInstance: {fileID: 1752271837168986505}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1569448768 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4020895940121281893, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-  m_PrefabInstance: {fileID: 1752271837168986505}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1569448770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569448766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc6efec66d8c37478c0ffe5f22a0d00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _particleSystem: {fileID: 1569448768}
 --- !u!4 &1600195646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8000789201367927090, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
@@ -3076,6 +3053,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1418407813}
     m_Modifications:
+    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
+      propertyPath: <SpreadAngle>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 808967256646746838, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Name
       value: S_BoltRepeater_MK1
@@ -4029,6 +4010,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2063334920}
   - component: {fileID: 2063334921}
+  - component: {fileID: 2063334922}
   m_Layer: 0
   m_Name: Pools
   m_TagString: Untagged
@@ -4067,7 +4049,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
   _startCapacity: 500
   _maxCapacity: 1000
-  _prewarmAmount: 5
+  _prewarmAmount: 10
+--- !u!114 &2063334922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063334919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ea1c00d75ed61148957a66ed2582eff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _poolsData:
+  - {fileID: 11400000, guid: 29905f6e1c9321b47801c7f5c32e817b, type: 2}
+  _startCapacity: 500
+  _maxCapacity: 1000
+  _prewarmAmount: 10
 --- !u!50 &641581802560924216
 Rigidbody2D:
   serializedVersion: 5
@@ -4113,66 +4112,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &1752271837168986505
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1237531300013582031, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_Name
-      value: S_BoltRepeater_MK1_HitSpot
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.505537
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.24486259
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3522999337142788670, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1237531300013582031, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1569448770}
-  m_SourcePrefab: {fileID: 100100000, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}
 --- !u!4 &3383285233363977440
 Transform:
   m_ObjectHideFlags: 0
@@ -4292,6 +4231,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1128428806}
     m_Modifications:
+    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
+      propertyPath: <SpreadAngle>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 808967256646746838, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Name
       value: S_BoltRepeater_MK1
@@ -4356,4 +4303,3 @@ SceneRoots:
   - {fileID: 3383285233363977440}
   - {fileID: 1699755048}
   - {fileID: 1697831217}
-  - {fileID: 1752271837168986505}

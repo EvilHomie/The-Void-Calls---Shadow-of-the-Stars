@@ -22,6 +22,9 @@ namespace GameSystem
         public static Func<string, ProjectileBase> GetProjectile { get; set; }
         public static Action<ProjectileBase> ProjectileFetched { get; set; }
         public static Action<ProjectileBase> ReturnProjectile { get; set; }
+
+        public static Func<string, HitParticle> GetHitParticle { get; set; }
+        public static Action<HitParticle> ReturnHitParticle { get; set; }
     }
 }
 

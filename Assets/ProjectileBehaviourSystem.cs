@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameSystem
 {
-    public class DestroyProjectileSystem : GameSystemBase
+    public class ProjectileBehaviourSystem : GameSystemBase
     {
         private HashSet<ProjectileBase> _activeProjectiles;
         private HashSet<ProjectileBase> _destroyedProjectiles;
@@ -20,6 +20,7 @@ namespace GameSystem
             GameFlow.FixedGameTick += OnGameTick;
             EventBus.ProjectileFetched += OnProjectileFetched;
             EventBus.ProjectileHit += OnProjectileHit;
+
         }
 
         protected override void Unsubscribe()
@@ -29,8 +30,11 @@ namespace GameSystem
             EventBus.ProjectileHit -= OnProjectileHit;
         }
 
-        private void OnProjectileHit(ProjectileBase  projectile, Collider2D d)
+        private void OnProjectileHit(ProjectileBase projectile, Collider2D hitCollider)
         {
+            var hitEffect = EventBus.GetHitParticle(projectile.HitData.PoolName);
+            Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
+            hitEffect.CachedTransform.position = hitPoint;
             _destroyedProjectiles.Add(projectile);
         }
 

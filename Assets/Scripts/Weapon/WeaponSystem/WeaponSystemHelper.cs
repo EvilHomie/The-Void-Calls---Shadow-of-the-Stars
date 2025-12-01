@@ -31,7 +31,24 @@ namespace Helper
         {
             Ray ray = new(weapon.CTransform.position, weapon.CTransform.up);
             return Physics.Raycast(ray, weapon.MaxDistance, hitLayers);
-        }    
+        }
+
+        public static Vector2 ApplySmallSpread(Vector2 baseDir, float spreadAngleDeg)
+        {
+            if (spreadAngleDeg <= 0f)
+                return baseDir;
+
+            float r = (Random.value * 2f - 1f);
+            float angleRad = r * spreadAngleDeg * Mathf.Deg2Rad;
+
+            float sin = angleRad;
+            float cos = 1f;
+
+            return new Vector2(
+                baseDir.x * cos - baseDir.y * sin,
+                baseDir.x * sin + baseDir.y * cos
+            );
+        }
     }
 }
 

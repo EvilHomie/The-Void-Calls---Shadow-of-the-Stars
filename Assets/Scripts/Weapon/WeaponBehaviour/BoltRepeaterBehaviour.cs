@@ -1,4 +1,5 @@
-using GameSystem;
+﻿using GameSystem;
+using Helper;
 using UnityEngine;
 
 namespace Weapon
@@ -30,9 +31,9 @@ namespace Weapon
 
                 var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectileData.PoolName);
                 projectile.CachedTransform.SetPositionAndRotation(weapon.ShootSpotT.position, weapon.CTransform.rotation);
-                projectile.RigidBody.linearVelocity = (Vector2)weapon.CTransform.up * weapon.ProjectileSpeed;
                 projectile.Weapon = weapon;
                 projectile.LifeTime = weapon.MaxDistance / weapon.ProjectileSpeed;
+                projectile.RigidBody.linearVelocity = WeaponSystemHelper.ApplySmallSpread(weapon.CTransform.up, weapon.SpreadAngle) * weapon.ProjectileSpeed;
             }
 
             weapon.FireCooldown -= dTime;

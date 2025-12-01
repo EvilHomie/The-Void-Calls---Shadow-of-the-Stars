@@ -1,44 +1,39 @@
 using GamePool;
 using GameSystem;
-using Projectile;
 using UnityEngine;
+using Weapon;
 
-public class HitParticlesPool : AbstractPool<ProjectileBase> 
+public class HitParticlesPool : AbstractPool<HitParticle>
 {
     [SerializeField] PoolDataSO[] _poolsData;
     [SerializeField] int _startCapacity;
     [SerializeField] int _maxCapacity;
     [SerializeField] int _prewarmAmount;
-    private Transform _enemiesContainer;
     protected override void AwakeInit()
     {
-        //_enemiesContainer = new GameObject("Pool_Container_Projectiles").transform;
-        //_enemiesContainer.SetParent(transform);
-
-        //foreach (var data in _poolsData)
-        //{
-        //    CreateItemPools(data, _startCapacity, _maxCapacity, _enemiesContainer, _prewarmAmount);
-        //}
+        foreach (var data in _poolsData)
+        {
+            var container = new GameObject($"{data.PoolName}").transform;
+            container.SetParent(transform);
+            var hitParticle = data.Prefab.GetComponent<HitParticle>();
+            CreateItemPool(hitParticle, data.PoolName, _startCapacity, _maxCapacity, container, _prewarmAmount);
+        }
     }
 
     protected override void Subscribe()
     {
-        //EventBus.GetProjectile += OnGetProjectile;
-        //EventBus.ReturnProjectile += Release;
+        EventBus.GetHitParticle += OnGetProjectile;
+        EventBus.ReturnHitParticle += ReleaseItem;
     }
-
-   
 
     protected override void Unsubscribe()
     {
-        //EventBus.GetProjectile -= OnGetProjectile;
-        //EventBus.ReturnProjectile -= Release;
+        EventBus.GetHitParticle -= OnGetProjectile;
+        EventBus.ReturnHitParticle -= ReleaseItem;
     }
 
-    //private ProjectileBase OnGetProjectile(string name)
-    //{
-    //    //var pr = Getitem(name);
-    //    //EventBus.ProjectileFetched(pr);
-    //    //return pr;
-    //}
+    private HitParticle OnGetProjectile(string name)
+    {
+        return Getitem(name);
+    }
 }

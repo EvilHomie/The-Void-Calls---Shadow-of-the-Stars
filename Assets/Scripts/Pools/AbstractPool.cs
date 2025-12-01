@@ -50,7 +50,7 @@ namespace GamePool
 
         protected void CreateItemPool(T prefab, string poolName, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
-            var item = Instantiate(prefab);
+            var item = Instantiate(prefab, parent);
             item.gameObject.SetActive(false);  
             _prefabByName.Add(poolName, item);
 

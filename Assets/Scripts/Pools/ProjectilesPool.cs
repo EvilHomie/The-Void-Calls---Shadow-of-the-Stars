@@ -9,16 +9,14 @@ public class ProjectilesPool : AbstractPool<ProjectileBase>
     [SerializeField] int _startCapacity;
     [SerializeField] int _maxCapacity;
     [SerializeField] int _prewarmAmount;
-    private Transform _enemiesContainer;
     protected override void AwakeInit()
     {
-        _enemiesContainer = new GameObject("Pool_Container_Projectiles").transform;
-        _enemiesContainer.SetParent(transform);
-
         foreach (var data in _poolsData)
         {
+            var container = new GameObject($"{data.PoolName}").transform;
+            container.SetParent(transform);
             ProjectileBase projectile = data.Prefab.GetComponent<ProjectileBase>();
-            CreateItemPool(projectile, data.PoolName, _startCapacity, _maxCapacity, _enemiesContainer, _prewarmAmount);
+            CreateItemPool(projectile, data.PoolName, _startCapacity, _maxCapacity, container, _prewarmAmount);
         }
     }
 

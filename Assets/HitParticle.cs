@@ -1,14 +1,24 @@
+using GameSystem;
 using UnityEngine;
 
 namespace Weapon
 {
-    public class HitParticle : MonoBehaviour
+    public class HitParticle : MonoBehaviour, IPoolable
     {
-        [SerializeField] ParticleSystem _particleSystem;
+        public string PoolName { get; set; }
+        public GameObject CachedGameObject { get; private set; }
+        public Transform CachedTransform { get; private set; }
+        public bool InPool { get; set; }
+
+        public virtual void Init()
+        {
+            CachedGameObject = gameObject;
+            CachedTransform = transform;
+        }
 
         void OnParticleSystemStopped()
         {
-            Debug.Log("System has stopped!");
+            EventBus.ReturnHitParticle(this);
         }
     }
 }
