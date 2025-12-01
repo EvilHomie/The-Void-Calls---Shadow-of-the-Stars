@@ -1,3 +1,4 @@
+using Asteroid;
 using GameSystem;
 using Ship;
 using UnityEngine;
