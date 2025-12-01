@@ -33,7 +33,7 @@ namespace GameSystem
             GameFlow.FixedGameTick += OnFixedGameTick;
             _playerInput.ChangeAtackState += PlayerToggleAtack;
             EventBus.CreateWeaponAction += _weaponsBehaviour.CancelShoot;
-            EventBus.WeaponChangeState += OnWeaponChangeState;
+            EventBus.WeaponChangeShootState += OnWeaponChangeState;
         }
 
         protected override void Unsubscribe()
@@ -41,7 +41,7 @@ namespace GameSystem
             GameFlow.FixedGameTick -= OnFixedGameTick;
             _playerInput.ChangeAtackState -= PlayerToggleAtack;
             EventBus.CreateWeaponAction -= _weaponsBehaviour.CancelShoot;
-            EventBus.WeaponChangeState -= OnWeaponChangeState;
+            EventBus.WeaponChangeShootState -= OnWeaponChangeState;
         }
 
         

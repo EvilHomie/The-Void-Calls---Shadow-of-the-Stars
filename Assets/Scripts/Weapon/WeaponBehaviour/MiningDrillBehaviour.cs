@@ -11,12 +11,12 @@ namespace Weapon
             weapon.BeamLineGO.SetActive(true);
             weapon.ShootSpotPS.Play();
             weapon.IsShooting = true;
-            EventBus.WeaponChangeState?.Invoke(weapon, true);
+            EventBus.WeaponChangeShootState?.Invoke(weapon, true);
         }
 
         public void CancelShoot(MiningDrill weapon)
         {
-            EventBus.WeaponChangeState?.Invoke(weapon, false);
+            EventBus.WeaponChangeShootState?.Invoke(weapon, false);
             weapon.BeamLineGO.SetActive(false);
             weapon.ShootSpotPS.Stop();
             weapon.IsShooting = false;
@@ -30,10 +30,14 @@ namespace Weapon
             {
                 weapon.HitPos = hit.point;
                 weapon.HitSpotT.position = hit.point;
-                weapon.HitParticleAccumulator += weapon.SparksRate * dTime;
-                int emitCount = Mathf.FloorToInt(weapon.HitParticleAccumulator);
-                weapon.HitSpotPS.Emit(emitCount);
-                weapon.HitParticleAccumulator -= emitCount;
+                weapon.HitParticleAccumulator += weapon.HitRate * dTime;
+
+                if (weapon.HitParticleAccumulator >= 1)
+                {
+                    weapon.HitSpotPS.Emit(1);
+                    weapon.HitParticleAccumulator -= 1;
+                    EventBus.BeamHit?.Invoke(weapon, hit.collider);
+                }
             }
             else
             {

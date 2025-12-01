@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7638931385160695529
 Transform:
   m_ObjectHideFlags: 0
@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.633, y: 0.326, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab80fe0c3b9860847811b3314839bba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PoolData>k__BackingField: {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
+  <PoolName>k__BackingField: S_BoltRepeater_MK1_Projectile
   <RigidBody>k__BackingField: {fileID: 2813269217918975466}
 --- !u!114 &8851457315122621506
 MonoBehaviour:

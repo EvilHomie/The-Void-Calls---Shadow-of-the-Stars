@@ -1,0 +1,68 @@
+using Projectile;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace GameSystem
+{
+    public class DestroyProjectileSystem : GameSystemBase
+    {
+        private HashSet<ProjectileBase> _activeProjectiles;
+        private HashSet<ProjectileBase> _destroyedProjectiles;
+
+        protected override void Init()
+        {
+            _activeProjectiles = new(500);
+            _destroyedProjectiles = new(500);
+        }
+
+        protected override void Subscribe()
+        {
+            GameFlow.FixedGameTick += OnGameTick;
+            EventBus.ProjectileFetched += OnProjectileFetched;
+            EventBus.ProjectileHit += OnProjectileHit;
+        }
+
+        protected override void Unsubscribe()
+        {
+            GameFlow.FixedGameTick -= OnGameTick;
+            EventBus.ProjectileFetched -= OnProjectileFetched;
+            EventBus.ProjectileHit -= OnProjectileHit;
+        }
+
+        private void OnProjectileHit(ProjectileBase  projectile, Collider2D d)
+        {
+            _destroyedProjectiles.Add(projectile);
+        }
+
+        private void OnProjectileFetched(ProjectileBase projectile)
+        {
+            _activeProjectiles.Add(projectile);
+        }
+        private void OnGameTick(float dTime)
+        {
+            ReturnDestroyed();
+
+            foreach (var projectile in _activeProjectiles)
+            {
+                projectile.LifeTime -= dTime;
+
+                if (projectile.LifeTime <= 0)
+                {
+                    _destroyedProjectiles.Add(projectile);
+                    continue;
+                }
+            }
+        }
+        private void ReturnDestroyed()
+        {
+            foreach (var projectile in _destroyedProjectiles)
+            {
+                _activeProjectiles.Remove(projectile);
+                EventBus.ReturnProjectile(projectile);
+            }
+
+            _destroyedProjectiles.Clear();
+        }
+    }
+}
+

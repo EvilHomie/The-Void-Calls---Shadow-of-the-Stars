@@ -4,7 +4,7 @@ namespace Asteroid
 {
     public class DriftingAsteroid : AsteroidBase, IPoolable
     {
-        [field: SerializeField] public PoolDataSO PoolData { get; private set; }
+        public string PoolName { get; set; }
         public GameObject CachedGameObject { get; set; }
         public Transform CachedTransform { get; set; }
         public bool InPool { get; set; }

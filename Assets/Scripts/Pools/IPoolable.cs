@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IPoolable
 {
-    PoolDataSO PoolData { get; }
+    public string PoolName { get; set; }
     GameObject CachedGameObject { get; }
     Transform CachedTransform { get; }
     bool InPool { get; set; }

@@ -4,4 +4,5 @@ using UnityEngine;
 public class PoolDataSO : ScriptableObject
 {
     [field: SerializeField] public string PoolName { get; private set; }
+    [field: SerializeField] public GameObject Prefab { get; private set; }
 }

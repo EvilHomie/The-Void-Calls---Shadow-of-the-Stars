@@ -7,22 +7,10 @@ namespace GamePool
 {
     public abstract class AbstractPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolable
     {
-        //public readonly HashSet<T> ActiveItems = new();
-        //protected Config Config;
-        //protected GameEventBus EventBus;
-        //protected GameFlowSystem GameFlowSystem;
         private readonly Dictionary<string, ObjectPool<T>> _poolByName = new();
         private readonly Dictionary<string, T> _prefabByName = new();
         private readonly Dictionary<string, Transform> _parentByName = new();
-        //private readonly List<T> _pendingReleases = new();
 
-        //[Inject]
-        //public void Construct(Config config, GameEventBus eventBus, GameFlowSystem gameFlowSystem)    //пока закоммитил. Скорее всего буду использовать конфиги.
-        //{
-        //    Config = config; 
-        //    EventBus = eventBus;
-        //    GameFlowSystem = gameFlowSystem;
-        //}
         private void Awake()
         {
             AwakeInit();
@@ -47,37 +35,28 @@ namespace GamePool
             return FindPool(itemName).Get();
         }
 
-        public void Release(T item)
+        public void ReleaseItem(T item)
         {
-            FindPool(item.PoolData.PoolName).Release(item);
+            FindPool(item.PoolName).Release(item);
         }
-        //public void ReleasePendingItems()
-        //{
-        //    foreach (var item in _pendingReleases)
-        //    {
-        //        FindPool(item.PoolName).Release(item);
-        //        ActiveItems.Remove(item);
-        //    }
 
-        //    _pendingReleases.Clear();
+        //protected void CreateItemPools(T[] prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
+        //{
+        //    foreach (var prefabItem in prefab)
+        //    {
+        //        CreateItemPool(prefabItem, startCapacity, maxCapacity, parent, prewarmCount);
+        //    }
         //}
 
-        protected void CreateItemPools(T[] prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
+        protected void CreateItemPool(T prefab, string poolName, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
-            foreach (var prefabItem in prefab)
-            {
-                CreateItemPool(prefabItem, startCapacity, maxCapacity, parent, prewarmCount);
-            }
-        }
-
-        protected void CreateItemPool(T prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
-        {
-            prefab.gameObject.SetActive(false);
-            _prefabByName.Add(prefab.PoolData.PoolName, prefab);
+            var item = Instantiate(prefab);
+            item.gameObject.SetActive(false);  
+            _prefabByName.Add(poolName, item);
 
             var newPool = new ObjectPool<T>(
 
-                   createFunc: () => OnCreate(prefab.PoolData.PoolName, parent),
+                   createFunc: () => OnCreate(poolName, parent),
                    actionOnGet: OnGet,
                    actionOnRelease: OnRelease,
                    actionOnDestroy: OnDestroyItem,
@@ -85,32 +64,17 @@ namespace GamePool
                    maxSize: maxCapacity
                );
 
-            _parentByName.Add(prefab.PoolData.PoolName, parent);
-            _poolByName.Add(prefab.PoolData.PoolName, newPool);
+            _parentByName.Add(poolName, parent);
+            _poolByName.Add(poolName, newPool);
+
             PrewarmPool(newPool, prewarmCount);
         }
 
-        //protected void ScheduleForRelease(T item)
-        //{
-        //    _pendingReleases.Add(item);
-        //    item.CachedGameObject.SetActive(false);
-        //}       
-
-        //protected void ReleaseAll()
-        //{
-        //    foreach (var item in ActiveItems)
-        //    {
-        //        ScheduleForRelease(item);
-        //    }
-
-        //    ActiveItems.Clear();
-        //    ReleasePendingItems();
-        //}        
-
-        private T OnCreate(string itemName, Transform parent)
+        private T OnCreate(string poolName, Transform parent)
         {
-            var prefab = _prefabByName[itemName];
+            var prefab = _prefabByName[poolName];
             var instance = Instantiate(prefab, parent);
+            instance.PoolName = poolName;
             instance.Init();
             return instance;
         }
@@ -120,13 +84,11 @@ namespace GamePool
             item.InPool = false;
             item.CachedTransform.SetParent(null);
             item.CachedGameObject.SetActive(true);
-            //ActiveItems.Add(item);
         }
         private void OnRelease(T item)
         {
-            //ActiveItems.Remove(item);
             item.InPool = true;
-            item.CachedTransform.SetParent(_parentByName[item.PoolData.PoolName]);
+            item.CachedTransform.SetParent(_parentByName[item.PoolName]);
             item.CachedGameObject.SetActive(false);
         }
 
