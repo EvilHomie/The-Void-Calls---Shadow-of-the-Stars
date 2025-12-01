@@ -14,8 +14,10 @@ public class AsteroidsClusterGenerator : MonoBehaviour
     [Range(0.5f, 10f)] public float _minScale;
     [Range(0.5f, 10f)] public float _maxScale;
 
-    private readonly List<(Vector2 pos, float radius)> _spawned = new();
+    private readonly List<(Vector2 pos, float radius)> _reservedPositions = new();
     private readonly List<GameObject> _spawnedGO = new();
+
+    private GameObject _newClaster;
 
     private GameObject GetRandomAsteroid()
     {
@@ -45,13 +47,17 @@ public class AsteroidsClusterGenerator : MonoBehaviour
 
     private void Generate()
     {
-        _spawned.Clear();
-
-        foreach (var go in _spawnedGO)
+        foreach (Transform child in transform)
         {
-            Destroy(go);
+            Destroy(child.gameObject);
         }
+
         _spawnedGO.Clear();
+        _reservedPositions.Clear();
+        Destroy(_newClaster);
+
+        _newClaster = new GameObject("NewClaster");
+        _newClaster.transform.position = transform.position;
 
         int spawned = 0;
         int attempts = 0;
@@ -61,15 +67,15 @@ public class AsteroidsClusterGenerator : MonoBehaviour
             attempts++;
 
             var asteroidPrefab = GetRandomAsteroid();
-            Vector2 pos = Random.insideUnitCircle * _fieldRadius;
-            pos.x += transform.position.x;
-            pos.y += transform.position.y;
-            float newRadius = Random.Range(_minScale, _maxScale);
+            Vector2 spawmPos = Random.insideUnitCircle * _fieldRadius;
+            spawmPos += (Vector2)transform.position;
+            float spawnDiametr = Random.Range(_minScale, _maxScale);
 
             bool overlap = false;
-            foreach (var (p, r) in _spawned)
+
+            foreach (var (reservedPos, reservedDiametr) in _reservedPositions)
             {
-                if (Vector2.Distance(pos, p) < (r + newRadius) / 2)
+                if (Vector2.Distance(spawmPos, reservedPos) < (reservedDiametr + spawnDiametr) / 2)
                 {
                     overlap = true;
                     break;
@@ -80,9 +86,9 @@ public class AsteroidsClusterGenerator : MonoBehaviour
                 continue;
 
             var newRotation = Quaternion.Euler(0, 0, Random.Range(-180, 180));
-            var asteroid = Instantiate(asteroidPrefab, pos, newRotation, transform);
-            asteroid.transform.localScale = Constants.Vector3One * newRadius;
-            _spawned.Add((pos, newRadius));
+            var asteroid = Instantiate(asteroidPrefab, spawmPos, newRotation, _newClaster.transform);
+            asteroid.transform.localScale = Constants.Vector3One * spawnDiametr;
+            _reservedPositions.Add((spawmPos, spawnDiametr));
             _spawnedGO.Add(asteroid);
             spawned++;
         }
@@ -103,16 +109,17 @@ public class AsteroidsClusterGenerator : MonoBehaviour
 
     public void FillData()
     {
-        var AsteroidsFieldComponent = GetComponent<AsteroidsCluster>();
-        AsteroidsFieldComponent.Asteroids.Clear();
+        var asteroidsCluster = _newClaster.AddComponent<AsteroidsCluster>();
+        asteroidsCluster.Asteroids = new();
+        Debug.Log(asteroidsCluster.Asteroids.Count);
 
         foreach (var asteroid in _spawnedGO)
         {
             var ast = asteroid.AddComponent<ClusterAsteroid>();
-            AsteroidsFieldComponent.Asteroids.Add(ast);
+            asteroidsCluster.Asteroids.Add(ast);
         }
 
-        foreach (var asteroid in AsteroidsFieldComponent.Asteroids)
+        foreach (var asteroid in asteroidsCluster.Asteroids)
         {
             asteroid.AsteroidBehaviourType = AsteroidBehaviourType.ClusterAsteroid;
             asteroid.RB = asteroid.GetComponent<Rigidbody2D>();
@@ -127,8 +134,8 @@ public class AsteroidsClusterGenerator : MonoBehaviour
             };
 
             asteroid.DefaultDamageProfile = newDamageProfile;
+            asteroid.CurrentDamageProfile = newDamageProfile;
         }
-
     }
 }
 

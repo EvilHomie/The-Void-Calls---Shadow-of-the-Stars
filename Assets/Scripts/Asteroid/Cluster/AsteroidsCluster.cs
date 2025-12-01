@@ -5,7 +5,7 @@ namespace Asteroid
 {
     public class AsteroidsCluster : MonoBehaviour
     {
-        [field: SerializeField] public List<ClusterAsteroid> Asteroids { get; private set; }
+        [field: SerializeField] public List<ClusterAsteroid> Asteroids { get; set; }
 
         private void Start()
         {

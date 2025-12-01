@@ -1,10 +1,7 @@
-using UnityEngine;
-
 namespace Asteroid
 {
     public class ClusterAsteroid : AsteroidBase
     {
-
         private void OnBecameInvisible()
         {
             RB.simulated = false;
