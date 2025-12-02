@@ -1,10 +1,10 @@
-using GameSystem;
-using Projectile;
+using GameSystems;
+using Projectiles;
 using System.Buffers.Text;
 using UnityEngine;
-using Weapon;
+using Weapons;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class DamageSystem : GameSystemBase
     {

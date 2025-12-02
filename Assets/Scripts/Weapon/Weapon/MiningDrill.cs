@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Weapon
+namespace Weapons
 {
     public class MiningDrill : WeaponBase
     {

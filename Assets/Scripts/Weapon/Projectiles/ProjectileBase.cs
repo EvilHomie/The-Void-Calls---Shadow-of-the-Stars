@@ -1,9 +1,9 @@
-using Enviroment;
-using GameSystem;
+using GamePools;
+using GameSystems;
 using UnityEngine;
-using Weapon;
+using Weapons;
 
-namespace Projectile
+namespace Projectiles
 {
     public class ProjectileBase : PoolObjectBase
     {

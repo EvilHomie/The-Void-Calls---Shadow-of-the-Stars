@@ -1,6 +1,6 @@
-using GamePool;
-using GameSystem;
-using Projectile;
+using GamePools;
+using GameSystems;
+using Projectiles;
 using UnityEngine;
 
 public class ProjectilesPool : AbstractPool<ProjectileBase>

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class GameFlow : MonoBehaviour
     {

@@ -1,7 +1,7 @@
-using GameSystem;
+using GameSystems;
 using UnityEngine;
 
-namespace Weapon
+namespace Weapons
 {
     public class HitParticle : MonoBehaviour, IPoolable
     {

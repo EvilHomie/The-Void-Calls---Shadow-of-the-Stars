@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Enviroment
+namespace GamePools
 {
     public abstract class PoolObjectBase : MonoBehaviour, IPoolable
     {
@@ -16,4 +16,3 @@ namespace Enviroment
         }
     }
 }
-

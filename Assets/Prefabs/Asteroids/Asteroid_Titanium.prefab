@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 1770992445339181337}
   - component: {fileID: 5043179483001390502}
   - component: {fileID: 8241648857600082667}
+  - component: {fileID: 3099152169615494874}
+  - component: {fileID: 4416170077388437246}
   m_Layer: 0
   m_Name: Asteroid_Titanium
   m_TagString: Untagged
@@ -244,3 +246,33 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3099152169615494874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72494188183028475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e395b886e34e8b442bde26ccbb5a7bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RB>k__BackingField: {fileID: 8241648857600082667}
+  <HealthData>k__BackingField: {fileID: 4416170077388437246}
+  <AsteroidType>k__BackingField: 129
+--- !u!114 &4416170077388437246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72494188183028475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503b366b420245e4f8ceae8c6da3f9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultHealthpoint: 0
+  CurrentHealthpoint: 0
+  HealthType: 0

@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 8981165168811459601}
   - component: {fileID: 5876206619490652291}
   - component: {fileID: 8312151454546175485}
+  - component: {fileID: 1454345449739664609}
+  - component: {fileID: 3902183762245198505}
   m_Layer: 0
   m_Name: Asteroid_Platina
   m_TagString: Untagged
@@ -244,3 +246,33 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1454345449739664609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5470517541155264483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e395b886e34e8b442bde26ccbb5a7bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RB>k__BackingField: {fileID: 8312151454546175485}
+  <HealthData>k__BackingField: {fileID: 3902183762245198505}
+  <AsteroidType>k__BackingField: 136
+--- !u!114 &3902183762245198505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5470517541155264483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503b366b420245e4f8ceae8c6da3f9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultHealthpoint: 0
+  CurrentHealthpoint: 0
+  HealthType: 0

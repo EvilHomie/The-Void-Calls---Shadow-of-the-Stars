@@ -1,5 +1,5 @@
 using UnityEngine;
-using Weapon;
+using Weapons;
 
 namespace Ship
 {

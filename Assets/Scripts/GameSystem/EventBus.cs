@@ -1,10 +1,10 @@
-using Projectile;
+using Projectiles;
 using Ship;
 using System;
 using UnityEngine;
-using Weapon;
+using Weapons;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class EventBus : MonoBehaviour
     {

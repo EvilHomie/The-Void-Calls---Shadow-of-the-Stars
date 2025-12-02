@@ -1,4 +1,5 @@
-﻿using Asteroid;
+﻿using Asteroids;
+using Helper;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,7 +57,7 @@ public class AsteroidsClusterGenerator : MonoBehaviour
         _reservedPositions.Clear();
         Destroy(_newClaster);
 
-        _newClaster = new GameObject("NewClaster");
+        _newClaster = new GameObject("AsteroidsClaster_NEW");
         _newClaster.transform.position = transform.position;
 
         int spawned = 0;
@@ -111,30 +112,35 @@ public class AsteroidsClusterGenerator : MonoBehaviour
     {
         var asteroidsCluster = _newClaster.AddComponent<AsteroidsCluster>();
         asteroidsCluster.Asteroids = new();
-        Debug.Log(asteroidsCluster.Asteroids.Count);
 
-        foreach (var asteroid in _spawnedGO)
+        foreach (var spawnedAsteroid in _spawnedGO)
         {
-            var ast = asteroid.AddComponent<ClusterAsteroid>();
-            asteroidsCluster.Asteroids.Add(ast);
+            if (!spawnedAsteroid.TryGetComponent(out Asteroid asteroidComponent))
+            {
+                throw new Exception("Asteroid Component NotFound");
+            }
+
+            var clusterAsteroid = spawnedAsteroid.AddComponent<ClusterAsteroid>();
+            asteroidsCluster.Asteroids.Add(clusterAsteroid);
+
+            clusterAsteroid.RB = asteroidComponent.RB;
+            clusterAsteroid.HealthData = asteroidComponent.HealthData;
+            clusterAsteroid.AsteroidType = asteroidComponent.AsteroidType;
+            Destroy(asteroidComponent);
         }
 
-        foreach (var asteroid in asteroidsCluster.Asteroids)
+        foreach (var clusterAsteroid in asteroidsCluster.Asteroids)
         {
-            asteroid.AsteroidBehaviourType = AsteroidBehaviourType.ClusterAsteroid;
-            asteroid.RB = asteroid.GetComponent<Rigidbody2D>();
-            asteroid.RB.angularDamping = 0;
-            asteroid.RB.linearDamping = 0.2f;
-            asteroid.RB.mass = _asteroidBaseMass * Mathf.Pow(asteroid.transform.localScale.x, 2f);
+            clusterAsteroid.RB.angularDamping = 0;
+            clusterAsteroid.RB.linearDamping = 0.2f;
+            clusterAsteroid.RB.mass = _asteroidBaseMass * Mathf.Pow(clusterAsteroid.transform.localScale.x, 2f);
+            clusterAsteroid.HealthData.DefaultHealthPoints.HullPoints = clusterAsteroid.RB.mass;
 
-            DamageProfile newDamageProfile = new()
-            {
-                Structure = asteroid.RB.mass,
-                ProfileType = DamageProfileType.Asteroid
-            };
+            FlagsHelper.RemoveFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Drifting);
+            FlagsHelper.AddFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Cluster);                        
 
-            asteroid.DefaultDamageProfile = newDamageProfile;
-            asteroid.CurrentDamageProfile = newDamageProfile;
+            clusterAsteroid.HealthData.ResistanceType = ResistanceType.None;
+            FlagsHelper.AddFlag(ref clusterAsteroid.HealthData.ResistanceType, ResistanceType.None);
         }
     }
 }

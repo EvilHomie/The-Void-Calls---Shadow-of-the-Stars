@@ -1,7 +1,7 @@
-using GamePool;
-using GameSystem;
+using GamePools;
+using GameSystems;
 using UnityEngine;
-using Weapon;
+using Weapons;
 
 public class HitParticlesPool : AbstractPool<HitParticle>
 {

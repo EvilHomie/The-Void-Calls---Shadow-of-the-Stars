@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7885196326597843223}
   - component: {fileID: 925731215222391324}
   - component: {fileID: 6527772960036661419}
+  - component: {fileID: 6756017609062694925}
+  - component: {fileID: 7017736389625070226}
   m_Layer: 0
   m_Name: Asteroid_Silver
   m_TagString: Untagged
@@ -244,3 +246,33 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6756017609062694925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8124298471664025412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e395b886e34e8b442bde26ccbb5a7bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RB>k__BackingField: {fileID: 6527772960036661419}
+  <HealthData>k__BackingField: {fileID: 7017736389625070226}
+  <AsteroidType>k__BackingField: 132
+--- !u!114 &7017736389625070226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8124298471664025412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503b366b420245e4f8ceae8c6da3f9b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultHealthpoint: 0
+  CurrentHealthpoint: 0
+  HealthType: 0

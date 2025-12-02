@@ -3,7 +3,7 @@ using Player;
 using Ship;
 using UnityEngine;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class PlayerVisualSystem : GameSystemBase
     {

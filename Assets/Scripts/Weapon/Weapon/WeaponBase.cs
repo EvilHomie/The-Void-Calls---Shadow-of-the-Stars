@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Weapon
+namespace Weapons
 {
     public abstract class WeaponBase : MonoBehaviour, IShipModule
     {

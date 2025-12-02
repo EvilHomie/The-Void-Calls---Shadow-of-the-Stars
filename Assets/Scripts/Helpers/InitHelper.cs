@@ -1,8 +1,8 @@
-using Asteroid;
-using GameSystem;
+using Asteroids;
+using GameSystems;
 using Ship;
 using UnityEngine;
-using Weapon;
+using Weapons;
 
 namespace Helper
 {

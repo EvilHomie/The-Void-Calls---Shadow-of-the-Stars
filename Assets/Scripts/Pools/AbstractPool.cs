@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace GamePool
+namespace GamePools
 {
     public abstract class AbstractPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolable
     {

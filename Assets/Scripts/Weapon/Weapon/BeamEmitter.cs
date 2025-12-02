@@ -1,4 +1,4 @@
-namespace Weapon
+namespace Weapons
 {
     public class BeamEmitter : WeaponBase
     {

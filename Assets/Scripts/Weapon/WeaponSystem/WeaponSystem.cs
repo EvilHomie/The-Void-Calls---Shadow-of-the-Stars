@@ -3,9 +3,9 @@ using Helper;
 using Player;
 using Ship;
 using System.Collections.Generic;
-using Weapon;
+using Weapons;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class WeaponSystem : GameSystemBase
     {

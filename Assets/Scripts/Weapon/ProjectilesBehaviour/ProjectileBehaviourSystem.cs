@@ -1,8 +1,8 @@
-using Projectile;
+using Projectiles;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class ProjectileBehaviourSystem : GameSystemBase
     {

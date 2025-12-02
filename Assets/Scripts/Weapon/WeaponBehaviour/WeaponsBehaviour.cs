@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Weapon;
+using Weapons;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class WeaponsBehaviour
     {

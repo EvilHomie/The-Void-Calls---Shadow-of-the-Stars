@@ -3,7 +3,7 @@ using Enviroment;
 using Player;
 using UnityEngine;
 
-namespace GameSystem
+namespace GameSystems
 {
     public class EnvironmentSystem : GameSystemBase
     {

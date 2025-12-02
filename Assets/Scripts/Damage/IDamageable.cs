@@ -1,4 +1,4 @@
 public interface IDamageable
 {
-    ref DamageProfile GetCurrentDamageProfile();
+    ref HealthData GetCurrentDamageProfile();
 }

@@ -1,7 +1,7 @@
-using GameSystem;
+using GameSystems;
 using UnityEngine;
 
-namespace Projectile
+namespace Projectiles
 {
     public class BoltRepeaterProjectile : ProjectileBase
     {

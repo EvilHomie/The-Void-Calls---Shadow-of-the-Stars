@@ -1,4 +1,4 @@
-namespace Weapon
+namespace Weapons
 {
     public interface IWeaponBehaviour<TWeapon> where TWeapon : WeaponBase
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Asteroid
+namespace Asteroids
 {
     public class AsteroidsCluster : MonoBehaviour
     {
