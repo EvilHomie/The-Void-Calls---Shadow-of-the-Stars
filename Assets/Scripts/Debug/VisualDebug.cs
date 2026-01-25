@@ -17,6 +17,8 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI CurrentDirectSpeedText;
     [SerializeField] TextMeshProUGUI CurrentStrafeSpeedText;
     [SerializeField] TextMeshProUGUI ThrottleText;
+    [SerializeField] TextMeshProUGUI DirectSpeedDelta;
+    [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
     [SerializeField] TextMeshProUGUI FPSText;
 
     private PlayerShip _playerShip;
@@ -53,13 +55,15 @@ public class VisualDebug : MonoBehaviour
         CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel * Constants.WorldUnitMod:F0} м/с";
         CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel * Constants.WorldUnitMod:F0} м/с";
 
+        ThrottleText.text = $"Throttle: {ship.ShipData.MovementData.Throttle * 100:F0} %";
+
         if (ship.ShipData.MovementData.InertiaDamping)
         {
             float speed = ship.ShipData.MovementData.Throttle > 0
             ? maxDirectSpeed
             : maxReverseSpeed;
 
-            ThrottleText.text = $"Throttle: {ship.ShipData.MovementData.Throttle * speed:F0} м/с";
+            DirectSpeedDelta.text = $"TargetSpeed: {ship.ShipData.MovementData.Throttle * speed:F0} м/с";
         }
         else
         {
@@ -67,7 +71,7 @@ public class VisualDebug : MonoBehaviour
             ? directAcceleration
             : reverseAcceleration;
 
-            ThrottleText.text = $"Throttle: {ship.ShipData.MovementData.Throttle * accel:F0} м/с";
+            DirectSpeedDelta.text = $"Acceleration: {ship.ShipData.MovementData.Throttle * accel:F0} м/с";
         }
 
 
@@ -79,7 +83,7 @@ public class VisualDebug : MonoBehaviour
 
     }
 
-    float fpsTickRate = 5;
+    private readonly float _fpsTickRate = 5;
     float FPSCooldown;
     void ShowFPS()
     {
@@ -87,7 +91,7 @@ public class VisualDebug : MonoBehaviour
 
         if (FPSCooldown <= 0)
         {
-            FPSCooldown = 1 / fpsTickRate;
+            FPSCooldown = 1 / _fpsTickRate;
             FPSText.text = $"FPS: {1 / Time.deltaTime:F0}";
         }
     }

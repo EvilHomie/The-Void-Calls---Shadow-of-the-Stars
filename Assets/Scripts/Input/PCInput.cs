@@ -65,7 +65,7 @@ namespace Player
 
         private void TrackMouse()
         {
-            Vector3 mouseWorld = _camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             mouseWorld.z = 0;
             _playerShip.MousePos = mouseWorld;
             Vector2 direction = (mouseWorld - _playerTransform.position).normalized;
@@ -80,22 +80,16 @@ namespace Player
 
         private void OnAttack(InputAction.CallbackContext context)
         {
-            if (!_isActive) return;
-
             ChangeAtackState?.Invoke(true);
         }
 
         private void OnEndAttack(InputAction.CallbackContext context)
         {
-            if (!_isActive) return;
-
             ChangeAtackState?.Invoke(false);
         }
 
         private void ToggleDamper(InputAction.CallbackContext context)
         {
-            if (!_isActive) return;
-
             ToggleDamperAction?.Invoke();
         }
 

@@ -49,7 +49,7 @@ namespace GameSystems
             _shipRB = _playerShip.Rigidbody;
             _shipTransform = _shipRB.transform;
 
-            OnPlayerChangeShip(_playerShip.ShipData);
+            OnPlayerChangeShip(_playerShip);
         }
 
         protected override void Subscribe()
@@ -72,19 +72,19 @@ namespace GameSystems
             EventBus.PlayerChangeShip -= OnPlayerChangeShip;
         }
 
-        private void OnPlayerChangeShip(ShipData shipData)
+        private void OnPlayerChangeShip(PlayerShip ship)
         {
-            _movementData = shipData.MovementData;
-            _inertiaDampingLastState = shipData.MovementData.InertiaDamping;
-            _shipRB.mass = shipData.ChassisData.Mass;
+            _movementData = ship.ShipData.MovementData;
+            _inertiaDampingLastState = ship.ShipData.MovementData.InertiaDamping;
+            _shipRB.mass = ship.ShipData.ChassisData.Mass;
 
-            _directMaxSpeed = shipData.MovementData.MainEngine.DirectThrust / shipData.ChassisData.DirectDrag / Constants.WorldUnitMod;
-            _directAcceleration = shipData.MovementData.MainEngine.DirectThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _reverseMaxSpeed = shipData.MovementData.MainEngine.ReverseThrust / shipData.ChassisData.ReverseDrag / Constants.WorldUnitMod;
-            _reverseAcceleration = shipData.MovementData.MainEngine.ReverseThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _strafeMaxSpeed = shipData.MovementData.SideEngines.StrafeThrust / shipData.ChassisData.StrafeDrag / Constants.WorldUnitMod;
-            _strafeAcceleration = shipData.MovementData.SideEngines.StrafeThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _rotateSpeed = shipData.MovementData.SideEngines.RotateThrust / shipData.ChassisData.RotateDrag;
+            _directMaxSpeed = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.DirectDrag / Constants.WorldUnitMod;
+            _directAcceleration = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _reverseMaxSpeed = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.ReverseDrag / Constants.WorldUnitMod;
+            _reverseAcceleration = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _strafeMaxSpeed = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.StrafeDrag / Constants.WorldUnitMod;
+            _strafeAcceleration = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _rotateSpeed = ship.ShipData.MovementData.SideEngines.RotateThrust / ship.ShipData.ChassisData.RotateDrag;
         }
 
         private void OnTrackMouseAction(Vector2 dir) { _mouseDirection = dir; }
@@ -93,19 +93,27 @@ namespace GameSystems
         {
             _movementData.InertiaDamping = !_movementData.InertiaDamping;
 
-            if (_inertiaDampingLastState != _movementData.InertiaDamping)
+            if (_inertiaDampingLastState == _movementData.InertiaDamping)
             {
-                if (_movementData.InertiaDamping)
-                {
-                    _movementData.Throttle = _lastThrottleWithDamping;
-                    _inertiaDampingLastState = true;
-                }
-                else
-                {
-                    _movementData.Throttle = 0;
-                    _inertiaDampingLastState = false;
-                    _movementData.DirectAccelerationPower = 0;
-                }
+                return;
+            }
+
+            if (_movementData.InertiaDamping)
+            {
+                _movementData.Throttle = _lastThrottleWithDamping;
+                _inertiaDampingLastState = true;
+
+                _targetSpeed = (_movementData.Throttle >= 0
+                     ? _directMaxSpeed
+                     : _reverseMaxSpeed)
+                     * _movementData.Throttle;
+            }
+            else
+            {
+                _lastThrottleWithDamping = _movementData.Throttle;
+                _movementData.Throttle = 0;
+                _inertiaDampingLastState = false;
+                _movementData.DirectAccelerationPower = 0;
             }
         }
 
@@ -116,52 +124,78 @@ namespace GameSystems
             HandleRotation(fixedDT);
         }
 
-        private readonly float _throttleZeroSensitivity = 0.05f; // порог срабатывания задержки.
-        private readonly float _throttleZeroDelay = 1f; // продолжительность задерки на нуле.
+        private readonly float _throttleZeroDelay = 0.2f; // продолжительность задерки на нуле.
         private float _throttleZeroDelayTimer = 0f; // текущий таймер задержки
-        private bool _zeroCrossIgnored; // должна ли быть пауза при прохождении через ноль
+
+        // переменные нужны для закомментированной версии
+        //private readonly float _throttleZeroSensitivity = 0.01f; // порог срабатывания задержки.
+        //private bool _lockOnZero; // должна ли быть пауза при прохождении через ноль
 
         private void HandleThrottle(float fixedDT)
         {
-            if (_movementData.InertiaDamping)
+            if (_inputValue.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
             {
-                _lastThrottleWithDamping = _movementData.Throttle;
-            }
-
-            if (_inputValue.y == 0)
-            {
-                _zeroCrossIgnored = true;
                 _throttleZeroDelayTimer = 0;
                 return;
             }
 
-            if (_throttleZeroDelayTimer > 0)
+            if (_throttleZeroDelayTimer > 0)  // игнор если запущен таймер остановки на нуле
             {
                 _throttleZeroDelayTimer -= fixedDT;
                 return;
             }
 
+            float prevValue = _movementData.Throttle;
             _movementData.Throttle += _inputValue.y * fixedDT;
             _movementData.Throttle = Mathf.Clamp(_movementData.Throttle, -1, 1);
 
-            float absThrottle = Mathf.Abs(_movementData.Throttle);
-
-            if (absThrottle > _throttleZeroSensitivity)
+            if ((prevValue < 0f && _movementData.Throttle >= 0f) || (prevValue > 0f && _movementData.Throttle <= 0f))
             {
-                _zeroCrossIgnored = false;
-            }
-
-            if (!_zeroCrossIgnored && absThrottle < _throttleZeroSensitivity)
-            {
-                _zeroCrossIgnored = true;
                 _movementData.Throttle = 0;
                 _throttleZeroDelayTimer = _throttleZeroDelay;
             }
 
             _targetSpeed = (_movementData.Throttle >= 0
-               ? _directMaxSpeed
-               : _reverseMaxSpeed)
-               * _movementData.Throttle;
+              ? _directMaxSpeed
+              : _reverseMaxSpeed)
+              * _movementData.Throttle;
+
+            // В версии ниже нашел косяк. если новая скорость отличается от нуля меньше чем на _throttleZeroSensitivity то при обратке не стопарится на нуле
+
+            //if (_inputValue.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
+            //{
+            //    _lockOnZero = false;
+            //    _throttleZeroDelayTimer = 0;
+            //    return;
+            //}
+
+            //if (_throttleZeroDelayTimer > 0)  // игнор если запущен таймер остановки на нуле
+            //{
+            //    _throttleZeroDelayTimer -= fixedDT;
+            //    return;
+            //}
+
+            //_movementData.Throttle += _inputValue.y * fixedDT;
+            //_movementData.Throttle = Mathf.Clamp(_movementData.Throttle, -1, 1);
+
+            //float absThrottle = Mathf.Abs(_movementData.Throttle);
+
+            //if (absThrottle >= _throttleZeroSensitivity)
+            //{
+            //    _lockOnZero = true;
+            //}
+
+            //if (_lockOnZero && absThrottle < _throttleZeroSensitivity)
+            //{
+            //    _lockOnZero = false;
+            //    _movementData.Throttle = 0;
+            //    _throttleZeroDelayTimer = _throttleZeroDelay;
+            //}
+
+            //_targetSpeed = (_movementData.Throttle >= 0
+            //   ? _directMaxSpeed
+            //   : _reverseMaxSpeed)
+            //   * _movementData.Throttle;
         }
 
         private void HandleRotation(float fixedDT)

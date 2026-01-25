@@ -20,7 +20,7 @@ namespace GameSystems
 
         protected override void Init()
         {
-            OnUpdateShip(_playerShip.ShipData);
+            OnUpdateShip(_playerShip);
         }
 
         protected override void Subscribe()
@@ -35,10 +35,10 @@ namespace GameSystems
             EventBus.PlayerChangeShip -= OnUpdateShip;
         }
 
-        private void OnUpdateShip(ShipData ship)
+        private void OnUpdateShip(PlayerShip ship)
         {
-            _shipMovementData = ship.MovementData;
-            _shipMovementView = ship.MovementView;
+            _shipMovementData = ship.ShipData.MovementData;
+            _shipMovementView = ship.ShipData.MovementView;
         }
 
 
@@ -72,15 +72,18 @@ namespace GameSystems
         {
             _currentThrustersPower = Constants.SideEnginesPowerZero;
 
-            if (_shipMovementData.SideAcceleration > 0)
+            if (_shipMovementData.SideAcceleration != 0)
             {
-                _currentThrustersPower.BackLeft = _shipMovementData.SideAcceleration;
-                _currentThrustersPower.FrontLeft = _shipMovementData.SideAcceleration;
-            }
-            else
-            {
-                _currentThrustersPower.BackRight = -_shipMovementData.SideAcceleration;
-                _currentThrustersPower.FrontRight = -_shipMovementData.SideAcceleration;
+                if (_shipMovementData.SideAcceleration > 0)
+                {
+                    _currentThrustersPower.BackLeft = _shipMovementData.SideAcceleration;
+                    _currentThrustersPower.FrontLeft = _shipMovementData.SideAcceleration;
+                }
+                else
+                {
+                    _currentThrustersPower.BackRight = -_shipMovementData.SideAcceleration;
+                    _currentThrustersPower.FrontRight = -_shipMovementData.SideAcceleration;
+                }
             }
 
             if (_shipMovementData.RotatePowerValue != 0)
