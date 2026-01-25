@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      AsteroidBlowFog_Adition_0: 597371308858753820
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

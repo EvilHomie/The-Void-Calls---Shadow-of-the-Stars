@@ -49,6 +49,7 @@ Material:
     - _NoiseSpeed: 2
     - _NoiseTiling: 2.6
     m_Colors:
+    - White: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 8.3, g: 0.7695961, b: 0, a: 0}
     - _MainColor: {r: 0, g: 0.90199935, b: 2.9960785, a: 0}
     - _SecondColor: {r: 0, g: 0.1713798, b: 47.93725, a: 0}
@@ -66,4 +67,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 9
+  version: 10
