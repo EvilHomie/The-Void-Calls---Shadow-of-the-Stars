@@ -8,10 +8,11 @@ namespace Player
     public class PCInput : IPlayerInput
     {
         public Action<Vector2> MoveInputAction { get; set; }
-        public Action<Vector2> TrackMouseAction { get; set; }
+        public Action<Vector2> TrackMouseDirectionAction { get; set; }
+        public Action<Vector2> TrackMouseWorldPositionAction { get; set; }
         public Action<bool> ChangeAtackState { get; set; }
         public Action ToggleDamperAction { get; set; }
-        public Action<float> MouseScrollAction { get; set; }
+        public Action<float> ChangeZoomAction { get; set; }
 
         private InputSystem_Actions _inputActions;
         private PlayerShip _playerShip;
@@ -29,7 +30,7 @@ namespace Player
 
         public void Subscrube()
         {
-            GameFlow.FixedGameTick += OnFixedGameTick;
+            GameFlow.UpdateTick += OnUpdateTick;
             GameFlow.GameStateChange += OnGameStateChange;
             _inputActions.Player.LeftClick.performed += OnAttack;
             _inputActions.Player.LeftClick.canceled += OnEndAttack;
@@ -39,7 +40,7 @@ namespace Player
 
         public void Unsubscribe()
         {
-            GameFlow.FixedGameTick -= OnFixedGameTick;
+            GameFlow.FixedGameTick -= OnUpdateTick;
             GameFlow.GameStateChange -= OnGameStateChange;
             _inputActions.Player.LeftClick.performed -= OnAttack;
             _inputActions.Player.LeftClick.canceled -= OnEndAttack;
@@ -47,7 +48,7 @@ namespace Player
             _inputActions.Player.MouseScroll.performed -= OnMouseScroll;
         }
 
-        private void OnFixedGameTick(float deltaTime)
+        private void OnUpdateTick(float deltaTime)
         {
             if (!_isActive) return;
 
@@ -65,11 +66,13 @@ namespace Player
 
         private void TrackMouse()
         {
+            Vector2 mouseScreen = Mouse.current.position.ReadValue();
             Vector3 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            mouseWorld.z = 0;
+            Vector2 shipScreen = _camera.WorldToScreenPoint(_playerTransform.position);
+            Vector2 direction = (mouseScreen - shipScreen).normalized;
             _playerShip.MousePos = mouseWorld;
-            Vector2 direction = (mouseWorld - _playerTransform.position).normalized;
-            TrackMouseAction?.Invoke(direction);
+            TrackMouseDirectionAction?.Invoke(direction);
+            //TrackMouseWorldPositionAction?.Invoke(mouseWorld);
         }
 
         private void TrackInput()
@@ -96,7 +99,7 @@ namespace Player
         private void OnMouseScroll(InputAction.CallbackContext context)
         {
             float scroll = context.ReadValue<Vector2>().y;
-            MouseScrollAction?.Invoke(scroll);
+            ChangeZoomAction?.Invoke(scroll);
         }
     }
 }

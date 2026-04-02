@@ -6,7 +6,7 @@ namespace GameSystems
     public class GameFlow : MonoBehaviour
     {
         // события помеченные как Standart будто обычные Update FixedUpdate LateUpdate
-        public static Action<float> GameTick { get; set; }
+        public static Action<float> UpdateTick { get; set; }
         public static Action<float> FixedGameTick { get; set; }
         public static Action<float> LateGameTick { get; set; }
         public static Action GameTickStandart { get; set; }
@@ -16,7 +16,7 @@ namespace GameSystems
 
         void Update()
         {
-            GameTick?.Invoke(Time.deltaTime);
+            UpdateTick?.Invoke(Time.deltaTime);
             GameTickStandart?.Invoke();
         }
 

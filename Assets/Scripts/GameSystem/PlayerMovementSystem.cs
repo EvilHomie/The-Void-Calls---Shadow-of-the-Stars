@@ -56,7 +56,7 @@ namespace GameSystems
         {
             _input.Subscrube();
             _input.MoveInputAction += OnMoveInputAction;
-            _input.TrackMouseAction += OnTrackMouseAction;
+            _input.TrackMouseDirectionAction += OnTrackMouseAction;
             _input.ToggleDamperAction += OnToggleDamper;
             GameFlow.FixedGameTick += OnFixedGameTick;
             EventBus.PlayerChangeShip += OnPlayerChangeShip;
@@ -66,7 +66,7 @@ namespace GameSystems
         {
             _input.Unsubscribe();
             _input.MoveInputAction -= OnMoveInputAction;
-            _input.TrackMouseAction -= OnTrackMouseAction;
+            _input.TrackMouseDirectionAction -= OnTrackMouseAction;
             _input.ToggleDamperAction -= OnToggleDamper;
             GameFlow.FixedGameTick -= OnFixedGameTick;
             EventBus.PlayerChangeShip -= OnPlayerChangeShip;

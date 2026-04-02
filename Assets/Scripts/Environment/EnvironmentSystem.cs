@@ -32,24 +32,24 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.GameTick += OnGameTick;
+            GameFlow.UpdateTick += OnUpdateTick;
             EventBus.ChangeCameraOrtoSize += OnChangeCameraOrtoSize;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlow.GameTick -= OnGameTick;
+            GameFlow.UpdateTick -= OnUpdateTick;
             EventBus.ChangeCameraOrtoSize -= OnChangeCameraOrtoSize;
         }
 
-        private void OnGameTick(float fixDeltaTime)
+        private void OnUpdateTick(float fixDeltaTime)
         {
             UpdateStarView(fixDeltaTime);
         }
 
-        private void OnChangeCameraOrtoSize(float value)
+        private void OnChangeCameraOrtoSize(float relativeValue)
         {
-            _starryCanvasParent.localScale = Constants.Vector3One * value / Constants.DeffCameraOrtoSize;
+            _starryCanvasParent.localScale = Constants.Vector3One * relativeValue;
         }
 
 
