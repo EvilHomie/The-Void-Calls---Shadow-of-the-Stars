@@ -49,7 +49,7 @@ namespace GameSystems
             _shipRB = _playerShip.Rigidbody;
             _shipTransform = _shipRB.transform;
 
-            OnPlayerChangeShip(_playerShip.ShipData);
+            OnPlayerChangeShip(_playerShip);
         }
 
         protected override void Subscribe()
@@ -72,19 +72,19 @@ namespace GameSystems
             EventBus.PlayerChangeShip -= OnPlayerChangeShip;
         }
 
-        private void OnPlayerChangeShip(ShipData shipData)
+        private void OnPlayerChangeShip(PlayerShip ship)
         {
-            _movementData = shipData.MovementData;
-            _inertiaDampingLastState = shipData.MovementData.InertiaDamping;
-            _shipRB.mass = shipData.ChassisData.Mass;
+            _movementData = ship.ShipData.MovementData;
+            _inertiaDampingLastState = ship.ShipData.MovementData.InertiaDamping;
+            _shipRB.mass = ship.ShipData.ChassisData.Mass;
 
-            _directMaxSpeed = shipData.MovementData.MainEngine.DirectThrust / shipData.ChassisData.DirectDrag / Constants.WorldUnitMod;
-            _directAcceleration = shipData.MovementData.MainEngine.DirectThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _reverseMaxSpeed = shipData.MovementData.MainEngine.ReverseThrust / shipData.ChassisData.ReverseDrag / Constants.WorldUnitMod;
-            _reverseAcceleration = shipData.MovementData.MainEngine.ReverseThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _strafeMaxSpeed = shipData.MovementData.SideEngines.StrafeThrust / shipData.ChassisData.StrafeDrag / Constants.WorldUnitMod;
-            _strafeAcceleration = shipData.MovementData.SideEngines.StrafeThrust / shipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _rotateSpeed = shipData.MovementData.SideEngines.RotateThrust / shipData.ChassisData.RotateDrag;
+            _directMaxSpeed = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.DirectDrag / Constants.WorldUnitMod;
+            _directAcceleration = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _reverseMaxSpeed = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.ReverseDrag / Constants.WorldUnitMod;
+            _reverseAcceleration = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _strafeMaxSpeed = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.StrafeDrag / Constants.WorldUnitMod;
+            _strafeAcceleration = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
+            _rotateSpeed = ship.ShipData.MovementData.SideEngines.RotateThrust / ship.ShipData.ChassisData.RotateDrag;
         }
 
         private void OnTrackMouseAction(Vector2 dir) { _mouseDirection = dir; }

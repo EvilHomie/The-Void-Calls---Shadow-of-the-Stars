@@ -6,7 +6,7 @@ using Weapons;
 
 namespace Helper
 {
-    public class InitHelper
+    public class ShipInitHelper
     {
         public static void Init(ShipData shipData, Rigidbody2D rigidbody)
         {

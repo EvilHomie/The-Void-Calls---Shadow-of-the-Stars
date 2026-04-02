@@ -2072,6 +2072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5db729a7357cf184fbc1aa8f042d3c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _minMaxViewDistance: {x: 1, y: 5}
   _cinemachineTargetGroup: {fileID: 1670447476}
   _mouseCursorWeight: 1
   _cinemachineCamera: {fileID: 1027794154}

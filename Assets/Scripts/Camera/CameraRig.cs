@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class CameraRig : GameSystemBase
 {
+    [MinMaxRangeSlider(1f, 10f)]
+    [SerializeField] Vector2 _minMaxViewDistance;
     [SerializeField] CinemachineTargetGroup _cinemachineTargetGroup;
     [SerializeField] float _mouseCursorWeight = 0.8f;
     [SerializeField] CinemachineCamera _cinemachineCamera;
@@ -15,7 +17,6 @@ public class CameraRig : GameSystemBase
     private Transform _mouseCursor;
     private PlayerShip _playerShip;
     private IPlayerInput _input;
-    private Vector2 _minMaxOrtSize;
     private float targetOrtSize;
 
     [Inject]
@@ -47,13 +48,13 @@ public class CameraRig : GameSystemBase
         _cinemachineTargetGroup.Targets.Add(playerTarget);
         _cinemachineTargetGroup.Targets.Add(cursorTarget);
         Cursor.visible = false;
-       
+
     }
 
     private void Start()
     {
         UpdateCursorPos();
-        OnChangeShip(_playerShip.ShipData);
+        OnChangeShip(_playerShip);
     }
 
     protected override void Subscribe()
@@ -81,10 +82,9 @@ public class CameraRig : GameSystemBase
         }
     }
 
-    private void OnChangeShip(ShipData data)
+    private void OnChangeShip(PlayerShip playerShip)
     {
-        _minMaxOrtSize = data.MinMaxViewDistance;
-        targetOrtSize = (_minMaxOrtSize.x + _minMaxOrtSize.y) / 2;
+        targetOrtSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;
         _cinemachineCamera.Lens.OrthographicSize = targetOrtSize;
         OnChangeOrtoSize();
     }
@@ -108,6 +108,6 @@ public class CameraRig : GameSystemBase
     {
         float ortSize = _cinemachineCamera.Lens.OrthographicSize;
         ortSize -= value * _changeOrtSizeStep;
-        targetOrtSize = Mathf.Clamp(ortSize, _minMaxOrtSize.x, _minMaxOrtSize.y);
+        targetOrtSize = Mathf.Clamp(ortSize, _minMaxViewDistance.x, _minMaxViewDistance.y);
     }
 }
