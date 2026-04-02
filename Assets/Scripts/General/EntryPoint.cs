@@ -6,7 +6,7 @@ public class EntryPoint : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void InitDI()
     {
-        var installer = FindFirstObjectByType<Installer>(FindObjectsInactive.Include);
+        var installer = FindAnyObjectByType<Installer>(FindObjectsInactive.Include);
         if (installer != null)
         {
             installer.Init();

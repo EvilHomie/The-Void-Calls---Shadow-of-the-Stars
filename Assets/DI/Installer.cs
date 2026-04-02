@@ -15,7 +15,7 @@ namespace DI
 
         private void InjectSceneMonobehaviours()
         {
-            var sceneMonoBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var sceneMonoBehaviours = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include);
 
             foreach (var monoBehaviour in sceneMonoBehaviours)
             {

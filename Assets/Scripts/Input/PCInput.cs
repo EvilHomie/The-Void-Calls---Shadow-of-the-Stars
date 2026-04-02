@@ -80,22 +80,16 @@ namespace Player
 
         private void OnAttack(InputAction.CallbackContext context)
         {
-            if (!_isActive) return;
-
             ChangeAtackState?.Invoke(true);
         }
 
         private void OnEndAttack(InputAction.CallbackContext context)
         {
-            if (!_isActive) return;
-
             ChangeAtackState?.Invoke(false);
         }
 
         private void ToggleDamper(InputAction.CallbackContext context)
         {
-            if (!_isActive) return;
-
             ToggleDamperAction?.Invoke();
         }
 
