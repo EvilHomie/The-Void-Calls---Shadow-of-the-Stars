@@ -34,6 +34,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7023785037818923506
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -52,6 +53,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -73,9 +76,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: 1461221128408217369, guid: 10065b1f0c1ee044ab4f86e02d16a122, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -85,7 +90,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &808967256646746838
 GameObject:
@@ -134,21 +138,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Size>k__BackingField: 0
-  <WeaponName>k__BackingField: S_BoltRepeater_MK1
-  <MaxRotateAngle>k__BackingField: 25
-  <RotateSpeed>k__BackingField: 90
-  <CTransform>k__BackingField: {fileID: 5791893213396587227}
-  <MaxDistance>k__BackingField: 10
+  <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 128
-  <IsShooting>k__BackingField: 0
-  <ProjectileData>k__BackingField: {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
-  <HitData>k__BackingField: {fileID: 11400000, guid: 29905f6e1c9321b47801c7f5c32e817b, type: 2}
+  <Transform>k__BackingField: {fileID: 5791893213396587227}
+  <MaxDistance>k__BackingField: 10
+  <MaxRotateAngle>k__BackingField: 25
+  <RotateSpeed>k__BackingField: 45
+  <ProjectilePoolData>k__BackingField: {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 8178394065935223340}
-  <ShootSpotT>k__BackingField: {fileID: 4647805223587347138}
+  <ShootPoint>k__BackingField: {fileID: 2403933954532205874}
   <FireRate>k__BackingField: 10
+  <SpreadAngle>k__BackingField: 1
   <ProjectileSpeed>k__BackingField: 20
+  NextShootTime: 0
+  ShootDelay: 0
 --- !u!1 &5033753141322967779
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +166,7 @@ GameObject:
   - component: {fileID: 8178394065935223340}
   - component: {fileID: 3408107055570856545}
   m_Layer: 0
-  m_Name: ShootSpotPS
+  m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197,7 +202,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -4907,7 +4912,7 @@ ParticleSystem:
     vectorLabel1_3: W
 --- !u!199 &3408107055570856545
 ParticleSystemRenderer:
-  serializedVersion: 6
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4926,6 +4931,8 @@ ParticleSystemRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -4947,9 +4954,11 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -20
+  m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -4981,7 +4990,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
-  m_MaskInteraction: 0
 --- !u!1 &7353638522607737708
 GameObject:
   m_ObjectHideFlags: 0
@@ -4992,7 +5000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4647805223587347138}
   m_Layer: 0
-  m_Name: ShootSpot(Scaler)
+  m_Name: ShootPoint(Scaler)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5007,7 +5015,7 @@ Transform:
   m_GameObject: {fileID: 7353638522607737708}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1903, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1925, z: 0}
   m_LocalScale: {x: 0.6, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

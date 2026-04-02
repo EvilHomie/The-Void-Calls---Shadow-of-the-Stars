@@ -1,6 +1,5 @@
-using UnityEngine;
-
 public interface IShipModule
 {
-    Size Size { get; }
+    public Size Size { get; }
+    public string Name { get; }
 }

@@ -1,9 +1,9 @@
-using DI;
+﻿using DI;
+using GameInput;
 using GameSystems;
-using Player;
-using Ship;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraRig : GameSystemBase
 {
@@ -14,100 +14,109 @@ public class CameraRig : GameSystemBase
     [SerializeField] CinemachineCamera _cinemachineCamera;
     [SerializeField] float _changeOrtSizeSpeed;
     [SerializeField] float _changeOrtSizeStep;
-    private Transform _mouseCursor;
-    private PlayerShip _playerShip;
+    [SerializeField] float _lookAheadDistanceMod = 1f;
+    private Transform _lookAheadCursor;
+    private ShipsDataStorage _objectsStorage;
     private IPlayerInput _input;
-    private float targetOrtSize;
+    private float _targetOrtSize;
+    private float _deffCameraOrtoSize = 3f;
 
     [Inject]
-    public void Construct(MouseCursor mouseCursor, PlayerShip playerShip, IPlayerInput playerInput)
+    public void Construct(LookAheadCursor lookAheadCursor, ShipsDataStorage objectsStorage, IPlayerInput playerInput)
     {
-        _mouseCursor = mouseCursor.transform;
-        _playerShip = playerShip;
+        _lookAheadCursor = lookAheadCursor.transform;
+        _objectsStorage = objectsStorage;
         _input = playerInput;
     }
 
-    protected override void Init()
+    protected override void AwakeInit()
+    {
+
+    }
+
+    protected override void Subscribe()
+    {
+        GameFlowSystem.UpdateTick += OnUpdateTick;
+        _input.ChangeZoomAction += OnMouseScroll;
+        EventBus.PlayerChangeShip += OnChangeShip;
+    }
+
+    protected override void Unsubscribe()
+    {
+        GameFlowSystem.UpdateTick -= OnUpdateTick;
+        _input.ChangeZoomAction -= OnMouseScroll;
+        EventBus.PlayerChangeShip -= OnChangeShip;
+    }
+
+    private void OnUpdateTick(float dTime)
+    {
+        float ortho = _cinemachineCamera.Lens.OrthographicSize;
+        float orthoDelta = 1;
+
+        if (ortho != _targetOrtSize)
+        {
+            ortho = Mathf.Lerp(ortho, _targetOrtSize, dTime * _changeOrtSizeSpeed);
+            //ortho = Mathf.MoveTowards(ortho, _targetOrtSize, dTime * _changeOrtSizeSpeed);
+            orthoDelta = _cinemachineCamera.Lens.OrthographicSize / ortho;
+            _cinemachineCamera.Lens.OrthographicSize = ortho;
+            float orthorelative = ortho / _deffCameraOrtoSize;
+            EventBus.ChangeCameraOrtoSize?.Invoke(orthorelative);
+        }
+
+        UpdateLookAheadCursorPos(orthoDelta);
+    }
+
+    private void OnChangeShip()
+    {
+        UpdateTargetGroup();
+        _targetOrtSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;
+        _deffCameraOrtoSize = _targetOrtSize;
+        _cinemachineCamera.Lens.OrthographicSize = _targetOrtSize;
+    }
+
+    private void UpdateTargetGroup()
     {
         _cinemachineTargetGroup.Targets.Clear();
 
+        var shipTransform = _objectsStorage.Views[_objectsStorage.PlayerIndex].Transform;
+
         var playerTarget = new CinemachineTargetGroup.Target()
         {
-            Object = _playerShip.transform,
+            Object = shipTransform,
             Weight = 1,
             Radius = 1,
         };
 
         var cursorTarget = new CinemachineTargetGroup.Target()
         {
-            Object = _mouseCursor,
+            Object = _lookAheadCursor,
             Weight = _mouseCursorWeight,
             Radius = 1,
         };
 
         _cinemachineTargetGroup.Targets.Add(playerTarget);
         _cinemachineTargetGroup.Targets.Add(cursorTarget);
-        Cursor.visible = false;
-
     }
 
-    private void Start()
+    private void UpdateLookAheadCursorPos(float orthoDelta)
     {
-        UpdateCursorPos();
-        OnChangeShip(_playerShip);
+        ref var playerShipPosition = ref _objectsStorage.Positions[_objectsStorage.PlayerIndex];
+        float ortho = _cinemachineCamera.Lens.OrthographicSize;
+        float height = Screen.height;
+        float width = Screen.width;
+
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        Vector2 screenCenter = new Vector2(width, height) * 0.5f;
+        Vector2 mouseOffset = mousePos - screenCenter;
+        Vector2 relativeOffset = mouseOffset / height;
+        relativeOffset /= orthoDelta;
+        _lookAheadCursor.position = playerShipPosition + ortho * _lookAheadDistanceMod * relativeOffset;
     }
 
-    protected override void Subscribe()
-    {
-        GameFlow.LateGameTick += OnLateGameTick;
-        GameFlow.FixedGameTick += OnFixedGameTick;
-        _input.MouseScrollAction += OnMouseScroll;
-        EventBus.PlayerChangeShip += OnChangeShip;
-    }
-
-    protected override void Unsubscribe()
-    {
-        GameFlow.LateGameTick -= OnLateGameTick;
-        GameFlow.FixedGameTick -= OnFixedGameTick;
-        _input.MouseScrollAction -= OnMouseScroll;
-        EventBus.PlayerChangeShip -= OnChangeShip;
-    }
-
-    private void OnFixedGameTick(float dTime)
-    {
-        if (_cinemachineCamera.Lens.OrthographicSize != targetOrtSize)
-        {
-            _cinemachineCamera.Lens.OrthographicSize = Mathf.MoveTowards(_cinemachineCamera.Lens.OrthographicSize, targetOrtSize, dTime * _changeOrtSizeSpeed);
-            OnChangeOrtoSize();
-        }
-    }
-
-    private void OnChangeShip(PlayerShip playerShip)
-    {
-        targetOrtSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;
-        _cinemachineCamera.Lens.OrthographicSize = targetOrtSize;
-        OnChangeOrtoSize();
-    }
-
-    private void OnChangeOrtoSize()
-    {
-        EventBus.ChangeCameraOrtoSize?.Invoke(_cinemachineCamera.Lens.OrthographicSize);
-        _mouseCursor.localScale = Constants.Vector3One * _cinemachineCamera.Lens.OrthographicSize / Constants.DeffCameraOrtoSize;
-    }
-
-    private void OnLateGameTick(float dTime)
-    {
-        UpdateCursorPos();
-    }
-
-    private void UpdateCursorPos()
-    {
-        _mouseCursor.position = _playerShip.MousePos;
-    }
     private void OnMouseScroll(float value)
     {
         float ortSize = _cinemachineCamera.Lens.OrthographicSize;
         ortSize -= value * _changeOrtSizeStep;
-        targetOrtSize = Mathf.Clamp(ortSize, _minMaxViewDistance.x, _minMaxViewDistance.y);
+        _targetOrtSize = Mathf.Clamp(ortSize, _minMaxViewDistance.x, _minMaxViewDistance.y);
     }
 }

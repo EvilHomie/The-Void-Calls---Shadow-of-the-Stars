@@ -10,7 +10,7 @@ namespace Weapons
         {
         }
 
-        public void ProceedShoot(BeamEmitter weapon, float dTime)
+        public void ProceedShoot(BeamEmitter weapon)
         {
         }
     }

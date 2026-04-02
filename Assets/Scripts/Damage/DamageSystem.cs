@@ -8,7 +8,7 @@ namespace GameSystems
 {
     public class DamageSystem : GameSystemBase
     {
-        protected override void Init()
+        protected override void AwakeInit()
         {
 
         }

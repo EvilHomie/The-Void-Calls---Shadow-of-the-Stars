@@ -9,7 +9,7 @@ namespace GameSystems
         private HashSet<ProjectileBase> _activeProjectiles;
         private HashSet<ProjectileBase> _destroyedProjectiles;
 
-        protected override void Init()
+        protected override void AwakeInit()
         {
             _activeProjectiles = new(500);
             _destroyedProjectiles = new(500);
@@ -17,7 +17,7 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.FixedGameTick += OnGameTick;
+            GameFlowSystem.UpdateTick += OnGameTick;
             EventBus.ProjectileFetched += OnProjectileFetched;
             EventBus.ProjectileHit += OnProjectileHit;
 
@@ -25,7 +25,7 @@ namespace GameSystems
 
         protected override void Unsubscribe()
         {
-            GameFlow.FixedGameTick -= OnGameTick;
+            GameFlowSystem.UpdateTick -= OnGameTick;
             EventBus.ProjectileFetched -= OnProjectileFetched;
             EventBus.ProjectileHit -= OnProjectileHit;
         }
@@ -36,6 +36,8 @@ namespace GameSystems
             Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
             hitEffect.CachedTransform.position = hitPoint;
             _destroyedProjectiles.Add(projectile);
+
+            Debug.LogError(hitCollider.name);
         }
 
         private void OnProjectileFetched(ProjectileBase projectile)
@@ -48,9 +50,7 @@ namespace GameSystems
 
             foreach (var projectile in _activeProjectiles)
             {
-                projectile.LifeTime -= dTime;
-
-                if (projectile.LifeTime <= 0)
+                if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
                     _destroyedProjectiles.Add(projectile);
                     continue;

@@ -1,7 +1,5 @@
 ﻿using DI;
 using GameSystems;
-using Player;
-using Ship;
 using TMPro;
 using UnityEngine;
 
@@ -19,80 +17,79 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI ThrottleText;
     [SerializeField] TextMeshProUGUI DirectSpeedDelta;
     [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
-    [SerializeField] TextMeshProUGUI FPSText;
 
-    private PlayerShip _playerShip;
+    private ShipsDataStorage _objectsStorage;
 
     [Inject]
-    public void Construct(PlayerShip ship)
+    public void Construct(ShipsDataStorage objectsStorage)
     {
-        _playerShip = ship;
+        _objectsStorage = objectsStorage;
+    }
+
+    private void Awake()
+    {
+        EventBus.PlayerChangeShip += OnPlayerChangeShip;
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.PlayerChangeShip -= OnPlayerChangeShip;
     }
 
     private void Update()
     {
-        OnUpdateShip(_playerShip);
-        ShowFPS();
+        ShowData();
     }
 
-    private void OnUpdateShip(PlayerShip ship)
+    private void OnPlayerChangeShip()
     {
-        float maxDirectSpeed = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.DirectDrag;
-        float maxReverseSpeed = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.ReverseDrag;
-        float maxStrafeSpeed = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.StrafeDrag;
-        float directAcceleration = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.Mass;
-        float reverseAcceleration = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.Mass;
-        float strafeAcceleration = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.Mass;
-        float rotateSpeed = ship.ShipData.MovementData.SideEngines.RotateThrust / ship.ShipData.ChassisData.RotateDrag;
+        ref var chassisData = ref _objectsStorage.ChassisDatas[_objectsStorage.PlayerIndex];
 
-        MaxDirectSpeedText.text = $"MaxDirSpeed: {maxDirectSpeed:F0} м/с";
-        MaxReverseSpeedText.text = $"MaxRevSpeed: {maxReverseSpeed:F0} м/с";
-        MaxStrafeSpeedText.text = $"MaxStrSpeed: {maxStrafeSpeed:F0} м/с";
+        MaxDirectSpeedText.text = $"MaxDirSpeed: {chassisData.DirectMaxSpeed * Constants.WorldUnitModReversed:F0} м/с";
+        MaxReverseSpeedText.text = $"MaxRevSpeed: {chassisData.ReverseMaxSpeed * Constants.WorldUnitModReversed:F0} м/с";
+        MaxStrafeSpeedText.text = $"MaxStrSpeed: {chassisData.StrafeMaxSpeed * Constants.WorldUnitModReversed:F0} м/с";
 
-        float forwardVel = Vector2.Dot(ship.Rigidbody.linearVelocity, ship.transform.up);
-        float sideVel = Vector2.Dot(ship.Rigidbody.linearVelocity, ship.transform.right);
+        float directAcceleration = chassisData.DirectMaxAcceleration;
+        float reverseAcceleration = chassisData.ReverseMaxAcceleration;
+        float strafeAcceleration = chassisData.StrafeMaxAcceleration;
+        float rotateSpeed = chassisData.RotateMaxSpeed;
 
-        CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel * Constants.WorldUnitMod:F0} м/с";
-        CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel * Constants.WorldUnitMod:F0} м/с";
+        DirectAcceleration.text = $"DirAccel: {directAcceleration * Constants.WorldUnitModReversed:F0} м/с²";
+        ReverseAcceleration.text = $"RevAccel: {reverseAcceleration * Constants.WorldUnitModReversed:F0} м/с²";
+        StrafeAcceleration.text = $"StrAccel: {strafeAcceleration * Constants.WorldUnitModReversed:F0} м/с²";
+        RotateSpeed.text = $"RotSpeed: {rotateSpeed:F0} °";
+    }
 
-        ThrottleText.text = $"Throttle: {ship.ShipData.MovementData.Throttle * 100:F0} %";
+    private void ShowData()
+    {
+        var playerIndex = _objectsStorage.PlayerIndex;
+        ref var movementData = ref _objectsStorage.MovementRuntimeDatas[playerIndex];
+        ref var view = ref _objectsStorage.Views[playerIndex];
+        ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
 
-        if (ship.ShipData.MovementData.InertiaDamping)
+        float forwardVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.up);
+        float sideVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.right);
+
+        CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel * Constants.WorldUnitModReversed:F0} м/с";
+        CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel * Constants.WorldUnitModReversed:F0} м/с";
+
+        ThrottleText.text = $"Throttle: {movementData.Throttle * 100:F0} %";
+
+        if (movementData.InertiaDampingState)
         {
-            float speed = ship.ShipData.MovementData.Throttle > 0
-            ? maxDirectSpeed
-            : maxReverseSpeed;
+            float speed = movementData.Throttle > 0
+            ? chassisData.DirectMaxSpeed
+            : chassisData.ReverseMaxSpeed;
 
-            DirectSpeedDelta.text = $"TargetSpeed: {ship.ShipData.MovementData.Throttle * speed:F0} м/с";
+            DirectSpeedDelta.text = $"TargetSpeed: {movementData.Throttle * speed * Constants.WorldUnitModReversed:F0} м/с";
         }
         else
         {
-            float accel = ship.ShipData.MovementData.Throttle > 0
-            ? directAcceleration
-            : reverseAcceleration;
+            float accel = movementData.Throttle > 0
+            ? chassisData.DirectMaxAcceleration
+            : chassisData.ReverseMaxAcceleration;
 
-            DirectSpeedDelta.text = $"Acceleration: {ship.ShipData.MovementData.Throttle * accel:F0} м/с";
-        }
-
-
-        DirectAcceleration.text = $"DirAccel: {directAcceleration:F0} м/с²";
-        ReverseAcceleration.text = $"RevAccel: {reverseAcceleration:F0} м/с²";
-        StrafeAcceleration.text = $"StrAccel: {strafeAcceleration:F0} м/с²";
-        RotateSpeed.text = $"RotSpeed: {rotateSpeed:F0} °";
-
-
-    }
-
-    private readonly float _fpsTickRate = 5;
-    float FPSCooldown;
-    void ShowFPS()
-    {
-        FPSCooldown -= Time.deltaTime;
-
-        if (FPSCooldown <= 0)
-        {
-            FPSCooldown = 1 / _fpsTickRate;
-            FPSText.text = $"FPS: {1 / Time.deltaTime:F0}";
+            DirectSpeedDelta.text = $"Acceleration: {movementData.Throttle * accel * Constants.WorldUnitModReversed:F0} м/с";
         }
     }
 }

@@ -8,35 +8,30 @@ namespace Weapons
     {
         public void StartShoot(BoltRepeater weapon)
         {
-            weapon.IsShooting = true;
-            EventBus.WeaponChangeShootState?.Invoke(weapon, true);
         }
         public void CancelShoot(BoltRepeater weapon)
         {
-            weapon.IsShooting = false;            
         }
 
-        public void ProceedShoot(BoltRepeater weapon, float dTime)
+        public void ProceedShoot(BoltRepeater weapon)
         {
-            if (weapon.FireCooldown <= 0)
+            if (GameFlowSystem.CoreTime <= weapon.NextShootTime)
             {
-                if (!weapon.IsShooting)
-                {
-                    EventBus.WeaponChangeShootState?.Invoke(weapon, false);
-                    return;
-                }
-
-                weapon.ShootSpotPS.Emit(1);
-                weapon.FireCooldown = weapon.TimePerShot;
-
-                var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectileData.PoolName);
-                projectile.CachedTransform.SetPositionAndRotation(weapon.ShootSpotT.position, weapon.CTransform.rotation);
-                projectile.Weapon = weapon;
-                projectile.LifeTime = weapon.MaxDistance / weapon.ProjectileSpeed;
-                projectile.RigidBody.linearVelocity = WeaponSystemHelper.ApplySmallSpread(weapon.CTransform.up, weapon.SpreadAngle) * weapon.ProjectileSpeed;
+                return;
             }
 
-            weapon.FireCooldown -= dTime;
+            var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectilePoolData.PoolName);
+            projectile.CachedTransform.SetPositionAndRotation(weapon.ShootPoint.position, weapon.Transform.rotation);
+            projectile.Weapon = weapon;
+            var weapontTransformUp = weapon.Transform.up;
+            projectile.DestroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance / weapon.ProjectileSpeed;
+            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapontTransformUp, weapon.SpreadAngle);
+            var shipRB = weapon.ShipRigidBody;
+            float shipForwardVel = Vector2.Dot(shipRB.linearVelocity, shipRB.transform.up);
+            projectile.RigidBody.linearVelocity = (weapon.ProjectileSpeed + shipForwardVel) * direction;
+
+            weapon.ShootSpotPS.Emit(1);
+            weapon.NextShootTime = GameFlowSystem.CoreTime + weapon.ShootDelay;
         }
     }
 }
