@@ -20,8 +20,8 @@ namespace GameSystems
         public void CancelShoot(WeaponBase weapon)
             => _invokers[weapon.WeaponType].CancelShoot(weapon);
 
-        public void ProceedShoot(WeaponBase weapon, float dTime)
-            => _invokers[weapon.WeaponType].ProceedShoot(weapon, dTime);
+        public void ProceedShoot(WeaponBase weapon)
+            => _invokers[weapon.WeaponType].ProceedShoot(weapon);
 
         private void RegisterInvokers()
         {
@@ -42,7 +42,7 @@ namespace GameSystems
                     return new WeaponInvoker(
                         w => drillBehaviour.StartShoot((MiningDrill)w),
                         w => drillBehaviour.CancelShoot((MiningDrill)w),
-                        (w, dt) => drillBehaviour.ProceedShoot((MiningDrill)w, dt)
+                        w => drillBehaviour.ProceedShoot((MiningDrill)w)
                     );
 
                 case WeaponType.BoltRepeater:
@@ -50,7 +50,7 @@ namespace GameSystems
                     return new WeaponInvoker(
                         w => BoltRepeaterBehaviour.StartShoot((BoltRepeater)w),
                         w => BoltRepeaterBehaviour.CancelShoot((BoltRepeater)w),
-                        (w, dt) => BoltRepeaterBehaviour.ProceedShoot((BoltRepeater)w, dt)
+                        w => BoltRepeaterBehaviour.ProceedShoot((BoltRepeater)w)
                     );
 
                 default:
@@ -64,9 +64,9 @@ public class WeaponInvoker
 {
     private readonly Action<WeaponBase> _start;
     private readonly Action<WeaponBase> _cancel;
-    private readonly Action<WeaponBase, float> _proceed;
+    private readonly Action<WeaponBase> _proceed;
 
-    public WeaponInvoker(Action<WeaponBase> start, Action<WeaponBase> cancel, Action<WeaponBase, float> proceed)
+    public WeaponInvoker(Action<WeaponBase> start, Action<WeaponBase> cancel, Action<WeaponBase> proceed)
     {
         _start = start;
         _cancel = cancel;
@@ -75,5 +75,5 @@ public class WeaponInvoker
 
     public void StartShoot(WeaponBase w) => _start(w);
     public void CancelShoot(WeaponBase w) => _cancel(w);
-    public void ProceedShoot(WeaponBase w, float dTime) => _proceed(w, dTime);
+    public void ProceedShoot(WeaponBase w) => _proceed(w);
 }

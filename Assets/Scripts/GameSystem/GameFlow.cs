@@ -9,38 +9,53 @@ namespace GameSystems
         public static Action<float> UpdateTick { get; set; }
         public static Action<float> FixedGameTick { get; set; }
         public static Action<float> LateGameTick { get; set; }
-        public static Action GameTickStandart { get; set; }
-        public static Action FixedGameTickStandart { get; set; }
-        public static Action LateGameTickStandart { get; set; }
+        public static Action UnityUpdateTick { get; set; }
+        public static Action UnityFixedUpdateTick { get; set; }
+        public static Action UnityLateUpdateTick { get; set; }
         public static Action<GameState> GameStateChange { get; set; }
+        public static float CoreTime { get; private set; }
+
+        private GameState _currentGameState;
+        private float _gameSpeed = 1;
 
         void Update()
         {
-            UpdateTick?.Invoke(Time.deltaTime);
-            GameTickStandart?.Invoke();
+            var deltaTime = Time.unscaledDeltaTime * _gameSpeed;
+            UpdateTick?.Invoke(deltaTime);
+            UnityUpdateTick?.Invoke();
+
+            if (_currentGameState == GameState.CoreGameplay)
+            {
+                CoreTime += deltaTime;
+            }
         }
 
         private void FixedUpdate()
         {
-            FixedGameTick?.Invoke(Time.fixedDeltaTime);
-            FixedGameTickStandart?.Invoke();
+            var deltaTime = Time.fixedDeltaTime * _gameSpeed;
+
+            FixedGameTick?.Invoke(deltaTime);
+            UnityFixedUpdateTick?.Invoke();
         }
 
         private void LateUpdate()
         {
-            LateGameTick?.Invoke(Time.deltaTime);
-            LateGameTickStandart?.Invoke();
+            var deltaTime = Time.unscaledDeltaTime * _gameSpeed;
+
+            LateGameTick?.Invoke(deltaTime);
+            UnityLateUpdateTick?.Invoke();
         }
 
         private void Start()
         {
-            GameStateChange?.Invoke(GameState.MainGameplay);
+            GameStateChange?.Invoke(GameState.CoreGameplay);
+            _currentGameState = GameState.CoreGameplay;
         }
     }
 }
 
 public enum GameState
 {
-    MainGameplay,
+    CoreGameplay,
     Pause
 }

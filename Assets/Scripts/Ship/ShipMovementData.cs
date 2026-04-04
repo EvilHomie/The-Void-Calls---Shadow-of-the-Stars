@@ -1,18 +1,26 @@
 using System;
-using UnityEngine;
 
 namespace Ship
 {
     [Serializable]
     public class ShipMovementData
     {
-        [field: SerializeField] public MainEngine MainEngine { get; set; }
-        [field: SerializeField] public SideEngines SideEngines { get; set; }
+        public float Throttle;
+        public bool InertiaDamping;
+        public float RotatePowerValue;
+        public float DirectAccelerationPower;
+        public float SideAcceleration;
 
-        [field: SerializeField] public float Throttle { get; set; }
-        [field: SerializeField] public bool InertiaDamping { get; set; }
-        [field: SerializeField] public float RotatePowerValue { get; set; }
-        [field: SerializeField] public float DirectAccelerationPower { get; set; }
-        [field: SerializeField] public float SideAcceleration { get; set; }
+        public float DirectMaxSpeed;
+        public float DirectAcceleration;
+        public float ReverseMaxSpeed;
+        public float ReverseAcceleration;
+        public float StrafeMaxSpeed;
+        public float StrafeAcceleration;
+        public float RotateSpeed;
+        public float TargetSpeed;
+
+        public bool InertiaDampingLastState;
+        public float LastThrottleWithDamping;
     }
 }

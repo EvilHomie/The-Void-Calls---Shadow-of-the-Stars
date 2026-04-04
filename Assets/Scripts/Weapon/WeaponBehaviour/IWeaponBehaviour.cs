@@ -4,6 +4,6 @@ namespace Weapons
     {
         void StartShoot(TWeapon weapon);
         void CancelShoot(TWeapon weapon);
-        void ProceedShoot(TWeapon weapon, float dTime);
+        void ProceedShoot(TWeapon weapon);
     }
 }

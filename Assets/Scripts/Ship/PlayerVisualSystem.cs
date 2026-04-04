@@ -1,5 +1,4 @@
 using DI;
-using Player;
 using Ship;
 using UnityEngine;
 
@@ -8,12 +7,12 @@ namespace GameSystems
     public class PlayerVisualSystem : GameSystemBase
     {
         private SideEnginesPower _currentThrustersPower;
-        private PlayerShip _playerShip;
-        private ShipMovementView _shipMovementView;
+        private ShipInstance _playerShip;
+        private ShipView _shipMovementView;
         private ShipMovementData _shipMovementData;
 
         [Inject]
-        public void Construct(PlayerShip ship)
+        public void Construct(ShipInstance ship)
         {
             _playerShip = ship;
         }
@@ -35,10 +34,10 @@ namespace GameSystems
             EventBus.PlayerChangeShip -= OnUpdateShip;
         }
 
-        private void OnUpdateShip(PlayerShip ship)
+        private void OnUpdateShip(ShipInstance ship)
         {
             _shipMovementData = ship.ShipData.MovementData;
-            _shipMovementView = ship.ShipData.MovementView;
+            _shipMovementView = ship.View;
         }
 
 

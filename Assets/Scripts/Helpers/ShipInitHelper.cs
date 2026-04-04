@@ -1,20 +1,16 @@
-using Asteroids;
-using GameSystems;
 using Ship;
-using UnityEngine;
-using Weapons;
 
 namespace Helper
 {
     public class ShipInitHelper
     {
-        public static void Init(ShipData shipData, Rigidbody2D rigidbody)
+        public static void Init(ShipData shipData)
         {
-            Init(shipData.MovementView);
-            Init(shipData.WeaponData, rigidbody);
+            //InitView(shipData.View);
+            //Init(shipData.WeaponData, rigidbody);
         }
 
-        private static void Init(ShipMovementView shipMovementView)
+        private static void InitView(ShipView shipMovementView)
         {
             shipMovementView.SideEngineFL.Init();
             shipMovementView.SideEngineFR.Init();
@@ -32,18 +28,18 @@ namespace Helper
             }
         }
 
-        private static void Init(ShipWeaponData shipWeaponData, Rigidbody2D rigidbody)
-        {
-            foreach (var slot in shipWeaponData.WeaponSlots)
-            {
-                if (slot.Weapon is BoltRepeater weapon)
-                {
-                    weapon.ShipRigidBody = rigidbody;
-                }
+        //private static void Init(ShipWeaponData shipWeaponData, Rigidbody2D rigidbody)
+        //{
+        //    foreach (var slot in shipWeaponData.WeaponSlots)
+        //    {
+        //        if (slot.Weapon is BoltRepeater weapon)
+        //        {
+        //            weapon.ShipRigidBody = rigidbody;
+        //        }
 
-                if (slot.Weapon != null) EventBus.CreateWeaponAction?.Invoke(slot.Weapon);
-            }
-        }
+        //        if (slot.Weapon != null) EventBus.CreateWeaponAction?.Invoke(slot.Weapon);
+        //    }
+        //}
     }
 }
 

@@ -1,22 +1,25 @@
+using GameInput;
+using Ship;
 using UnityEngine;
-using DI;
-using Player;
 
-public class GameInstaller : Installer
+namespace DI
 {
-    [SerializeField] PlayerShip _playerShip;
-    [SerializeField] Camera _camera;
-    [SerializeField] LookAheadCursor _mouseCursor;
-
-    protected override void InstallBindings()
+    public class GameInstaller : Installer
     {
-        Container.Bind<PlayerShip>().FromInstance(_playerShip);
-        Container.Bind<Camera>().FromInstance(_camera);
-        Container.Bind<LookAheadCursor>().FromInstance(_mouseCursor);
+        [SerializeField] ShipInstance _playerShip;
+        [SerializeField] Camera _mainCamera;
+        [SerializeField] LookAheadCursor _mouseCursor;
 
-        if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
+        protected override void InstallBindings()
         {
-            Container.Bind<IPlayerInput>().To<PCInput>().AsSingleton();
+            Container.Bind<ShipInstance>().FromInstance(_playerShip);
+            Container.Bind<Camera>().FromInstance(_mainCamera);
+            Container.Bind<LookAheadCursor>().FromInstance(_mouseCursor);
+
+            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
+            {
+                Container.Bind<IPlayerInput>().To<PCInput>().AsSingleton();
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
-using Player;
 using Projectiles;
+using Ship;
 using System;
 using UnityEngine;
 using Weapons;
@@ -8,10 +8,11 @@ namespace GameSystems
 {
     public class EventBus : MonoBehaviour
     {
-        public static Action<PlayerShip> PlayerChangeShip { get; set; }
+        public static Action<ShipInstance> PlayerChangeShip { get; set; }
         public static Action<float> ChangeCameraOrtoSize { get; set; }
         public static Action<WeaponBase> CreateWeaponAction { get; set; }
         public static Action<WeaponBase, bool> WeaponChangeShootState { get; set; }
+        public static Action<ShipInstance, bool> ChangeAttackState { get; set; }
 
 
         public static Action<ProjectileBase, Collider2D> ProjectileHit { get; set; }

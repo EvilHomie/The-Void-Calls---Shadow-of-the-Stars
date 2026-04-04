@@ -1,6 +1,7 @@
 ﻿using DI;
+using GameInput;
 using GameSystems;
-using Player;
+using Ship;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,19 +17,17 @@ public class CameraRig : GameSystemBase
     [SerializeField] float _changeOrtSizeStep;
     [SerializeField] float _lookAheadDistanceMod = 1f;
     private Transform _lookAheadCursor;
-    private Transform _playerShipTransform;
-    private PlayerShip _playerShip;
+    private ShipInstance _playerShip;
     private IPlayerInput _input;
     private float _targetOrtSize;
     private Camera _camera;
     private float _deffCameraOrtoSize = 3f;
 
     [Inject]
-    public void Construct(LookAheadCursor lookAheadCursor, PlayerShip playerShip, IPlayerInput playerInput, Camera camera)
+    public void Construct(LookAheadCursor lookAheadCursor, ShipInstance playerShip, IPlayerInput playerInput, Camera camera)
     {
         _lookAheadCursor = lookAheadCursor.transform;
         _playerShip = playerShip;
-        _playerShipTransform = playerShip.transform;
         _input = playerInput;
         _camera = camera;
     }
@@ -39,7 +38,7 @@ public class CameraRig : GameSystemBase
 
         var playerTarget = new CinemachineTargetGroup.Target()
         {
-            Object = _playerShipTransform,
+            Object = _playerShip.View.Transform,
             Weight = 1,
             Radius = 1,
         };
@@ -57,7 +56,6 @@ public class CameraRig : GameSystemBase
 
     private void Start()
     {
-        //UpdateLookAheadCursorPos();
         OnChangeShip(_playerShip);
     }
 
@@ -93,18 +91,13 @@ public class CameraRig : GameSystemBase
         UpdateLookAheadCursorPos(orthoDelta);
     }
 
-    private void OnChangeShip(PlayerShip ship)
+    private void OnChangeShip(ShipInstance ship)
     {
         _targetOrtSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;
         _deffCameraOrtoSize = _targetOrtSize;
         _cinemachineCamera.Lens.OrthographicSize = _targetOrtSize;
-        OnChangeOrtoSize();
     }
 
-    private void OnChangeOrtoSize()
-    {
-
-    }
     private void UpdateLookAheadCursorPos(float orthoDelta)
     {
         float ortho = _cinemachineCamera.Lens.OrthographicSize;
@@ -116,7 +109,7 @@ public class CameraRig : GameSystemBase
         Vector2 mouseOffset = mousePos - screenCenter;
         Vector3 relativeOffset = mouseOffset / height;
         relativeOffset /= orthoDelta;
-        _lookAheadCursor.position = _playerShipTransform.position + ortho * _lookAheadDistanceMod * relativeOffset;
+        _lookAheadCursor.position = _playerShip.View.Transform.position + ortho * _lookAheadDistanceMod * relativeOffset;
     }
 
     private void OnMouseScroll(float value)

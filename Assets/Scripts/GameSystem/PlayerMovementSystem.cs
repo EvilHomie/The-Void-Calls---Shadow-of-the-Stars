@@ -1,5 +1,5 @@
 ﻿using DI;
-using Player;
+using GameInput;
 using Ship;
 using UnityEngine;
 
@@ -17,26 +17,10 @@ namespace GameSystems
         private Vector2 _mouseDirection;
         private Vector2 _inputValue;
         private Camera _camera;
-        private PlayerShip _playerShip;
-        private Rigidbody2D _shipRB;
-        private Transform _shipTransform;
-        private ShipMovementData _movementData;
-
-        private float _directMaxSpeed;
-        private float _directAcceleration;
-        private float _reverseMaxSpeed;
-        private float _reverseAcceleration;
-        private float _strafeMaxSpeed;
-        private float _strafeAcceleration;
-        private float _rotateSpeed;
-
-        private float _targetSpeed;
-
-        private bool _inertiaDampingLastState;
-        private float _lastThrottleWithDamping;
+        private ShipInstance _playerShip;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, PlayerShip ship, Camera camera)
+        public void Construct(IPlayerInput playerInput, ShipInstance ship, Camera camera)
         {
             _input = playerInput;
             _playerShip = ship;
@@ -46,9 +30,6 @@ namespace GameSystems
         protected override void Init()
         {
             _input.Init(_playerShip, _camera);
-            _shipRB = _playerShip.Rigidbody;
-            _shipTransform = _shipRB.transform;
-
             OnPlayerChangeShip(_playerShip);
         }
 
@@ -72,48 +53,50 @@ namespace GameSystems
             EventBus.PlayerChangeShip -= OnPlayerChangeShip;
         }
 
-        private void OnPlayerChangeShip(PlayerShip ship)
+        private void OnPlayerChangeShip(ShipInstance ship)
         {
-            _movementData = ship.ShipData.MovementData;
-            _inertiaDampingLastState = ship.ShipData.MovementData.InertiaDamping;
-            _shipRB.mass = ship.ShipData.ChassisData.Mass;
+            var shipMovementData = _playerShip.ShipData.MovementData;
+            var shipChassisData = _playerShip.ShipData.ChassisData;
+            var shipEquipData = _playerShip.ShipData.EquipData;
 
-            _directMaxSpeed = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.DirectDrag / Constants.WorldUnitMod;
-            _directAcceleration = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _reverseMaxSpeed = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.ReverseDrag / Constants.WorldUnitMod;
-            _reverseAcceleration = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _strafeMaxSpeed = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.StrafeDrag / Constants.WorldUnitMod;
-            _strafeAcceleration = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.Mass / Constants.WorldUnitMod;
-            _rotateSpeed = ship.ShipData.MovementData.SideEngines.RotateThrust / ship.ShipData.ChassisData.RotateDrag;
+            shipMovementData.InertiaDampingLastState = shipMovementData.InertiaDamping;
+            shipMovementData.DirectMaxSpeed = shipEquipData.MainEngine.DirectThrust / shipChassisData.DirectDrag * Constants.WorldUnitMod;
+            shipMovementData.DirectAcceleration = shipEquipData.MainEngine.DirectThrust / shipChassisData.Mass * Constants.WorldUnitMod;
+            shipMovementData.ReverseMaxSpeed = shipEquipData.MainEngine.ReverseThrust / shipChassisData.ReverseDrag * Constants.WorldUnitMod;
+            shipMovementData.ReverseAcceleration = shipEquipData.MainEngine.ReverseThrust / shipChassisData.Mass * Constants.WorldUnitMod;
+            shipMovementData.StrafeMaxSpeed = shipEquipData.SideEngines.StrafeThrust / shipChassisData.StrafeDrag * Constants.WorldUnitMod;
+            shipMovementData.StrafeAcceleration = shipEquipData.SideEngines.StrafeThrust / shipChassisData.Mass * Constants.WorldUnitMod;
+            shipMovementData.RotateSpeed = shipEquipData.SideEngines.RotateThrust / shipChassisData.RotateDrag;
         }
 
         private void OnTrackMouseAction(Vector2 dir) { _mouseDirection = dir; }
         private void OnMoveInputAction(Vector2 input) { _inputValue = input; }
         private void OnToggleDamper()
         {
-            _movementData.InertiaDamping = !_movementData.InertiaDamping;
+            var shipMovementData = _playerShip.ShipData.MovementData;
+            shipMovementData.InertiaDamping = !shipMovementData.InertiaDamping;
 
-            if (_inertiaDampingLastState == _movementData.InertiaDamping)
+            if (shipMovementData.InertiaDampingLastState == shipMovementData.InertiaDamping)
             {
                 return;
             }
 
-            if (_movementData.InertiaDamping)
+            if (shipMovementData.InertiaDamping)
             {
-                _movementData.Throttle = _lastThrottleWithDamping;
-                _inertiaDampingLastState = true;
+                shipMovementData.Throttle = shipMovementData.LastThrottleWithDamping;
+                shipMovementData.InertiaDampingLastState = true;
 
-                _targetSpeed = (_movementData.Throttle >= 0
-                     ? _directMaxSpeed
-                     : _reverseMaxSpeed)
-                     * _movementData.Throttle;
+                shipMovementData.TargetSpeed = (shipMovementData.Throttle >= 0
+                     ? shipMovementData.DirectMaxSpeed
+                     : shipMovementData.ReverseMaxSpeed)
+                     * shipMovementData.Throttle;
             }
             else
             {
-                _lastThrottleWithDamping = _movementData.Throttle;
-                _movementData.Throttle = 0;
-                _inertiaDampingLastState = false;
-                _movementData.DirectAccelerationPower = 0;
+                shipMovementData.LastThrottleWithDamping = shipMovementData.Throttle;
+                shipMovementData.Throttle = 0;
+                shipMovementData.InertiaDampingLastState = false;
+                shipMovementData.DirectAccelerationPower = 0;
             }
         }
 
@@ -145,20 +128,22 @@ namespace GameSystems
                 return;
             }
 
-            float prevValue = _movementData.Throttle;
-            _movementData.Throttle += _inputValue.y * fixedDT;
-            _movementData.Throttle = Mathf.Clamp(_movementData.Throttle, -1, 1);
+            var movementData = _playerShip.ShipData.MovementData;
 
-            if ((prevValue < 0f && _movementData.Throttle >= 0f) || (prevValue > 0f && _movementData.Throttle <= 0f))
+            float prevValue = movementData.Throttle;
+            movementData.Throttle += _inputValue.y * fixedDT;
+            movementData.Throttle = Mathf.Clamp(movementData.Throttle, -1, 1);
+
+            if ((prevValue < 0f && movementData.Throttle >= 0f) || (prevValue > 0f && movementData.Throttle <= 0f))
             {
-                _movementData.Throttle = 0;
+                movementData.Throttle = 0;
                 _throttleZeroDelayTimer = _throttleZeroDelay;
             }
 
-            _targetSpeed = (_movementData.Throttle >= 0
-              ? _directMaxSpeed
-              : _reverseMaxSpeed)
-              * _movementData.Throttle;
+            movementData.TargetSpeed = (movementData.Throttle >= 0
+              ? movementData.DirectMaxSpeed
+              : movementData.ReverseMaxSpeed)
+              * movementData.Throttle;
 
             // В версии ниже нашел косяк. если новая скорость отличается от нуля меньше чем на _throttleZeroSensitivity то при обратке не стопарится на нуле
 
@@ -200,71 +185,78 @@ namespace GameSystems
 
         private void HandleRotation(float fixedDT)
         {
+            var view = _playerShip.View;
+            var movementData = _playerShip.ShipData.MovementData;
+
             // логика торможения если скорость вращение выше контролируемой
-            if (Mathf.Abs(_shipRB.angularVelocity) > _rotateSpeed)
+            if (Mathf.Abs(view.Rigidbody.angularVelocity) > movementData.RotateSpeed)
             {
-                float rotateDirection = Mathf.Sign(_shipRB.angularVelocity);
-                _shipRB.angularVelocity -= _rotateSpeed * rotateDirection * fixedDT;
-                _movementData.RotatePowerValue = -Mathf.Sign(_shipRB.angularVelocity);
+                float rotateDirection = Mathf.Sign(view.Rigidbody.angularVelocity);
+                view.Rigidbody.angularVelocity -= movementData.RotateSpeed * rotateDirection * fixedDT;
+                movementData.RotatePowerValue = -Mathf.Sign(view.Rigidbody.angularVelocity);
                 return;
             }
 
-            float angleDiff = Vector2.SignedAngle(_shipTransform.up, _mouseDirection);
+            float angleDiff = Vector2.SignedAngle(view.Transform.up, _mouseDirection);
             float absAngleDiff = Mathf.Abs(angleDiff);
             float direction = Mathf.Sign(angleDiff);
 
             // --- плавное уменьшение скорости в начале и в конце ---
             float anleMod = Mathf.InverseLerp(0f, 10f, absAngleDiff);
             float power = anleMod * direction;
-            float targetTorque = _rotateSpeed * power;
-            _shipRB.angularVelocity = Mathf.MoveTowards(_shipRB.angularVelocity, targetTorque, _rotateSpeed);
-            _movementData.RotatePowerValue = power;
+            float targetTorque = movementData.RotateSpeed * power;
+            view.Rigidbody.angularVelocity = Mathf.MoveTowards(view.Rigidbody.angularVelocity, targetTorque, movementData.RotateSpeed);
+            movementData.RotatePowerValue = power;
         }
 
         private void HandleMovement(float fixedDT)
         {
-            float forwardVel = Vector2.Dot(_shipRB.linearVelocity, _shipTransform.up);
-            float sideVel = Vector2.Dot(_shipRB.linearVelocity, _shipTransform.right);
+            var view = _playerShip.View;
+
+            float forwardVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.up);
+            float sideVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.right);
             CalcForwardVelocity(fixedDT, ref forwardVel);
             CalcSideVelocity(fixedDT, ref sideVel);
 
-            _shipRB.linearVelocity = _shipTransform.right * sideVel + _shipTransform.up * forwardVel;
+            view.Rigidbody.linearVelocity = view.Transform.right * sideVel + view.Transform.up * forwardVel;
         }
 
         private void CalcForwardVelocity(float fixedDT, ref float forwardVel)
         {
-            if (_movementData.InertiaDamping)
+            var movementData = _playerShip.ShipData.MovementData;
+
+            if (movementData.InertiaDamping)
             {
-                float speedDiff = _targetSpeed - forwardVel;
+                float speedDiff = movementData.TargetSpeed - forwardVel;
                 float absSpeedDiff = Mathf.Abs(speedDiff);
-                float stabilityMod = _targetSpeed == 0 ? 0 : _stabilizationPower; // если цель остановится то минимальное значение мощности ноль иначе значение стабилизации
-                float passivePower = stabilityMod * _movementData.Throttle;
+                float stabilityMod = movementData.TargetSpeed == 0 ? 0 : _stabilizationPower; // если цель остановится то минимальное значение мощности ноль иначе значение стабилизации
+                float passivePower = stabilityMod * movementData.Throttle;
 
                 if (absSpeedDiff < 0.0001f) // если изменение скорости около нулевое
                 {
-                    forwardVel = _targetSpeed;
-                    _movementData.DirectAccelerationPower = passivePower;
+                    forwardVel = movementData.TargetSpeed;
+                    movementData.DirectAccelerationPower = passivePower;
                 }
                 else
                 {
                     float disiredMoveDir = Mathf.Sign(speedDiff);
-                    float baseAccel = (disiredMoveDir >= 0f ? _directAcceleration : _reverseAcceleration) * fixedDT;
+                    float baseAccel = (disiredMoveDir >= 0f ? movementData.DirectAcceleration : movementData.ReverseAcceleration) * fixedDT;
                     float smoothAccel = SmoothAcceleration(baseAccel, absSpeedDiff); // логика сглаживания ускорения при скорости близкой к желаемой
-                    forwardVel = Mathf.MoveTowards(forwardVel, _targetSpeed, smoothAccel);
-                    _movementData.DirectAccelerationPower = Mathf.Lerp(passivePower, disiredMoveDir, (smoothAccel / baseAccel) - _maxSmooth);
+                    forwardVel = Mathf.MoveTowards(forwardVel, movementData.TargetSpeed, smoothAccel);
+                    movementData.DirectAccelerationPower = Mathf.Lerp(passivePower, disiredMoveDir, (smoothAccel / baseAccel) - _maxSmooth);
                 }
             }
             else
             {
-                if (_movementData.Throttle == 0) // если нет тяги то ничего не делаем
+                if (movementData.Throttle == 0) // если нет тяги то ничего не делаем
                 {
-                    _movementData.DirectAccelerationPower = 0;
+                    movementData.DirectAccelerationPower = 0;
                     return;
                 }
 
-                float maxSpeed = _movementData.Throttle > 0f
-                        ? _directMaxSpeed
-                        : -_reverseMaxSpeed;
+                float maxSpeed = movementData.Throttle > 0f
+                        ? movementData.DirectMaxSpeed
+                        : -movementData.ReverseMaxSpeed;
 
                 float speedDiff = maxSpeed - forwardVel;
                 float absSpeedDiff = Mathf.Abs(speedDiff);
@@ -272,17 +264,17 @@ namespace GameSystems
                 if (absSpeedDiff < 0.0001f) // если изменение скорости около нулевое
                 {
                     forwardVel = maxSpeed;
-                    _movementData.DirectAccelerationPower = 0;
+                    movementData.DirectAccelerationPower = 0;
                 }
                 else
                 {
-                    float baseAccel = (_movementData.Throttle > 0f ? _directAcceleration : -_reverseAcceleration) * fixedDT * _movementData.Throttle;
+                    float baseAccel = (movementData.Throttle > 0f ? movementData.DirectAcceleration : -movementData.ReverseAcceleration) * fixedDT * movementData.Throttle;
                     float smoothAccel = SmoothAcceleration(baseAccel, absSpeedDiff); // логика сглаживания ускорения при скорости близкой к максимальной
                     forwardVel = Mathf.MoveTowards(forwardVel, maxSpeed, smoothAccel);
 
                     // если скорость далека от максимальной (если нет сглаживания)
-                    if (baseAccel == smoothAccel) _movementData.DirectAccelerationPower = _movementData.Throttle;
-                    else _movementData.DirectAccelerationPower = Mathf.Lerp(0, Mathf.Sign(_movementData.Throttle), (smoothAccel / baseAccel) - _maxSmooth);
+                    if (baseAccel == smoothAccel) movementData.DirectAccelerationPower = movementData.Throttle;
+                    else movementData.DirectAccelerationPower = Mathf.Lerp(0, Mathf.Sign(movementData.Throttle), (smoothAccel / baseAccel) - _maxSmooth);
                 }
             }
         }
@@ -297,15 +289,17 @@ namespace GameSystems
         // нужна логика быстрого гашения боковой скорости
         private void CalcSideVelocity(float fixedDT, ref float sideVel)
         {
-            if (_movementData.InertiaDamping)
+            var movementData = _playerShip.ShipData.MovementData;
+
+            if (movementData.InertiaDamping)
             {
                 float targetSpeed = 0;
-                float accelBase = _strafeAcceleration * fixedDT;
+                float accelBase = movementData.StrafeAcceleration * fixedDT;
 
                 if (_inputValue.x != 0) //если есть боковой инпут
                 {
-                    targetSpeed = _inputValue.x > 0 ? _strafeMaxSpeed : -_strafeMaxSpeed;
-                    _movementData.SideAcceleration = _inputValue.x;
+                    targetSpeed = _inputValue.x > 0 ? movementData.StrafeMaxSpeed : -movementData.StrafeMaxSpeed;
+                    movementData.SideAcceleration = _inputValue.x;
                 }
                 else
                 {
@@ -314,11 +308,11 @@ namespace GameSystems
                     if (Mathf.Abs(speedDiff) < 0.0001f) // если изменение скорости около нулевое
                     {
                         sideVel = targetSpeed;
-                        _movementData.SideAcceleration = 0;
+                        movementData.SideAcceleration = 0;
                         return;
                     }
 
-                    _movementData.SideAcceleration = Mathf.Sign(-sideVel);
+                    movementData.SideAcceleration = Mathf.Sign(-sideVel);
                 }
 
                 sideVel = Mathf.MoveTowards(sideVel, targetSpeed, accelBase);
@@ -327,23 +321,23 @@ namespace GameSystems
             {
                 if (_inputValue.x != 0) //если есть боковой инпут
                 {
-                    float accelBase = _strafeAcceleration * fixedDT;
-                    float targetSpeed = _inputValue.x > 0 ? _strafeMaxSpeed : -_strafeMaxSpeed;
+                    float accelBase = movementData.StrafeAcceleration * fixedDT;
+                    float targetSpeed = _inputValue.x > 0 ? movementData.StrafeMaxSpeed : -movementData.StrafeMaxSpeed;
                     float speedDiff = targetSpeed - sideVel;
 
                     if (Mathf.Abs(speedDiff) < 0.0001f) // если изменение скорости около нулевое
                     {
                         sideVel = targetSpeed;
-                        _movementData.SideAcceleration = 0;
+                        movementData.SideAcceleration = 0;
                         return;
                     }
 
                     sideVel = Mathf.MoveTowards(sideVel, targetSpeed, accelBase);
-                    _movementData.SideAcceleration = _inputValue.x;
+                    movementData.SideAcceleration = _inputValue.x;
                 }
                 else
                 {
-                    _movementData.SideAcceleration = 0;
+                    movementData.SideAcceleration = 0;
                 }
             }
         }

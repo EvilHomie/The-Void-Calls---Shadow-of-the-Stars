@@ -70,9 +70,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AnimSpeed: -2
+    - _AnimSpeed: -6
     m_Colors:
-    - _Color: {r: 0.404682, g: 5.9921575, b: 0, a: 0}
-    - _NoiseTiling: {r: 1, g: 2, b: 0, a: 0}
+    - White: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.55374384, g: 4.686737, b: 0, a: 0}
+    - _NoiseTiling: {r: 2.36, g: -0.37, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

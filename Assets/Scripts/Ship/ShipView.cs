@@ -4,8 +4,10 @@ using UnityEngine;
 namespace Ship
 {
     [Serializable]
-    public class ShipMovementView
+    public class ShipView
     {
+        [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
+        [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public ExhaustPlume[] DirectEngines { get; private set; }
         [field: SerializeField] public ExhaustPlume[] ReverseEngines { get; private set; }
         [field: SerializeField] public ExhaustPlume SideEngineFL { get; private set; }

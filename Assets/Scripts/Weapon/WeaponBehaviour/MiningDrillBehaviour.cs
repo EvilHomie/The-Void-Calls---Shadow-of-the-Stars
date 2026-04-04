@@ -7,44 +7,45 @@ namespace Weapons
     {
         public void StartShoot(MiningDrill weapon)
         {
-            ProceedShoot(weapon, 0);
+            ProceedShoot(weapon);
             weapon.BeamLineGO.SetActive(true);
             weapon.ShootSpotPS.Play();
-            weapon.IsShooting = true;
-            EventBus.WeaponChangeShootState?.Invoke(weapon, true);
+            //weapon.IsShooting = true;
+            //EventBus.WeaponChangeShootState?.Invoke(weapon, true);
         }
 
         public void CancelShoot(MiningDrill weapon)
         {
-            EventBus.WeaponChangeShootState?.Invoke(weapon, false);
+            //EventBus.WeaponChangeShootState?.Invoke(weapon, false);
             weapon.BeamLineGO.SetActive(false);
             weapon.ShootSpotPS.Stop();
-            weapon.IsShooting = false;
+            //weapon.IsShooting = false;
         }
 
-        public void ProceedShoot(MiningDrill weapon, float dTime)
+        public void ProceedShoot(MiningDrill weapon)
         {
-            RaycastHit2D hit = Physics2D.Raycast(weapon.CTransform.position, weapon.CTransform.up, weapon.MaxDistance, weapon.HitLayers);
+            RaycastHit2D hit = Physics2D.Raycast(weapon.Transform.position, weapon.Transform.up, weapon.MaxDistance, weapon.HitLayers); 
 
             if (hit.collider != null)
             {
                 weapon.HitPos = hit.point;
                 weapon.HitSpotT.position = hit.point;
-                weapon.HitParticleAccumulator += weapon.HitRate * dTime;
 
-                if (weapon.HitParticleAccumulator >= 1)
+                if (GameFlow.CoreTime <= weapon.NextHitTime)
                 {
-                    weapon.HitSpotPS.Emit(1);
-                    weapon.HitParticleAccumulator -= 1;
-                    EventBus.BeamHit?.Invoke(weapon, hit.collider);
+                    return;
                 }
+
+                weapon.HitSpotPS.Emit(1);
+                EventBus.BeamHit?.Invoke(weapon, hit.collider);
+                weapon.NextHitTime = GameFlow.CoreTime + weapon.HitDelay;
             }
             else
             {
-                weapon.HitPos = weapon.CTransform.position + weapon.CTransform.up * weapon.MaxDistance;
+                weapon.HitPos = weapon.Transform.position + weapon.Transform.up * weapon.MaxDistance;
             }
 
-            weapon.BeamLineLR.SetPosition(0, weapon.CTransform.position);
+            weapon.BeamLineLR.SetPosition(0, weapon.Transform.position);
             weapon.BeamLineLR.SetPosition(1, weapon.HitPos);
         }
     }

@@ -1,6 +1,6 @@
 using DI;
 using Enviroment;
-using Player;
+using Ship;
 using UnityEngine;
 
 namespace GameSystems
@@ -9,14 +9,12 @@ namespace GameSystems
     {
         [SerializeField] StarryCanvasTwinkleView[] _starryCanvasTwinkleViews;
         [SerializeField] Transform _starryCanvasParent;
-        private Rigidbody2D _shipRB;
-        private Transform _shipT;
-        private PlayerShip _playerShip;
+        private ShipInstance _playerShip;
 
         [Inject]
-        public void Construct(PlayerShip ship)
+        public void Construct(ShipInstance playerSip)
         {
-            _playerShip = ship;
+            _playerShip = playerSip;
         }
 
         protected override void Init()
@@ -25,43 +23,38 @@ namespace GameSystems
             {
                 starryCanvas.Init();
             }
-
-            _shipRB = _playerShip.Rigidbody;
-            _shipT = _playerShip.transform;
         }
 
         protected override void Subscribe()
         {
-            GameFlow.UpdateTick += OnUpdateTick;
+            GameFlow.UpdateTick += UpdateStarView;
             EventBus.ChangeCameraOrtoSize += OnChangeCameraOrtoSize;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlow.UpdateTick -= OnUpdateTick;
+            GameFlow.UpdateTick -= UpdateStarView;
             EventBus.ChangeCameraOrtoSize -= OnChangeCameraOrtoSize;
         }
 
-        private void OnUpdateTick(float fixDeltaTime)
+        private void OnChangeCameraOrtoSize(float dTime)
         {
-            UpdateStarView(fixDeltaTime);
+            _starryCanvasParent.localScale = Constants.Vector3One * dTime;
         }
 
-        private void OnChangeCameraOrtoSize(float relativeValue)
+        private void UpdateStarView(float dTime)
         {
-            _starryCanvasParent.localScale = Constants.Vector3One * relativeValue;
-        }
+            _starryCanvasParent.position = _playerShip.View.Transform.position;
+            var shipRB = _playerShip.View.Rigidbody;
 
-
-        private void UpdateStarView(float fixDeltaTime)
-        {
-            _starryCanvasParent.position = _shipT.position;
-
-            if (_shipRB.linearVelocity == Constants.Vector2Zero) return;
+            if (shipRB.linearVelocity.sqrMagnitude < 0.0001f)
+            {
+                return;
+            }
 
             foreach (var starryCanvas in _starryCanvasTwinkleViews)
             {
-                starryCanvas.LastOffset += fixDeltaTime * starryCanvas.SpeedMod * _shipRB.linearVelocity;
+                starryCanvas.LastOffset += dTime * starryCanvas.SpeedMod * shipRB.linearVelocity;
                 starryCanvas.Material.SetVector(StarryCanvasTwinkleView.OffsetID, starryCanvas.LastOffset);
             }
         }

@@ -1,6 +1,4 @@
 ﻿using DI;
-using GameSystems;
-using Player;
 using Ship;
 using TMPro;
 using UnityEngine;
@@ -21,10 +19,10 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
     [SerializeField] TextMeshProUGUI FPSText;
 
-    private PlayerShip _playerShip;
+    private ShipInstance _playerShip;
 
     [Inject]
-    public void Construct(PlayerShip ship)
+    public void Construct(ShipInstance ship)
     {
         _playerShip = ship;
     }
@@ -35,25 +33,25 @@ public class VisualDebug : MonoBehaviour
         ShowFPS();
     }
 
-    private void OnUpdateShip(PlayerShip ship)
+    private void OnUpdateShip(ShipInstance ship)
     {
-        float maxDirectSpeed = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.DirectDrag;
-        float maxReverseSpeed = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.ReverseDrag;
-        float maxStrafeSpeed = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.StrafeDrag;
-        float directAcceleration = ship.ShipData.MovementData.MainEngine.DirectThrust / ship.ShipData.ChassisData.Mass;
-        float reverseAcceleration = ship.ShipData.MovementData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.Mass;
-        float strafeAcceleration = ship.ShipData.MovementData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.Mass;
-        float rotateSpeed = ship.ShipData.MovementData.SideEngines.RotateThrust / ship.ShipData.ChassisData.RotateDrag;
+        float maxDirectSpeed = ship.ShipData.EquipData.MainEngine.DirectThrust / ship.ShipData.ChassisData.DirectDrag;
+        float maxReverseSpeed = ship.ShipData.EquipData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.ReverseDrag;
+        float maxStrafeSpeed = ship.ShipData.EquipData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.StrafeDrag;
+        float directAcceleration = ship.ShipData.EquipData.MainEngine.DirectThrust / ship.ShipData.ChassisData.Mass;
+        float reverseAcceleration = ship.ShipData.EquipData.MainEngine.ReverseThrust / ship.ShipData.ChassisData.Mass;
+        float strafeAcceleration = ship.ShipData.EquipData.SideEngines.StrafeThrust / ship.ShipData.ChassisData.Mass;
+        float rotateSpeed = ship.ShipData.EquipData.SideEngines.RotateThrust / ship.ShipData.ChassisData.RotateDrag;
 
         MaxDirectSpeedText.text = $"MaxDirSpeed: {maxDirectSpeed:F0} м/с";
         MaxReverseSpeedText.text = $"MaxRevSpeed: {maxReverseSpeed:F0} м/с";
         MaxStrafeSpeedText.text = $"MaxStrSpeed: {maxStrafeSpeed:F0} м/с";
 
-        float forwardVel = Vector2.Dot(ship.Rigidbody.linearVelocity, ship.transform.up);
-        float sideVel = Vector2.Dot(ship.Rigidbody.linearVelocity, ship.transform.right);
+        float forwardVel = Vector2.Dot(ship.View.Rigidbody.linearVelocity, ship.transform.up);
+        float sideVel = Vector2.Dot(ship.View.Rigidbody.linearVelocity, ship.transform.right);
 
-        CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel * Constants.WorldUnitMod:F0} м/с";
-        CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel * Constants.WorldUnitMod:F0} м/с";
+        CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel / Constants.WorldUnitMod:F0} м/с";
+        CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel / Constants.WorldUnitMod:F0} м/с";
 
         ThrottleText.text = $"Throttle: {ship.ShipData.MovementData.Throttle * 100:F0} %";
 

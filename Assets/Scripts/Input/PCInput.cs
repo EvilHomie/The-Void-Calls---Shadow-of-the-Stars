@@ -1,9 +1,10 @@
 using GameSystems;
+using Ship;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Player
+namespace GameInput
 {
     public class PCInput : IPlayerInput
     {
@@ -15,12 +16,12 @@ namespace Player
         public Action<float> ChangeZoomAction { get; set; }
 
         private InputSystem_Actions _inputActions;
-        private PlayerShip _playerShip;
+        private ShipInstance _playerShip;
         private Transform _playerTransform;
         private Camera _camera;
         private bool _isActive;
 
-        public void Init(PlayerShip ship, Camera camera)
+        public void Init(ShipInstance ship, Camera camera)
         {
             _inputActions = new InputSystem_Actions();
             _playerShip = ship;
@@ -58,7 +59,7 @@ namespace Player
 
         private void OnGameStateChange(GameState gameFlow)
         {
-            _isActive = gameFlow == GameState.MainGameplay;
+            _isActive = gameFlow == GameState.CoreGameplay;
 
             if (_isActive) _inputActions.Player.Enable();
             else _inputActions.Player.Disable();
@@ -70,7 +71,7 @@ namespace Player
             Vector3 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2 shipScreen = _camera.WorldToScreenPoint(_playerTransform.position);
             Vector2 direction = (mouseScreen - shipScreen).normalized;
-            _playerShip.MousePos = mouseWorld;
+            _playerShip.ShipData.TargetPos = mouseWorld;
             TrackMouseDirectionAction?.Invoke(direction);
             //TrackMouseWorldPositionAction?.Invoke(mouseWorld);
         }
