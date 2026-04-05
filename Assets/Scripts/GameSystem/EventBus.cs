@@ -8,6 +8,9 @@ namespace GameSystems
 {
     public class EventBus : MonoBehaviour
     {
+        public static Action<ShipInstance> SpawnShip { get; set; }
+        public static Action<ShipInstance> RemoveShip { get; set; }
+
         public static Action<ShipInstance> PlayerChangeShip { get; set; }
         public static Action<float> ChangeCameraOrtoSize { get; set; }
         public static Action<WeaponBase> CreateWeaponAction { get; set; }

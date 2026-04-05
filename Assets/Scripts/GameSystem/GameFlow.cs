@@ -6,12 +6,14 @@ namespace GameSystems
     public class GameFlow : MonoBehaviour
     {
         // события помеченные как Standart будто обычные Update FixedUpdate LateUpdate
-        public static Action<float> UpdateTick { get; set; }
         public static Action<float> FixedGameTick { get; set; }
+        public static Action<float> PreUpdateTick { get; set; }
+        public static Action<float> UpdateTick { get; set; }
+        public static Action PostUpdateTick { get; set; }
         public static Action<float> LateGameTick { get; set; }
-        public static Action UnityUpdateTick { get; set; }
-        public static Action UnityFixedUpdateTick { get; set; }
-        public static Action UnityLateUpdateTick { get; set; }
+        //public static Action UnityUpdateTick { get; set; }
+        //public static Action UnityFixedUpdateTick { get; set; }
+        //public static Action UnityLateUpdateTick { get; set; }
         public static Action<GameState> GameStateChange { get; set; }
         public static float CoreTime { get; private set; }
 
@@ -21,8 +23,10 @@ namespace GameSystems
         void Update()
         {
             var deltaTime = Time.unscaledDeltaTime * _gameSpeed;
+            PreUpdateTick?.Invoke(deltaTime);
             UpdateTick?.Invoke(deltaTime);
-            UnityUpdateTick?.Invoke();
+            PostUpdateTick?.Invoke();
+            //UnityUpdateTick?.Invoke();
 
             if (_currentGameState == GameState.CoreGameplay)
             {
@@ -35,7 +39,7 @@ namespace GameSystems
             var deltaTime = Time.fixedDeltaTime * _gameSpeed;
 
             FixedGameTick?.Invoke(deltaTime);
-            UnityFixedUpdateTick?.Invoke();
+            //UnityFixedUpdateTick?.Invoke();
         }
 
         private void LateUpdate()
@@ -43,7 +47,7 @@ namespace GameSystems
             var deltaTime = Time.unscaledDeltaTime * _gameSpeed;
 
             LateGameTick?.Invoke(deltaTime);
-            UnityLateUpdateTick?.Invoke();
+            //UnityLateUpdateTick?.Invoke();
         }
 
         private void Start()

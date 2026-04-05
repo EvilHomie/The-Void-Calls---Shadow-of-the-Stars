@@ -3,7 +3,7 @@ using System;
 namespace Ship
 {
     [Serializable]
-    public class ShipMovementData
+    public struct ShipMovementData
     {
         public float Throttle;
         public bool InertiaDamping;

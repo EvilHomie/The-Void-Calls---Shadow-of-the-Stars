@@ -1558,6 +1558,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 774036084}
   m_CullTransparentMesh: 1
+--- !u!1 &789032728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 789032729}
+  - component: {fileID: 789032730}
+  m_Layer: 0
+  m_Name: SpawnShipsSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &789032729
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789032728}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1883150519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &789032730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789032728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5883dbcb34ac32f479fcdac5857233ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnShipsSystem
 --- !u!1 &802507656
 GameObject:
   m_ObjectHideFlags: 0
@@ -3124,6 +3168,7 @@ MonoBehaviour:
   _playerShip: {fileID: 2099876501}
   _mainCamera: {fileID: 519420031}
   _mouseCursor: {fileID: 182906323}
+  _objectsStorage: {fileID: 0}
 --- !u!4 &1676256109
 Transform:
   m_ObjectHideFlags: 0
@@ -3195,22 +3240,56 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8709519288791882567, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
---- !u!114 &1736517986 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8709519288791882567, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
-  m_PrefabInstance: {fileID: 1736517985}
+--- !u!1 &1863799659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1863799660}
+  - component: {fileID: 1863799661}
+  m_Layer: 0
+  m_Name: ObjectsStorage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1863799660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863799659}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1883150519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1863799661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863799659}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7722ada10e0afb458db81c2c5689bd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e6c6c86193f01640862ad5ad6c3de9f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectsStorage
 --- !u!1 &1883150518
 GameObject:
   m_ObjectHideFlags: 0
@@ -3251,6 +3330,8 @@ Transform:
   - {fileID: 1062493947}
   - {fileID: 2063334920}
   - {fileID: 1374963307}
+  - {fileID: 1863799660}
+  - {fileID: 789032729}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1886418348
@@ -4115,10 +4196,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
-  <ShipData>k__BackingField: {fileID: 1736517986}
-  <View>k__BackingField:
-    <Rigidbody>k__BackingField: {fileID: 641581802560924216}
-    <Transform>k__BackingField: {fileID: 3383285233363977440}
+  ShipData:
+    IsPlayer: 0
+    Index: 0
+    TargetPos: {x: 0, y: 0, z: 0}
+    Position: {x: 0, y: 0, z: 0}
+    <ChassisData>k__BackingField:
+      <Size>k__BackingField: 0
+      <Mass>k__BackingField: 0
+      <DirectDrag>k__BackingField: 0
+      <ReverseDrag>k__BackingField: 0
+      <StrafeDrag>k__BackingField: 0
+      <RotateDrag>k__BackingField: 0
+    <EquipData>k__BackingField:
+      <WeaponSlots>k__BackingField: []
+      <MainEngine>k__BackingField: {fileID: 0}
+      <SideEngines>k__BackingField: {fileID: 0}
+    <MovementData>k__BackingField:
+      Throttle: 0
+      InertiaDamping: 0
+      RotatePowerValue: 0
+      DirectAccelerationPower: 0
+      SideAcceleration: 0
+      DirectMaxSpeed: 0
+      DirectAcceleration: 0
+      ReverseMaxSpeed: 0
+      ReverseAcceleration: 0
+      StrafeMaxSpeed: 0
+      StrafeAcceleration: 0
+      RotateSpeed: 0
+      TargetSpeed: 0
+      InertiaDampingLastState: 0
+      LastThrottleWithDamping: 0
+  View:
+    <ShipInstance>k__BackingField: {fileID: 0}
+    <Rigidbody>k__BackingField: {fileID: 0}
+    <Transform>k__BackingField: {fileID: 0}
     <DirectEngines>k__BackingField: []
     <ReverseEngines>k__BackingField: []
     <SideEngineFL>k__BackingField: {fileID: 0}

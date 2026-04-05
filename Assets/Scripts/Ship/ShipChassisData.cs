@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Ship
 {
     [Serializable]
-    public class ShipChassisData
+    public struct ShipChassisData
     {
         [field: SerializeField] public Size Size { get; private set; }
         [field: SerializeField] public float Mass { get; private set; }
