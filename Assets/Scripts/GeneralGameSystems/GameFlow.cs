@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class GameFlow : MonoBehaviour
+    public class GameFlow : GameSystemBase
     {
         // события помеченные как Standart будто обычные Update FixedUpdate LateUpdate
         public static Action<float> FixedGameTick { get; set; }
-        public static Action<float> PreUpdateTick { get; set; }
+        public static Action PreUpdateTick { get; set; }
         public static Action<float> UpdateTick { get; set; }
         public static Action PostUpdateTick { get; set; }
         public static Action<float> LateGameTick { get; set; }
@@ -17,27 +17,42 @@ namespace GameSystems
         public static Action<GameState> GameStateChange { get; set; }
         public static float CoreTime { get; private set; }
 
-        private GameState _currentGameState;
+        private GameState _currentGameState = GameState.None;
         private float _gameSpeed = 1;
+
+        protected override void AwakeInit()
+        {
+
+        }
+
+        protected override void Subscribe()
+        {
+            EventBus.GameStateChangeAction += OnGameStateChanged;
+        }
+
+        protected override void Unsubscribe()
+        {
+            EventBus.GameStateChangeAction -= OnGameStateChanged;
+        }
 
         void Update()
         {
             var deltaTime = Time.unscaledDeltaTime * _gameSpeed;
-            PreUpdateTick?.Invoke(deltaTime);
-            UpdateTick?.Invoke(deltaTime);
-            PostUpdateTick?.Invoke();
-            //UnityUpdateTick?.Invoke();
 
             if (_currentGameState == GameState.CoreGameplay)
             {
                 CoreTime += deltaTime;
             }
+
+            PreUpdateTick?.Invoke();
+            UpdateTick?.Invoke(deltaTime);
+            PostUpdateTick?.Invoke();
+            //UnityUpdateTick?.Invoke();
         }
 
         private void FixedUpdate()
         {
             var deltaTime = Time.fixedDeltaTime * _gameSpeed;
-
             FixedGameTick?.Invoke(deltaTime);
             //UnityFixedUpdateTick?.Invoke();
         }
@@ -49,17 +64,16 @@ namespace GameSystems
             LateGameTick?.Invoke(deltaTime);
             //UnityLateUpdateTick?.Invoke();
         }
-
-        private void Start()
+        private void OnGameStateChanged(GameState state)
         {
-            GameStateChange?.Invoke(GameState.CoreGameplay);
-            _currentGameState = GameState.CoreGameplay;
+            _currentGameState = state;
         }
     }
 }
 
 public enum GameState
 {
+    None,
     CoreGameplay,
     Pause
 }

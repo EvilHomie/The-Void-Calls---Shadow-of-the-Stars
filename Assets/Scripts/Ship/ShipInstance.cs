@@ -4,7 +4,9 @@ namespace Ship
 {
     public class ShipInstance : MonoBehaviour
     {
-        public ShipData ShipData;
+        public int Index;
+        public bool IsPlayer;
+        public ShipData ShipInitialData;
         public ShipView View;
     }
 }

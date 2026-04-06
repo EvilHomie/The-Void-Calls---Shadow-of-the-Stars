@@ -13,42 +13,45 @@ namespace GameSystems
         private readonly HashSet<ShipInstance> _attackingShips = new(200);
         private readonly HashSet<ShipInstance> _stopAttackingShips = new(200);
 
-        private ShipInstance _playerShip;
         private IPlayerInput _playerInput;
+        private ObjectsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ShipInstance playerShip)
+        public void Construct(IPlayerInput playerInput, ObjectsStorage objectsStorage)
         {
-            _playerShip = playerShip;
             _playerInput = playerInput;
+            _objectsStorage = objectsStorage;
             _weaponsBehaviour = new WeaponsBehaviour();
         }
 
-        protected override void Init()
+        protected override void AwakeInit()
         {
 
         }
 
         protected override void Subscribe()
         {
+            GameFlow.PreUpdateTick += ClearCollections;
             GameFlow.UpdateTick += OnUpdateTick;
             _playerInput.ChangeAtackState += OnPlayerChangeAttackState;
-            EventBus.ChangeAttackState += OnOtherChangeAttackState;
+            EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
         }
 
         protected override void Unsubscribe()
         {
+            GameFlow.PreUpdateTick -= ClearCollections;
             GameFlow.UpdateTick -= OnUpdateTick;
             _playerInput.ChangeAtackState -= OnPlayerChangeAttackState;
-            EventBus.ChangeAttackState += OnOtherChangeAttackState;
+            EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
         }
 
         private void OnUpdateTick(float dTime)
         {
-            ClearCollections();
+            //Aim(dTime);
+
             PlayerAim(dTime);
-            OthersAim(dTime);
-            OthersAttack();
+            //OthersAim(dTime);
+            //OthersAttack();
         }
 
         private void ClearCollections()
@@ -59,6 +62,14 @@ namespace GameSystems
             }
 
             _stopAttackingShips.Clear();
+        }
+
+        private void Aim(float dTime)
+        {
+            foreach (var shipData in _objectsStorage.NonPlayerShipsData)
+            {
+                AimToTarget(shipData.EquipData.WeaponSlots, shipData.TargetPos, dTime);
+            }
         }
 
         private void OnPlayerChangeAttackState(bool state)
@@ -72,26 +83,27 @@ namespace GameSystems
                 GameFlow.UpdateTick -= PlayerAttack;
             }
 
-            OnChangeAttackState(_playerShip, state);
+            ref var playerShipData = ref _objectsStorage.PlayerShipData;
+            OnChangeAttackState(playerShipData.EquipData.WeaponSlots, state);
         }
 
-        private void OnOtherChangeAttackState(ShipInstance ship, bool state)
+        private void OnNonPlayerChangeAttackState(ShipInstance ship, bool state)
         {
-            if (state)
-            {
-                _attackingShips.Add(ship);
-            }
-            else
-            {
-                _stopAttackingShips.Add(ship);
-            }
+            //if (state)
+            //{
+            //    _attackingShips.Add(ship);
+            //}
+            //else
+            //{
+            //    _stopAttackingShips.Add(ship);
+            //}
 
-            OnChangeAttackState(ship, state);
+            //OnChangeAttackState(ship, state);
         }
 
-        private void OnChangeAttackState(ShipInstance ship, bool state)
+        private void OnChangeAttackState(WeaponSlot[] weaponSlots, bool state)
         {
-            foreach (var slot in ship.ShipData.EquipData.WeaponSlots)
+            foreach (var slot in weaponSlots)
             {
                 if (!slot.IsActive)
                 {
@@ -113,7 +125,7 @@ namespace GameSystems
         {
             foreach (var ship in _attackingShips)
             {
-                ProceedWeaponShoot(ship.ShipData.EquipData.WeaponSlots);
+                ProceedWeaponShoot(ship.ShipInitialData.EquipData.WeaponSlots);
             }
         }
 
@@ -132,21 +144,26 @@ namespace GameSystems
 
         private void PlayerAim(float dTime)
         {
-            var weaponSlots = _playerShip.ShipData.EquipData.WeaponSlots;
-            AimToTarget(weaponSlots, _playerShip.ShipData.TargetPos, dTime);
+            ref var playerShipData = ref _objectsStorage.PlayerShipData;
+            var weaponSlots = playerShipData.EquipData.WeaponSlots;
+            AimToTarget(weaponSlots, playerShipData.TargetPos, dTime);
         }
 
         private void PlayerAttack(float dTime)
         {
-            ProceedWeaponShoot(_playerShip.ShipData.EquipData.WeaponSlots);
+            ref var shipData = ref _objectsStorage.PlayerShipData;
+
+            ProceedWeaponShoot(shipData.EquipData.WeaponSlots);
         }
 
         private void OthersAim(float dTime)
         {
             foreach (var ship in _attackingShips)
             {
-                var weaponSlots = ship.ShipData.EquipData.WeaponSlots;
-                AimToTarget(weaponSlots, _playerShip.ShipData.TargetPos, dTime);
+
+                //ref var shipData = ref _objectsStorage.ShipsData[ship.ShipInitialData.Index];
+                //var weaponSlots = ship.ShipInitialData.EquipData.WeaponSlots;
+                //AimToTarget(weaponSlots, _playerShip.ShipInitialData.TargetPos, dTime);
             }
         }
 

@@ -495,6 +495,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2205898bde2eb024e96af9cbbcf82ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &363215581 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7560302030021228407, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+  m_PrefabInstance: {fileID: 1736517985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &428943705
 GameObject:
   m_ObjectHideFlags: 0
@@ -2443,6 +2454,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125549099}
   m_CullTransparentMesh: 1
+--- !u!114 &1165149184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6090276293456497624, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+  m_PrefabInstance: {fileID: 1736517985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1208889896
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,6 +2801,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219fff6bfbbea804592d1e3e84730bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1474265793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1474265794}
+  - component: {fileID: 1474265795}
+  m_Layer: 0
+  m_Name: UpdateCashesSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1474265794
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474265793}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1883150519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1474265795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474265793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57d2f60c22a33b4993c1090bc776c67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameSystems.UpdateCashesSystem
 --- !u!1 &1554658857
 GameObject:
   m_ObjectHideFlags: 0
@@ -3168,7 +3234,7 @@ MonoBehaviour:
   _playerShip: {fileID: 2099876501}
   _mainCamera: {fileID: 519420031}
   _mouseCursor: {fileID: 182906323}
-  _objectsStorage: {fileID: 0}
+  _objectsStorage: {fileID: 1863799661}
 --- !u!4 &1676256109
 Transform:
   m_ObjectHideFlags: 0
@@ -3196,8 +3262,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship_Miner_S_1
       objectReference: {fileID: 0}
-    - target: {fileID: 2555100201372720572, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 3257694416211380314, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3594393525299202342, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
@@ -3240,12 +3306,94 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8709519288791882567, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.MovementData.InertiaDamping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipData.EquipData.<MainEngine>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipData.EquipData.<SideEngines>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.ChassisData.<Mass>k__BackingField
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.EquipData.<MainEngine>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.EquipData.<SideEngines>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.ChassisData.<DirectDrag>k__BackingField
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.ChassisData.<RotateDrag>k__BackingField
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.ChassisData.<StrafeDrag>k__BackingField
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.ChassisData.<ReverseDrag>k__BackingField
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipData.EquipData.<WeaponSlots>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'ShipData.EquipData.<WeaponSlots>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 363215581}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'ShipData.EquipData.<WeaponSlots>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1774104205}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'ShipData.EquipData.<WeaponSlots>k__BackingField.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1165149184}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: ShipInitialData.EquipData.<WeaponSlots>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'ShipInitialData.EquipData.<WeaponSlots>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 363215581}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'ShipInitialData.EquipData.<WeaponSlots>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1774104205}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'ShipInitialData.EquipData.<WeaponSlots>k__BackingField.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1165149184}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+--- !u!114 &1774104205 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3274016382475295634, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+  m_PrefabInstance: {fileID: 1736517985}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1863799659
 GameObject:
   m_ObjectHideFlags: 0
@@ -3290,6 +3438,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e6c6c86193f01640862ad5ad6c3de9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectsStorage
+  PlayerShipData:
+    TargetPos: {x: 0, y: 0, z: 0}
+    Position: {x: 0, y: 0, z: 0}
+    ChassisData:
+      <Size>k__BackingField: 0
+      <Mass>k__BackingField: 0
+      <DirectDrag>k__BackingField: 0
+      <ReverseDrag>k__BackingField: 0
+      <StrafeDrag>k__BackingField: 0
+      <RotateDrag>k__BackingField: 0
+    EquipData:
+      <WeaponSlots>k__BackingField: []
+      <MainEngine>k__BackingField: {fileID: 0}
+      <SideEngines>k__BackingField: {fileID: 0}
+    MovementData:
+      Throttle: 0
+      InertiaDamping: 0
+      RotatePowerValue: 0
+      DirectAccelerationPower: 0
+      SideAcceleration: 0
+      DirectMaxSpeed: 0
+      DirectAcceleration: 0
+      ReverseMaxSpeed: 0
+      ReverseAcceleration: 0
+      StrafeMaxSpeed: 0
+      StrafeAcceleration: 0
+      RotateSpeed: 0
+      TargetSpeed: 0
+      InertiaDampingLastState: 0
+      LastThrottleWithDamping: 0
+  PlayerShipView:
+    <Rigidbody>k__BackingField: {fileID: 0}
+    <Transform>k__BackingField: {fileID: 0}
+    <DirectEngines>k__BackingField: []
+    <ReverseEngines>k__BackingField: []
+    <SideEngineFL>k__BackingField: {fileID: 0}
+    <SideEngineFR>k__BackingField: {fileID: 0}
+    <SideEngineBL>k__BackingField: {fileID: 0}
+    <SideEngineBR>k__BackingField: {fileID: 0}
+  PlayerShipInstance: {fileID: 0}
 --- !u!1 &1883150518
 GameObject:
   m_ObjectHideFlags: 0
@@ -3332,6 +3520,7 @@ Transform:
   - {fileID: 1374963307}
   - {fileID: 1863799660}
   - {fileID: 789032729}
+  - {fileID: 1474265794}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1886418348
@@ -4196,23 +4385,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
-  ShipData:
-    IsPlayer: 0
-    Index: 0
+  Index: 0
+  IsPlayer: 0
+  ShipInitialData:
     TargetPos: {x: 0, y: 0, z: 0}
     Position: {x: 0, y: 0, z: 0}
-    <ChassisData>k__BackingField:
+    ChassisData:
       <Size>k__BackingField: 0
       <Mass>k__BackingField: 0
       <DirectDrag>k__BackingField: 0
       <ReverseDrag>k__BackingField: 0
       <StrafeDrag>k__BackingField: 0
       <RotateDrag>k__BackingField: 0
-    <EquipData>k__BackingField:
+    EquipData:
       <WeaponSlots>k__BackingField: []
       <MainEngine>k__BackingField: {fileID: 0}
       <SideEngines>k__BackingField: {fileID: 0}
-    <MovementData>k__BackingField:
+    MovementData:
       Throttle: 0
       InertiaDamping: 0
       RotatePowerValue: 0
@@ -4229,7 +4418,6 @@ MonoBehaviour:
       InertiaDampingLastState: 0
       LastThrottleWithDamping: 0
   View:
-    <ShipInstance>k__BackingField: {fileID: 0}
     <Rigidbody>k__BackingField: {fileID: 0}
     <Transform>k__BackingField: {fileID: 0}
     <DirectEngines>k__BackingField: []

@@ -9,7 +9,7 @@ namespace GameSystems
         private HashSet<ProjectileBase> _activeProjectiles;
         private HashSet<ProjectileBase> _destroyedProjectiles;
 
-        protected override void Init()
+        protected override void AwakeInit()
         {
             _activeProjectiles = new(500);
             _destroyedProjectiles = new(500);

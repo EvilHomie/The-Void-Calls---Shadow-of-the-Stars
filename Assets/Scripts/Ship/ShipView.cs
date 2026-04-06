@@ -6,7 +6,6 @@ namespace Ship
     [Serializable]
     public struct ShipView
     {
-        [field: SerializeField] public ShipInstance ShipInstance { get; private set; }
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public ExhaustPlume[] DirectEngines { get; private set; }

@@ -1,20 +1,25 @@
 ﻿using Ship;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameSystems
 {
     public class ObjectsStorage : GameSystemBase
     {
-        public readonly FastList<ShipData> ShipsData = new(200);
-        public readonly FastList<ShipView> ShipsView = new(200);
-        public int PlayerShipIndex { get; private set; } = -1;
+        public readonly FastList<ShipData> NonPlayerShipsData = new(200);
+        public readonly FastList<ShipView> NonPlayerShipsView = new(200);
+        public readonly List<ShipInstance> NonPlayerShipsInstance = new(200);
+
+        public ShipData PlayerShipData;
+        public ShipView PlayerShipView;
+        public ShipInstance PlayerShipInstance;
 
         private readonly List<ShipInstance> _removeQueue = new(50);
         private readonly List<ShipInstance> _addQueue = new(50);
-        protected override void Init()
-        {
 
+        protected override void AwakeInit()
+        {
         }
 
         protected override void Subscribe()
@@ -22,7 +27,7 @@ namespace GameSystems
             EventBus.SpawnShip += OnSpawnShip;
             EventBus.RemoveShip += OnDestroyShip;
 
-            GameFlow.PostUpdateTick += UpdateCollections;
+            GameFlow.PreUpdateTick += UpdateCollections;
         }
 
         protected override void Unsubscribe()
@@ -30,14 +35,14 @@ namespace GameSystems
             EventBus.SpawnShip -= OnSpawnShip;
             EventBus.RemoveShip -= OnDestroyShip;
 
-            GameFlow.PostUpdateTick -= UpdateCollections;
+            GameFlow.PreUpdateTick -= UpdateCollections;
         }
 
         private void UpdateCollections()
         {
             foreach (var ship in _removeQueue)
             {
-                RemoveShip(ship.ShipData.Index);
+                RemoveShip(ship.Index);
             }
 
             _removeQueue.Clear();
@@ -52,7 +57,17 @@ namespace GameSystems
 
         private void OnSpawnShip(ShipInstance shipInstance)
         {
-            _addQueue.Add(shipInstance);
+            if (shipInstance.IsPlayer)
+            {
+                PlayerShipData = shipInstance.ShipInitialData;
+                PlayerShipView = shipInstance.View;
+                PlayerShipInstance = shipInstance;
+                EventBus.PlayerChangeShip?.Invoke();
+            }
+            else
+            {
+                _addQueue.Add(shipInstance);
+            }
         }
 
         private void OnDestroyShip(ShipInstance shipInstance)
@@ -62,44 +77,32 @@ namespace GameSystems
 
         private void AddShip(ShipInstance shipInstance)
         {
-            ShipsData.Add(shipInstance.ShipData);
-            ShipsView.Add(shipInstance.View);
-            var lastIndex = ShipsData.Count - 1;
-            ref var shipData = ref shipInstance.ShipData;
-            shipData.Index = lastIndex;
-
-            if (shipInstance.ShipData.IsPlayer)
-            {
-                PlayerShipIndex = lastIndex;
-            }
+            NonPlayerShipsInstance.Add(shipInstance);
+            NonPlayerShipsData.Add(shipInstance.ShipInitialData);
+            NonPlayerShipsView.Add(shipInstance.View);
+            int index = NonPlayerShipsInstance.Count - 1;
+            shipInstance.Index = index;
         }
 
         private void RemoveShip(int index)
         {
-            int lastIndex = ShipsData.Count - 1;
+            int lastIndex = NonPlayerShipsInstance.Count - 1;
 
             if (index != lastIndex)
             {
-                ref var movedData = ref ShipsData[lastIndex];
-                var movedView = ShipsView[lastIndex];
+                ref var movedData = ref NonPlayerShipsData[lastIndex];
+                ref var movedView = ref NonPlayerShipsView[lastIndex];
+                var movedInstance = NonPlayerShipsInstance[lastIndex];
 
-                ShipsData[index] = movedData;
-                ShipsView[index] = movedView;
+                NonPlayerShipsData[index] = movedData;
+                NonPlayerShipsView[index] = movedView;
+                NonPlayerShipsInstance[index] = movedInstance;
 
-                movedData.Index = index;
+                movedInstance.Index = index;
             }
 
-            if (PlayerShipIndex == lastIndex)
-            {
-                PlayerShipIndex = index;
-            }
-            else if (PlayerShipIndex == index)
-            {
-                PlayerShipIndex = -1;
-            }
-
-            ShipsData.RemoveAt(lastIndex);
-            ShipsView.RemoveAt(lastIndex);
+            NonPlayerShipsData.RemoveAt(lastIndex);
+            NonPlayerShipsView.RemoveAt(lastIndex);
         }
     }
 }
@@ -156,11 +159,12 @@ public class FastList<T> where T : struct
 
     public void RemoveAt(int index)
     {
-        int last = Count - 1;
+        int lastIndex = Count - 1;
 
-        if (index != last)
+        if (index != lastIndex)
         {
-            _items[index] = _items[last];
+            ref var movedItem = ref _items[lastIndex];
+            _items[index] = movedItem;
         }
 
         Count--;
@@ -213,4 +217,57 @@ public class FastList<T> where T : struct
         public ref T Current => ref _items[_index];
     }
 }
+
+
+
+/* логика когда еще корабль игрока был в общей коллекции
+
+private void AddShip(ShipInstance shipInstance)
+        {
+            NonPlayerShipsInstance.Add(shipInstance);
+            NonPlayerShipsData.Add(shipInstance.ShipInitialData);
+            NonPlayerShipsView.Add(shipInstance.View);
+
+            int index = NonPlayerShipsInstance.Count - 1;
+
+            shipInstance.Index = index;
+
+            if (NonPlayerShipsInstance[index].IsPlayer)
+            {
+                PlayerShipIndex = index;
+            }
+        }
+
+        private void RemoveShip(int index)
+        {
+            int lastIndex = NonPlayerShipsInstance.Count - 1;
+
+            if (index != lastIndex)
+            {
+                ref var movedData = ref NonPlayerShipsData[lastIndex];
+                ref var movedView = ref NonPlayerShipsView[lastIndex];
+                var movedInstance = NonPlayerShipsInstance[lastIndex];
+
+                NonPlayerShipsData[index] = movedData;
+                NonPlayerShipsView[index] = movedView;
+                NonPlayerShipsInstance[index] = movedInstance;
+
+                movedInstance.Index = index;
+            }
+
+            if (PlayerShipIndex == lastIndex)
+            {
+                PlayerShipIndex = index;
+            }
+            else if (PlayerShipIndex == index)
+            {
+                PlayerShipIndex = -1;
+            }
+
+            NonPlayerShipsData.RemoveAt(lastIndex);
+            NonPlayerShipsView.RemoveAt(lastIndex);
+        }
+
+
+*/
 

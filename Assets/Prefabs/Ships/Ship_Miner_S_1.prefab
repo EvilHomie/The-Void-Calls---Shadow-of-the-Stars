@@ -115,7 +115,6 @@ GameObject:
   - component: {fileID: 3594393525299202342}
   - component: {fileID: 6017611796855989182}
   - component: {fileID: 3928580360091820729}
-  - component: {fileID: 8709519288791882567}
   m_Layer: 0
   m_Name: Ship_Miner_S_1
   m_TagString: Untagged
@@ -181,62 +180,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
-  <ShipData>k__BackingField: {fileID: 8709519288791882567}
-  <View>k__BackingField:
+  ShipData:
+    IsPlayer: 0
+    Index: 0
+    TargetPos: {x: 0, y: 0, z: 0}
+    Position: {x: 0, y: 0, z: 0}
+    ChassisData:
+      <Size>k__BackingField: 0
+      <Mass>k__BackingField: 10
+      <DirectDrag>k__BackingField: 2
+      <ReverseDrag>k__BackingField: 5
+      <StrafeDrag>k__BackingField: 20
+      <RotateDrag>k__BackingField: 6
+    EquipData:
+      <WeaponSlots>k__BackingField: []
+      <MainEngine>k__BackingField: {fileID: 0}
+      <SideEngines>k__BackingField: {fileID: 0}
+    MovementData:
+      Throttle: 0
+      InertiaDamping: 0
+      RotatePowerValue: 0
+      DirectAccelerationPower: 0
+      SideAcceleration: 0
+      DirectMaxSpeed: 0
+      DirectAcceleration: 0
+      ReverseMaxSpeed: 0
+      ReverseAcceleration: 0
+      StrafeMaxSpeed: 0
+      StrafeAcceleration: 0
+      RotateSpeed: 0
+      TargetSpeed: 0
+      InertiaDampingLastState: 0
+      LastThrottleWithDamping: 0
+  View:
+    <ShipInstance>k__BackingField: {fileID: 3928580360091820729}
     <Rigidbody>k__BackingField: {fileID: 6017611796855989182}
     <Transform>k__BackingField: {fileID: 3594393525299202342}
     <DirectEngines>k__BackingField:
     - {fileID: 6013853014266696036}
     <ReverseEngines>k__BackingField:
-    - {fileID: 1885998137138351501}
     - {fileID: 5485098076751902980}
+    - {fileID: 1885998137138351501}
     <SideEngineFL>k__BackingField: {fileID: 4121987505725392283}
     <SideEngineFR>k__BackingField: {fileID: 7336943791894267104}
     <SideEngineBL>k__BackingField: {fileID: 8042475745488275334}
     <SideEngineBR>k__BackingField: {fileID: 1937416427932666524}
---- !u!114 &8709519288791882567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1994318018500245952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7722ada10e0afb458db81c2c5689bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  TargetPos: {x: 0, y: 0, z: 0}
-  <ChassisData>k__BackingField:
-    <Size>k__BackingField: 0
-    <Mass>k__BackingField: 10
-    <DirectDrag>k__BackingField: 2
-    <ReverseDrag>k__BackingField: 5
-    <StrafeDrag>k__BackingField: 20
-    <RotateDrag>k__BackingField: 6
-  <EquipData>k__BackingField:
-    <WeaponSlots>k__BackingField:
-    - {fileID: 7560302030021228407}
-    - {fileID: 3274016382475295634}
-    - {fileID: 6090276293456497624}
-    <MainEngine>k__BackingField: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
-    <SideEngines>k__BackingField: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
-  <MovementData>k__BackingField:
-    Throttle: 0
-    InertiaDamping: 0
-    RotatePowerValue: 0
-    DirectAccelerationPower: 0
-    SideAcceleration: 0
-    DirectMaxSpeed: 0
-    DirectAcceleration: 0
-    ReverseMaxSpeed: 0
-    ReverseAcceleration: 0
-    StrafeMaxSpeed: 0
-    StrafeAcceleration: 0
-    RotateSpeed: 0
-    TargetSpeed: 0
-    InertiaDampingLastState: 0
-    LastThrottleWithDamping: 0
 --- !u!1 &2028138005341966525
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,6 +1331,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4964821154419843585}
     m_Modifications:
+    - target: {fileID: 2184953884915563217, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5415149461915584563, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_Name
       value: S_MiningDrill_Mk1

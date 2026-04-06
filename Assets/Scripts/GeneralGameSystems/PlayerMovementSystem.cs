@@ -14,66 +14,43 @@ namespace GameSystems
         private const float _maxSmooth = 0.05f; // чем меньше тем более плавно (дольше) добираются последние "метры" скорости
 
         private IPlayerInput _input;
-        private Vector2 _mouseDirection;
         private Vector2 _inputValue;
         private Camera _camera;
-        private ShipInstance _playerShip;
+        private ObjectsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ShipInstance ship, Camera camera)
+        public void Construct(IPlayerInput playerInput, ObjectsStorage objectsStorage, Camera camera)
         {
             _input = playerInput;
-            _playerShip = ship;
+            _objectsStorage = objectsStorage;
             _camera = camera;
         }
 
-        protected override void Init()
+        protected override void AwakeInit()
         {
-            _input.Init(_playerShip, _camera);
-            OnPlayerChangeShip(_playerShip);
+            _input.Init(_camera, _objectsStorage);
         }
 
         protected override void Subscribe()
         {
             _input.Subscrube();
             _input.MoveInputAction += OnMoveInputAction;
-            _input.TrackMouseDirectionAction += OnTrackMouseAction;
             _input.ToggleDamperAction += OnToggleDamper;
             GameFlow.FixedGameTick += OnFixedGameTick;
-            EventBus.PlayerChangeShip += OnPlayerChangeShip;
         }
 
         protected override void Unsubscribe()
         {
             _input.Unsubscribe();
             _input.MoveInputAction -= OnMoveInputAction;
-            _input.TrackMouseDirectionAction -= OnTrackMouseAction;
             _input.ToggleDamperAction -= OnToggleDamper;
             GameFlow.FixedGameTick -= OnFixedGameTick;
-            EventBus.PlayerChangeShip -= OnPlayerChangeShip;
         }
 
-        private void OnPlayerChangeShip(ShipInstance ship)
-        {
-            var shipMovementData = _playerShip.ShipData.MovementData;
-            var shipChassisData = _playerShip.ShipData.ChassisData;
-            var shipEquipData = _playerShip.ShipData.EquipData;
-
-            shipMovementData.InertiaDampingLastState = shipMovementData.InertiaDamping;
-            shipMovementData.DirectMaxSpeed = shipEquipData.MainEngine.DirectThrust / shipChassisData.DirectDrag * Constants.WorldUnitMod;
-            shipMovementData.DirectAcceleration = shipEquipData.MainEngine.DirectThrust / shipChassisData.Mass * Constants.WorldUnitMod;
-            shipMovementData.ReverseMaxSpeed = shipEquipData.MainEngine.ReverseThrust / shipChassisData.ReverseDrag * Constants.WorldUnitMod;
-            shipMovementData.ReverseAcceleration = shipEquipData.MainEngine.ReverseThrust / shipChassisData.Mass * Constants.WorldUnitMod;
-            shipMovementData.StrafeMaxSpeed = shipEquipData.SideEngines.StrafeThrust / shipChassisData.StrafeDrag * Constants.WorldUnitMod;
-            shipMovementData.StrafeAcceleration = shipEquipData.SideEngines.StrafeThrust / shipChassisData.Mass * Constants.WorldUnitMod;
-            shipMovementData.RotateSpeed = shipEquipData.SideEngines.RotateThrust / shipChassisData.RotateDrag;
-        }
-
-        private void OnTrackMouseAction(Vector2 dir) { _mouseDirection = dir; }
         private void OnMoveInputAction(Vector2 input) { _inputValue = input; }
         private void OnToggleDamper()
         {
-            var shipMovementData = _playerShip.ShipData.MovementData;
+            ref var shipMovementData = ref _objectsStorage.PlayerShipData.MovementData;
             shipMovementData.InertiaDamping = !shipMovementData.InertiaDamping;
 
             if (shipMovementData.InertiaDampingLastState == shipMovementData.InertiaDamping)
@@ -107,12 +84,8 @@ namespace GameSystems
             HandleRotation(fixedDT);
         }
 
-        private readonly float _throttleZeroDelay = 0.2f; // продолжительность задерки на нуле.
+        private readonly float _throttleZeroDelay = 0.3f; // продолжительность задерки на нуле.
         private float _throttleZeroDelayTimer = 0f; // текущий таймер задержки
-
-        // переменные нужны для закомментированной версии
-        //private readonly float _throttleZeroSensitivity = 0.01f; // порог срабатывания задержки.
-        //private bool _lockOnZero; // должна ли быть пауза при прохождении через ноль
 
         private void HandleThrottle(float fixedDT)
         {
@@ -128,7 +101,7 @@ namespace GameSystems
                 return;
             }
 
-            var movementData = _playerShip.ShipData.MovementData;
+            ref var movementData = ref _objectsStorage.PlayerShipData.MovementData;
 
             float prevValue = movementData.Throttle;
             movementData.Throttle += _inputValue.y * fixedDT;
@@ -144,49 +117,13 @@ namespace GameSystems
               ? movementData.DirectMaxSpeed
               : movementData.ReverseMaxSpeed)
               * movementData.Throttle;
-
-            // В версии ниже нашел косяк. если новая скорость отличается от нуля меньше чем на _throttleZeroSensitivity то при обратке не стопарится на нуле
-
-            //if (_inputValue.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
-            //{
-            //    _lockOnZero = false;
-            //    _throttleZeroDelayTimer = 0;
-            //    return;
-            //}
-
-            //if (_throttleZeroDelayTimer > 0)  // игнор если запущен таймер остановки на нуле
-            //{
-            //    _throttleZeroDelayTimer -= fixedDT;
-            //    return;
-            //}
-
-            //_movementData.Throttle += _inputValue.y * fixedDT;
-            //_movementData.Throttle = Mathf.Clamp(_movementData.Throttle, -1, 1);
-
-            //float absThrottle = Mathf.Abs(_movementData.Throttle);
-
-            //if (absThrottle >= _throttleZeroSensitivity)
-            //{
-            //    _lockOnZero = true;
-            //}
-
-            //if (_lockOnZero && absThrottle < _throttleZeroSensitivity)
-            //{
-            //    _lockOnZero = false;
-            //    _movementData.Throttle = 0;
-            //    _throttleZeroDelayTimer = _throttleZeroDelay;
-            //}
-
-            //_targetSpeed = (_movementData.Throttle >= 0
-            //   ? _directMaxSpeed
-            //   : _reverseMaxSpeed)
-            //   * _movementData.Throttle;
         }
 
         private void HandleRotation(float fixedDT)
         {
-            var view = _playerShip.View;
-            var movementData = _playerShip.ShipData.MovementData;
+            ref var view = ref _objectsStorage.PlayerShipView;          
+            ref var data = ref _objectsStorage.PlayerShipData;          
+            ref var movementData = ref data.MovementData;
 
             // логика торможения если скорость вращение выше контролируемой
             if (Mathf.Abs(view.Rigidbody.angularVelocity) > movementData.RotateSpeed)
@@ -197,7 +134,9 @@ namespace GameSystems
                 return;
             }
 
-            float angleDiff = Vector2.SignedAngle(view.Transform.up, _mouseDirection);
+            var mouseDir = data.TargetPos - data.Position;
+
+            float angleDiff = Vector2.SignedAngle(view.Transform.up, mouseDir);
             float absAngleDiff = Mathf.Abs(angleDiff);
             float direction = Mathf.Sign(angleDiff);
 
@@ -211,7 +150,7 @@ namespace GameSystems
 
         private void HandleMovement(float fixedDT)
         {
-            var view = _playerShip.View;
+            ref var view = ref _objectsStorage.PlayerShipView;
 
             float forwardVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.up);
             float sideVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.right);
@@ -223,7 +162,7 @@ namespace GameSystems
 
         private void CalcForwardVelocity(float fixedDT, ref float forwardVel)
         {
-            var movementData = _playerShip.ShipData.MovementData;
+            ref var movementData = ref _objectsStorage.PlayerShipData.MovementData;
 
             if (movementData.InertiaDamping)
             {
@@ -289,7 +228,7 @@ namespace GameSystems
         // нужна логика быстрого гашения боковой скорости
         private void CalcSideVelocity(float fixedDT, ref float sideVel)
         {
-            var movementData = _playerShip.ShipData.MovementData;
+            ref var movementData = ref _objectsStorage.PlayerShipData.MovementData;
 
             if (movementData.InertiaDamping)
             {
@@ -341,30 +280,5 @@ namespace GameSystems
                 }
             }
         }
-
-
-
-        //private void Update() //Тестовая часть 
-        //{
-        //    if (Keyboard.current.qKey.wasPressedThisFrame)
-        //    {
-        //        _shipRB.AddTorque(200);
-        //    }
-
-        //    if (Keyboard.current.eKey.wasPressedThisFrame)
-        //    {
-        //        _shipRB.AddTorque(-200);
-        //    }
-
-        //    if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
-        //    {
-        //        _shipRB.AddRelativeForce(Vector2.up * 500);
-        //    }
-
-        //    if (Keyboard.current.leftCtrlKey.wasPressedThisFrame)
-        //    {
-        //        _shipRB.AddRelativeForce(Vector2.down * 500);
-        //    }
-        //}
     }
 }

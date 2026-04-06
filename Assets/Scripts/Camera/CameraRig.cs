@@ -1,7 +1,6 @@
 ﻿using DI;
 using GameInput;
 using GameSystems;
-using Ship;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,46 +16,22 @@ public class CameraRig : GameSystemBase
     [SerializeField] float _changeOrtSizeStep;
     [SerializeField] float _lookAheadDistanceMod = 1f;
     private Transform _lookAheadCursor;
-    private ShipInstance _playerShip;
+    private ObjectsStorage _objectsStorage;
     private IPlayerInput _input;
     private float _targetOrtSize;
-    private Camera _camera;
     private float _deffCameraOrtoSize = 3f;
 
     [Inject]
-    public void Construct(LookAheadCursor lookAheadCursor, ShipInstance playerShip, IPlayerInput playerInput, Camera camera)
+    public void Construct(LookAheadCursor lookAheadCursor, ObjectsStorage objectsStorage, IPlayerInput playerInput)
     {
         _lookAheadCursor = lookAheadCursor.transform;
-        _playerShip = playerShip;
+        _objectsStorage = objectsStorage;
         _input = playerInput;
-        _camera = camera;
     }
 
-    protected override void Init()
+    protected override void AwakeInit()
     {
-        _cinemachineTargetGroup.Targets.Clear();
-
-        var playerTarget = new CinemachineTargetGroup.Target()
-        {
-            Object = _playerShip.View.Transform,
-            Weight = 1,
-            Radius = 1,
-        };
-
-        var cursorTarget = new CinemachineTargetGroup.Target()
-        {
-            Object = _lookAheadCursor,
-            Weight = _mouseCursorWeight,
-            Radius = 1,
-        };
-
-        _cinemachineTargetGroup.Targets.Add(playerTarget);
-        _cinemachineTargetGroup.Targets.Add(cursorTarget);
-    }
-
-    private void Start()
-    {
-        OnChangeShip(_playerShip);
+       
     }
 
     protected override void Subscribe()
@@ -91,15 +66,41 @@ public class CameraRig : GameSystemBase
         UpdateLookAheadCursorPos(orthoDelta);
     }
 
-    private void OnChangeShip(ShipInstance ship)
+    private void OnChangeShip()
     {
+        UpdateTargetGroup();
         _targetOrtSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;
         _deffCameraOrtoSize = _targetOrtSize;
         _cinemachineCamera.Lens.OrthographicSize = _targetOrtSize;
     }
 
+    private void UpdateTargetGroup()
+    {
+        _cinemachineTargetGroup.Targets.Clear();
+
+        ref var playerShipView = ref _objectsStorage.PlayerShipView;
+
+        var playerTarget = new CinemachineTargetGroup.Target()
+        {
+            Object = playerShipView.Transform,
+            Weight = 1,
+            Radius = 1,
+        };
+
+        var cursorTarget = new CinemachineTargetGroup.Target()
+        {
+            Object = _lookAheadCursor,
+            Weight = _mouseCursorWeight,
+            Radius = 1,
+        };
+
+        _cinemachineTargetGroup.Targets.Add(playerTarget);
+        _cinemachineTargetGroup.Targets.Add(cursorTarget);
+    }
+
     private void UpdateLookAheadCursorPos(float orthoDelta)
     {
+        ref var playerShipData = ref _objectsStorage.PlayerShipData;
         float ortho = _cinemachineCamera.Lens.OrthographicSize;
         float height = Screen.height;
         float width = Screen.width;
@@ -109,7 +110,7 @@ public class CameraRig : GameSystemBase
         Vector2 mouseOffset = mousePos - screenCenter;
         Vector3 relativeOffset = mouseOffset / height;
         relativeOffset /= orthoDelta;
-        _lookAheadCursor.position = _playerShip.View.Transform.position + ortho * _lookAheadDistanceMod * relativeOffset;
+        _lookAheadCursor.position = playerShipData.Position + ortho * _lookAheadDistanceMod * relativeOffset;
     }
 
     private void OnMouseScroll(float value)
@@ -119,11 +120,3 @@ public class CameraRig : GameSystemBase
         _targetOrtSize = Mathf.Clamp(ortSize, _minMaxViewDistance.x, _minMaxViewDistance.y);
     }
 }
-
-
-//Vector2 mouse = Mouse.current.position.ReadValue();
-//Vector3 viewport = new(mouse.x / width, mouse.y / height, 0f);
-
-//Vector3 world = _camera.ViewportToWorldPoint(new (viewport.x, viewport.y, _camera.nearClipPlane));
-
-//_lookAheadCursor.position = new Vector3(world.x, world.y, 0f);

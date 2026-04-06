@@ -9,15 +9,15 @@ namespace GameSystems
     {
         [SerializeField] StarryCanvasTwinkleView[] _starryCanvasTwinkleViews;
         [SerializeField] Transform _starryCanvasParent;
-        private ShipInstance _playerShip;
+        private ObjectsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(ShipInstance playerSip)
+        public void Construct(ObjectsStorage objectsStorage)
         {
-            _playerShip = playerSip;
+            _objectsStorage = objectsStorage;
         }
 
-        protected override void Init()
+        protected override void AwakeInit()
         {
             foreach (var starryCanvas in _starryCanvasTwinkleViews)
             {
@@ -44,8 +44,8 @@ namespace GameSystems
 
         private void UpdateStarView(float dTime)
         {
-            _starryCanvasParent.position = _playerShip.View.Transform.position;
-            var shipRB = _playerShip.View.Rigidbody;
+            _starryCanvasParent.position = _objectsStorage.PlayerShipData.Position;
+            var shipRB = _objectsStorage.PlayerShipView.Rigidbody;
 
             if (shipRB.linearVelocity.sqrMagnitude < 0.0001f)
             {
