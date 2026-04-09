@@ -16,13 +16,13 @@ public class CameraRig : GameSystemBase
     [SerializeField] float _changeOrtSizeStep;
     [SerializeField] float _lookAheadDistanceMod = 1f;
     private Transform _lookAheadCursor;
-    private ObjectsStorage _objectsStorage;
+    private ShipsStorage _objectsStorage;
     private IPlayerInput _input;
     private float _targetOrtSize;
     private float _deffCameraOrtoSize = 3f;
 
     [Inject]
-    public void Construct(LookAheadCursor lookAheadCursor, ObjectsStorage objectsStorage, IPlayerInput playerInput)
+    public void Construct(LookAheadCursor lookAheadCursor, ShipsStorage objectsStorage, IPlayerInput playerInput)
     {
         _lookAheadCursor = lookAheadCursor.transform;
         _objectsStorage = objectsStorage;
@@ -31,7 +31,7 @@ public class CameraRig : GameSystemBase
 
     protected override void AwakeInit()
     {
-       
+
     }
 
     protected override void Subscribe()
@@ -78,11 +78,11 @@ public class CameraRig : GameSystemBase
     {
         _cinemachineTargetGroup.Targets.Clear();
 
-        ref var playerShipView = ref _objectsStorage.PlayerShipView;
+        var shipTransform = _objectsStorage.ViewsDatas[_objectsStorage.PlayerIndex].Transform;
 
         var playerTarget = new CinemachineTargetGroup.Target()
         {
-            Object = playerShipView.Transform,
+            Object = shipTransform,
             Weight = 1,
             Radius = 1,
         };
@@ -100,7 +100,7 @@ public class CameraRig : GameSystemBase
 
     private void UpdateLookAheadCursorPos(float orthoDelta)
     {
-        ref var playerShipData = ref _objectsStorage.PlayerShipData;
+        ref var playerShipPosition = ref _objectsStorage.Positions[_objectsStorage.PlayerIndex];
         float ortho = _cinemachineCamera.Lens.OrthographicSize;
         float height = Screen.height;
         float width = Screen.width;
@@ -108,9 +108,9 @@ public class CameraRig : GameSystemBase
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Vector2 screenCenter = new Vector2(width, height) * 0.5f;
         Vector2 mouseOffset = mousePos - screenCenter;
-        Vector3 relativeOffset = mouseOffset / height;
+        Vector2 relativeOffset = mouseOffset / height;
         relativeOffset /= orthoDelta;
-        _lookAheadCursor.position = playerShipData.Position + ortho * _lookAheadDistanceMod * relativeOffset;
+        _lookAheadCursor.position = playerShipPosition + ortho * _lookAheadDistanceMod * relativeOffset;
     }
 
     private void OnMouseScroll(float value)

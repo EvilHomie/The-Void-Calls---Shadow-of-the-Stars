@@ -1,6 +1,6 @@
 using DI;
 using Enviroment;
-using Ship;
+using Ships;
 using UnityEngine;
 
 namespace GameSystems
@@ -9,10 +9,10 @@ namespace GameSystems
     {
         [SerializeField] StarryCanvasTwinkleView[] _starryCanvasTwinkleViews;
         [SerializeField] Transform _starryCanvasParent;
-        private ObjectsStorage _objectsStorage;
+        private ShipsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(ObjectsStorage objectsStorage)
+        public void Construct(ShipsStorage objectsStorage)
         {
             _objectsStorage = objectsStorage;
         }
@@ -44,8 +44,11 @@ namespace GameSystems
 
         private void UpdateStarView(float dTime)
         {
-            _starryCanvasParent.position = _objectsStorage.PlayerShipData.Position;
-            var shipRB = _objectsStorage.PlayerShipView.Rigidbody;
+            var playerIndex = _objectsStorage.PlayerIndex;
+            ref var playerPosition = ref _objectsStorage.Positions[playerIndex];
+            var playerView = _objectsStorage.ViewsDatas[playerIndex];
+            _starryCanvasParent.position = playerPosition;
+            var shipRB = playerView.Rigidbody;
 
             if (shipRB.linearVelocity.sqrMagnitude < 0.0001f)
             {

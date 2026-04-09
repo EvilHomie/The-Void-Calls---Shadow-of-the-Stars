@@ -1,5 +1,5 @@
 using DI;
-using Ship;
+using Ships;
 using UnityEngine;
 
 namespace GameSystems
@@ -7,10 +7,10 @@ namespace GameSystems
     public class PlayerVisualSystem : GameSystemBase
     {
         private SideEnginesPower _currentThrustersPower;
-        private ObjectsStorage _objectsStorage;
+        private ShipsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(ObjectsStorage objectsStorage)
+        public void Construct(ShipsStorage objectsStorage)
         {
             _objectsStorage = objectsStorage;
         }
@@ -31,34 +31,30 @@ namespace GameSystems
 
         private void OnUpdateTick(float deltaTime)
         {
-            VisualizeDirectMove(_objectsStorage.PlayerShipData, _objectsStorage.PlayerShipView);
-            CalcSideEnginesPower(_objectsStorage.PlayerShipData.MovementData);
-            VisualizeSideEngines(_objectsStorage.PlayerShipView);
 
-
-            foreach (var shipInstance in _objectsStorage.NonPlayerShipsInstance)
+            for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
-                var index = shipInstance.Index;
-                ref var view = ref _objectsStorage.NonPlayerShipsView[index];
-                ref var shipData = ref _objectsStorage.NonPlayerShipsData[index];
-                VisualizeDirectMove(shipData, view);
-                CalcSideEnginesPower(shipData.MovementData);
-                VisualizeSideEngines(view);
+                ref var movementData = ref _objectsStorage.MovementDatas[i];
+                ref var viewData = ref _objectsStorage.ViewsDatas[i];
+
+                VisualizeDirectMove(movementData, viewData);
+                CalcSideEnginesPower(movementData);
+                VisualizeSideEngines(viewData);
             }
         }
 
-        private void VisualizeDirectMove(in ShipData shipData, in ShipView shipView)
+        private void VisualizeDirectMove(in MovementData movementData, in ViewData shipView)
         {
             float directAccel = 0;
             float reversAccel = 0;
 
-            if (shipData.MovementData.DirectAccelerationPower > 0)
+            if (movementData.DirectMovePower > 0)
             {
-                directAccel = shipData.MovementData.DirectAccelerationPower;
+                directAccel = movementData.DirectMovePower;
             }
-            else if (shipData.MovementData.DirectAccelerationPower < 0)
+            else if (movementData.DirectMovePower < 0)
             {
-                reversAccel = shipData.MovementData.DirectAccelerationPower;
+                reversAccel = movementData.DirectMovePower;
             }
 
             foreach (var engine in shipView.ReverseEngines)
@@ -72,41 +68,41 @@ namespace GameSystems
             }
         }
 
-        private void CalcSideEnginesPower(in ShipMovementData movementData)
+        private void CalcSideEnginesPower(in MovementData movementData)
         {
             _currentThrustersPower = Constants.SideEnginesPowerZero;
 
-            if (movementData.SideAcceleration != 0)
+            if (movementData.StrafeMovePower != 0)
             {
-                if (movementData.SideAcceleration > 0)
+                if (movementData.StrafeMovePower > 0)
                 {
-                    _currentThrustersPower.BackLeft = movementData.SideAcceleration;
-                    _currentThrustersPower.FrontLeft = movementData.SideAcceleration;
+                    _currentThrustersPower.BackLeft = movementData.StrafeMovePower;
+                    _currentThrustersPower.FrontLeft = movementData.StrafeMovePower;
                 }
                 else
                 {
-                    _currentThrustersPower.BackRight = -movementData.SideAcceleration;
-                    _currentThrustersPower.FrontRight = -movementData.SideAcceleration;
+                    _currentThrustersPower.BackRight = -movementData.StrafeMovePower;
+                    _currentThrustersPower.FrontRight = -movementData.StrafeMovePower;
                 }
             }
 
-            if (movementData.RotatePowerValue != 0)
+            if (movementData.RotatePower != 0)
             {
-                if (movementData.RotatePowerValue > 0)
+                if (movementData.RotatePower > 0)
                 {
-                    if (_currentThrustersPower.BackLeft == 0) _currentThrustersPower.BackLeft = movementData.RotatePowerValue;
-                    if (_currentThrustersPower.FrontRight == 0) _currentThrustersPower.FrontRight = movementData.RotatePowerValue;
+                    if (_currentThrustersPower.BackLeft == 0) _currentThrustersPower.BackLeft = movementData.RotatePower;
+                    if (_currentThrustersPower.FrontRight == 0) _currentThrustersPower.FrontRight = movementData.RotatePower;
 
                 }
                 else
                 {
-                    if (_currentThrustersPower.FrontLeft == 0) _currentThrustersPower.FrontLeft = -movementData.RotatePowerValue;
-                    if (_currentThrustersPower.BackRight == 0) _currentThrustersPower.BackRight = -movementData.RotatePowerValue;
+                    if (_currentThrustersPower.FrontLeft == 0) _currentThrustersPower.FrontLeft = -movementData.RotatePower;
+                    if (_currentThrustersPower.BackRight == 0) _currentThrustersPower.BackRight = -movementData.RotatePower;
                 }
             }
         }
 
-        private void VisualizeSideEngines(in ShipView view)
+        private void VisualizeSideEngines(in ViewData view)
         {
             view.SideEngineFR.SetThrustValue(_currentThrustersPower.FrontRight);
             view.SideEngineBR.SetThrustValue(_currentThrustersPower.BackRight);

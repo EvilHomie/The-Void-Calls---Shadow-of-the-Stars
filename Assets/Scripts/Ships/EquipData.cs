@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
 
-namespace Ship
+namespace Ships
 {
     [Serializable]
-    public struct ShipEquipData
+    public struct EquipData
     {
         [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
         [field: SerializeField] public MainEngine MainEngine { get; set; }

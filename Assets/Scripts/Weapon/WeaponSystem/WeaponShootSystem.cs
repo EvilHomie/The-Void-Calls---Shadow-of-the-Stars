@@ -1,7 +1,7 @@
 using DI;
 using GameInput;
 using Helper;
-using Ship;
+using Ships;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,10 +14,10 @@ namespace GameSystems
         private readonly HashSet<ShipInstance> _stopAttackingShips = new(200);
 
         private IPlayerInput _playerInput;
-        private ObjectsStorage _objectsStorage;
+        private ShipsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ObjectsStorage objectsStorage)
+        public void Construct(IPlayerInput playerInput, ShipsStorage objectsStorage)
         {
             _playerInput = playerInput;
             _objectsStorage = objectsStorage;
@@ -47,9 +47,9 @@ namespace GameSystems
 
         private void OnUpdateTick(float dTime)
         {
-            //Aim(dTime);
+            Aim(dTime);
 
-            PlayerAim(dTime);
+            //PlayerAim(dTime);
             //OthersAim(dTime);
             //OthersAttack();
         }
@@ -66,9 +66,11 @@ namespace GameSystems
 
         private void Aim(float dTime)
         {
-            foreach (var shipData in _objectsStorage.NonPlayerShipsData)
+            for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
-                AimToTarget(shipData.EquipData.WeaponSlots, shipData.TargetPos, dTime);
+                ref var equipData = ref _objectsStorage.EquipDatas[i];
+                ref var aimPos = ref _objectsStorage.AimPositions[i];
+                AimToTarget(equipData.WeaponSlots, aimPos, dTime);
             }
         }
 
@@ -83,8 +85,8 @@ namespace GameSystems
                 GameFlow.UpdateTick -= PlayerAttack;
             }
 
-            ref var playerShipData = ref _objectsStorage.PlayerShipData;
-            OnChangeAttackState(playerShipData.EquipData.WeaponSlots, state);
+            ref var equipData = ref _objectsStorage.EquipDatas[_objectsStorage.PlayerIndex];
+            OnChangeAttackState(equipData.WeaponSlots, state);
         }
 
         private void OnNonPlayerChangeAttackState(ShipInstance ship, bool state)
@@ -142,18 +144,11 @@ namespace GameSystems
             }
         }
 
-        private void PlayerAim(float dTime)
-        {
-            ref var playerShipData = ref _objectsStorage.PlayerShipData;
-            var weaponSlots = playerShipData.EquipData.WeaponSlots;
-            AimToTarget(weaponSlots, playerShipData.TargetPos, dTime);
-        }
-
         private void PlayerAttack(float dTime)
         {
-            ref var shipData = ref _objectsStorage.PlayerShipData;
+            ref var equipData = ref _objectsStorage.EquipDatas[_objectsStorage.PlayerIndex];
 
-            ProceedWeaponShoot(shipData.EquipData.WeaponSlots);
+            ProceedWeaponShoot(equipData.WeaponSlots);
         }
 
         private void OthersAim(float dTime)

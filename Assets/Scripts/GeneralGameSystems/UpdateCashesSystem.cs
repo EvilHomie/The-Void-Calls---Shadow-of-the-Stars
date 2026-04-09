@@ -4,10 +4,10 @@ namespace GameSystems
 {
     public class UpdateCashesSystem : GameSystemBase
     {
-        private ObjectsStorage _objectsStorage;
+        private ShipsStorage _objectsStorage;
 
         [Inject]
-        public void Construct(ObjectsStorage  objectsStorage)
+        public void Construct(ShipsStorage  objectsStorage)
         {
             _objectsStorage = objectsStorage;
         }
@@ -28,14 +28,12 @@ namespace GameSystems
 
         private void UpdateCashes()
         {
-            for (int i = 0; i < _objectsStorage.NonPlayerShipsData.Count; i++)
+            for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
-                ref var data = ref _objectsStorage.NonPlayerShipsData[i];
-                ref var view = ref _objectsStorage.NonPlayerShipsView[i];
-                data.Position = view.Transform.position;
+                ref var position = ref _objectsStorage.Positions[i];
+                ref var view = ref _objectsStorage.ViewsDatas[i];
+                position = view.Transform.position;
             }
-
-            _objectsStorage.PlayerShipData.Position = _objectsStorage.PlayerShipView.Transform.position;
         }
     }
 }

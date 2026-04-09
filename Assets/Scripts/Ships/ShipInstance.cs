@@ -1,12 +1,11 @@
 using UnityEngine;
 
-namespace Ship
+namespace Ships
 {
     public class ShipInstance : MonoBehaviour
     {
         public int Index;
-        public bool IsPlayer;
         public ShipData ShipInitialData;
-        public ShipView View;
+        public ViewData View;
     }
 }

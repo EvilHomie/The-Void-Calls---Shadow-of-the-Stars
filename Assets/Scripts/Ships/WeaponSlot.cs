@@ -1,7 +1,7 @@
 using UnityEngine;
 using Weapons;
 
-namespace Ship
+namespace Ships
 {
     public class WeaponSlot : MonoBehaviour
     {

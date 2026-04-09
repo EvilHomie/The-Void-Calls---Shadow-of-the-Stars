@@ -1,16 +1,17 @@
-using Ship;
+using Ships;
 
 namespace Helper
 {
     public class ShipInitHelper
     {
+        
         public static void Init(ShipData shipData)
         {
             //InitView(shipData.View);
             //Init(shipData.WeaponData, rigidbody);
         }
 
-        private static void InitView(ShipView shipMovementView)
+        private static void InitView(ViewData shipMovementView)
         {
             shipMovementView.SideEngineFL.Init();
             shipMovementView.SideEngineFR.Init();

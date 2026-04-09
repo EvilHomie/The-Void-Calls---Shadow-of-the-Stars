@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
 
-namespace Ship
+namespace Ships
 {
     [Serializable]
-    public struct ShipView
+    public struct ViewData
     {
+        [field: SerializeField] public ShipInstance ShipInstance { get; private set; }
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public ExhaustPlume[] DirectEngines { get; private set; }

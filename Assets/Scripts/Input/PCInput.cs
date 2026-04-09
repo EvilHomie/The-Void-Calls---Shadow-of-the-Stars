@@ -1,5 +1,5 @@
 using GameSystems;
-using Ship;
+using Ships;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,10 +17,10 @@ namespace GameInput
 
         private InputSystem_Actions _inputActions;
         private Camera _camera;
-        private ObjectsStorage _objectsStorage;
+        private ShipsStorage _objectsStorage;
         private bool _isActive;
 
-        public void Init(Camera camera, ObjectsStorage objectsStorage)
+        public void Init(Camera camera, ShipsStorage objectsStorage)
         {
             _inputActions = new InputSystem_Actions();
             _objectsStorage = objectsStorage;
@@ -51,7 +51,7 @@ namespace GameInput
         {
             if (!_isActive) return;
 
-            TrackMouse(ref _objectsStorage.PlayerShipData);
+            TrackMouse();
             TrackInput();
         }
 
@@ -63,11 +63,10 @@ namespace GameInput
             else _inputActions.Player.Disable();
         }
 
-        private void TrackMouse(ref ShipData shipData)
+        private void TrackMouse()
         {
-            Vector3 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            mouseWorld.z = 0;
-            shipData.TargetPos = mouseWorld;
+            Vector2 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            _objectsStorage.AimPositions[_objectsStorage.PlayerIndex] = mouseWorld;
         }
 
         private void TrackInput()
