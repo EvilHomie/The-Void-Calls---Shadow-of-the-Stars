@@ -15,7 +15,7 @@ namespace GameSystems
 
         protected override void AwakeInit()
         {
-            QualitySettings.vSyncCount = 0;
+            //QualitySettings.vSyncCount = 0;
         }
 
         protected override void Subscribe()
