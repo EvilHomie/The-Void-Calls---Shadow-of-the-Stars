@@ -17,7 +17,6 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI ThrottleText;
     [SerializeField] TextMeshProUGUI DirectSpeedDelta;
     [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
-    [SerializeField] TextMeshProUGUI FPSText;
 
     private ShipsStorage _objectsStorage;
 
@@ -40,7 +39,6 @@ public class VisualDebug : MonoBehaviour
     private void Update()
     {
         ShowData();
-        ShowFPS();
     }
 
     private void OnPlayerChangeShip()
@@ -66,7 +64,7 @@ public class VisualDebug : MonoBehaviour
     {
         var playerIndex = _objectsStorage.PlayerIndex;
         ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
-        ref var view = ref _objectsStorage.ViewsDatas[playerIndex];
+        ref var view = ref _objectsStorage.ViewDatas[playerIndex];
         ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
 
         float forwardVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.up);
@@ -92,19 +90,6 @@ public class VisualDebug : MonoBehaviour
             : chassisData.ReverseMaxAcceleration;
 
             DirectSpeedDelta.text = $"Acceleration: {movementData.Throttle * accel * Constants.WorldUnitModReversed:F0} м/с";
-        }
-    }
-
-    private readonly float _fpsTickRate = 10;
-    float FPSCooldown;
-    void ShowFPS()
-    {
-        FPSCooldown -= Time.deltaTime;
-
-        if (FPSCooldown <= 0)
-        {
-            FPSCooldown = 1 / _fpsTickRate;
-            FPSText.text = $"FPS: {1 / Time.deltaTime:F0}";
         }
     }
 }

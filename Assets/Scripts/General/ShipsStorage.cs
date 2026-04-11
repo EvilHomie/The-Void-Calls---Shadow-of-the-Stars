@@ -11,7 +11,7 @@ namespace GameSystems
         public readonly StructList<ChassisData> ChassisDatas = new(1000);
         public readonly StructList<MovementData> MovementDatas = new(1000);
         public readonly StructList<EquipData> EquipDatas = new(1000);
-        public readonly StructList<ViewData> ViewsDatas = new(1000);
+        public readonly StructList<ViewData> ViewDatas = new(1000);
         public int LastUsedIndex { get; private set; } = -1;
         public int PlayerIndex { get; private set; }
 
@@ -81,7 +81,7 @@ namespace GameSystems
             Positions.Add(shipInstance.transform.position);
             ChassisDatas.Add(shipInstance.ShipInitialData.ChassisData);
             MovementDatas.Add(shipInstance.ShipInitialData.MovementData);
-            ViewsDatas.Add(shipInstance.View);
+            ViewDatas.Add(shipInstance.View);
             EquipDatas.Add(shipInstance.ShipInitialData.EquipData);
 
 
@@ -113,14 +113,14 @@ namespace GameSystems
                 ref var movedPosition = ref Positions[LastUsedIndex];
                 ref var movedChassisData = ref ChassisDatas[LastUsedIndex];
                 ref var movedMovementData = ref MovementDatas[LastUsedIndex];
-                ref var movedViewData = ref ViewsDatas[LastUsedIndex];
+                ref var movedViewData = ref ViewDatas[LastUsedIndex];
                 ref var movedEquipData = ref EquipDatas[LastUsedIndex];
 
                 AimPositions[index] = movedAimPosition;
                 Positions[index] = movedPosition;
                 ChassisDatas[index] = movedChassisData;
                 MovementDatas[index] = movedMovementData;
-                ViewsDatas[index] = movedViewData;
+                ViewDatas[index] = movedViewData;
                 EquipDatas[index] = movedEquipData;
 
                 movedViewData.ShipInstance.Index = index;
@@ -135,7 +135,7 @@ namespace GameSystems
             Positions.RemoveAt(LastUsedIndex);
             ChassisDatas.RemoveAt(LastUsedIndex);
             MovementDatas.RemoveAt(LastUsedIndex);
-            ViewsDatas.RemoveAt(LastUsedIndex);
+            ViewDatas.RemoveAt(LastUsedIndex);
             EquipDatas.RemoveAt(LastUsedIndex);
             LastUsedIndex--;
         }

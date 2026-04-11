@@ -31,7 +31,7 @@ namespace GameSystems
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
                 ref var position = ref _objectsStorage.Positions[i];
-                ref var view = ref _objectsStorage.ViewsDatas[i];
+                ref var view = ref _objectsStorage.ViewDatas[i];
                 position = view.Transform.position;
             }
         }

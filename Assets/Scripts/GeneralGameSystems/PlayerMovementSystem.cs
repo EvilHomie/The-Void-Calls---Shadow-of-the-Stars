@@ -36,7 +36,10 @@ namespace GameSystems
             _input.Subscrube();
             _input.MoveInputAction += OnMoveInputAction;
             _input.ToggleDamperAction += OnToggleDamper;
-            GameFlow.FixedGameTick += OnFixedGameTick;
+
+            GameFlow.PreFixedGameTick += CashMovementData;
+            GameFlow.FixedGameTick += SimulateMovement;
+            GameFlow.PostFixedGameTick += ApplyMovementData;
         }
 
         protected override void Unsubscribe()
@@ -44,7 +47,10 @@ namespace GameSystems
             _input.Unsubscribe();
             _input.MoveInputAction -= OnMoveInputAction;
             _input.ToggleDamperAction -= OnToggleDamper;
-            GameFlow.FixedGameTick -= OnFixedGameTick;
+
+            GameFlow.PreFixedGameTick -= CashMovementData;
+            GameFlow.FixedGameTick -= SimulateMovement;
+            GameFlow.PostFixedGameTick -= ApplyMovementData;
         }
 
         private void OnMoveInputAction(Vector2 input) { _inputValue = input; }
@@ -72,11 +78,31 @@ namespace GameSystems
             }
         }
 
-        private void OnFixedGameTick(float fixedDT)
+        private void CashMovementData()
+        {
+            var playerIndex = _objectsStorage.PlayerIndex;
+            ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+            ref var view = ref _objectsStorage.ViewDatas[playerIndex];
+
+            movementData.LinearVelocity = view.Rigidbody.linearVelocity;
+            movementData.AngularVelocity = view.Rigidbody.angularVelocity;
+        }
+
+        private void SimulateMovement(float fixedDT)
         {
             HandleThrottle(fixedDT);
             HandleMovement(fixedDT);
             HandleRotation(fixedDT);
+        }
+
+        private void ApplyMovementData()
+        {
+            //var playerIndex = _objectsStorage.PlayerIndex;
+            //ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+            //ref var view = ref _objectsStorage.ViewDatas[playerIndex];
+
+            //view.Rigidbody.linearVelocity = movementData.LinearVelocity;
+            //view.Rigidbody.angularVelocity = movementData.AngularVelocity;
         }
 
         private readonly float _throttleZeroDelay = 0.3f; // продолжительность задерки на нуле.
@@ -121,7 +147,7 @@ namespace GameSystems
             var playerIndex = _objectsStorage.PlayerIndex;
             ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
             ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
-            ref var viewData = ref _objectsStorage.ViewsDatas[playerIndex];
+            ref var viewData = ref _objectsStorage.ViewDatas[playerIndex];
 
             var rigidBody = viewData.Rigidbody;
 
@@ -153,7 +179,7 @@ namespace GameSystems
 
         private void HandleMovement(float fixedDT)
         {
-            ref var view = ref _objectsStorage.ViewsDatas[_objectsStorage.PlayerIndex];
+            ref var view = ref _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex];
 
             float forwardVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.up);
             float sideVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.right);

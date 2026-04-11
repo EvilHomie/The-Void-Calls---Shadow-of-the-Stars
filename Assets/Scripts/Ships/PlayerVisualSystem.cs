@@ -35,7 +35,7 @@ namespace GameSystems
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
                 ref var movementData = ref _objectsStorage.MovementDatas[i];
-                ref var viewData = ref _objectsStorage.ViewsDatas[i];
+                ref var viewData = ref _objectsStorage.ViewDatas[i];
 
                 VisualizeDirectMove(movementData, viewData);
                 CalcSideEnginesPower(movementData);

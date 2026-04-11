@@ -78,7 +78,7 @@ public class CameraRig : GameSystemBase
     {
         _cinemachineTargetGroup.Targets.Clear();
 
-        var shipTransform = _objectsStorage.ViewsDatas[_objectsStorage.PlayerIndex].Transform;
+        var shipTransform = _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex].Transform;
 
         var playerTarget = new CinemachineTargetGroup.Target()
         {

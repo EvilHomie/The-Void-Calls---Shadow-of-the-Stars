@@ -46,7 +46,7 @@ namespace GameSystems
         {
             var playerIndex = _objectsStorage.PlayerIndex;
             ref var playerPosition = ref _objectsStorage.Positions[playerIndex];
-            var playerView = _objectsStorage.ViewsDatas[playerIndex];
+            var playerView = _objectsStorage.ViewDatas[playerIndex];
             _starryCanvasParent.position = playerPosition;
             var shipRB = playerView.Rigidbody;
 

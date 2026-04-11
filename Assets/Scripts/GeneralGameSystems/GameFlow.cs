@@ -6,14 +6,14 @@ namespace GameSystems
     public class GameFlow : GameSystemBase
     {
         // события помеченные как Standart будто обычные Update FixedUpdate LateUpdate
+        public static Action PreFixedGameTick { get; set; }
         public static Action<float> FixedGameTick { get; set; }
+        public static Action PostFixedGameTick { get; set; }
+
         public static Action PreUpdateTick { get; set; }
         public static Action<float> UpdateTick { get; set; }
         public static Action PostUpdateTick { get; set; }
         public static Action<float> LateGameTick { get; set; }
-        //public static Action UnityUpdateTick { get; set; }
-        //public static Action UnityFixedUpdateTick { get; set; }
-        //public static Action UnityLateUpdateTick { get; set; }
         public static Action<GameState> GameStateChange { get; set; }
         public static float CoreTime { get; private set; }
 
@@ -47,22 +47,20 @@ namespace GameSystems
             PreUpdateTick?.Invoke();
             UpdateTick?.Invoke(deltaTime);
             PostUpdateTick?.Invoke();
-            //UnityUpdateTick?.Invoke();
         }
 
         private void FixedUpdate()
         {
             var deltaTime = Time.fixedDeltaTime * _gameSpeed;
+            PreFixedGameTick?.Invoke();
             FixedGameTick?.Invoke(deltaTime);
-            //UnityFixedUpdateTick?.Invoke();
+            PostFixedGameTick?.Invoke();
         }
 
         private void LateUpdate()
         {
             var deltaTime = Time.unscaledDeltaTime * _gameSpeed;
-
             LateGameTick?.Invoke(deltaTime);
-            //UnityLateUpdateTick?.Invoke();
         }
         private void OnGameStateChanged(GameState state)
         {
