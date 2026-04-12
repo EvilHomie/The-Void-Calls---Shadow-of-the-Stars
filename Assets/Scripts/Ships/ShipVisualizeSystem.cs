@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class PlayerVisualSystem : GameSystemBase
+    public class ShipVisualizeSystem : GameSystemBase
     {
         private SideEnginesPower _currentThrustersPower;
         private ShipsStorage _objectsStorage;

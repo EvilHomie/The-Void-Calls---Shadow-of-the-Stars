@@ -77,13 +77,13 @@ namespace GameSystems
         {
             LastUsedIndex++;
 
+            var chassisData = CreateChassisData(shipInstance);
+            var movementData = new MovementData { InertiaDampingState = true };
+            shipInstance.View.Rigidbody.mass = chassisData.Mass;
+
             AimPositions.Add(Vector2.zero);
             Positions.Add(shipInstance.transform.position);
-            ChassisDatas.Add(CreateChassisData(shipInstance));
-            var movementData = new MovementData
-            {
-                InertiaDampingState = true
-            };
+            ChassisDatas.Add(chassisData);
             MovementDatas.Add(movementData);
             ViewDatas.Add(shipInstance.View);
             EquipDatas.Add(shipInstance.EquipData);

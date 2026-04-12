@@ -10,11 +10,13 @@ namespace GameSystems
         [SerializeField] StarryCanvasTwinkleView[] _starryCanvasTwinkleViews;
         [SerializeField] Transform _starryCanvasParent;
         private ShipsStorage _objectsStorage;
+        private Camera _camera;
 
         [Inject]
-        public void Construct(ShipsStorage objectsStorage)
+        public void Construct(ShipsStorage objectsStorage, Camera camera)
         {
             _objectsStorage = objectsStorage;
+            _camera = camera;
         }
 
         protected override void AwakeInit()
@@ -45,19 +47,13 @@ namespace GameSystems
         private void UpdateStarView(float dTime)
         {
             var playerIndex = _objectsStorage.PlayerIndex;
-            ref var playerPosition = ref _objectsStorage.Positions[playerIndex];
-            var playerView = _objectsStorage.ViewDatas[playerIndex];
-            _starryCanvasParent.position = playerPosition;
-            var shipRB = playerView.Rigidbody;
-
-            if (shipRB.linearVelocity.sqrMagnitude < 0.0001f)
-            {
-                return;
-            }
+            var playerPosition = _objectsStorage.Positions[playerIndex];
+            var playerVelocity = _objectsStorage.MovementDatas[playerIndex].LinearVelocity;
+            _starryCanvasParent.position = playerPosition;                      
 
             foreach (var starryCanvas in _starryCanvasTwinkleViews)
             {
-                starryCanvas.LastOffset += dTime * starryCanvas.SpeedMod * shipRB.linearVelocity;
+                starryCanvas.LastOffset += dTime * starryCanvas.SpeedMod * playerVelocity;
                 starryCanvas.Material.SetVector(StarryCanvasTwinkleView.OffsetID, starryCanvas.LastOffset);
             }
         }

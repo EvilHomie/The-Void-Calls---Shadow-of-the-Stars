@@ -36,6 +36,8 @@ namespace GameSystems
             Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
             hitEffect.CachedTransform.position = hitPoint;
             _destroyedProjectiles.Add(projectile);
+
+            Debug.LogError(hitCollider.name);
         }
 
         private void OnProjectileFetched(ProjectileBase projectile)

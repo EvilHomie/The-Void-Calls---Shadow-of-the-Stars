@@ -273,7 +273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &159578140
 SpriteRenderer:
   serializedVersion: 2
@@ -343,7 +343,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1015955414}
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecac56a287ec674a9d9cff2e0394f6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <SpeedMod>k__BackingField: 0.01
+  <SpeedMod>k__BackingField: 0.003
   <Renderer>k__BackingField: {fileID: 159578140}
   <Transform>k__BackingField: {fileID: 159578141}
 --- !u!1 &163481652
@@ -1767,7 +1767,7 @@ GameObject:
   - component: {fileID: 802507657}
   - component: {fileID: 802507658}
   m_Layer: 0
-  m_Name: PlayerVisualSystem
+  m_Name: ShipVisualizeSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2749,6 +2749,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1712473046432795391, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7863458149921933340, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
       propertyPath: m_Name
       value: Asteroid_Copper
@@ -2878,7 +2882,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1015955414}
@@ -3630,6 +3634,18 @@ PrefabInstance:
       propertyPath: 'ShipInitialData.EquipData.<WeaponSlots>k__BackingField.Array.data[2]'
       value: 
       objectReference: {fileID: 1165149184}
+    - target: {fileID: 4024536107956159930, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.114
+      objectReference: {fileID: 0}
+    - target: {fileID: 6017611796855989182, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_Mass
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6396891759433502983, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.114
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

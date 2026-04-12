@@ -9,7 +9,7 @@ namespace GameSystems
     {
         public const int _rotateMod = 45; // базовая скорость поворота при силе равной сопротивлению
         public const int _rotateAngleTreshhold = 2; // отбраковка минимального угла поворота
-        private const float _stabilizationPower = 0.6f; // модификатор при движении без ускорения при включеном гасителе инерции. Будто мощность для поддержания скорости
+        private const float _stabilizationPower = 1f; // модификатор при движении без ускорения при включеном гасителе инерции. Будто мощность для поддержания скорости
         private const float _smoothZone = 0.5f; // чем больше тем раньше начнется плавность
         private const float _maxSmooth = 0.05f; // чем меньше тем более плавно (дольше) добираются последние "метры" скорости
 
@@ -157,7 +157,7 @@ namespace GameSystems
             Vector2 direction = targetPos - shipPosition;
 
             // цель совпадает с позицией (когда игрок сам на себя мышку навел, то просто гасим)
-            if (direction.sqrMagnitude < 0.001f)
+            if (direction.sqrMagnitude < 0.1f)
             {
                 movementData.AngularVelocity = Mathf.MoveTowards(movementData.AngularVelocity, 0f, chassisData.RotateMaxAcceleration * fixedDT);
                 movementData.RotatePower = 0;
@@ -190,7 +190,7 @@ namespace GameSystems
             // тормозной угол 
             float brakingAngle = (clampedSpeed * clampedSpeed) / (2f * accel);
 
-            float targetSpeed = absAngle <= brakingAngle ? 0 : sign * maxSpeed;           
+            float targetSpeed = absAngle <= brakingAngle ? 0 : sign * maxSpeed;
 
             // плавное изменение скорости
             movementData.AngularVelocity = Mathf.MoveTowards(movementData.AngularVelocity, targetSpeed, accel * fixedDT);
