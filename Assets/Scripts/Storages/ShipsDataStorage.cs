@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class ShipsStorage : GameSystemBase
+    public class ShipsDataStorage : GameSystemBase
     {
         public readonly StructList<Vector2> AimPositions = new(1000);
         public readonly StructList<Vector2> Positions = new(1000);

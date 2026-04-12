@@ -13,7 +13,7 @@ namespace GameInput
         public Action ToggleDamperAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
 
-        public void Init(Camera camera, ShipsStorage objectsStorage);
+        public void Init(Camera camera, ShipsDataStorage objectsStorage);
         public void Subscrube();
         public void Unsubscribe();
     }

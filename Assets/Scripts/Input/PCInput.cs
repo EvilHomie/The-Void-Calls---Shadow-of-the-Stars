@@ -17,10 +17,10 @@ namespace GameInput
 
         private InputSystem_Actions _inputActions;
         private Camera _camera;
-        private ShipsStorage _objectsStorage;
+        private ShipsDataStorage _objectsStorage;
         private bool _isActive;
 
-        public void Init(Camera camera, ShipsStorage objectsStorage)
+        public void Init(Camera camera, ShipsDataStorage objectsStorage)
         {
             _inputActions = new InputSystem_Actions();
             _objectsStorage = objectsStorage;

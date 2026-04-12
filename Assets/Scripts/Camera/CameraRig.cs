@@ -16,13 +16,13 @@ public class CameraRig : GameSystemBase
     [SerializeField] float _changeOrtSizeStep;
     [SerializeField] float _lookAheadDistanceMod = 1f;
     private Transform _lookAheadCursor;
-    private ShipsStorage _objectsStorage;
+    private ShipsDataStorage _objectsStorage;
     private IPlayerInput _input;
     private float _targetOrtSize;
     private float _deffCameraOrtoSize = 3f;
 
     [Inject]
-    public void Construct(LookAheadCursor lookAheadCursor, ShipsStorage objectsStorage, IPlayerInput playerInput)
+    public void Construct(LookAheadCursor lookAheadCursor, ShipsDataStorage objectsStorage, IPlayerInput playerInput)
     {
         _lookAheadCursor = lookAheadCursor.transform;
         _objectsStorage = objectsStorage;

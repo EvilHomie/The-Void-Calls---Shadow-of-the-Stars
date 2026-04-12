@@ -16,10 +16,10 @@ namespace GameSystems
         private IPlayerInput _input;
         private Vector2 _inputValue;
         private Camera _camera;
-        private ShipsStorage _objectsStorage;
+        private ShipsDataStorage _objectsStorage;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ShipsStorage objectsStorage, Camera camera)
+        public void Construct(IPlayerInput playerInput, ShipsDataStorage objectsStorage, Camera camera)
         {
             _input = playerInput;
             _objectsStorage = objectsStorage;
@@ -83,9 +83,9 @@ namespace GameSystems
             var playerIndex = _objectsStorage.PlayerIndex;
             ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
             ref var view = ref _objectsStorage.ViewDatas[playerIndex];
-
-            movementData.LinearVelocity = view.Rigidbody.linearVelocity;
-            movementData.AngularVelocity = view.Rigidbody.angularVelocity;
+            var rb = view.Rigidbody;
+            movementData.LinearVelocity = rb.linearVelocity;
+            movementData.AngularVelocity = rb.angularVelocity;
             movementData.Rotation = view.Rigidbody.rotation;
         }
 
@@ -112,9 +112,9 @@ namespace GameSystems
             var playerIndex = _objectsStorage.PlayerIndex;
             ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
             ref var view = ref _objectsStorage.ViewDatas[playerIndex];
-
-            view.Rigidbody.linearVelocity = movementData.LinearVelocity;
-            view.Rigidbody.angularVelocity = movementData.AngularVelocity;
+            var rb = view.Rigidbody;
+            rb.linearVelocity = movementData.LinearVelocity;
+            rb.angularVelocity = movementData.AngularVelocity;
         }
 
         private readonly float _throttleZeroDelay = 0.3f; // продолжительность задерки на нуле.

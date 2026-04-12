@@ -18,10 +18,10 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI DirectSpeedDelta;
     [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
 
-    private ShipsStorage _objectsStorage;
+    private ShipsDataStorage _objectsStorage;
 
     [Inject]
-    public void Construct(ShipsStorage objectsStorage)
+    public void Construct(ShipsDataStorage objectsStorage)
     {
         _objectsStorage = objectsStorage;
     }

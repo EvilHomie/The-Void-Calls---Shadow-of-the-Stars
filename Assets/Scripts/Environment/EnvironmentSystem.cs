@@ -9,11 +9,11 @@ namespace GameSystems
     {
         [SerializeField] StarryCanvasTwinkleView[] _starryCanvasTwinkleViews;
         [SerializeField] Transform _starryCanvasParent;
-        private ShipsStorage _objectsStorage;
+        private ShipsDataStorage _objectsStorage;
         private Camera _camera;
 
         [Inject]
-        public void Construct(ShipsStorage objectsStorage, Camera camera)
+        public void Construct(ShipsDataStorage objectsStorage, Camera camera)
         {
             _objectsStorage = objectsStorage;
             _camera = camera;

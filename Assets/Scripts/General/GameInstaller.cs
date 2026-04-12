@@ -10,14 +10,14 @@ namespace DI
         [SerializeField] ShipInstance _playerShip;
         [SerializeField] Camera _mainCamera;
         [SerializeField] LookAheadCursor _mouseCursor;
-        [SerializeField] ShipsStorage _objectsStorage;
+        [SerializeField] ShipsDataStorage _objectsStorage;
 
         protected override void InstallBindings()
         {
             Container.Bind<ShipInstance>().FromInstance(_playerShip);
             Container.Bind<Camera>().FromInstance(_mainCamera);
             Container.Bind<LookAheadCursor>().FromInstance(_mouseCursor);
-            Container.Bind<ShipsStorage>().FromInstance(_objectsStorage);
+            Container.Bind<ShipsDataStorage>().FromInstance(_objectsStorage);
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {

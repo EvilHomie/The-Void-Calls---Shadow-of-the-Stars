@@ -14,10 +14,10 @@ namespace GameSystems
         private readonly HashSet<ShipInstance> _stopAttackingShips = new(200);
 
         private IPlayerInput _playerInput;
-        private ShipsStorage _objectsStorage;
+        private ShipsDataStorage _objectsStorage;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ShipsStorage objectsStorage)
+        public void Construct(IPlayerInput playerInput, ShipsDataStorage objectsStorage)
         {
             _playerInput = playerInput;
             _objectsStorage = objectsStorage;

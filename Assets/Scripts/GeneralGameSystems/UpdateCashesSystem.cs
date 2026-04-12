@@ -4,10 +4,10 @@ namespace GameSystems
 {
     public class UpdateCashesSystem : GameSystemBase
     {
-        private ShipsStorage _objectsStorage;
+        private ShipsDataStorage _objectsStorage;
 
         [Inject]
-        public void Construct(ShipsStorage  objectsStorage)
+        public void Construct(ShipsDataStorage  objectsStorage)
         {
             _objectsStorage = objectsStorage;
         }

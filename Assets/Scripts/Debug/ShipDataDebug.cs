@@ -14,10 +14,10 @@ public class ShipDataDebug : MonoBehaviour
     public EquipData EquipData;
     public ViewData ViewData;
 
-    private ShipsStorage _objectsStorage;
+    private ShipsDataStorage _objectsStorage;
 
     [Inject]
-    public void Construct(ShipsStorage objectsStorage)
+    public void Construct(ShipsDataStorage objectsStorage)
     {
         _objectsStorage = objectsStorage;
     }
