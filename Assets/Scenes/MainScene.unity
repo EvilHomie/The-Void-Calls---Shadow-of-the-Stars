@@ -2653,7 +2653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 931f812e15c8aaf4c933bcbda0721f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipDataDebug
-  ShipIndex: -1
+  ShipIndex: 0
   AimPosition: {x: 0, y: 0}
   Position: {x: 0, y: 0}
   ChassisData:
@@ -2670,6 +2670,7 @@ MonoBehaviour:
     StrafeMaxSpeed: 0
     StrafeMaxAcceleration: 0
     RotateMaxSpeed: 0
+    RotateMaxAcceleration: 0
   MovementData:
     Throttle: 0
     TargetSpeed: 0
@@ -2680,8 +2681,9 @@ MonoBehaviour:
     StrafeMovePower: 0
     LinearVelocity: {x: 0, y: 0}
     AngularVelocity: 0
+    Rotation: 0
   EquipData:
-    <WeaponSlots>k__BackingField: []
+    <Chassis>k__BackingField: {fileID: 0}
     <MainEngine>k__BackingField: {fileID: 0}
     <SideEngines>k__BackingField: {fileID: 0}
   ViewData:
@@ -2694,6 +2696,7 @@ MonoBehaviour:
     <SideEngineFR>k__BackingField: {fileID: 0}
     <SideEngineBL>k__BackingField: {fileID: 0}
     <SideEngineBR>k__BackingField: {fileID: 0}
+    <WeaponSlots>k__BackingField: []
 --- !u!1 &1210034163
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,6 +3511,18 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: EquipData.<Chassis>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: d7c58d660237235419f39a0806ef6301, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: EquipData.<MainEngine>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: EquipData.<SideEngines>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
       propertyPath: ShipInitialData.ChassisData.DirectDrag
       value: 2
       objectReference: {fileID: 0}
@@ -3528,6 +3543,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: View.<WeaponSlots>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
       propertyPath: ShipData.EquipData.<MainEngine>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
@@ -3535,6 +3554,18 @@ PrefabInstance:
       propertyPath: ShipData.EquipData.<SideEngines>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'View.<WeaponSlots>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 363215581}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'View.<WeaponSlots>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1774104205}
+    - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: 'View.<WeaponSlots>k__BackingField.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1165149184}
     - target: {fileID: 3928580360091820729, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
       propertyPath: ShipInitialData.MovementData.InertiaDampingState
       value: 1

@@ -2,7 +2,6 @@
 using GameInput;
 using Ships;
 using UnityEngine;
-using UnityEngine.Splines.ExtrusionShapes;
 
 namespace GameSystems
 {
@@ -105,7 +104,6 @@ namespace GameSystems
 
             HandleThrottle(fixedDT, ref movementData, ref chassisData);
             HandleMovement(fixedDT, ref movementData, ref chassisData, forward, right);
-            //HandleRotation(fixedDT, ref movementData, ref chassisData, targetPos, shipPosition, forward);
             HandleRotation(fixedDT, ref movementData, ref chassisData, targetPos, shipPosition, forward);
         }
 

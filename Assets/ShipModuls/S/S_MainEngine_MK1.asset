@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b414911938450a2429c3e5e202ca1fda, type: 3}
-  m_Name: S_MainEngine
+  m_Name: S_MainEngine_MK1
   m_EditorClassIdentifier: 
-  <DirectThrust>k__BackingField: 500
+  <Name>k__BackingField: S_MainEngine_MK1
+  <Size>k__BackingField: 0
+  <DirectThrust>k__BackingField: 1000
   <ReverseThrust>k__BackingField: 500

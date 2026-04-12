@@ -15,5 +15,6 @@ namespace Ships
         [field: SerializeField] public ExhaustPlume SideEngineFR { get; private set; }
         [field: SerializeField] public ExhaustPlume SideEngineBL { get; private set; }
         [field: SerializeField] public ExhaustPlume SideEngineBR { get; private set; }
+        [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
     }
 }

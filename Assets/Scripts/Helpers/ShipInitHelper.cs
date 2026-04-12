@@ -5,29 +5,29 @@ namespace Helper
     public class ShipInitHelper
     {
         
-        public static void Init(ShipData shipData)
-        {
-            //InitView(shipData.View);
-            //Init(shipData.WeaponData, rigidbody);
-        }
+        //public static void Init(ShipData shipData)
+        //{
+        //    //InitView(shipData.View);
+        //    //Init(shipData.WeaponData, rigidbody);
+        //}
 
-        private static void InitView(ViewData shipMovementView)
-        {
-            shipMovementView.SideEngineFL.Init();
-            shipMovementView.SideEngineFR.Init();
-            shipMovementView.SideEngineBL.Init();
-            shipMovementView.SideEngineBR.Init();
+        //private static void InitView(ViewData shipMovementView)
+        //{
+        //    shipMovementView.SideEngineFL.Init();
+        //    shipMovementView.SideEngineFR.Init();
+        //    shipMovementView.SideEngineBL.Init();
+        //    shipMovementView.SideEngineBR.Init();
 
-            foreach (var engine in shipMovementView.ReverseEngines)
-            {
-                engine.Init();
-            }
+        //    foreach (var engine in shipMovementView.ReverseEngines)
+        //    {
+        //        engine.Init();
+        //    }
 
-            foreach (var engine in shipMovementView.DirectEngines)
-            {
-                engine.Init();
-            }
-        }
+        //    foreach (var engine in shipMovementView.DirectEngines)
+        //    {
+        //        engine.Init();
+        //    }
+        //}
 
         //private static void Init(ShipWeaponData shipWeaponData, Rigidbody2D rigidbody)
         //{

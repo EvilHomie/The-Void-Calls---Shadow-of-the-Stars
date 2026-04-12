@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c106c0dce505154da651ba9c897c7f3, type: 3}
-  m_Name: S_SideEngines
+  m_Name: S_SideEngines_MK1
   m_EditorClassIdentifier: 
-  <StrafeThrust>k__BackingField: 500
-  <RotateThrust>k__BackingField: 200
+  <Name>k__BackingField: S_SideEngines_MK1
+  <Size>k__BackingField: 0
+  <StrafeThrust>k__BackingField: 1000
+  <RotateThrust>k__BackingField: 500

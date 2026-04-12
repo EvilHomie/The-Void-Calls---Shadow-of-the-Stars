@@ -79,18 +79,14 @@ namespace GameSystems
 
             AimPositions.Add(Vector2.zero);
             Positions.Add(shipInstance.transform.position);
-            ChassisDatas.Add(shipInstance.ShipInitialData.ChassisData);
-            MovementDatas.Add(shipInstance.ShipInitialData.MovementData);
+            ChassisDatas.Add(CreateChassisData(shipInstance));
+            var movementData = new MovementData
+            {
+                InertiaDampingState = true
+            };
+            MovementDatas.Add(movementData);
             ViewDatas.Add(shipInstance.View);
-            EquipDatas.Add(shipInstance.ShipInitialData.EquipData);
-
-
-            //AimPositions[LastUsedIndex] = Vector3.zero;
-            //Positions[LastUsedIndex] = shipInstance.transform.position;
-            //ChassisDatas[LastUsedIndex] = shipInstance.ShipInitialData.ChassisData;
-            //MovementDatas[LastUsedIndex] = shipInstance.ShipInitialData.MovementData;
-            //ViewsDatas[LastUsedIndex] = shipInstance.View;
-            //EquipDatas[LastUsedIndex] = shipInstance.ShipInitialData.EquipData;
+            EquipDatas.Add(shipInstance.EquipData);
             shipInstance.Index = LastUsedIndex;
         }
 
@@ -138,6 +134,31 @@ namespace GameSystems
             ViewDatas.RemoveAt(LastUsedIndex);
             EquipDatas.RemoveAt(LastUsedIndex);
             LastUsedIndex--;
+        }
+
+        private ChassisData CreateChassisData(ShipInstance shipInstance)
+        {
+            var chassis = shipInstance.EquipData.Chassis;
+            var mainEngine = shipInstance.EquipData.MainEngine;
+            var sideEngine = shipInstance.EquipData.SideEngines;
+            return new ChassisData
+            {
+                Size = chassis.Size,
+                Mass = chassis.Mass,
+                DirectDrag = chassis.DirectDrag,
+                ReverseDrag = chassis.ReverseDrag,
+                StrafeDrag = chassis.StrafeDrag,
+                RotateDrag = chassis.RotateDrag,
+
+                DirectMaxSpeed = mainEngine.DirectThrust / chassis.DirectDrag * Constants.WorldUnitMod,
+                DirectMaxAcceleration = mainEngine.DirectThrust / chassis.Mass * Constants.WorldUnitMod,
+                ReverseMaxSpeed = mainEngine.ReverseThrust / chassis.ReverseDrag * Constants.WorldUnitMod,
+                ReverseMaxAcceleration = mainEngine.ReverseThrust / chassis.Mass * Constants.WorldUnitMod,
+                StrafeMaxSpeed = sideEngine.StrafeThrust / chassis.StrafeDrag * Constants.WorldUnitMod,
+                StrafeMaxAcceleration = sideEngine.StrafeThrust / chassis.Mass * Constants.WorldUnitMod,
+                RotateMaxSpeed = sideEngine.RotateThrust / chassis.RotateDrag,
+                RotateMaxAcceleration = sideEngine.RotateThrust / chassis.Mass
+            };
         }
     }
 }

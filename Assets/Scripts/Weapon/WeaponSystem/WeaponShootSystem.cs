@@ -68,9 +68,9 @@ namespace GameSystems
         {
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
-                ref var equipData = ref _objectsStorage.EquipDatas[i];
+                ref var view = ref _objectsStorage.ViewDatas[i];
                 ref var aimPos = ref _objectsStorage.AimPositions[i];
-                AimToTarget(equipData.WeaponSlots, aimPos, dTime);
+                AimToTarget(view.WeaponSlots, aimPos, dTime);
             }
         }
 
@@ -85,8 +85,8 @@ namespace GameSystems
                 GameFlow.UpdateTick -= PlayerAttack;
             }
 
-            ref var equipData = ref _objectsStorage.EquipDatas[_objectsStorage.PlayerIndex];
-            OnChangeAttackState(equipData.WeaponSlots, state);
+            ref var view = ref _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex];
+            OnChangeAttackState(view.WeaponSlots, state);
         }
 
         private void OnNonPlayerChangeAttackState(ShipInstance ship, bool state)
@@ -125,10 +125,10 @@ namespace GameSystems
 
         private void OthersAttack()
         {
-            foreach (var ship in _attackingShips)
-            {
-                ProceedWeaponShoot(ship.ShipInitialData.EquipData.WeaponSlots);
-            }
+            //foreach (var ship in _attackingShips)
+            //{
+            //    ProceedWeaponShoot(ship.ShipInitialData.EquipData.WeaponSlots);
+            //}
         }
 
         private void ProceedWeaponShoot(WeaponSlot[] weaponSlots)
@@ -146,9 +146,9 @@ namespace GameSystems
 
         private void PlayerAttack(float dTime)
         {
-            ref var equipData = ref _objectsStorage.EquipDatas[_objectsStorage.PlayerIndex];
+            ref var view = ref _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex];
 
-            ProceedWeaponShoot(equipData.WeaponSlots);
+            ProceedWeaponShoot(view.WeaponSlots);
         }
 
         private void OthersAim(float dTime)
