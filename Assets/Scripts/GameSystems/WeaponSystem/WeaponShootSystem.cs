@@ -31,16 +31,16 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.PreUpdateTick += ClearCollections;
-            GameFlow.UpdateTick += OnUpdateTick;
+            GameFlowSystem.PreUpdateTick += ClearCollections;
+            GameFlowSystem.UpdateTick += OnUpdateTick;
             _playerInput.ChangeAtackState += OnPlayerChangeAttackState;
             EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlow.PreUpdateTick -= ClearCollections;
-            GameFlow.UpdateTick -= OnUpdateTick;
+            GameFlowSystem.PreUpdateTick -= ClearCollections;
+            GameFlowSystem.UpdateTick -= OnUpdateTick;
             _playerInput.ChangeAtackState -= OnPlayerChangeAttackState;
             EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
         }
@@ -68,7 +68,7 @@ namespace GameSystems
         {
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
-                ref var view = ref _objectsStorage.ViewDatas[i];
+                ref var view = ref _objectsStorage.Views[i];
                 ref var aimPos = ref _objectsStorage.AimPositions[i];
                 AimToTarget(view.WeaponSlots, aimPos, dTime);
             }
@@ -78,14 +78,14 @@ namespace GameSystems
         {
             if (state)
             {
-                GameFlow.UpdateTick += PlayerAttack;
+                GameFlowSystem.UpdateTick += PlayerAttack;
             }
             else
             {
-                GameFlow.UpdateTick -= PlayerAttack;
+                GameFlowSystem.UpdateTick -= PlayerAttack;
             }
 
-            ref var view = ref _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex];
+            ref var view = ref _objectsStorage.Views[_objectsStorage.PlayerIndex];
             OnChangeAttackState(view.WeaponSlots, state);
         }
 
@@ -146,7 +146,7 @@ namespace GameSystems
 
         private void PlayerAttack(float dTime)
         {
-            ref var view = ref _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex];
+            ref var view = ref _objectsStorage.Views[_objectsStorage.PlayerIndex];
 
             ProceedWeaponShoot(view.WeaponSlots);
         }

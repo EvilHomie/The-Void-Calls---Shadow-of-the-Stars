@@ -31,14 +31,14 @@ namespace Weapons
                 weapon.HitPos = hit.point;
                 weapon.HitSpotT.position = hit.point;
 
-                if (GameFlow.CoreTime <= weapon.NextHitTime)
+                if (GameFlowSystem.CoreTime <= weapon.NextHitTime)
                 {
                     return;
                 }
 
                 weapon.HitSpotPS.Emit(1);
                 EventBus.BeamHit?.Invoke(weapon, hit.collider);
-                weapon.NextHitTime = GameFlow.CoreTime + weapon.HitDelay;
+                weapon.NextHitTime = GameFlowSystem.CoreTime + weapon.HitDelay;
             }
             else
             {

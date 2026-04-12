@@ -17,7 +17,7 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.UpdateTick += OnGameTick;
+            GameFlowSystem.UpdateTick += OnGameTick;
             EventBus.ProjectileFetched += OnProjectileFetched;
             EventBus.ProjectileHit += OnProjectileHit;
 
@@ -25,7 +25,7 @@ namespace GameSystems
 
         protected override void Unsubscribe()
         {
-            GameFlow.UpdateTick -= OnGameTick;
+            GameFlowSystem.UpdateTick -= OnGameTick;
             EventBus.ProjectileFetched -= OnProjectileFetched;
             EventBus.ProjectileHit -= OnProjectileHit;
         }
@@ -50,7 +50,7 @@ namespace GameSystems
 
             foreach (var projectile in _activeProjectiles)
             {
-                if (GameFlow.CoreTime >= projectile.DestroyTime)
+                if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
                     _destroyedProjectiles.Add(projectile);
                     continue;

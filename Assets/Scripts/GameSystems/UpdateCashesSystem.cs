@@ -18,12 +18,12 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.PreUpdateTick += UpdateCashes;
+            GameFlowSystem.PreUpdateTick += UpdateCashes;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlow.PreUpdateTick -= UpdateCashes;
+            GameFlowSystem.PreUpdateTick -= UpdateCashes;
         }
 
         private void UpdateCashes()
@@ -31,7 +31,7 @@ namespace GameSystems
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
                 ref var position = ref _objectsStorage.Positions[i];
-                ref var view = ref _objectsStorage.ViewDatas[i];
+                ref var view = ref _objectsStorage.Views[i];
                 position = view.Transform.position;
             }
         }

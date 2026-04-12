@@ -30,7 +30,7 @@ namespace GameSystems
             EventBus.SpawnPlayerShip += OnSpawnPlayerShip;
             EventBus.RemovePlayerShip += OnRemovePlayerShip;
 
-            GameFlow.PreUpdateTick += UpdateCollections;
+            GameFlowSystem.PreUpdateTick += UpdateCollections;
         }
 
         protected override void Unsubscribe()
@@ -41,7 +41,7 @@ namespace GameSystems
             EventBus.SpawnPlayerShip -= OnSpawnPlayerShip;
             EventBus.RemovePlayerShip -= OnRemovePlayerShip;
 
-            GameFlow.PreUpdateTick -= UpdateCollections;
+            GameFlowSystem.PreUpdateTick -= UpdateCollections;
         }
 
         private void UpdateCollections()

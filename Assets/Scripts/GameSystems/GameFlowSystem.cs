@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class GameFlow : GameSystemBase
+    public class GameFlowSystem : GameSystemBase
     {
         // события помеченные как Standart будто обычные Update FixedUpdate LateUpdate
         public static Action PreFixedGameTick { get; set; }

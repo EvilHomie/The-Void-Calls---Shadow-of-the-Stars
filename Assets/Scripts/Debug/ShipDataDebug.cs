@@ -34,6 +34,6 @@ public class ShipDataDebug : MonoBehaviour
         ChassisData = _objectsStorage.ChassisDatas[ShipIndex];
         MovementData = _objectsStorage.MovementDatas[ShipIndex];
         EquipData = _objectsStorage.EquipDatas[ShipIndex];
-        ViewData = _objectsStorage.ViewDatas[ShipIndex];
+        ViewData = _objectsStorage.Views[ShipIndex];
     }
 }

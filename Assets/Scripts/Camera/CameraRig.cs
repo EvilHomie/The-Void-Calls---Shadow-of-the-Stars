@@ -36,14 +36,14 @@ public class CameraRig : GameSystemBase
 
     protected override void Subscribe()
     {
-        GameFlow.UpdateTick += OnUpdateTick;
+        GameFlowSystem.UpdateTick += OnUpdateTick;
         _input.ChangeZoomAction += OnMouseScroll;
         EventBus.PlayerChangeShip += OnChangeShip;
     }
 
     protected override void Unsubscribe()
     {
-        GameFlow.UpdateTick -= OnUpdateTick;
+        GameFlowSystem.UpdateTick -= OnUpdateTick;
         _input.ChangeZoomAction -= OnMouseScroll;
         EventBus.PlayerChangeShip -= OnChangeShip;
     }
@@ -78,7 +78,7 @@ public class CameraRig : GameSystemBase
     {
         _cinemachineTargetGroup.Targets.Clear();
 
-        var shipTransform = _objectsStorage.ViewDatas[_objectsStorage.PlayerIndex].Transform;
+        var shipTransform = _objectsStorage.Views[_objectsStorage.PlayerIndex].Transform;
 
         var playerTarget = new CinemachineTargetGroup.Target()
         {

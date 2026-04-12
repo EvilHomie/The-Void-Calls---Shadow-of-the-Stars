@@ -29,13 +29,13 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.UpdateTick += UpdateStarView;
+            GameFlowSystem.UpdateTick += UpdateStarView;
             EventBus.ChangeCameraOrtoSize += OnChangeCameraOrtoSize;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlow.UpdateTick -= UpdateStarView;
+            GameFlowSystem.UpdateTick -= UpdateStarView;
             EventBus.ChangeCameraOrtoSize -= OnChangeCameraOrtoSize;
         }
 

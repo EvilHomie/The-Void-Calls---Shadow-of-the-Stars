@@ -17,7 +17,7 @@ namespace Weapons
 
         public void ProceedShoot(BoltRepeater weapon)
         {
-            if (GameFlow.CoreTime <= weapon.NextShootTime)
+            if (GameFlowSystem.CoreTime <= weapon.NextShootTime)
             {
                 return;
             }
@@ -25,12 +25,12 @@ namespace Weapons
             var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectileData.PoolName);
             projectile.CachedTransform.SetPositionAndRotation(weapon.ShootSpotT.position, weapon.Transform.rotation);
             projectile.Weapon = weapon;
-            projectile.DestroyTime = GameFlow.CoreTime + weapon.MaxDistance / weapon.ProjectileSpeed;
+            projectile.DestroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance / weapon.ProjectileSpeed;
             var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weapon.SpreadAngle);
             projectile.RigidBody.linearVelocity = direction * weapon.ProjectileSpeed;
 
             weapon.ShootSpotPS.Emit(1);
-            weapon.NextShootTime = GameFlow.CoreTime + weapon.ShootDelay;
+            weapon.NextShootTime = GameFlowSystem.CoreTime + weapon.ShootDelay;
         }
     }
 }

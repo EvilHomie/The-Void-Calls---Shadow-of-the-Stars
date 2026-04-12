@@ -21,12 +21,12 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlow.UpdateTick += OnUpdateTick;
+            GameFlowSystem.UpdateTick += OnUpdateTick;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlow.UpdateTick -= OnUpdateTick;
+            GameFlowSystem.UpdateTick -= OnUpdateTick;
         }
 
         private void OnUpdateTick(float deltaTime)
@@ -35,7 +35,7 @@ namespace GameSystems
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
                 ref var movementData = ref _objectsStorage.MovementDatas[i];
-                ref var viewData = ref _objectsStorage.ViewDatas[i];
+                ref var viewData = ref _objectsStorage.Views[i];
 
                 VisualizeDirectMove(movementData, viewData);
                 CalcSideEnginesPower(movementData);

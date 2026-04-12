@@ -37,9 +37,9 @@ namespace GameSystems
             _input.MoveInputAction += OnMoveInputAction;
             _input.ToggleDamperAction += OnToggleDamper;
 
-            GameFlow.PreFixedGameTick += CacheMovementData;
-            GameFlow.FixedGameTick += SimulateMovement;
-            GameFlow.PostFixedGameTick += ApplyMovementData;
+            GameFlowSystem.PreFixedGameTick += CacheMovementData;
+            GameFlowSystem.FixedGameTick += SimulateMovement;
+            GameFlowSystem.PostFixedGameTick += ApplyMovementData;
         }
 
         protected override void Unsubscribe()
@@ -48,9 +48,9 @@ namespace GameSystems
             _input.MoveInputAction -= OnMoveInputAction;
             _input.ToggleDamperAction -= OnToggleDamper;
 
-            GameFlow.PreFixedGameTick -= CacheMovementData;
-            GameFlow.FixedGameTick -= SimulateMovement;
-            GameFlow.PostFixedGameTick -= ApplyMovementData;
+            GameFlowSystem.PreFixedGameTick -= CacheMovementData;
+            GameFlowSystem.FixedGameTick -= SimulateMovement;
+            GameFlowSystem.PostFixedGameTick -= ApplyMovementData;
         }
 
         private void OnMoveInputAction(Vector2 input) { _inputValue = input; }
@@ -82,7 +82,7 @@ namespace GameSystems
         {
             var playerIndex = _objectsStorage.PlayerIndex;
             ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
-            ref var view = ref _objectsStorage.ViewDatas[playerIndex];
+            ref var view = ref _objectsStorage.Views[playerIndex];
             var rb = view.Rigidbody;
             movementData.LinearVelocity = rb.linearVelocity;
             movementData.AngularVelocity = rb.angularVelocity;
@@ -111,7 +111,7 @@ namespace GameSystems
         {
             var playerIndex = _objectsStorage.PlayerIndex;
             ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
-            ref var view = ref _objectsStorage.ViewDatas[playerIndex];
+            ref var view = ref _objectsStorage.Views[playerIndex];
             var rb = view.Rigidbody;
             rb.linearVelocity = movementData.LinearVelocity;
             rb.angularVelocity = movementData.AngularVelocity;

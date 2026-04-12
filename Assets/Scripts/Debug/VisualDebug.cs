@@ -64,7 +64,7 @@ public class VisualDebug : MonoBehaviour
     {
         var playerIndex = _objectsStorage.PlayerIndex;
         ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
-        ref var view = ref _objectsStorage.ViewDatas[playerIndex];
+        ref var view = ref _objectsStorage.Views[playerIndex];
         ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
 
         float forwardVel = Vector2.Dot(view.Rigidbody.linearVelocity, view.Transform.up);

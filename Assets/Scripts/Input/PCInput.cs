@@ -29,7 +29,7 @@ namespace GameInput
 
         public void Subscrube()
         {
-            GameFlow.UpdateTick += OnUpdateTick;
+            GameFlowSystem.UpdateTick += OnUpdateTick;
             EventBus.GameStateChangeAction += OnGameStateChange;
             _inputActions.Player.LeftClick.performed += OnAttack;
             _inputActions.Player.LeftClick.canceled += OnEndAttack;
@@ -39,7 +39,7 @@ namespace GameInput
 
         public void Unsubscribe()
         {
-            GameFlow.UpdateTick -= OnUpdateTick;
+            GameFlowSystem.UpdateTick -= OnUpdateTick;
             EventBus.GameStateChangeAction -= OnGameStateChange;
             _inputActions.Player.LeftClick.performed -= OnAttack;
             _inputActions.Player.LeftClick.canceled -= OnEndAttack;
