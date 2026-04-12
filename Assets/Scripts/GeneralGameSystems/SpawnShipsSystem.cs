@@ -54,6 +54,7 @@ namespace GameSystems
             shipChassisData.StrafeMaxSpeed = shipEquipData.SideEngines.StrafeThrust / shipChassisData.StrafeDrag * Constants.WorldUnitMod;
             shipChassisData.StrafeMaxAcceleration = shipEquipData.SideEngines.StrafeThrust / shipChassisData.Mass * Constants.WorldUnitMod;
             shipChassisData.RotateMaxSpeed = shipEquipData.SideEngines.RotateThrust / shipChassisData.RotateDrag;
+            shipChassisData.RotateMaxAcceleration = shipEquipData.SideEngines.RotateThrust / shipChassisData.Mass;
         }
     }
 }
