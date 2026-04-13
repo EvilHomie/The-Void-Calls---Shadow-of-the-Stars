@@ -48,7 +48,7 @@ namespace GameSystems
         {
             var playerIndex = _objectsStorage.PlayerIndex;
             var playerPosition = _objectsStorage.Positions[playerIndex];
-            var playerVelocity = _objectsStorage.MovementDatas[playerIndex].LinearVelocity;
+            var playerVelocity = _objectsStorage.MovementRuntimeDatas[playerIndex].LinearVelocity;
             _starryCanvasParent.position = playerPosition;                      
 
             foreach (var starryCanvas in _starryCanvasTwinkleViews)

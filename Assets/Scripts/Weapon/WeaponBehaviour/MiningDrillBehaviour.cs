@@ -10,16 +10,12 @@ namespace Weapons
             ProceedShoot(weapon);
             weapon.BeamLineGO.SetActive(true);
             weapon.ShootSpotPS.Play();
-            //weapon.IsShooting = true;
-            //EventBus.WeaponChangeShootState?.Invoke(weapon, true);
         }
 
         public void CancelShoot(MiningDrill weapon)
         {
-            //EventBus.WeaponChangeShootState?.Invoke(weapon, false);
             weapon.BeamLineGO.SetActive(false);
             weapon.ShootSpotPS.Stop();
-            //weapon.IsShooting = false;
         }
 
         public void ProceedShoot(MiningDrill weapon)
@@ -37,7 +33,8 @@ namespace Weapons
                 }
 
                 weapon.HitSpotPS.Emit(1);
-                EventBus.BeamHit?.Invoke(weapon, hit.collider);
+                float hitTime = weapon.NextHitTime - GameFlowSystem.CoreTime;
+                EventBus.BeamHit?.Invoke(weapon, hit.collider, hitTime);
                 weapon.NextHitTime = GameFlowSystem.CoreTime + weapon.HitDelay;
             }
             else

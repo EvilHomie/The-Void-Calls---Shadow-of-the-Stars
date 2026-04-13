@@ -137,24 +137,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: S_BoltRepeater_MK1
   <Size>k__BackingField: 0
+  <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 5791893213396587227}
   <MaxDistance>k__BackingField: 10
   <MaxRotateAngle>k__BackingField: 25
-  RotateSpeed: 90
-  IsShooting: 0
-  <ProjectileData>k__BackingField: {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
+  <RotateSpeed>k__BackingField: 45
+  <ProjectilePoolData>k__BackingField: {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 8178394065935223340}
-  <ShootSpotT>k__BackingField: {fileID: 4647805223587347138}
+  <ShootPoint>k__BackingField: {fileID: 2403933954532205874}
   <FireRate>k__BackingField: 10
   <SpreadAngle>k__BackingField: 1
   <ProjectileSpeed>k__BackingField: 20
-  <ShipRB>k__BackingField: {fileID: 0}
   NextShootTime: 0
+  ShootDelay: 0
 --- !u!1 &5033753141322967779
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +166,7 @@ GameObject:
   - component: {fileID: 8178394065935223340}
   - component: {fileID: 3408107055570856545}
   m_Layer: 0
-  m_Name: ShootSpotPS
+  m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,7 +202,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -5001,7 +5000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4647805223587347138}
   m_Layer: 0
-  m_Name: ShootSpot(Scaler)
+  m_Name: ShootPoint(Scaler)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5016,7 +5015,7 @@ Transform:
   m_GameObject: {fileID: 7353638522607737708}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1903, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1925, z: 0}
   m_LocalScale: {x: 0.6, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

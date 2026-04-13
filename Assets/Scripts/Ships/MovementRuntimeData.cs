@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Ships
 {
     [Serializable]
-    public struct MovementData
+    public struct MovementRuntimeData
     {  
         public float Throttle;
         public float TargetSpeed;

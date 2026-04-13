@@ -63,7 +63,7 @@ public class VisualDebug : MonoBehaviour
     private void ShowData()
     {
         var playerIndex = _objectsStorage.PlayerIndex;
-        ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+        ref var movementData = ref _objectsStorage.MovementRuntimeDatas[playerIndex];
         ref var view = ref _objectsStorage.Views[playerIndex];
         ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
 

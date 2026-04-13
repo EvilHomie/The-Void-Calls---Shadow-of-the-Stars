@@ -22,8 +22,8 @@ namespace Weapons
                 return;
             }
 
-            var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectileData.PoolName);
-            projectile.CachedTransform.SetPositionAndRotation(weapon.ShootSpotT.position, weapon.Transform.rotation);
+            var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectilePoolData.PoolName);
+            projectile.CachedTransform.SetPositionAndRotation(weapon.ShootPoint.position, weapon.Transform.rotation);
             projectile.Weapon = weapon;
             projectile.DestroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance / weapon.ProjectileSpeed;
             var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weapon.SpreadAngle);

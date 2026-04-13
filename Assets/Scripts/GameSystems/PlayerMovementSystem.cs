@@ -7,9 +7,7 @@ namespace GameSystems
 {
     public class PlayerMovementSystem : GameSystemBase
     {
-        public const int _rotateMod = 45; // базовая скорость поворота при силе равной сопротивлению
-        public const int _rotateAngleTreshhold = 2; // отбраковка минимального угла поворота
-        private const float _stabilizationPower = 1f; // модификатор при движении без ускорения при включеном гасителе инерции. Будто мощность для поддержания скорости
+        private const float _stabilizationPower = 0.7f; // модификатор при движении без ускорения при включеном гасителе инерции. Будто мощность для поддержания скорости
         private const float _smoothZone = 0.5f; // чем больше тем раньше начнется плавность
         private const float _maxSmooth = 0.05f; // чем меньше тем более плавно (дольше) добираются последние "метры" скорости
 
@@ -57,7 +55,7 @@ namespace GameSystems
         private void OnToggleDamper()
         {
             var playerIndex = _objectsStorage.PlayerIndex;
-            ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+            ref var movementData = ref _objectsStorage.MovementRuntimeDatas[playerIndex];
             ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
             movementData.InertiaDampingState = !movementData.InertiaDampingState;
 
@@ -81,7 +79,7 @@ namespace GameSystems
         private void CacheMovementData()
         {
             var playerIndex = _objectsStorage.PlayerIndex;
-            ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+            ref var movementData = ref _objectsStorage.MovementRuntimeDatas[playerIndex];
             ref var view = ref _objectsStorage.Views[playerIndex];
             var rb = view.Rigidbody;
             movementData.LinearVelocity = rb.linearVelocity;
@@ -92,7 +90,7 @@ namespace GameSystems
         private void SimulateMovement(float fixedDT)
         {
             var playerIndex = _objectsStorage.PlayerIndex;
-            ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+            ref var movementData = ref _objectsStorage.MovementRuntimeDatas[playerIndex];
             ref var chassisData = ref _objectsStorage.ChassisDatas[playerIndex];
 
             var targetPos = _objectsStorage.AimPositions[playerIndex];
@@ -110,7 +108,7 @@ namespace GameSystems
         private void ApplyMovementData()
         {
             var playerIndex = _objectsStorage.PlayerIndex;
-            ref var movementData = ref _objectsStorage.MovementDatas[playerIndex];
+            ref var movementData = ref _objectsStorage.MovementRuntimeDatas[playerIndex];
             ref var view = ref _objectsStorage.Views[playerIndex];
             var rb = view.Rigidbody;
             rb.linearVelocity = movementData.LinearVelocity;
@@ -120,7 +118,7 @@ namespace GameSystems
         private readonly float _throttleZeroDelay = 0.3f; // продолжительность задерки на нуле.
         private float _throttleZeroDelayTimer = 0f; // текущий таймер задержки
 
-        private void HandleThrottle(float fixedDT, ref MovementData movementData, ref ChassisData chassisData)
+        private void HandleThrottle(float fixedDT, ref MovementRuntimeData movementData, ref ChassisData chassisData)
         {
             if (_inputValue.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
             {
@@ -152,7 +150,7 @@ namespace GameSystems
               * movementData.Throttle;
         }
 
-        private void HandleRotation(float fixedDT, ref MovementData movementData, ref ChassisData chassisData, Vector2 targetPos, Vector2 shipPosition, Vector2 forward)
+        private void HandleRotation(float fixedDT, ref MovementRuntimeData movementData, ref ChassisData chassisData, Vector2 targetPos, Vector2 shipPosition, Vector2 forward)
         {
             Vector2 direction = targetPos - shipPosition;
 
@@ -199,7 +197,7 @@ namespace GameSystems
             movementData.RotatePower = Mathf.Clamp(targetSpeed / maxSpeed, -1f, 1f);
         }
 
-        private void HandleMovement(float fixedDT, ref MovementData movementData, ref ChassisData chassisData, Vector2 forward, Vector2 right)
+        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementData, ref ChassisData chassisData, Vector2 forward, Vector2 right)
         {
             float forwardVel = Vector2.Dot(movementData.LinearVelocity, forward);
             float sideVel = Vector2.Dot(movementData.LinearVelocity, right);
@@ -209,7 +207,7 @@ namespace GameSystems
             movementData.LinearVelocity = right * sideVel + forward * forwardVel;
         }
 
-        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementData movementData, ref ChassisData chassisData)
+        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementRuntimeData movementData, ref ChassisData chassisData)
         {
 
             if (movementData.InertiaDampingState)
@@ -274,7 +272,7 @@ namespace GameSystems
 
 
         // нужна логика быстрого гашения боковой скорости
-        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementData movementData, ref ChassisData chassisData)
+        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementRuntimeData movementData, ref ChassisData chassisData)
         {
             if (movementData.InertiaDampingState)
             {

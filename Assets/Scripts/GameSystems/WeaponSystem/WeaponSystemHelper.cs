@@ -27,33 +27,6 @@ namespace Helper
             }
         }
 
-        public static void AimAtTarget2(WeaponBase weapon, float dTime, in Vector3 targetPos)
-        {
-            Vector2 dir = targetPos - weapon.Transform.position;
-
-
-
-
-
-            float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
-
-            float newAngle = Mathf.MoveTowardsAngle(
-                weapon.Transform.eulerAngles.z,
-                targetAngle,
-                weapon.RotateSpeed * dTime
-            );
-
-            weapon.Transform.rotation = Quaternion.Euler(0, 0, newAngle);
-
-            float localZ = Mathf.DeltaAngle(0, weapon.Transform.localEulerAngles.z);
-
-            if (Mathf.Abs(localZ) > weapon.MaxRotateAngle)
-            {
-                float clamped = Mathf.Clamp(localZ, -weapon.MaxRotateAngle, weapon.MaxRotateAngle);
-                weapon.Transform.localRotation = Quaternion.Euler(0, 0, clamped);
-            }
-        }
-
         public static bool CanFire(WeaponBase weapon, LayerMask hitLayers)
         {
             Ray ray = new(weapon.Transform.position, weapon.Transform.up);

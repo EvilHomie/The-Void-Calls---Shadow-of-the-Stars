@@ -34,7 +34,7 @@ namespace GameSystems
 
             for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
             {
-                ref var movementData = ref _objectsStorage.MovementDatas[i];
+                ref var movementData = ref _objectsStorage.MovementRuntimeDatas[i];
                 ref var viewData = ref _objectsStorage.Views[i];
 
                 VisualizeDirectMove(movementData, viewData);
@@ -43,7 +43,7 @@ namespace GameSystems
             }
         }
 
-        private void VisualizeDirectMove(in MovementData movementData, in ViewData shipView)
+        private void VisualizeDirectMove(in MovementRuntimeData movementData, in ViewData shipView)
         {
             float directAccel = 0;
             float reversAccel = 0;
@@ -68,7 +68,7 @@ namespace GameSystems
             }
         }
 
-        private void CalcSideEnginesPower(in MovementData movementData)
+        private void CalcSideEnginesPower(in MovementRuntimeData movementData)
         {
             _currentThrustersPower = Constants.SideEnginesPowerZero;
 

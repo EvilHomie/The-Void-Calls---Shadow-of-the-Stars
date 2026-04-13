@@ -10,7 +10,7 @@ public class ShipDataDebug : MonoBehaviour
     public Vector2 AimPosition;
     public Vector2 Position;
     public ChassisData ChassisData;
-    public MovementData MovementData;
+    public MovementRuntimeData MovementData;
     public EquipData EquipData;
     public ViewData ViewData;
 
@@ -32,7 +32,7 @@ public class ShipDataDebug : MonoBehaviour
         AimPosition = _objectsStorage.AimPositions[ShipIndex];
         Position = _objectsStorage.Positions[ShipIndex];
         ChassisData = _objectsStorage.ChassisDatas[ShipIndex];
-        MovementData = _objectsStorage.MovementDatas[ShipIndex];
+        MovementData = _objectsStorage.MovementRuntimeDatas[ShipIndex];
         EquipData = _objectsStorage.EquipDatas[ShipIndex];
         ViewData = _objectsStorage.Views[ShipIndex];
     }

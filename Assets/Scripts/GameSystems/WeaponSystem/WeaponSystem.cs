@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class WeaponShootSystem : GameSystemBase
+    public class WeaponSystem : GameSystemBase
     {
         private WeaponsBehaviour _weaponsBehaviour;
         private readonly HashSet<ShipInstance> _attackingShips = new(200);

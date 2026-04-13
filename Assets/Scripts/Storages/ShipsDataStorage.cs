@@ -9,7 +9,7 @@ namespace GameSystems
         public readonly StructList<Vector2> AimPositions = new(1000);
         public readonly StructList<Vector2> Positions = new(1000);
         public readonly StructList<ChassisData> ChassisDatas = new(1000);
-        public readonly StructList<MovementData> MovementDatas = new(1000);
+        public readonly StructList<MovementRuntimeData> MovementRuntimeDatas = new(1000);
         public readonly StructList<EquipData> EquipDatas = new(1000);
         public readonly StructList<ViewData> Views = new(1000);
         public int LastUsedIndex { get; private set; } = -1;
@@ -78,13 +78,13 @@ namespace GameSystems
             LastUsedIndex++;
 
             var chassisData = CreateChassisData(shipInstance);
-            var movementData = new MovementData { InertiaDampingState = true };
+            var movementData = new MovementRuntimeData { InertiaDampingState = true };
             shipInstance.View.Rigidbody.mass = chassisData.Mass;
 
             AimPositions.Add(Vector2.zero);
             Positions.Add(shipInstance.transform.position);
             ChassisDatas.Add(chassisData);
-            MovementDatas.Add(movementData);
+            MovementRuntimeDatas.Add(movementData);
             Views.Add(shipInstance.View);
             EquipDatas.Add(shipInstance.EquipData);
             shipInstance.Index = LastUsedIndex;
@@ -108,14 +108,14 @@ namespace GameSystems
                 ref var movedAimPosition = ref AimPositions[LastUsedIndex];
                 ref var movedPosition = ref Positions[LastUsedIndex];
                 ref var movedChassisData = ref ChassisDatas[LastUsedIndex];
-                ref var movedMovementData = ref MovementDatas[LastUsedIndex];
+                ref var movedMovementData = ref MovementRuntimeDatas[LastUsedIndex];
                 ref var movedViewData = ref Views[LastUsedIndex];
                 ref var movedEquipData = ref EquipDatas[LastUsedIndex];
 
                 AimPositions[index] = movedAimPosition;
                 Positions[index] = movedPosition;
                 ChassisDatas[index] = movedChassisData;
-                MovementDatas[index] = movedMovementData;
+                MovementRuntimeDatas[index] = movedMovementData;
                 Views[index] = movedViewData;
                 EquipDatas[index] = movedEquipData;
 
@@ -130,7 +130,7 @@ namespace GameSystems
             AimPositions.RemoveAt(LastUsedIndex);
             Positions.RemoveAt(LastUsedIndex);
             ChassisDatas.RemoveAt(LastUsedIndex);
-            MovementDatas.RemoveAt(LastUsedIndex);
+            MovementRuntimeDatas.RemoveAt(LastUsedIndex);
             Views.RemoveAt(LastUsedIndex);
             EquipDatas.RemoveAt(LastUsedIndex);
             LastUsedIndex--;
