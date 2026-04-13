@@ -26,16 +26,16 @@ namespace Weapons
             {
                 weapon.HitPos = hit.point;
                 weapon.HitSpotT.position = hit.point;
+                float coreTime = GameFlowSystem.CoreTime;
 
-                if (GameFlowSystem.CoreTime <= weapon.NextHitTime)
+                if (coreTime <= weapon.NextHitTime)
                 {
                     return;
                 }
 
                 weapon.HitSpotPS.Emit(1);
-                float hitTime = weapon.NextHitTime - GameFlowSystem.CoreTime;
-                EventBus.BeamHit?.Invoke(weapon, hit.collider, hitTime);
-                weapon.NextHitTime = GameFlowSystem.CoreTime + weapon.HitDelay;
+                EventBus.BeamHit?.Invoke(weapon, hit.collider);
+                weapon.NextHitTime = coreTime + weapon.HitDelay;
             }
             else
             {

@@ -25,7 +25,7 @@ namespace GameSystems
             EventBus.BeamHit -= OnBeamHit;
         }
 
-        void OnBeamHit(WeaponBase weapon, Collider2D hitedCollider, float hitTime)
+        void OnBeamHit(WeaponBase weapon, Collider2D hitedCollider)
         {
 
         }

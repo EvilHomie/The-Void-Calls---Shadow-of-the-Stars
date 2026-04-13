@@ -23,7 +23,7 @@ namespace GameSystems
 
 
         public static Action<ProjectileBase, Collider2D> ProjectileHit { get; set; }
-        public static Action<WeaponBase, Collider2D, float> BeamHit { get; set; }
+        public static Action<WeaponBase, Collider2D> BeamHit { get; set; }
 
 
 

@@ -16,6 +16,7 @@ namespace GameSystems
         public static Action<float> LateGameTick { get; set; }
         public static Action<GameState> GameStateChange { get; set; }
         public static float CoreTime { get; private set; }
+        public static float CoreDeltaTime { get; private set; }
 
         private GameState _currentGameState = GameState.None;
         private float _gameSpeed = 1;
@@ -42,6 +43,7 @@ namespace GameSystems
             if (_currentGameState == GameState.CoreGameplay)
             {
                 CoreTime += deltaTime;
+                CoreDeltaTime = deltaTime;
             }
 
             PreUpdateTick?.Invoke();

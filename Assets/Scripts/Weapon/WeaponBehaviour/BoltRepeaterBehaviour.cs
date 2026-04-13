@@ -1,5 +1,6 @@
 ﻿using GameSystems;
 using Helper;
+using UnityEngine;
 
 namespace Weapons
 {
@@ -7,12 +8,9 @@ namespace Weapons
     {
         public void StartShoot(BoltRepeater weapon)
         {
-            //weapon.IsShooting = true;
-            //EventBus.WeaponChangeShootState?.Invoke(weapon, true);
         }
         public void CancelShoot(BoltRepeater weapon)
         {
-            //weapon.IsShooting = false;
         }
 
         public void ProceedShoot(BoltRepeater weapon)
@@ -25,9 +23,12 @@ namespace Weapons
             var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectilePoolData.PoolName);
             projectile.CachedTransform.SetPositionAndRotation(weapon.ShootPoint.position, weapon.Transform.rotation);
             projectile.Weapon = weapon;
+            var weapontTransformUp = weapon.Transform.up;
             projectile.DestroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance / weapon.ProjectileSpeed;
-            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weapon.SpreadAngle);
-            projectile.RigidBody.linearVelocity = direction * weapon.ProjectileSpeed;
+            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapontTransformUp, weapon.SpreadAngle);
+            var shipRB = weapon.ShipRigidBody;
+            float shipForwardVel = Vector2.Dot(shipRB.linearVelocity, shipRB.transform.up);
+            projectile.RigidBody.linearVelocity = (weapon.ProjectileSpeed + shipForwardVel) * direction;
 
             weapon.ShootSpotPS.Emit(1);
             weapon.NextShootTime = GameFlowSystem.CoreTime + weapon.ShootDelay;
