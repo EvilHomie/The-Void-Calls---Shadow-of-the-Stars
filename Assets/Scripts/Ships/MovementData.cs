@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Ships
 {
     [Serializable]
-    public struct MovementRuntimeData
+    public struct MovementData
     {  
         public float Throttle;
         public float TargetSpeed;
@@ -12,8 +12,10 @@ namespace Ships
         public bool InertiaDampingState;
         public float RotatePower;
         public float DirectMovePower;
-        public float StrafeMovePower;        
+        public float StrafeMovePower;
 
+
+        public Vector2 Position;
         public Vector2 LinearVelocity;
         public float AngularVelocity;
         public float Rotation;

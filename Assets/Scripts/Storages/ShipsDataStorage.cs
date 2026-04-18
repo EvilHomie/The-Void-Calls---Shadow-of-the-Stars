@@ -9,7 +9,7 @@ namespace GameSystems
         public readonly StructList<Vector2> AimPositions = new(1000);
         public readonly StructList<Vector2> Positions = new(1000);
         public readonly StructList<ChassisData> ChassisDatas = new(1000);
-        public readonly StructList<MovementRuntimeData> MovementRuntimeDatas = new(1000);
+        public readonly StructList<MovementData> MovementRuntimeDatas = new(1000);
         public readonly StructList<EquipData> EquipDatas = new(1000);
         public readonly StructList<ViewData> Views = new(1000);
         public int LastUsedIndex { get; private set; } = -1;
@@ -78,7 +78,7 @@ namespace GameSystems
             LastUsedIndex++;
 
             var chassisData = CreateChassisData(shipInstance);
-            var movementData = new MovementRuntimeData { InertiaDampingState = true };
+            var movementData = new MovementData { InertiaDampingState = true };
             shipInstance.View.Rigidbody.mass = chassisData.Mass;
 
             AimPositions.Add(Vector2.zero);

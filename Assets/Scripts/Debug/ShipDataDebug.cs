@@ -10,7 +10,7 @@ public class ShipDataDebug : MonoBehaviour
     public Vector2 AimPosition;
     public Vector2 Position;
     public ChassisData ChassisData;
-    public MovementRuntimeData MovementData;
+    public MovementData MovementData;
     public EquipData EquipData;
     public ViewData ViewData;
 

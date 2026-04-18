@@ -2679,6 +2679,7 @@ MonoBehaviour:
     RotatePower: 0
     DirectMovePower: 0
     StrafeMovePower: 0
+    Position: {x: 0, y: 0}
     LinearVelocity: {x: 0, y: 0}
     AngularVelocity: 0
     Rotation: 0
@@ -3574,6 +3575,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship_Miner_S_1
       objectReference: {fileID: 0}
+    - target: {fileID: 2997261761082624193, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3257694416211380314, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
       propertyPath: playOnAwake
       value: 0
@@ -3761,6 +3766,26 @@ PrefabInstance:
     - target: {fileID: 6090276293456497624, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
       propertyPath: <IsActive>k__BackingField
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6255985706260958109, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6255985706260958109, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6255985706260958109, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 6255985706260958109, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.399
+      objectReference: {fileID: 0}
+    - target: {fileID: 6255985706260958109, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6396891759433502983, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
       propertyPath: m_LocalPosition.y

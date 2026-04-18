@@ -118,7 +118,7 @@ namespace GameSystems
         private readonly float _throttleZeroDelay = 0.3f; // продолжительность задерки на нуле.
         private float _throttleZeroDelayTimer = 0f; // текущий таймер задержки
 
-        private void HandleThrottle(float fixedDT, ref MovementRuntimeData movementData, ref ChassisData chassisData)
+        private void HandleThrottle(float fixedDT, ref MovementData movementData, ref ChassisData chassisData)
         {
             if (_inputValue.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
             {
@@ -150,7 +150,7 @@ namespace GameSystems
               * movementData.Throttle;
         }
 
-        private void HandleRotation(float fixedDT, ref MovementRuntimeData movementData, ref ChassisData chassisData, Vector2 targetPos, Vector2 shipPosition, Vector2 forward)
+        private void HandleRotation(float fixedDT, ref MovementData movementData, ref ChassisData chassisData, Vector2 targetPos, Vector2 shipPosition, Vector2 forward)
         {
             Vector2 direction = targetPos - shipPosition;
 
@@ -197,7 +197,7 @@ namespace GameSystems
             movementData.RotatePower = Mathf.Clamp(targetSpeed / maxSpeed, -1f, 1f);
         }
 
-        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementData, ref ChassisData chassisData, Vector2 forward, Vector2 right)
+        private void HandleMovement(float fixedDT, ref MovementData movementData, ref ChassisData chassisData, Vector2 forward, Vector2 right)
         {
             float forwardVel = Vector2.Dot(movementData.LinearVelocity, forward);
             float sideVel = Vector2.Dot(movementData.LinearVelocity, right);
@@ -207,7 +207,7 @@ namespace GameSystems
             movementData.LinearVelocity = right * sideVel + forward * forwardVel;
         }
 
-        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementRuntimeData movementData, ref ChassisData chassisData)
+        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementData movementData, ref ChassisData chassisData)
         {
 
             if (movementData.InertiaDampingState)
@@ -272,7 +272,7 @@ namespace GameSystems
 
 
         // нужна логика быстрого гашения боковой скорости
-        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementRuntimeData movementData, ref ChassisData chassisData)
+        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementData movementData, ref ChassisData chassisData)
         {
             if (movementData.InertiaDampingState)
             {
