@@ -49,12 +49,12 @@ Material:
     - _NarrowFactor: 1
     - _NoiseSpeed: 2
     - _NoiseTiling: 2.6
-    - _Slider: 1
+    - _Slider: -1
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 8.3, g: 0.7695961, b: 0, a: 0}
-    - _MainColor: {r: 0, g: 3.295178, b: 12.844469, a: 0}
-    - _SecondColor: {r: 0, g: 0, b: 16, a: 0}
+    - _MainColor: {r: 0, g: 3.0745099, b: 11.984314, a: 0}
+    - _SecondColor: {r: 0, g: 0, b: 23.96863, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5637424231163629858
