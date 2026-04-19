@@ -45,26 +45,9 @@ namespace GameSystems
 
         private void VisualizeDirectMove(in MovementData movementData, in ViewData shipView)
         {
-            float directAccel = 0;
-            float reversAccel = 0;
-
-            if (movementData.DirectMovePower > 0)
+            foreach (var engine in shipView.MainEnginesPlumes)
             {
-                directAccel = movementData.DirectMovePower;
-            }
-            else if (movementData.DirectMovePower < 0)
-            {
-                reversAccel = movementData.DirectMovePower;
-            }
-
-            foreach (var engine in shipView.ReverseEngines)
-            {
-                engine.SetThrustValue(-reversAccel);
-            }
-
-            foreach (var engine in shipView.DirectEngines)
-            {
-                engine.SetThrustValue(directAccel);
+                engine.SetPowerValue(movementData.DirectMovePower);
             }
         }
 
@@ -104,10 +87,10 @@ namespace GameSystems
 
         private void VisualizeSideEngines(in ViewData view)
         {
-            view.SideEngineFR.SetThrustValue(_currentThrustersPower.FrontRight);
-            view.SideEngineBR.SetThrustValue(_currentThrustersPower.BackRight);
-            view.SideEngineFL.SetThrustValue(_currentThrustersPower.FrontLeft);
-            view.SideEngineBL.SetThrustValue(_currentThrustersPower.BackLeft);
+            view.SideEngineFR.SetPowerValue(_currentThrustersPower.FrontRight);
+            view.SideEngineBR.SetPowerValue(_currentThrustersPower.BackRight);
+            view.SideEngineFL.SetPowerValue(_currentThrustersPower.FrontLeft);
+            view.SideEngineBL.SetPowerValue(_currentThrustersPower.BackLeft);
         }
     }
 }
