@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: S_MainEngine_MK1
   <Size>k__BackingField: 0
-  <DirectThrust>k__BackingField: 1000
-  <ReverseThrust>k__BackingField: 400
+  <DirectThrust>k__BackingField: 500
+  <ReverseThrust>k__BackingField: 500

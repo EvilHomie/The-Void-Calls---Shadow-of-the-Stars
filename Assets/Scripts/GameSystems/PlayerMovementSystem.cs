@@ -13,8 +13,8 @@ namespace GameSystems
         //private const float _smoothZone = 0.5f; // чем больше тем раньше начнется плавность
         //private const float _maxSmooth = 0.05f; // чем меньше тем более плавно (дольше) добираются последние "метры" скорости
 
-        private readonly float _smoothZone = 0.1f; // процент от макс скорости для плавности
-        private readonly float _maxSmooth = 0.02f; // по сути минимальный модификатор ускорения (чтобы не было нуля при сглаживании)
+        private readonly float _smoothZone = 0.05f; // процент от макс скорости когда начинается плавность
+        private readonly float _maxSmooth = 0.03f; // по сути минимальный модификатор ускорения (чтобы не было нуля при сглаживании)
 
         [SerializeField] AnimationCurve accelerationCurve;
 
@@ -187,23 +187,36 @@ namespace GameSystems
         {
             if (movementData.InertiaDampingState)
             {
-                var maxSpeed = movementData.Throttle > 0
-                    ? movementCharacteristicsData.DirectMaxSpeed
-                    : movementCharacteristicsData.ReverseMaxSpeed;
+                var throttle = movementData.Throttle;
+                float maxSpeed;
 
-                var acceleration = movementData.Throttle > 0
-                    ? movementCharacteristicsData.DirectAcceleration
-                    : movementCharacteristicsData.ReverseAcceleration;
+                if (throttle == 0)
+                {
+                    if (Mathf.Abs(forwardVel) < 0.0001f)
+                    {
+                        forwardVel = 0;
+                        return;
+                    }
 
-                var targetSpeed = movementData.Throttle * maxSpeed;
-                float speedDiff = targetSpeed - forwardVel;
-                float absSpeedDiff = Mathf.Abs(speedDiff);
+                    maxSpeed = forwardVel > 0 ? movementCharacteristicsData.ReverseMaxSpeed : movementCharacteristicsData.DirectMaxSpeed;
+                }
+                else
+                {
+                    maxSpeed = throttle > 0 ? movementCharacteristicsData.DirectMaxSpeed : movementCharacteristicsData.ReverseMaxSpeed;
+                }
+
+                var targetSpeed = throttle * maxSpeed;
+                var speedDiff = targetSpeed - forwardVel;
+                var absSpeedDiff = Mathf.Abs(speedDiff);
 
                 if (absSpeedDiff < 0.0001f) // если изменение скорости около нулевое
                 {
                     forwardVel = targetSpeed;
                     return;
                 }
+
+                var speedDiffSign = Mathf.Sign(speedDiff);
+                float acceleration = speedDiffSign > 0 ? movementCharacteristicsData.DirectAcceleration : movementCharacteristicsData.ReverseAcceleration; 
 
                 ApplySmooth(ref acceleration, absSpeedDiff, maxSpeed);
                 forwardVel = Mathf.MoveTowards(forwardVel, targetSpeed, acceleration * fixedDT);
