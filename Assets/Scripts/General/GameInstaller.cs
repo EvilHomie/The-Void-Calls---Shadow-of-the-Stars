@@ -1,5 +1,4 @@
 using GameInput;
-using GameSystems;
 using Ships;
 using UnityEngine;
 
@@ -10,18 +9,17 @@ namespace DI
         [SerializeField] ShipInstance _playerShip;
         [SerializeField] Camera _mainCamera;
         [SerializeField] LookAheadCursor _mouseCursor;
-        [SerializeField] ShipsDataStorage _objectsStorage;
 
         protected override void InstallBindings()
         {
             Container.Bind<ShipInstance>().FromInstance(_playerShip);
             Container.Bind<Camera>().FromInstance(_mainCamera);
             Container.Bind<LookAheadCursor>().FromInstance(_mouseCursor);
-            Container.Bind<ShipsDataStorage>().FromInstance(_objectsStorage);
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {
-                Container.Bind<IPlayerInput>().To<PCInput>().AsSingleton();
+                var input = new PCInput();
+                Container.Bind<IPlayerInput>().To<PCInput>().FromInstance(input);
             }
         }
     }

@@ -1,4 +1,5 @@
 using DI;
+using Helpers;
 using Ships;
 
 namespace GameSystems
@@ -6,6 +7,7 @@ namespace GameSystems
     public class SpawnShipsSystem : GameSystemBase
     {
         private ShipInstance _playerShip;
+
         [Inject]
         public void Construct(ShipInstance playerShip)
         {
@@ -14,7 +16,6 @@ namespace GameSystems
 
         protected override void AwakeInit()
         {
-            //QualitySettings.vSyncCount = 0;
         }
 
         protected override void Subscribe()
@@ -29,9 +30,12 @@ namespace GameSystems
 
         private void Start()
         {
+            ShipInitHelper.InitShip(_playerShip);
             EventBus.SpawnPlayerShip?.Invoke(_playerShip);
             EventBus.GameStateChangeAction?.Invoke(GameState.CoreGameplay);
         }
+
+
     }
 }
 

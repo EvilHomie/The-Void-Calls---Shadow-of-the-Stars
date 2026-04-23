@@ -10,6 +10,7 @@ public enum AsteroidType
     Platina = 1 << 3,
     Gold = 1 << 4,
     Empty = 1 << 5,
+
     Cluster = 1 << 6,
     Drifting = 1 << 7
 }

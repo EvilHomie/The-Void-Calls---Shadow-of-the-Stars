@@ -3,7 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class MainEnginePlume : MonoBehaviour
 {
-    [SerializeField] ParticleSystem particles;
+    [SerializeField] ParticleSystem forwardParticles;
+    [SerializeField] ParticleSystem reverseParticles;
     private SpriteRenderer _sr;
     private MaterialPropertyBlock _matBlock;
     private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
@@ -29,13 +30,25 @@ public class MainEnginePlume : MonoBehaviour
             return;
         }
 
-        if (value != 0 && !particles.isPlaying)
+        _lastPowerValue = value;
+        //_sr.GetPropertyBlock(_matBlock);
+        _matBlock.SetFloat(_powerValueID, value);
+        _sr.SetPropertyBlock(_matBlock);
+
+        if (value == 0)
         {
-            particles.Play();
+            forwardParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            reverseParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            return;
         }
-        else if(particles.isPlaying) 
+
+        if (value > 0 && !forwardParticles.isPlaying)
         {
-            particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            forwardParticles.Play();
+        }
+        else if (!reverseParticles.isPlaying)
+        {
+            reverseParticles.Play();
         }
 
         _lastPowerValue = value;

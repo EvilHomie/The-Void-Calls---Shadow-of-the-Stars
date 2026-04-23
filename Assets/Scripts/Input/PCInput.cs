@@ -1,5 +1,4 @@
 using GameSystems;
-using Ships;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,70 +8,56 @@ namespace GameInput
     public class PCInput : IPlayerInput
     {
         public Action<Vector2> MoveInputAction { get; set; }
-        //public Action<Vector2> TrackMouseDirectionAction { get; set; }
-        public Action<Vector2> TrackMouseWorldPositionAction { get; set; }
         public Action<bool> ChangeAtackState { get; set; }
         public Action ToggleDamperAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
 
-        private InputSystem_Actions _inputActions;
-        private Camera _camera;
-        private ShipsDataStorage _objectsStorage;
-        private bool _isActive;
+        private readonly InputSystem_Actions _inputActions;
 
-        public void Init(Camera camera, ShipsDataStorage objectsStorage)
+        public PCInput()
         {
             _inputActions = new InputSystem_Actions();
-            _objectsStorage = objectsStorage;
-            _camera = camera;
         }
 
         public void Subscrube()
         {
-            GameFlowSystem.UpdateTick += OnUpdateTick;
             EventBus.GameStateChangeAction += OnGameStateChange;
             _inputActions.Player.LeftClick.performed += OnAttack;
             _inputActions.Player.LeftClick.canceled += OnEndAttack;
             _inputActions.Player.ToggleDamper.performed += ToggleDamper;
             _inputActions.Player.MouseScroll.performed += OnMouseScroll;
+
+            _inputActions.Player.Move.performed += OnMove;
+            _inputActions.Player.Move.canceled += OnStop;
         }
 
         public void Unsubscribe()
         {
-            GameFlowSystem.UpdateTick -= OnUpdateTick;
             EventBus.GameStateChangeAction -= OnGameStateChange;
             _inputActions.Player.LeftClick.performed -= OnAttack;
             _inputActions.Player.LeftClick.canceled -= OnEndAttack;
             _inputActions.Player.ToggleDamper.performed -= ToggleDamper;
             _inputActions.Player.MouseScroll.performed -= OnMouseScroll;
-        }
 
-        private void OnUpdateTick(float deltaTime)
-        {
-            if (!_isActive) return;
-
-            TrackMouse();
-            TrackInput();
+            _inputActions.Player.Move.performed -= OnMove;
+            _inputActions.Player.Move.canceled -= OnStop;
         }
 
         private void OnGameStateChange(GameState gameState)
         {
-            _isActive = gameState == GameState.CoreGameplay;
-
-            if (_isActive) _inputActions.Player.Enable();
+            if (gameState == GameState.CoreGameplay) _inputActions.Player.Enable();
             else _inputActions.Player.Disable();
         }
 
-        private void TrackMouse()
+        private void OnMove(InputAction.CallbackContext context)
         {
-            Vector2 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            _objectsStorage.AimPositions[_objectsStorage.PlayerIndex] = mouseWorld;
+            var inputDir = context.ReadValue<Vector2>();
+            MoveInputAction?.Invoke(inputDir);
         }
 
-        private void TrackInput()
+        private void OnStop(InputAction.CallbackContext context)
         {
-            var inputDir = _inputActions.Player.Move.ReadValue<Vector2>();
-            MoveInputAction?.Invoke(inputDir);
+            MoveInputAction?.Invoke(Vector2.zero);
         }
 
         private void OnAttack(InputAction.CallbackContext context)

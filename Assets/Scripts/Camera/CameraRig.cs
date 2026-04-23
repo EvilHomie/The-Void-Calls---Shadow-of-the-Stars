@@ -16,16 +16,16 @@ public class CameraRig : GameSystemBase
     [SerializeField] float _changeOrtSizeStep;
     [SerializeField] float _lookAheadDistanceMod = 1f;
     private Transform _lookAheadCursor;
-    private ShipsDataStorage _objectsStorage;
+    //private ShipsDataStorage _objectsStorage;
     private IPlayerInput _input;
     private float _targetOrtSize;
     private float _deffCameraOrtoSize = 3f;
 
     [Inject]
-    public void Construct(LookAheadCursor lookAheadCursor, ShipsDataStorage objectsStorage, IPlayerInput playerInput)
+    public void Construct(LookAheadCursor lookAheadCursor/*, ShipsDataStorage objectsStorage*/, IPlayerInput playerInput)
     {
         _lookAheadCursor = lookAheadCursor.transform;
-        _objectsStorage = objectsStorage;
+        //_objectsStorage = objectsStorage;
         _input = playerInput;
     }
 
@@ -76,41 +76,41 @@ public class CameraRig : GameSystemBase
 
     private void UpdateTargetGroup()
     {
-        _cinemachineTargetGroup.Targets.Clear();
+        //_cinemachineTargetGroup.Targets.Clear();
 
-        var shipTransform = _objectsStorage.Views[_objectsStorage.PlayerIndex].Transform;
+        //var shipTransform = _objectsStorage.Views[_objectsStorage.PlayerIndex].Transform;
 
-        var playerTarget = new CinemachineTargetGroup.Target()
-        {
-            Object = shipTransform,
-            Weight = 1,
-            Radius = 1,
-        };
+        //var playerTarget = new CinemachineTargetGroup.Target()
+        //{
+        //    Object = shipTransform,
+        //    Weight = 1,
+        //    Radius = 1,
+        //};
 
-        var cursorTarget = new CinemachineTargetGroup.Target()
-        {
-            Object = _lookAheadCursor,
-            Weight = _mouseCursorWeight,
-            Radius = 1,
-        };
+        //var cursorTarget = new CinemachineTargetGroup.Target()
+        //{
+        //    Object = _lookAheadCursor,
+        //    Weight = _mouseCursorWeight,
+        //    Radius = 1,
+        //};
 
-        _cinemachineTargetGroup.Targets.Add(playerTarget);
-        _cinemachineTargetGroup.Targets.Add(cursorTarget);
+        //_cinemachineTargetGroup.Targets.Add(playerTarget);
+        //_cinemachineTargetGroup.Targets.Add(cursorTarget);
     }
 
     private void UpdateLookAheadCursorPos(float orthoDelta)
     {
-        ref var playerShipPosition = ref _objectsStorage.Positions[_objectsStorage.PlayerIndex];
-        float ortho = _cinemachineCamera.Lens.OrthographicSize;
-        float height = Screen.height;
-        float width = Screen.width;
+        //ref var playerShipPosition = ref _objectsStorage.SelfPositions[_objectsStorage.PlayerIndex];
+        //float ortho = _cinemachineCamera.Lens.OrthographicSize;
+        //float height = Screen.height;
+        //float width = Screen.width;
 
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        Vector2 screenCenter = new Vector2(width, height) * 0.5f;
-        Vector2 mouseOffset = mousePos - screenCenter;
-        Vector2 relativeOffset = mouseOffset / height;
-        relativeOffset /= orthoDelta;
-        _lookAheadCursor.position = playerShipPosition + ortho * _lookAheadDistanceMod * relativeOffset;
+        //Vector2 mousePos = Mouse.current.position.ReadValue();
+        //Vector2 screenCenter = new Vector2(width, height) * 0.5f;
+        //Vector2 mouseOffset = mousePos - screenCenter;
+        //Vector2 relativeOffset = mouseOffset / height;
+        //relativeOffset /= orthoDelta;
+        //_lookAheadCursor.position = playerShipPosition + ortho * _lookAheadDistanceMod * relativeOffset;
     }
 
     private void OnMouseScroll(float value)

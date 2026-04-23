@@ -6,14 +6,10 @@ namespace GameSystems
 {
     public class ShipVisualizeSystem : GameSystemBase
     {
-        private SideEnginesPower _currentThrustersPower;
-        private ShipsDataStorage _objectsStorage;
+        private ThrustersPower currentThrustersPower;
 
-        [Inject]
-        public void Construct(ShipsDataStorage objectsStorage)
-        {
-            _objectsStorage = objectsStorage;
-        }
+        private ShipInstance _playerShip;
+
 
         protected override void AwakeInit()
         {
@@ -22,80 +18,72 @@ namespace GameSystems
         protected override void Subscribe()
         {
             GameFlowSystem.UpdateTick += OnUpdateTick;
+            EventBus.SpawnPlayerShip += OnSpawnPlayerShip;
         }
 
         protected override void Unsubscribe()
         {
             GameFlowSystem.UpdateTick -= OnUpdateTick;
+            EventBus.SpawnPlayerShip -= OnSpawnPlayerShip;
+        }
+
+        private void OnSpawnPlayerShip(ShipInstance shipInstance)
+        {
+            _playerShip = shipInstance;
         }
 
         private void OnUpdateTick(float deltaTime)
         {
+            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
+            ref var view = ref _playerShip.View;
+            VisualizeMainEngine(movementRuntimeData, view);
+            VisualizeThrusters(movementRuntimeData, view);
+        }
 
-            for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
+        private void VisualizeMainEngine(in MovementRuntimeData movementVisualData, in View view)
+        {
+            foreach (var engine in view.MainEnginesPlumes)
             {
-                ref var movementData = ref _objectsStorage.MovementRuntimeDatas[i];
-                ref var viewData = ref _objectsStorage.Views[i];
-
-                VisualizeDirectMove(movementData, viewData);
-                CalcSideEnginesPower(movementData);
-                VisualizeSideEngines(viewData);
+                engine.SetPowerValue(movementVisualData.Throttle);
             }
         }
 
-        private void VisualizeDirectMove(in MovementData movementData, in ViewData shipView)
+        private void VisualizeThrusters(in MovementRuntimeData movementRuntimeData, in View view)
         {
-            foreach (var engine in shipView.MainEnginesPlumes)
+            var currentThrustersPower = new ThrustersPower();
+
+            if (movementRuntimeData.StrafePower > 0)
             {
-                engine.SetPowerValue(movementData.DirectMovePower);
+                currentThrustersPower.BackLeft = movementRuntimeData.StrafePower;
+                currentThrustersPower.FrontLeft = movementRuntimeData.StrafePower;
             }
-        }
-
-        private void CalcSideEnginesPower(in MovementData movementData)
-        {
-            _currentThrustersPower = Constants.SideEnginesPowerZero;
-
-            if (movementData.StrafeMovePower != 0)
+            else if (movementRuntimeData.StrafePower < 0)
             {
-                if (movementData.StrafeMovePower > 0)
-                {
-                    _currentThrustersPower.BackLeft = movementData.StrafeMovePower;
-                    _currentThrustersPower.FrontLeft = movementData.StrafeMovePower;
-                }
-                else
-                {
-                    _currentThrustersPower.BackRight = -movementData.StrafeMovePower;
-                    _currentThrustersPower.FrontRight = -movementData.StrafeMovePower;
-                }
+                currentThrustersPower.BackRight = -movementRuntimeData.StrafePower;
+                currentThrustersPower.FrontRight = -movementRuntimeData.StrafePower;
             }
 
-            if (movementData.RotatePower != 0)
+            if (movementRuntimeData.RotatePower > 0)
             {
-                if (movementData.RotatePower > 0)
-                {
-                    if (_currentThrustersPower.BackLeft == 0) _currentThrustersPower.BackLeft = movementData.RotatePower;
-                    if (_currentThrustersPower.FrontRight == 0) _currentThrustersPower.FrontRight = movementData.RotatePower;
+                if (currentThrustersPower.BackLeft == 0) currentThrustersPower.BackLeft = movementRuntimeData.RotatePower;
+                if (currentThrustersPower.FrontRight == 0) currentThrustersPower.FrontRight = movementRuntimeData.RotatePower;
 
-                }
-                else
-                {
-                    if (_currentThrustersPower.FrontLeft == 0) _currentThrustersPower.FrontLeft = -movementData.RotatePower;
-                    if (_currentThrustersPower.BackRight == 0) _currentThrustersPower.BackRight = -movementData.RotatePower;
-                }
             }
-        }
+            else if (movementRuntimeData.RotatePower < 0)
+            {
+                if (currentThrustersPower.FrontLeft == 0) currentThrustersPower.FrontLeft = -movementRuntimeData.RotatePower;
+                if (currentThrustersPower.BackRight == 0) currentThrustersPower.BackRight = -movementRuntimeData.RotatePower;
+            }
 
-        private void VisualizeSideEngines(in ViewData view)
-        {
-            view.SideEngineFR.SetPowerValue(_currentThrustersPower.FrontRight);
-            view.SideEngineBR.SetPowerValue(_currentThrustersPower.BackRight);
-            view.SideEngineFL.SetPowerValue(_currentThrustersPower.FrontLeft);
-            view.SideEngineBL.SetPowerValue(_currentThrustersPower.BackLeft);
+            view.ThrusterFR.SetPowerValue(currentThrustersPower.FrontRight);
+            view.ThrusterBR.SetPowerValue(currentThrustersPower.BackRight);
+            view.ThrusterFL.SetPowerValue(currentThrustersPower.FrontLeft);
+            view.ThrusterBL.SetPowerValue(currentThrustersPower.BackLeft);
         }
     }
 }
 
-public struct SideEnginesPower
+public struct ThrustersPower
 {
     public float FrontLeft;
     public float FrontRight;
@@ -105,7 +93,7 @@ public struct SideEnginesPower
 
 public static class SideEnginesPowerExtensions
 {
-    public static void Lerp(this ref SideEnginesPower current, in SideEnginesPower target, float t)
+    public static void Lerp(this ref ThrustersPower current, in ThrustersPower target, float t)
     {
         t = Mathf.Clamp01(t);
         float it = 1f - t;
@@ -115,7 +103,7 @@ public static class SideEnginesPowerExtensions
         current.BackLeft = current.BackLeft * it + target.BackLeft * t;
         current.BackRight = current.BackRight * it + target.BackRight * t;
     }
-    public static void MoveTowards(ref this SideEnginesPower current, in SideEnginesPower target, float maxDelta)
+    public static void MoveTowards(ref this ThrustersPower current, in ThrustersPower target, float maxDelta)
     {
         current.FrontLeft = Mathf.MoveTowards(current.FrontLeft, target.FrontLeft, maxDelta);
         current.FrontRight = Mathf.MoveTowards(current.FrontRight, target.FrontRight, maxDelta);

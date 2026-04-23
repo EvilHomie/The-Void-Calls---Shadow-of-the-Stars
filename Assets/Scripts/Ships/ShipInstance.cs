@@ -4,27 +4,17 @@ namespace Ships
 {
     public class ShipInstance : MonoBehaviour
     {
-        public ChassisData ChassisData;
-        public MovementData MovementData;
-        public EquipData EquipData;
-        public ViewData View;
+        [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
+        [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
 
+        public Transform LockOnTransform;
 
+        public HealthData HealthData;
 
+        public MovementStaticData MovementStaticData;
+        public MovementRuntimeData MovementRuntimeData;
 
-
-
-
-        public int Index = -1;
-
-
-
-
-        public readonly StructList<Vector2> AimPositions = new(1000);
-        public readonly StructList<Vector2> Positions = new(1000);
-        public readonly StructList<ChassisData> ChassisDatas = new(1000);
-        public readonly StructList<MovementData> MovementRuntimeDatas = new(1000);
-        public readonly StructList<EquipData> EquipDatas = new(1000);
-        public readonly StructList<ViewData> Views = new(1000);
+        public EquipData Equip;
+        public View View;
     }
 }

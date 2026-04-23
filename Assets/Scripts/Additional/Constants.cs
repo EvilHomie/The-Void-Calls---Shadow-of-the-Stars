@@ -11,7 +11,7 @@ public static class Constants
     public static readonly Vector3 Vector3One = Vector3.one;
     public static readonly Vector3 Vector3Right = Vector3.right;
     public static readonly Vector3 Vector3Back = Vector3.back;
-    public static readonly SideEnginesPower SideEnginesPowerZero = new();
+    public static readonly ThrustersPower SideEnginesPowerZero = new();
 
     public static readonly float WorldUnitMod = 0.01f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
     public static readonly float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  

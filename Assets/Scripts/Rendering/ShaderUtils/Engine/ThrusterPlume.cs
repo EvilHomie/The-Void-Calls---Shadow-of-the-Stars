@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent (typeof(SpriteRenderer))]
-public class SideEnginePlume : MonoBehaviour
+public class ThrusterPlume : MonoBehaviour
 {    
     private SpriteRenderer _sr;
     private MaterialPropertyBlock _matBlock;

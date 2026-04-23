@@ -1,4 +1,6 @@
-﻿namespace Helper
+﻿using Damage;
+
+namespace Helpers
 {
     public enum DestroyedPartType
     {

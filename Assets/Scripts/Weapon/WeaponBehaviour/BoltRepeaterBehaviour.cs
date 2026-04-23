@@ -1,5 +1,5 @@
 ﻿using GameSystems;
-using Helper;
+using Helpers;
 using UnityEngine;
 
 namespace Weapons

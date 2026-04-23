@@ -1,7 +1,7 @@
 using UnityEngine;
 using Weapons;
 
-namespace Helper
+namespace Helpers
 {
     public class WeaponSystemHelper
     {

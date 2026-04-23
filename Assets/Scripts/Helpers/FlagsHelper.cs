@@ -1,6 +1,6 @@
 using System;
 
-namespace Helper
+namespace Helpers
 {
     public static class FlagsHelper
     {

@@ -1,6 +1,6 @@
 using DI;
 using GameInput;
-using Helper;
+using Helpers;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,15 +14,15 @@ namespace GameSystems
         private readonly HashSet<ShipInstance> _stopAttackingShips = new(200);
 
         private IPlayerInput _playerInput;
-        private ShipsDataStorage _objectsStorage;
+        //private ShipsDataStorage _objectsStorage;
 
-        [Inject]
-        public void Construct(IPlayerInput playerInput, ShipsDataStorage objectsStorage)
-        {
-            _playerInput = playerInput;
-            _objectsStorage = objectsStorage;
-            _weaponsBehaviour = new WeaponsBehaviour();
-        }
+        //[Inject]
+        //public void Construct(IPlayerInput playerInput, ShipsDataStorage objectsStorage)
+        //{
+        //    _playerInput = playerInput;
+        //    _objectsStorage = objectsStorage;
+        //    _weaponsBehaviour = new WeaponsBehaviour();
+        //}
 
         protected override void AwakeInit()
         {
@@ -31,18 +31,18 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            GameFlowSystem.PreUpdateTick += ClearCollections;
-            GameFlowSystem.UpdateTick += OnUpdateTick;
-            _playerInput.ChangeAtackState += OnPlayerChangeAttackState;
-            EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
+            //GameFlowSystem.PreUpdateTick += ClearCollections;
+            //GameFlowSystem.UpdateTick += OnUpdateTick;
+            //_playerInput.ChangeAtackState += OnPlayerChangeAttackState;
+            //EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlowSystem.PreUpdateTick -= ClearCollections;
-            GameFlowSystem.UpdateTick -= OnUpdateTick;
-            _playerInput.ChangeAtackState -= OnPlayerChangeAttackState;
-            EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
+            //GameFlowSystem.PreUpdateTick -= ClearCollections;
+            //GameFlowSystem.UpdateTick -= OnUpdateTick;
+            //_playerInput.ChangeAtackState -= OnPlayerChangeAttackState;
+            //EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
         }
 
         private void OnUpdateTick(float dTime)
@@ -66,27 +66,27 @@ namespace GameSystems
 
         private void Aim(float dTime)
         {
-            for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
-            {
-                ref var view = ref _objectsStorage.Views[i];
-                ref var aimPos = ref _objectsStorage.AimPositions[i];
-                AimToTarget(view.WeaponSlots, aimPos, dTime);
-            }
+            //for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
+            //{
+            //    ref var view = ref _objectsStorage.Views[i];
+            //    ref var aimPos = ref _objectsStorage.TargetPositions[i];
+            //    AimToTarget(view.WeaponSlots, aimPos, dTime);
+            //}
         }
 
         private void OnPlayerChangeAttackState(bool state)
         {
-            if (state)
-            {
-                GameFlowSystem.UpdateTick += PlayerAttack;
-            }
-            else
-            {
-                GameFlowSystem.UpdateTick -= PlayerAttack;
-            }
+            //if (state)
+            //{
+            //    GameFlowSystem.UpdateTick += PlayerAttack;
+            //}
+            //else
+            //{
+            //    GameFlowSystem.UpdateTick -= PlayerAttack;
+            //}
 
-            ref var view = ref _objectsStorage.Views[_objectsStorage.PlayerIndex];
-            OnChangeAttackState(view.WeaponSlots, state);
+            //ref var view = ref _objectsStorage.Views[_objectsStorage.PlayerIndex];
+            //OnChangeAttackState(view.WeaponSlots, state);
         }
 
         private void OnNonPlayerChangeAttackState(ShipInstance ship, bool state)
@@ -146,9 +146,9 @@ namespace GameSystems
 
         private void PlayerAttack(float dTime)
         {
-            ref var view = ref _objectsStorage.Views[_objectsStorage.PlayerIndex];
+            //ref var view = ref _objectsStorage.Views[_objectsStorage.PlayerIndex];
 
-            ProceedWeaponShoot(view.WeaponSlots);
+            //ProceedWeaponShoot(view.WeaponSlots);
         }
 
         private void OthersAim(float dTime)
