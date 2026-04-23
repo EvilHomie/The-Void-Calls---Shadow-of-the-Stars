@@ -9,7 +9,7 @@ namespace Ships
         public float StrafePower;
         public float RotatePower;
 
-        public bool InertiaDampingState;
+        public bool InertiaDampingActive;
         public float LastDampingThrottle;
     }
 }

@@ -8,7 +8,7 @@ namespace Helpers
         public static void InitShip(ShipInstance shipInstance)
         {
             ref var movement = ref shipInstance.MovementRuntimeData;
-            movement.InertiaDampingState = true;
+            movement.InertiaDampingActive = true;
 
             ref var movementCharacteristics = ref shipInstance.MovementStaticData;
             ref var equip = ref shipInstance.Equip;

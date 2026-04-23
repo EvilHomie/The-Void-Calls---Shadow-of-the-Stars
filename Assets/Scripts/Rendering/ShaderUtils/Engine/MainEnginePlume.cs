@@ -45,10 +45,12 @@ public class MainEnginePlume : MonoBehaviour
         if (value > 0 && !forwardParticles.isPlaying)
         {
             forwardParticles.Play();
+            reverseParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
         else if (!reverseParticles.isPlaying)
         {
             reverseParticles.Play();
+            forwardParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
         _lastPowerValue = value;

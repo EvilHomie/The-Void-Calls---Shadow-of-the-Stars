@@ -78,7 +78,7 @@ public class VisualDebug : MonoBehaviour
 
         ThrottleText.text = $"Throttle: {movementRuntimeData.Throttle * 100:F0} %";
 
-        if (movementRuntimeData.InertiaDampingState)
+        if (movementRuntimeData.InertiaDampingActive)
         {
             float speed = movementRuntimeData.Throttle > 0
             ? movementStaticData.DirectMaxSpeed
