@@ -18,8 +18,7 @@ namespace DI
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {
-                var input = new PCInput();
-                Container.Bind<IPlayerInput>().To<PCInput>().FromInstance(input);
+                Container.Bind<IPlayerInput>().To<PCInput>().AsSingleton();
             }
         }
     }

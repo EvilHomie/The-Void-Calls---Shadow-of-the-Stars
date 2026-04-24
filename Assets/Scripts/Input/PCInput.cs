@@ -17,30 +17,17 @@ namespace GameInput
         public PCInput()
         {
             _inputActions = new InputSystem_Actions();
-        }
 
-        public void Subscrube()
-        {
-            EventBus.GameStateChangeAction += OnGameStateChange;
             _inputActions.Player.LeftClick.performed += OnAttack;
-            _inputActions.Player.LeftClick.canceled += OnEndAttack;
+            _inputActions.Player.LeftClick.canceled += OnAttack;
+
             _inputActions.Player.ToggleDamper.performed += ToggleDamper;
             _inputActions.Player.MouseScroll.performed += OnMouseScroll;
 
             _inputActions.Player.Move.performed += OnMove;
-            _inputActions.Player.Move.canceled += OnStop;
-        }
+            _inputActions.Player.Move.canceled += OnMove;
 
-        public void Unsubscribe()
-        {
-            EventBus.GameStateChangeAction -= OnGameStateChange;
-            _inputActions.Player.LeftClick.performed -= OnAttack;
-            _inputActions.Player.LeftClick.canceled -= OnEndAttack;
-            _inputActions.Player.ToggleDamper.performed -= ToggleDamper;
-            _inputActions.Player.MouseScroll.performed -= OnMouseScroll;
-
-            _inputActions.Player.Move.performed -= OnMove;
-            _inputActions.Player.Move.canceled -= OnStop;
+            EventBus.GameStateChangeAction += OnGameStateChange;
         }
 
         private void OnGameStateChange(GameState gameState)
@@ -55,19 +42,9 @@ namespace GameInput
             MoveInputAction?.Invoke(inputDir);
         }
 
-        private void OnStop(InputAction.CallbackContext context)
-        {
-            MoveInputAction?.Invoke(Vector2.zero);
-        }
-
         private void OnAttack(InputAction.CallbackContext context)
         {
-            ChangeAtackState?.Invoke(true);
-        }
-
-        private void OnEndAttack(InputAction.CallbackContext context)
-        {
-            ChangeAtackState?.Invoke(false);
+            ChangeAtackState?.Invoke(context.performed);
         }
 
         private void ToggleDamper(InputAction.CallbackContext context)
@@ -77,7 +54,7 @@ namespace GameInput
 
         private void OnMouseScroll(InputAction.CallbackContext context)
         {
-            float scroll = context.ReadValue<Vector2>().y;
+            var scroll = context.ReadValue<Vector2>().y;
             ChangeZoomAction?.Invoke(scroll);
         }
     }

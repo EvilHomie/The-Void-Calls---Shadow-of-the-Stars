@@ -1,7 +1,6 @@
 ﻿using DI;
 using GameInput;
 using Ships;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,9 +14,8 @@ namespace GameSystems
 
         private readonly float _smoothZone = 0.05f; // процент от макс скорости когда начинается плавность
         private readonly float _maxSmooth = 0.03f; // по сути минимальный модификатор ускорения (чтобы не было нуля при сглаживании)
-        private readonly float _noDumpingThrottleMod = 10; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
+        private readonly float _noDumpingThrottleMod = 4; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
 
-        [SerializeField] AnimationCurve accelerationCurve;
 
         private IPlayerInput _input;
         private Vector2 _inputValue;
@@ -33,14 +31,10 @@ namespace GameSystems
             _camera = camera;
         }
 
-        protected override void AwakeInit()
-        {
-
-        }
+        protected override void AwakeInit() { }
 
         protected override void Subscribe()
         {
-            _input.Subscrube();
             _input.MoveInputAction += OnMoveInputAction;
             _input.ToggleDamperAction += OnToggleDamper;
             GameFlowSystem.FixedGameTick += Simulate;
@@ -49,7 +43,6 @@ namespace GameSystems
 
         protected override void Unsubscribe()
         {
-            _input.Unsubscribe();
             _input.MoveInputAction -= OnMoveInputAction;
             _input.ToggleDamperAction -= OnToggleDamper;
             GameFlowSystem.FixedGameTick -= Simulate;
