@@ -36,15 +36,15 @@ namespace Helpers
 
             movementCharacteristics.DirectMaxSpeed = totalDirectThrust / totalDirectDrag * worldUnitMod;
             movementCharacteristics.DirectAcceleration = totalDirectThrust / totalMass * worldUnitMod;
-            movementCharacteristics.DirectDampingAcceleration = totalDirectDrag * inertiaDampingForce;
+            movementCharacteristics.DirectDampingAcceleration = totalDirectDrag * inertiaDampingForce * worldUnitMod;
 
             movementCharacteristics.ReverseMaxSpeed = totalReverseThrust / totalReverseDrag * worldUnitMod;
             movementCharacteristics.ReverseAcceleration = totalReverseThrust / totalMass * worldUnitMod;
-            movementCharacteristics.ReverseDampingAcceleration = totalReverseDrag * inertiaDampingForce;
+            movementCharacteristics.ReverseDampingAcceleration = totalReverseDrag * inertiaDampingForce * worldUnitMod;
 
             movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / totalStrafeDrag * worldUnitMod;
             movementCharacteristics.StrafeAcceleration = totalStrafeThrust / totalMass * worldUnitMod;
-            movementCharacteristics.StrafeDampingAcceleration = totalStrafeDrag * inertiaDampingForce;
+            movementCharacteristics.StrafeDampingAcceleration = totalStrafeDrag * inertiaDampingForce * worldUnitMod;
 
             movementCharacteristics.RotateSpeed = totalRotateThrust / totalRotateDrag;
 

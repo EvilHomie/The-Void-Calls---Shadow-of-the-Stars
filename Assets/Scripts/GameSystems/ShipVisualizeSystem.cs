@@ -44,7 +44,7 @@ namespace GameSystems
         {
             foreach (var engine in view.MainEnginesPlumes)
             {
-                engine.SetPowerValue(movementVisualData.DirectPower);
+                engine.SetPowerValue(movementVisualData.MainEnginePower);
             }
         }
 
@@ -52,27 +52,27 @@ namespace GameSystems
         {
             var currentThrustersPower = new ThrustersPower();
 
-            if (movementRuntimeData.StrafePower > 0)
+            if (movementRuntimeData.ThrustersPower > 0)
             {
-                currentThrustersPower.BackLeft = movementRuntimeData.StrafePower;
-                currentThrustersPower.FrontLeft = movementRuntimeData.StrafePower;
+                currentThrustersPower.BackLeft = movementRuntimeData.ThrustersPower;
+                currentThrustersPower.FrontLeft = movementRuntimeData.ThrustersPower;
             }
-            else if (movementRuntimeData.StrafePower < 0)
+            else if (movementRuntimeData.ThrustersPower < 0)
             {
-                currentThrustersPower.BackRight = -movementRuntimeData.StrafePower;
-                currentThrustersPower.FrontRight = -movementRuntimeData.StrafePower;
+                currentThrustersPower.BackRight = -movementRuntimeData.ThrustersPower;
+                currentThrustersPower.FrontRight = -movementRuntimeData.ThrustersPower;
             }
 
-            if (movementRuntimeData.RotatePower > 0)
+            if (movementRuntimeData.RotateThrottle > 0)
             {
-                if (currentThrustersPower.BackLeft == 0) currentThrustersPower.BackLeft = movementRuntimeData.RotatePower;
-                if (currentThrustersPower.FrontRight == 0) currentThrustersPower.FrontRight = movementRuntimeData.RotatePower;
+                if (currentThrustersPower.BackLeft == 0) currentThrustersPower.BackLeft = movementRuntimeData.RotateThrottle;
+                if (currentThrustersPower.FrontRight == 0) currentThrustersPower.FrontRight = movementRuntimeData.RotateThrottle;
 
             }
-            else if (movementRuntimeData.RotatePower < 0)
+            else if (movementRuntimeData.RotateThrottle < 0)
             {
-                if (currentThrustersPower.FrontLeft == 0) currentThrustersPower.FrontLeft = -movementRuntimeData.RotatePower;
-                if (currentThrustersPower.BackRight == 0) currentThrustersPower.BackRight = -movementRuntimeData.RotatePower;
+                if (currentThrustersPower.FrontLeft == 0) currentThrustersPower.FrontLeft = -movementRuntimeData.RotateThrottle;
+                if (currentThrustersPower.BackRight == 0) currentThrustersPower.BackRight = -movementRuntimeData.RotateThrottle;
             }
 
             view.ThrusterFR.SetPowerValue(currentThrustersPower.FrontRight);

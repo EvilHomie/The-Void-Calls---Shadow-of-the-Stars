@@ -8,10 +8,11 @@ namespace GameSystems
 {
     public class PlayerMovementSystem : GameSystemBase
     {
-        private readonly float _smoothZone = 0.05f; // процент от макс скорости когда начинается плавность
-        private readonly float _maxSmooth = 0.03f; // по сути минимальный модификатор ускорения (чтобы не было нуля при сглаживании)
+        private const float EPS = 0.001f;
+        private readonly float _minSmoothFactor = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") сглаживания ускорения
         private readonly float _noDumpingThrottleMod = 4; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
-
+        private readonly float _smoothZoneTime = 0.2f; // время до ключевой скорости для сглаживания ускорения
+        private float _smoothZoneMod; // 1/ _smoothZoneTime. сугубо чтобы уйти от деления в логике
 
         private IPlayerInput _input;
         private Vector2 _inputValue;
@@ -25,6 +26,7 @@ namespace GameSystems
         {
             _input = playerInput;
             _camera = camera;
+            _smoothZoneMod = 1 / _smoothZoneTime;
         }
 
         protected override void AwakeInit() { }
@@ -137,7 +139,7 @@ namespace GameSystems
             if (prevAngularVelocity > maxRotateSpeed)  // только гашение если больше максимального
             {
                 rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, 0f, maxRotateSpeed * fixedDT);
-                movementRuntimeData.RotatePower = -Mathf.Sign(prevAngularVelocity);
+                movementRuntimeData.RotateThrottle = -Mathf.Sign(prevAngularVelocity);
                 return;
             }
 
@@ -147,7 +149,7 @@ namespace GameSystems
             if (mouseDirection.sqrMagnitude < 0.1f) // только гашение если курсор наведен на свой корабль
             {
                 rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, 0f, maxRotateSpeed * fixedDT);
-                movementRuntimeData.RotatePower = -Mathf.Sign(prevAngularVelocity);
+                movementRuntimeData.RotateThrottle = -Mathf.Sign(prevAngularVelocity);
                 return;
             }
 
@@ -163,105 +165,247 @@ namespace GameSystems
 
             if (Mathf.Abs(newAngularVelocity) >= maxRotateSpeed - 0.5f) // если достигли макс вращения
             {
-                movementRuntimeData.RotatePower = Mathf.Sign(newAngularVelocity);
+                movementRuntimeData.RotateThrottle = Mathf.Sign(newAngularVelocity);
                 return;
             }
 
-            movementRuntimeData.RotatePower = rotatePowerMod;
+            movementRuntimeData.RotateThrottle = rotatePowerMod;
 
             // версия которая при торможении включаем противоположные, но дерганная. использовать lerp не стал.
             //var velocityDelta = Mathf.Abs(newAngularVelocity) - Mathf.Abs(prevAngularVelocity);
             //movementRuntimeData.RotateThrottle = velocityDelta > 0 ? rotateSpeedMod : -rotateSpeedMod; 
         }
 
-        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
+        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
         {
             var rb = _playerShip.Rigidbody;
             var velocity = rb.linearVelocity;
             var forwardVel = Vector2.Dot(velocity, forward);
             var sideVel = Vector2.Dot(velocity, right);
 
-            CalcForwardVelocity(fixedDT, ref forwardVel, ref movementData, movementStaticData);
-            CalcSideVelocity(fixedDT, ref sideVel, ref movementData, movementStaticData);
-
-            rb.linearVelocity = right * sideVel + forward * forwardVel;
-        }
-
-        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
-        {
             var throttle = movementRuntimeData.DirectThrottle;
 
             if (movementRuntimeData.InertiaDampingActive)
             {
-                float maxSpeed;
-
-                if (throttle == 0)
-                {
-                    if (Mathf.Abs(forwardVel) < 0.0001f)
-                    {
-                        forwardVel = 0;
-                        movementRuntimeData.DirectPower = 0;
-                        return;
-                    }
-
-                    maxSpeed = forwardVel > 0
-                        ? movementStaticData.ReverseMaxSpeed
-                        : movementStaticData.DirectMaxSpeed;
-                }
-                else
-                {
-                    maxSpeed = throttle > 0
-                        ? movementStaticData.DirectMaxSpeed
-                        : movementStaticData.ReverseMaxSpeed;
-                }
-
-                var targetSpeed = throttle * maxSpeed;
-                var speedDiff = targetSpeed - forwardVel;
-                var absSpeedDiff = Mathf.Abs(speedDiff);
-
-                if (absSpeedDiff < 0.0001f) // если изменение скорости около нулевое
-                {
-                    forwardVel = targetSpeed;
-                    return;
-                }
-
-                var speedDiffSign = Mathf.Sign(speedDiff);
-                var acceleration = speedDiffSign > 0
-                    ? movementStaticData.DirectAcceleration
-                    : movementStaticData.ReverseAcceleration;
-
-                ApplySmooth(ref acceleration, absSpeedDiff, maxSpeed);
-                forwardVel = Mathf.MoveTowards(forwardVel, targetSpeed, acceleration * fixedDT);
-
-                movementRuntimeData.DirectPower = throttle;
+                ApplyMainEngineDampingForce(fixedDT, throttle, ref forwardVel, ref movementRuntimeData, movementStaticData);
+                //CalcSideVelocity(fixedDT, ref sideVel, ref movementData, movementStaticData);
+                ApplyForwardDamping(fixedDT, throttle, ref forwardVel, movementStaticData);
             }
             else
             {
-                if (throttle == 0) // если дросель в нуле то ничего не делаем
+                ApplyMainEngineAcceleration(fixedDT, throttle, ref forwardVel, ref movementRuntimeData, movementStaticData);
+            }
+
+            rb.linearVelocity = right * sideVel + forward * forwardVel;
+        }
+
+        private void ApplyForwardDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
+        {
+            if (Mathf.Abs(forwardVel) < EPS) // если не двигаемся. 
+            {
+                forwardVel = 0;
+                return;
+            }
+
+            var acceleration = forwardVel > 0
+                ? movementStaticData.DirectDampingAcceleration
+                : movementStaticData.ReverseDampingAcceleration;
+
+            var maxSpeed = throttle > 0
+                ? movementStaticData.DirectMaxSpeed
+                : movementStaticData.ReverseMaxSpeed;
+
+            var targetSpeed = throttle * maxSpeed;
+
+            float desiredSpeed;
+
+            if (throttle == 0f || forwardVel * throttle < 0f) // Нет дроссель в нуле или в контртяге то гасим до нуля
+            {
+                desiredSpeed = 0f;
+            }
+            else
+            {
+                var speedDiff = targetSpeed - forwardVel;
+
+                if (speedDiff * throttle < -EPS) // Гасим если превысили
+                {
+                    desiredSpeed = targetSpeed;
+                }
+                else
                 {
                     return;
                 }
-
-                var acceleration = throttle > 0
-                    ? movementStaticData.DirectAcceleration
-                    : movementStaticData.ReverseAcceleration;
-
-                forwardVel += acceleration * throttle * fixedDT;
-                movementRuntimeData.DirectPower = throttle;
             }
+
+            forwardVel = Mathf.MoveTowards(forwardVel, desiredSpeed, acceleration * fixedDT);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //if (speedDiff * throttle < -EPS)
+            //{
+            //    Debug.LogError("гасим");
+            //}
+
+            //if (throttle == 0f)
+            //{
+            //    if (Mathf.Abs(forwardVel) > EPS)
+            //    {
+            //        Debug.LogError("гасим к нулю");
+            //    }
+
+            //    return;
+            //}
+
+            //if (Mathf.Abs(forwardVel) > Mathf.Abs(targetSpeed))
+            //{
+            //    Debug.LogError("ГАсим");
+            //}
+
+
+
+
+            //if (movementRuntimeData.InertiaDampingActive)
+            //    {
+            //        float maxSpeed;
+
+            //        if (throttle == 0)
+            //        {
+            //            if (Mathf.Abs(forwardVel) < 0.0001f)
+            //            {
+            //                forwardVel = 0;
+            //                movementRuntimeData.DirectPower = 0;
+            //                return;
+            //            }
+
+            //            maxSpeed = forwardVel > 0
+            //                ? movementStaticData.ReverseMaxSpeed
+            //                : movementStaticData.DirectMaxSpeed;
+            //        }
+            //        else
+            //        {
+            //            maxSpeed = throttle > 0
+            //                ? movementStaticData.DirectMaxSpeed
+            //                : movementStaticData.ReverseMaxSpeed;
+            //        }
+
+            //        var targetSpeed = throttle * maxSpeed;
+            //        var speedDiff = targetSpeed - forwardVel;
+            //        var absSpeedDiff = Mathf.Abs(speedDiff);
+
+            //        if (absSpeedDiff < 0.0001f) // если изменение скорости около нулевое
+            //        {
+            //            forwardVel = targetSpeed;
+            //            return;
+            //        }
+
+            //        var speedDiffSign = Mathf.Sign(speedDiff);
+            //        var acceleration = speedDiffSign > 0
+            //            ? movementStaticData.DirectAcceleration
+            //            : movementStaticData.ReverseAcceleration;
+
+            //        ApplySmooth(ref acceleration, absSpeedDiff, maxSpeed);
+            //        forwardVel = Mathf.MoveTowards(forwardVel, targetSpeed, acceleration * fixedDT);
+
+            //        movementRuntimeData.DirectPower = throttle;
+            //    }
+            //    else
+            //    {
+            //        if (throttle == 0) // если дросель в нуле то ничего не делаем
+            //        {
+            //            return;
+            //        }
+
+            //        var acceleration = throttle > 0
+            //            ? movementStaticData.DirectAcceleration
+            //            : movementStaticData.ReverseAcceleration;
+
+            //        forwardVel += acceleration * throttle * fixedDT;
+            //        movementRuntimeData.DirectPower = throttle;
+            //    }
+
+
         }
 
-        private void ApplySmooth(ref float currentAcceleration, float absSpeedDiff, float maxSpeed)
+        private void ApplyMainEngineDampingForce(float fixedDT, float throttle, ref float forwardVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
         {
-            var smoothSpeed = maxSpeed * _smoothZone;
-            float t = Mathf.Clamp01(absSpeedDiff / smoothSpeed);
+            if (throttle == 0)
+            {
+                movementRuntimeData.MainEnginePower = 0;
+                return;
+            }
+
+            var acceleration = throttle > 0
+                      ? movementStaticData.DirectAcceleration
+                      : -movementStaticData.ReverseAcceleration;
+
+            var maxSpeed = throttle > 0
+                      ? movementStaticData.DirectMaxSpeed
+                      : movementStaticData.ReverseMaxSpeed;
+
+            // speedDiff и acceleration гарантированно одного знака
+            var targetSpeed = throttle * maxSpeed;
+            var speedDiff = targetSpeed - forwardVel;
+
+            if (speedDiff * throttle <= 0f) // проверка если скорость достигла максимальной
+            {
+                return;
+            }
+
+            ApplySmooth(ref acceleration, speedDiff);
+            forwardVel += acceleration * fixedDT;
+            movementRuntimeData.MainEnginePower = throttle;
+        }
+
+        private void ApplyMainEngineAcceleration(float fixedDT, float throttle, ref float forwardVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
+        {
+            if (throttle == 0) // если дросель в нуле то ничего не делаем
+            {
+                return;
+            }
+
+            var acceleration = throttle > 0
+                ? movementStaticData.DirectAcceleration
+                : movementStaticData.ReverseAcceleration;
+
+            forwardVel += acceleration * throttle * fixedDT;
+            movementRuntimeData.MainEnginePower = throttle;
+        }
+
+        private void ApplySmooth(ref float acceleration, float speedDiff)
+        {
+            float timeToTarget = speedDiff / acceleration;
+
+            if (timeToTarget > 0.2f) return;
+
+            float t = timeToTarget * 5;
             float curve = t * t;
-            float accelerationMod = Mathf.Lerp(_maxSmooth, 1f, curve);
-            currentAcceleration *= accelerationMod;
+            float accelFactor = Mathf.Lerp(_minSmoothFactor, 1f, curve);
+            acceleration *= accelFactor;
         }
 
 
-        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
+        private void ApplyMainEngineDampingForce(float fixedDT, ref float sideVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
         {
             var strafeThrottle = movementRuntimeData.StrafeThrottle;
 
@@ -291,7 +435,7 @@ namespace GameSystems
                 var speedDiffSign = Mathf.Sign(speedDiff);
                 var acceleration = movementStaticData.StrafeAcceleration;
 
-                ApplySmooth(ref acceleration, absSpeedDiff, maxSpeed);
+                ApplySmooth(ref acceleration, absSpeedDiff);
                 sideVel = Mathf.MoveTowards(sideVel, targetSpeed, acceleration * fixedDT);
             }
             else

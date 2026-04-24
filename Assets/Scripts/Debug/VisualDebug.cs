@@ -1,12 +1,11 @@
-﻿using DI;
-using GameSystems;
-using Helpers;
+﻿using GameSystems;
 using Ships;
 using TMPro;
 using UnityEngine;
 
 public class VisualDebug : MonoBehaviour
 {
+    // StaticData
     [SerializeField] TextMeshProUGUI MaxDirectSpeedText;
     [SerializeField] TextMeshProUGUI MaxReverseSpeedText;
     [SerializeField] TextMeshProUGUI MaxStrafeSpeedText;
@@ -14,27 +13,29 @@ public class VisualDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI ReverseAcceleration;
     [SerializeField] TextMeshProUGUI StrafeAcceleration;
     [SerializeField] TextMeshProUGUI RotateSpeed;
+
+    // RealTimeData
     [SerializeField] TextMeshProUGUI CurrentDirectSpeedText;
+    [SerializeField] TextMeshProUGUI CurrentDirectAccelerationText;
     [SerializeField] TextMeshProUGUI CurrentStrafeSpeedText;
+    [SerializeField] TextMeshProUGUI CurrentStrafeAccelerationText;
     [SerializeField] TextMeshProUGUI ThrottleText;
     [SerializeField] TextMeshProUGUI DirectSpeedDelta;
     [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
 
     private ShipInstance _playerShip;
+    private Vector2 _lastVelocity;
 
     private void Awake()
     {
         EventBus.SpawnPlayerShip += OnPlayerChangeShip;
+        GameFlowSystem.FixedGameTick += ShowData;
     }
 
     private void OnDestroy()
     {
         EventBus.SpawnPlayerShip -= OnPlayerChangeShip;
-    }
-
-    private void Update()
-    {
-        ShowData(_playerShip);
+        GameFlowSystem.FixedGameTick -= ShowData;
     }
 
     private void OnPlayerChangeShip(ShipInstance shipInstance)
@@ -58,23 +59,29 @@ public class VisualDebug : MonoBehaviour
         RotateSpeed.text = $"RotSpeed: {rotateSpeed:F0} °";
     }
 
-    private void ShowData(ShipInstance shipInstance)
+    private void ShowData(float fixedDT)
     {
         var worldUnitModReversed = WorldConfig.WorldUnitModReversed;
-        var movementRuntimeData = shipInstance.MovementRuntimeData;
-        var movementStaticData = shipInstance.MovementStaticData;
+        var movementRuntimeData = _playerShip.MovementRuntimeData;
+        var movementStaticData = _playerShip.MovementStaticData;
 
-        var rb = shipInstance.Rigidbody;
+        var rb = _playerShip.Rigidbody;
 
-        float rad = _playerShip.Rigidbody.rotation * Mathf.Deg2Rad;
+        var rad = _playerShip.Rigidbody.rotation * Mathf.Deg2Rad;
         var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
         var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
-        float forwardVel = Vector2.Dot(rb.linearVelocity, shipForward);
-        float sideVel = Vector2.Dot(rb.linearVelocity, shipRight);
+        var currentForwardVel = Vector2.Dot(rb.linearVelocity, shipForward);
+        var currentStrafeVel = Vector2.Dot(rb.linearVelocity, shipRight);
 
-        CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel * worldUnitModReversed:F0} м/с";
-        CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel * worldUnitModReversed:F0} м/с";
+        var lastForwardVel = Vector2.Dot(_lastVelocity, shipForward);
+        var lastStrafeVel = Vector2.Dot(_lastVelocity, shipRight);
+
+        CurrentDirectSpeedText.text = $"DirSpeed: {currentForwardVel * worldUnitModReversed:F0} м/с";
+        CurrentStrafeSpeedText.text = $"StrSpeed: {currentStrafeVel * worldUnitModReversed:F0} м/с";
+
+        CurrentDirectAccelerationText.text = $"DirAccel: {(currentForwardVel - lastForwardVel) * worldUnitModReversed / fixedDT:F2} м/с";
+        CurrentStrafeAccelerationText.text = $"StrAccel: {(currentStrafeVel - lastStrafeVel) * worldUnitModReversed / fixedDT:F2} м/с";
 
         ThrottleText.text = $"Throttle: {movementRuntimeData.DirectThrottle * 100:F0} %";
 
@@ -94,5 +101,7 @@ public class VisualDebug : MonoBehaviour
 
             DirectSpeedDelta.text = $"Acceleration: {movementRuntimeData.DirectThrottle * accel * worldUnitModReversed:F0} м/с";
         }
+
+        _lastVelocity = _playerShip.Rigidbody.linearVelocity;
     }
 }
