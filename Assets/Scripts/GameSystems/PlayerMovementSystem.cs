@@ -8,10 +8,6 @@ namespace GameSystems
 {
     public class PlayerMovementSystem : GameSystemBase
     {
-        //private const float _stabilizationPower = 0.7f; // модификатор при движении без ускорения при включеном гасителе инерции. Будто мощность для поддержания скорости
-        //private const float _smoothZone = 0.5f; // чем больше тем раньше начнется плавность
-        //private const float _maxSmooth = 0.05f; // чем меньше тем более плавно (дольше) добираются последние "метры" скорости
-
         private readonly float _smoothZone = 0.05f; // процент от макс скорости когда начинается плавность
         private readonly float _maxSmooth = 0.03f; // по сути минимальный модификатор ускорения (чтобы не было нуля при сглаживании)
         private readonly float _noDumpingThrottleMod = 4; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
@@ -86,7 +82,7 @@ namespace GameSystems
             var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
             CalcMoveThrottle(fixedDT, ref movementData);
-            //HandleRotation(fixedDT, shipForward, movementStaticData, ref movementData);
+            HandleRotation(fixedDT, shipForward, movementStaticData, ref movementData);
             HandleMovement(fixedDT, ref movementData, movementStaticData, shipForward, shipRight);
         }
 
@@ -170,24 +166,24 @@ namespace GameSystems
             //movementRuntimeData.RotateThrottle = velocityDelta > 0 ? rotateSpeedMod : -rotateSpeedMod; 
         }
 
-        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementData, in MovementStaticData movementCharacteristicsData, Vector2 forward, Vector2 right)
+        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
         {
             var rb = _playerShip.Rigidbody;
             var velocity = rb.linearVelocity;
             var forwardVel = Vector2.Dot(velocity, forward);
             var sideVel = Vector2.Dot(velocity, right);
 
-            CalcForwardVelocity(fixedDT, ref forwardVel, ref movementData, movementCharacteristicsData);
-            CalcSideVelocity(fixedDT, ref sideVel, ref movementData, movementCharacteristicsData);
+            CalcForwardVelocity(fixedDT, ref forwardVel, ref movementData, movementStaticData);
+            CalcSideVelocity(fixedDT, ref sideVel, ref movementData, movementStaticData);
 
             rb.linearVelocity = right * sideVel + forward * forwardVel;
         }
 
-        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementRuntimeData movementData, in MovementStaticData movementCharacteristicsData)
+        private void CalcForwardVelocity(float fixedDT, ref float forwardVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
         {
-            var throttle = movementData.Throttle;
+            var throttle = movementRuntimeData.Throttle;
 
-            if (movementData.InertiaDampingActive)
+            if (movementRuntimeData.InertiaDampingActive)
             {
                 float maxSpeed;
 
@@ -200,14 +196,14 @@ namespace GameSystems
                     }
 
                     maxSpeed = forwardVel > 0
-                        ? movementCharacteristicsData.ReverseMaxSpeed
-                        : movementCharacteristicsData.DirectMaxSpeed;
+                        ? movementStaticData.ReverseMaxSpeed
+                        : movementStaticData.DirectMaxSpeed;
                 }
                 else
                 {
                     maxSpeed = throttle > 0
-                        ? movementCharacteristicsData.DirectMaxSpeed
-                        : movementCharacteristicsData.ReverseMaxSpeed;
+                        ? movementStaticData.DirectMaxSpeed
+                        : movementStaticData.ReverseMaxSpeed;
                 }
 
                 var targetSpeed = throttle * maxSpeed;
@@ -222,8 +218,8 @@ namespace GameSystems
 
                 var speedDiffSign = Mathf.Sign(speedDiff);
                 var acceleration = speedDiffSign > 0
-                    ? movementCharacteristicsData.DirectAcceleration
-                    : movementCharacteristicsData.ReverseAcceleration;
+                    ? movementStaticData.DirectAcceleration
+                    : movementStaticData.ReverseAcceleration;
 
                 ApplySmooth(ref acceleration, absSpeedDiff, maxSpeed);
                 forwardVel = Mathf.MoveTowards(forwardVel, targetSpeed, acceleration * fixedDT);
@@ -236,8 +232,8 @@ namespace GameSystems
                 }
 
                 var acceleration = throttle > 0
-                    ? movementCharacteristicsData.DirectAcceleration
-                    : movementCharacteristicsData.ReverseAcceleration;
+                    ? movementStaticData.DirectAcceleration
+                    : movementStaticData.ReverseAcceleration;
 
                 forwardVel += acceleration * throttle * fixedDT;
             }
@@ -253,58 +249,87 @@ namespace GameSystems
         }
 
 
-        // нужна логика быстрого гашения боковой скорости
-        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementRuntimeData movementData, in MovementStaticData movementCharacteristicsData)
+        private void CalcSideVelocity(float fixedDT, ref float sideVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
         {
+            //var strafePower = movementRuntimeData.StrafePower;
+
+            //if (strafePower == 0) // если нет бокового инпута то 
+            //{
+
+            //}
+
+
+            //if (movementRuntimeData.InertiaDampingActive)
+            //{
+            //    var maxSpeed = strafePower >
+            //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             //if (movementData.InertiaDampingState)
             //{
             //    float targetSpeed = 0;
             //    float accelBase = movementCharacteristicsData.StrafeMaxAcceleration * fixedDT;
 
-            //    if (_inputValue.x != 0) //если есть боковой инпут
-            //    {
-            //        targetSpeed = _inputValue.x > 0 ? movementCharacteristicsData.StrafeMaxSpeed : -movementCharacteristicsData.StrafeMaxSpeed;
-            //        movementData.StrafeMovePower = _inputValue.x;
-            //    }
-            //    else
-            //    {
-            //        float speedDiff = targetSpeed - sideVel;
+                //    if (_inputValue.x != 0) //если есть боковой инпут
+                //    {
+                //        targetSpeed = _inputValue.x > 0 ? movementCharacteristicsData.StrafeMaxSpeed : -movementCharacteristicsData.StrafeMaxSpeed;
+                //        movementData.StrafeMovePower = _inputValue.x;
+                //    }
+                //    else
+                //    {
+                //        float speedDiff = targetSpeed - sideVel;
 
-            //        if (Mathf.Abs(speedDiff) < 0.0001f) // если изменение скорости около нулевое
-            //        {
-            //            sideVel = targetSpeed;
-            //            movementData.StrafeMovePower = 0;
-            //            return;
-            //        }
+                //        if (Mathf.Abs(speedDiff) < 0.0001f) // если изменение скорости около нулевое
+                //        {
+                //            sideVel = targetSpeed;
+                //            movementData.StrafeMovePower = 0;
+                //            return;
+                //        }
 
-            //        movementData.StrafeMovePower = Mathf.Sign(-sideVel);
-            //    }
+                //        movementData.StrafeMovePower = Mathf.Sign(-sideVel);
+                //    }
 
-            //    sideVel = Mathf.MoveTowards(sideVel, targetSpeed, accelBase);
-            //}
-            //else
-            //{
-            //    if (_inputValue.x != 0) //если есть боковой инпут
-            //    {
-            //        float accelBase = movementCharacteristicsData.StrafeMaxAcceleration * fixedDT;
-            //        float targetSpeed = _inputValue.x > 0 ? movementCharacteristicsData.StrafeMaxSpeed : -movementCharacteristicsData.StrafeMaxSpeed;
-            //        float speedDiff = targetSpeed - sideVel;
+                //    sideVel = Mathf.MoveTowards(sideVel, targetSpeed, accelBase);
+                //}
+                //else
+                //{
+                //    if (_inputValue.x != 0) //если есть боковой инпут
+                //    {
+                //        float accelBase = movementCharacteristicsData.StrafeMaxAcceleration * fixedDT;
+                //        float targetSpeed = _inputValue.x > 0 ? movementCharacteristicsData.StrafeMaxSpeed : -movementCharacteristicsData.StrafeMaxSpeed;
+                //        float speedDiff = targetSpeed - sideVel;
 
-            //        if (Mathf.Abs(speedDiff) < 0.0001f) // если изменение скорости около нулевое
-            //        {
-            //            sideVel = targetSpeed;
-            //            movementData.StrafeMovePower = 0;
-            //            return;
-            //        }
+                //        if (Mathf.Abs(speedDiff) < 0.0001f) // если изменение скорости около нулевое
+                //        {
+                //            sideVel = targetSpeed;
+                //            movementData.StrafeMovePower = 0;
+                //            return;
+                //        }
 
-            //        sideVel = Mathf.MoveTowards(sideVel, targetSpeed, accelBase);
-            //        movementData.StrafeMovePower = _inputValue.x;
-            //    }
-            //    else
-            //    {
-            //        movementData.StrafeMovePower = 0;
-            //    }
-            //}
+                //        sideVel = Mathf.MoveTowards(sideVel, targetSpeed, accelBase);
+                //        movementData.StrafeMovePower = _inputValue.x;
+                //    }
+                //    else
+                //    {
+                //        movementData.StrafeMovePower = 0;
+                //    }
+                //}
         }
 
 

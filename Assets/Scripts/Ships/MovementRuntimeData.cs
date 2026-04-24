@@ -6,6 +6,8 @@ namespace Ships
     public struct MovementRuntimeData
     {  
         public float Throttle;
+
+        public float DirectPower;
         public float StrafePower;
         public float RotatePower;
 

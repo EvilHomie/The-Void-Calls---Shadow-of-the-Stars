@@ -11,7 +11,6 @@ namespace GameSystems
         public static Action<ShipInstance> SpawnNonPlayerShip { get; set; }
         public static Action<int> RemoveNonPlayerShip { get; set; }
         public static Action<ShipInstance> SpawnPlayerShip { get; set; }
-        public static Action PlayerChangeShip { get; set; }
         public static Action RemovePlayerShip { get; set; }
 
 
