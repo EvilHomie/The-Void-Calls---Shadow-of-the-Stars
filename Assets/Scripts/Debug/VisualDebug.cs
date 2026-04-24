@@ -40,7 +40,7 @@ public class VisualDebug : MonoBehaviour
     private void OnPlayerChangeShip(ShipInstance shipInstance)
     {
         _playerShip = shipInstance;
-        var worldUnitModReversed = Constants.WorldUnitModReversed;
+        var worldUnitModReversed = WorldConfig.WorldUnitModReversed;
         var movementStaticData = shipInstance.MovementStaticData;
 
         MaxDirectSpeedText.text = $"MaxDirSpeed: {movementStaticData.DirectMaxSpeed * worldUnitModReversed:F0} м/с";
@@ -60,7 +60,7 @@ public class VisualDebug : MonoBehaviour
 
     private void ShowData(ShipInstance shipInstance)
     {
-        var worldUnitModReversed = Constants.WorldUnitModReversed;
+        var worldUnitModReversed = WorldConfig.WorldUnitModReversed;
         var movementRuntimeData = shipInstance.MovementRuntimeData;
         var movementStaticData = shipInstance.MovementStaticData;
 
@@ -76,23 +76,23 @@ public class VisualDebug : MonoBehaviour
         CurrentDirectSpeedText.text = $"DirSpeed: {forwardVel * worldUnitModReversed:F0} м/с";
         CurrentStrafeSpeedText.text = $"StrSpeed: {sideVel * worldUnitModReversed:F0} м/с";
 
-        ThrottleText.text = $"Throttle: {movementRuntimeData.Throttle * 100:F0} %";
+        ThrottleText.text = $"Throttle: {movementRuntimeData.DirectThrottle * 100:F0} %";
 
         if (movementRuntimeData.InertiaDampingActive)
         {
-            float speed = movementRuntimeData.Throttle > 0
+            float speed = movementRuntimeData.DirectThrottle > 0
             ? movementStaticData.DirectMaxSpeed
             : movementStaticData.ReverseMaxSpeed;
 
-            DirectSpeedDelta.text = $"TargetSpeed: {movementRuntimeData.Throttle * speed * worldUnitModReversed:F0} м/с";
+            DirectSpeedDelta.text = $"TargetSpeed: {movementRuntimeData.DirectThrottle * speed * worldUnitModReversed:F0} м/с";
         }
         else
         {
-            float accel = movementRuntimeData.Throttle > 0
+            float accel = movementRuntimeData.DirectThrottle > 0
             ? movementStaticData.DirectAcceleration
             : movementStaticData.ReverseAcceleration;
 
-            DirectSpeedDelta.text = $"Acceleration: {movementRuntimeData.Throttle * accel * worldUnitModReversed:F0} м/с";
+            DirectSpeedDelta.text = $"Acceleration: {movementRuntimeData.DirectThrottle * accel * worldUnitModReversed:F0} м/с";
         }
     }
 }

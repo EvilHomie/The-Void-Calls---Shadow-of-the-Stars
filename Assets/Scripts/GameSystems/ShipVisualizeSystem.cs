@@ -44,7 +44,7 @@ namespace GameSystems
         {
             foreach (var engine in view.MainEnginesPlumes)
             {
-                engine.SetPowerValue(movementVisualData.Throttle);
+                engine.SetPowerValue(movementVisualData.DirectPower);
             }
         }
 

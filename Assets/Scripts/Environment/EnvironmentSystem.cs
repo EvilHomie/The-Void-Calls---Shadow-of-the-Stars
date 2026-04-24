@@ -11,11 +11,13 @@ namespace GameSystems
         [SerializeField] Transform _starryCanvasParent;
         private ShipInstance _playerShip;
         private Camera _camera;
+        private Vector3 Vector3One;
 
         [Inject]
         public void Construct(Camera camera)
         {
             _camera = camera;
+            Vector3One = Vector3.one;
         }
 
         protected override void AwakeInit()
@@ -45,14 +47,14 @@ namespace GameSystems
             _playerShip = shipInstance;
         }
 
-        private void OnChangeCameraOrtoSize(float dTime)
+        private void OnChangeCameraOrtoSize(float relativeValue)
         {
-            _starryCanvasParent.localScale = Constants.Vector3One * dTime;
+            _starryCanvasParent.localScale = Vector3One * relativeValue;
         }
 
         private void UpdateStarView(float dTime)
         {
-            var playerPosition = _playerShip.Rigidbody.position;
+            var playerPosition = _playerShip.Transform.position;
             var playerVelocity = _playerShip.Rigidbody.linearVelocity;
             _starryCanvasParent.position = playerPosition;                      
 

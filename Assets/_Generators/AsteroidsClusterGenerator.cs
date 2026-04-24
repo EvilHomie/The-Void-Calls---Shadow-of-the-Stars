@@ -19,6 +19,12 @@ public class AsteroidsClusterGenerator : MonoBehaviour
     private readonly List<GameObject> _spawnedGO = new();
 
     private GameObject _newClaster;
+    private Vector3 Vector3One;
+
+    private void Awake()
+    {
+        Vector3One = Vector3.one;
+    }
 
     private GameObject GetRandomAsteroid()
     {
@@ -88,7 +94,7 @@ public class AsteroidsClusterGenerator : MonoBehaviour
 
             var newRotation = Quaternion.Euler(0, 0, Random.Range(-180, 180));
             var asteroid = Instantiate(asteroidPrefab, spawmPos, newRotation, _newClaster.transform);
-            asteroid.transform.localScale = Constants.Vector3One * spawnDiametr;
+            asteroid.transform.localScale = Vector3One * spawnDiametr;
             _reservedPositions.Add((spawmPos, spawnDiametr));
             _spawnedGO.Add(asteroid);
             spawned++;

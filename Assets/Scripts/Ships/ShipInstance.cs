@@ -5,6 +5,7 @@ namespace Ships
     public class ShipInstance : MonoBehaviour
     {
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
+        [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
 
         public Transform LockOnTransform;

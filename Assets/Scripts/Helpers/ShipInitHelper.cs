@@ -1,5 +1,4 @@
 using Ships;
-using System.Runtime.CompilerServices;
 
 namespace Helpers
 {
@@ -25,7 +24,8 @@ namespace Helpers
             var totalStrafeDrag = equip.Chassis.StrafeDrag + chassisMods.StrafeDragModPercent * equip.Chassis.StrafeDrag / 100;
             var totalRotateDrag = equip.Chassis.RotateDrag + chassisMods.RotateDragModPercent * equip.Chassis.RotateDrag / 100;
 
-            var worldUnitMod = Constants.WorldUnitMod;
+            var worldUnitMod = WorldConfig.WorldUnitMod;
+            var inertiaDampingForce = WorldConfig.InertiaDampingForce;
             var mainEngine = equip.MainEngine;
             var sideEngine = equip.SideEngine;
 
@@ -36,12 +36,18 @@ namespace Helpers
 
             movementCharacteristics.DirectMaxSpeed = totalDirectThrust / totalDirectDrag * worldUnitMod;
             movementCharacteristics.DirectAcceleration = totalDirectThrust / totalMass * worldUnitMod;
+            movementCharacteristics.DirectDampingAcceleration = totalDirectDrag * inertiaDampingForce;
+
             movementCharacteristics.ReverseMaxSpeed = totalReverseThrust / totalReverseDrag * worldUnitMod;
             movementCharacteristics.ReverseAcceleration = totalReverseThrust / totalMass * worldUnitMod;
+            movementCharacteristics.ReverseDampingAcceleration = totalReverseDrag * inertiaDampingForce;
+
             movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / totalStrafeDrag * worldUnitMod;
             movementCharacteristics.StrafeAcceleration = totalStrafeThrust / totalMass * worldUnitMod;
+            movementCharacteristics.StrafeDampingAcceleration = totalStrafeDrag * inertiaDampingForce;
+
             movementCharacteristics.RotateSpeed = totalRotateThrust / totalRotateDrag;
-            //movementCharacteristics.RotateAcceleration = totalRotateThrust / totalMass;
+
         }
     }
 }

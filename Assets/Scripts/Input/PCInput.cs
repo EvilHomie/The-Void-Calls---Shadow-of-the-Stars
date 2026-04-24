@@ -10,6 +10,7 @@ namespace GameInput
         public Action<Vector2> MoveInputAction { get; set; }
         public Action<bool> ChangeAtackState { get; set; }
         public Action ToggleDamperAction { get; set; }
+        public Action DisableEngineAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
 
         private readonly InputSystem_Actions _inputActions;
@@ -26,6 +27,8 @@ namespace GameInput
 
             _inputActions.Player.Move.performed += OnMove;
             _inputActions.Player.Move.canceled += OnMove;
+
+            _inputActions.Player.DisableEngine.performed += DisableEngine;
 
             EventBus.GameStateChangeAction += OnGameStateChange;
         }
@@ -56,6 +59,10 @@ namespace GameInput
         {
             var scroll = context.ReadValue<Vector2>().y;
             ChangeZoomAction?.Invoke(scroll);
+        }
+        private void DisableEngine(InputAction.CallbackContext context)
+        {
+            DisableEngineAction?.Invoke();
         }
     }
 }

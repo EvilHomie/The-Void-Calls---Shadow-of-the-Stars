@@ -136,6 +136,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""DisableEngine"",
+                    ""type"": ""Button"",
+                    ""id"": ""cbf79e68-9514-4c1d-9295-78d2c91013dd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -279,6 +288,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""710310ef-cdfc-45ed-a6fe-5855e576f44f"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""DisableEngine"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1345,6 +1365,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
         m_Player_ToggleDamper = m_Player.FindAction("ToggleDamper", throwIfNotFound: true);
         m_Player_MouseScroll = m_Player.FindAction("MouseScroll", throwIfNotFound: true);
+        m_Player_DisableEngine = m_Player.FindAction("DisableEngine", throwIfNotFound: true);
         // PlayerOriginal
         m_PlayerOriginal = asset.FindActionMap("PlayerOriginal", throwIfNotFound: true);
         m_PlayerOriginal_Move = m_PlayerOriginal.FindAction("Move", throwIfNotFound: true);
@@ -1455,6 +1476,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RightClick;
     private readonly InputAction m_Player_ToggleDamper;
     private readonly InputAction m_Player_MouseScroll;
+    private readonly InputAction m_Player_DisableEngine;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1486,6 +1508,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/MouseScroll".
         /// </summary>
         public InputAction @MouseScroll => m_Wrapper.m_Player_MouseScroll;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/DisableEngine".
+        /// </summary>
+        public InputAction @DisableEngine => m_Wrapper.m_Player_DisableEngine;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1527,6 +1553,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MouseScroll.started += instance.OnMouseScroll;
             @MouseScroll.performed += instance.OnMouseScroll;
             @MouseScroll.canceled += instance.OnMouseScroll;
+            @DisableEngine.started += instance.OnDisableEngine;
+            @DisableEngine.performed += instance.OnDisableEngine;
+            @DisableEngine.canceled += instance.OnDisableEngine;
         }
 
         /// <summary>
@@ -1553,6 +1582,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MouseScroll.started -= instance.OnMouseScroll;
             @MouseScroll.performed -= instance.OnMouseScroll;
             @MouseScroll.canceled -= instance.OnMouseScroll;
+            @DisableEngine.started -= instance.OnDisableEngine;
+            @DisableEngine.performed -= instance.OnDisableEngine;
+            @DisableEngine.canceled -= instance.OnDisableEngine;
         }
 
         /// <summary>
@@ -2072,6 +2104,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMouseScroll(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "DisableEngine" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDisableEngine(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerOriginal" which allows adding and removing callbacks.

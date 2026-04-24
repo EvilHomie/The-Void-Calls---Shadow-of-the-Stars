@@ -9,7 +9,7 @@ public class MainEnginePlume : MonoBehaviour
     private MaterialPropertyBlock _matBlock;
     private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
 
-    private float _lastPowerValue = 0;
+    private float _lastPowerValue = -100;
 
     private void Awake()
     {
