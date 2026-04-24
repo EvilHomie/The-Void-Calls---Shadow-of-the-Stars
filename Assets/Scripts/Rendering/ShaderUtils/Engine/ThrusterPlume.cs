@@ -1,13 +1,13 @@
 using UnityEngine;
 
-[RequireComponent (typeof(SpriteRenderer))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class ThrusterPlume : MonoBehaviour
-{    
+{
     private SpriteRenderer _sr;
     private MaterialPropertyBlock _matBlock;
     private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
 
-    private float _lastPowerValue = 0;
+    private float _lastPowerValue = -100f;
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class ThrusterPlume : MonoBehaviour
     }
     public void SetPowerValue(float value)
     {
-        if(_lastPowerValue == value) return;
+        if (_lastPowerValue == value) return;
 
         _lastPowerValue = value;
         //_sr.GetPropertyBlock(_matBlock);
@@ -31,17 +31,17 @@ public class ThrusterPlume : MonoBehaviour
         _sr.SetPropertyBlock(_matBlock);
     }
 
-//#if UNITY_EDITOR
-//    [SerializeField] float _masterThrust;
-//    private void OnValidate()
-//    {
-//        if (_sr == null)
-//            _sr = GetComponent<SpriteRenderer>();
-//        if (_matBlock == null)
-//            _matBlock = new MaterialPropertyBlock();
+    //#if UNITY_EDITOR
+    //    [SerializeField] float _masterThrust;
+    //    private void OnValidate()
+    //    {
+    //        if (_sr == null)
+    //            _sr = GetComponent<SpriteRenderer>();
+    //        if (_matBlock == null)
+    //            _matBlock = new MaterialPropertyBlock();
 
-//        _masterThrust = Mathf.Clamp01(_masterThrust);
-//        SetThrustValue(_masterThrust);
-//    }
-//#endif
+    //        _masterThrust = Mathf.Clamp01(_masterThrust);
+    //        SetThrustValue(_masterThrust);
+    //    }
+    //#endif
 }

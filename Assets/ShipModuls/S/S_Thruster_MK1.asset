@@ -15,4 +15,4 @@ MonoBehaviour:
   <Name>k__BackingField: S_Thruster_MK1
   <Size>k__BackingField: 0
   <StrafeThrust>k__BackingField: 250
-  <RotateThrust>k__BackingField: 0
+  <RotateThrust>k__BackingField: 600

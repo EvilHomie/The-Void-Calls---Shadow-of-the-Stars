@@ -183,20 +183,25 @@ namespace GameSystems
             var forwardVel = Vector2.Dot(velocity, forward);
             var sideVel = Vector2.Dot(velocity, right);
 
-            var throttle = movementRuntimeData.DirectThrottle;
+            var directThrottle = movementRuntimeData.DirectThrottle;
+            var strafeThrottle = movementRuntimeData.StrafeThrottle;
 
             if (movementRuntimeData.InertiaDampingActive)
             {
-                ApplyMainEngineDampingForce(fixedDT, throttle, ref forwardVel, ref movementRuntimeData, movementStaticData);
+                ApplyMainEngineDampingForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
                 //CalcSideVelocity(fixedDT, ref sideVel, ref movementData, movementStaticData);
-                ApplyForwardDamping(fixedDT, throttle, ref forwardVel, movementStaticData);
+                ApplyForwardDamping(fixedDT, directThrottle, ref forwardVel, movementStaticData);
             }
             else
             {
-                ApplyMainEngineAcceleration(fixedDT, throttle, ref forwardVel, ref movementRuntimeData, movementStaticData);
+                ApplyMainEngineAcceleration(fixedDT, directThrottle, ref forwardVel, movementStaticData);
+                ApplyThrustersAcceleration(fixedDT, strafeThrottle, ref sideVel, ref movementRuntimeData, movementStaticData);
             }
 
             rb.linearVelocity = right * sideVel + forward * forwardVel;
+
+            movementRuntimeData.MainEnginePower = directThrottle;
+            movementRuntimeData.ThrustersPower = strafeThrottle;
         }
 
         private void ApplyForwardDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
@@ -347,11 +352,10 @@ namespace GameSystems
 
         }
 
-        private void ApplyMainEngineDampingForce(float fixedDT, float throttle, ref float forwardVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
+        private void ApplyMainEngineDampingForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
         {
             if (throttle == 0)
             {
-                movementRuntimeData.MainEnginePower = 0;
                 return;
             }
 
@@ -374,10 +378,9 @@ namespace GameSystems
 
             ApplySmooth(ref acceleration, speedDiff);
             forwardVel += acceleration * fixedDT;
-            movementRuntimeData.MainEnginePower = throttle;
         }
 
-        private void ApplyMainEngineAcceleration(float fixedDT, float throttle, ref float forwardVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
+        private void ApplyMainEngineAcceleration(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
         {
             if (throttle == 0) // если дросель в нуле то ничего не делаем
             {
@@ -389,7 +392,16 @@ namespace GameSystems
                 : movementStaticData.ReverseAcceleration;
 
             forwardVel += acceleration * throttle * fixedDT;
-            movementRuntimeData.MainEnginePower = throttle;
+        }
+        private void ApplyThrustersAcceleration(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
+        {
+            if (throttle == 0) // если дросель в нуле то ничего не делаем
+            {
+                return;
+            }
+
+            var acceleration = movementStaticData.StrafeAcceleration;
+            sideVel += acceleration * throttle * fixedDT;
         }
 
         private void ApplySmooth(ref float acceleration, float speedDiff)
@@ -405,7 +417,7 @@ namespace GameSystems
         }
 
 
-        private void ApplyMainEngineDampingForce(float fixedDT, ref float sideVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
+        private void ApplyThrustersDampingForce(float fixedDT, ref float sideVel, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData)
         {
             var strafeThrottle = movementRuntimeData.StrafeThrottle;
 
@@ -520,9 +532,7 @@ namespace GameSystems
 
 
 
-
-
-
+        
 
 
 
