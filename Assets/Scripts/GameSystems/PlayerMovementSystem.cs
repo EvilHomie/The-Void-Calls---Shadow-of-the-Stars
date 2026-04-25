@@ -9,30 +9,31 @@ namespace GameSystems
     public class PlayerMovementSystem : GameSystemBase
     {
         private const float EPS = 0.001f;
-        private readonly float _minAcceleration = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") при модификации ускорения
-        private readonly float _noDumpingThrottleMod = 4; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
-        private readonly float _smoothZoneTime = 0.2f; // время до ключевой скорости для сглаживания ускорения
+        private const float _minAcceleration = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") при модификации ускорения
+        private const float _noDumpingThrottleMod = 4; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
+        private const float _smoothZoneTime = 0.2f; // время до ключевой скорости для сглаживания ускорения
+        private const float _damperMaxFactor = 2f; // усиление гасителей при макс скорости (будто выше сопротивление)
+        private const float _damperMinFactor = 1f; // сила гасителей при минимальной скорости (чтобы не залипало)
+        private const float _rotateSlowAngle = 20f;
+        private const float _minMouseDistanceSQR = 0.1f;
+        private const float _minBoostersPowerForEnableMod = 0.2f;
+        private const float _throttleZeroDelay = 0.3f;
+
         private float _smoothZoneMod; // 1/ _smoothZoneTime. сугубо чтобы уйти от деления в логике
-        private readonly float _damperMaxFactor = 2f; // усиление гасителей при макс скорости (будто выше сопротивление)
-        private readonly float _damperMinFactor = 1f; // сила гасителей при минимальной скорости (чтобы не залипало)
-        private readonly float _rotateSlowAngle = 20f;
-        private readonly float _minMouseDistanceSQR = 0.1f;
-        private readonly float _minBoostersPowerForEnableMod = 0.2f;
+        private float _throttleZeroDelayTimer; // текущий таймер остановки на нуле
 
 
         private IPlayerInput _input;
         private Vector2 _inputValue;
         private Camera _camera;
         private ShipInstance _playerShip;
-        private float _throttleZeroDelayTimer;
-        private readonly float _throttleZeroDelay = 0.3f;
 
         [Inject]
         public void Construct(IPlayerInput playerInput, Camera camera)
         {
             _input = playerInput;
             _camera = camera;
-            _smoothZoneMod = 1 / _smoothZoneTime;
+            _smoothZoneMod = 1f / _smoothZoneTime;
         }
 
         protected override void AwakeInit() { }
