@@ -19,5 +19,6 @@ namespace ShipModules
     {
         public int DirectThrustModPercent;
         public int ReverseThrustModPercent;
+        public int BoostThrustModPercent;
     }
 }

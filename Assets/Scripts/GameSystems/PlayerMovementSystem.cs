@@ -17,6 +17,7 @@ namespace GameSystems
         private readonly float _damperMinFactor = 1f; // сила гасителей при минимальной скорости (чтобы не залипало)
         private readonly float _rotateSlowAngle = 20f;
         private readonly float _minMouseDistanceSQR = 0.1f;
+        private readonly float _minBoostersPowerForEnableMod = 0.2f;
 
 
         private IPlayerInput _input;
@@ -69,24 +70,39 @@ namespace GameSystems
 
         private void OnToggleDamper()
         {
-            ref var movementData = ref _playerShip.MovementRuntimeData;
-            movementData.InertiaDampingIsActive = !movementData.InertiaDampingIsActive;
+            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
+            movementRuntimeData.InertiaDampingIsActive = !movementRuntimeData.InertiaDampingIsActive;
 
-            if (movementData.InertiaDampingIsActive)
+            if (movementRuntimeData.InertiaDampingIsActive)
             {
-                movementData.DirectThrottle = movementData.LastDampingThrottle;
+                movementRuntimeData.DirectThrottle = movementRuntimeData.LastDampingThrottle;
             }
             else
             {
-                movementData.LastDampingThrottle = movementData.DirectThrottle;
-                movementData.DirectThrottle = 0;
+                movementRuntimeData.LastDampingThrottle = movementRuntimeData.DirectThrottle;
+                movementRuntimeData.DirectThrottle = 0;
             }
         }
 
-        private void OnToogleBoosters()
+        private void OnToogleBoosters(bool state)
         {
-            ref var movementData = ref _playerShip.MovementRuntimeData;
-            movementData.BoostersIsActive = !movementData.BoostersIsActive;
+            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
+            ref var movementStaticData = ref _playerShip.MovementStaticData;
+
+            if (state)
+            {
+                movementRuntimeData.DirectThrottle = 1; // всегда включаем двигатель на макс есть был запрос через буст
+
+                var boostersPower = movementRuntimeData.BoostersPower;
+                var minPowerForEnable = movementStaticData.BoostersMaxPower * _minBoostersPowerForEnableMod;
+
+                if (boostersPower < minPowerForEnable)
+                {
+                    return;
+                }
+            }
+
+            movementRuntimeData.BoostersIsActive = state;
         }
 
         private void Simulate(float fixedDT)
@@ -98,6 +114,7 @@ namespace GameSystems
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
             var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
 
+            UpdateBoostersPower(fixedDT, movementStaticData, ref movementRuntimeData);
             HandleInput(fixedDT, ref movementRuntimeData);
             HandleRotation(fixedDT, shipForward, movementStaticData, ref movementRuntimeData);
             HandleMovement(fixedDT, ref movementRuntimeData, movementStaticData, shipForward, shipRight);
@@ -106,6 +123,11 @@ namespace GameSystems
         private void HandleInput(float fixedDT, ref MovementRuntimeData movementRuntimeData)
         {
             movementRuntimeData.StrafeThrottle = _inputValue.x; // боковое движение ровно инпуту
+
+            if (movementRuntimeData.BoostersIsActive)
+            {
+                return;
+            }
 
             if (!movementRuntimeData.InertiaDampingIsActive) // если гаситель выключен то дросель всегда равен инпуту (будто отстреливает в ноль если нет инпута)
             {
@@ -135,6 +157,28 @@ namespace GameSystems
             }
 
             movementRuntimeData.DirectThrottle = Mathf.Clamp(newThrottle, -1, 1);
+        }
+
+        private void UpdateBoostersPower(float fixedDT, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
+        {
+            var boostersPower = movementRuntimeData.BoostersPower;
+
+            if (!movementRuntimeData.BoostersIsActive)
+            {
+                boostersPower += fixedDT;
+            }
+            else
+            {
+                boostersPower -= fixedDT;
+
+                if (boostersPower <= 0)
+                {
+                    movementRuntimeData.BoostersIsActive = false;
+                }
+            }
+
+            boostersPower = Mathf.Clamp(boostersPower, 0, movementStaticData.BoostersMaxPower);
+            movementRuntimeData.BoostersPower = boostersPower;
         }
 
         private void DisableEngine()
@@ -183,17 +227,17 @@ namespace GameSystems
 
             var directThrottle = movementRuntimeData.DirectThrottle;
             var strafeThrottle = movementRuntimeData.StrafeThrottle;
+            var boostersIsActive = movementRuntimeData.BoostersIsActive;
 
-
-            if (directThrottle != 0)
+            if (directThrottle != 0 || boostersIsActive)
             {
                 if (movementRuntimeData.InertiaDampingIsActive)
                 {
-                    ApplyMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
+                    ApplyMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData, boostersIsActive);
                 }
                 else
                 {
-                    AddMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
+                    AddMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData, boostersIsActive);
                 }
             }
 
@@ -211,20 +255,25 @@ namespace GameSystems
 
             if (movementRuntimeData.InertiaDampingIsActive)
             {
-                ApplyDirectDamping(fixedDT, directThrottle, ref forwardVel, movementStaticData);
-                ApplyStrageDamping(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                ApplyDirectDamping(fixedDT, directThrottle, ref forwardVel, movementStaticData, boostersIsActive);
+                ApplyStrafeDamping(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
             }
 
-            movementRuntimeData.MainEnginePower = directThrottle;
+            movementRuntimeData.MainEnginePower = boostersIsActive ? 1 : directThrottle;
             movementRuntimeData.ThrustersPower = strafeThrottle;
             rb.linearVelocity = right * sideVel + forward * forwardVel;
         }
 
-        private void ApplyDirectDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
+        private void ApplyDirectDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
         {
             if (Mathf.Abs(forwardVel) < EPS) // если не двигаемся. 
             {
                 forwardVel = 0;
+                return;
+            }
+
+            if (boostersIsActive)
+            {
                 return;
             }
 
@@ -261,7 +310,7 @@ namespace GameSystems
             forwardVel = Mathf.MoveTowards(forwardVel, desiredSpeed, acceleration * fixedDT);
         }
 
-        private void ApplyStrageDamping(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
+        private void ApplyStrafeDamping(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
         {
             if (Mathf.Abs(sideVel) < EPS) // если не двигаемся. 
             {
@@ -297,15 +346,26 @@ namespace GameSystems
             sideVel = Mathf.MoveTowards(sideVel, desiredSpeed, acceleration * fixedDT);
         }
 
-        private void ApplyMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
+        private void ApplyMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
         {
-            var acceleration = throttle > 0
+            float acceleration;
+            float maxSpeed;
+
+            if (boostersIsActive)
+            {
+                acceleration = movementStaticData.BoostersAcceleration;
+                maxSpeed = movementStaticData.BoostersMaxSpeed;
+            }
+            else
+            {
+                acceleration = throttle > 0
                       ? movementStaticData.DirectAcceleration
                       : -movementStaticData.ReverseAcceleration;
 
-            var maxSpeed = throttle > 0
-                      ? movementStaticData.DirectMaxSpeed
-                      : movementStaticData.ReverseMaxSpeed;
+                maxSpeed = throttle > 0
+                          ? movementStaticData.DirectMaxSpeed
+                          : movementStaticData.ReverseMaxSpeed;
+            }
 
             var targetSpeed = throttle * maxSpeed;
             var speedDiff = targetSpeed - forwardVel;
@@ -339,11 +399,20 @@ namespace GameSystems
             sideVel += acceleration * fixedDT;
         }
 
-        private void AddMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
+        private void AddMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
         {
-            var acceleration = throttle > 0
+            float acceleration;
+
+            if (boostersIsActive)
+            {
+                acceleration = movementStaticData.BoostersAcceleration;
+            }
+            else
+            {
+                acceleration = throttle > 0
                 ? movementStaticData.DirectAcceleration
                 : movementStaticData.ReverseAcceleration;
+            }
 
             forwardVel += acceleration * throttle * fixedDT;
         }

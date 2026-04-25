@@ -18,5 +18,9 @@ namespace Ships
         public float StrafeDampingAcceleration;
 
         public float RotateSpeed;
+
+        public float BoostersMaxSpeed;
+        public float BoostersAcceleration;
+        public float BoostersMaxPower;
     }
 }

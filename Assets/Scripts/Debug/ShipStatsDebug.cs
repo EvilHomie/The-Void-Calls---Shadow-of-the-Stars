@@ -25,6 +25,7 @@ public class ShipStatsDebug : MonoBehaviour
     [SerializeField] TextMeshProUGUI ThrottleText;
     [SerializeField] TextMeshProUGUI DirectSpeedDelta;
     [SerializeField] TextMeshProUGUI StrafeSpeedDelta;
+    [SerializeField] TextMeshProUGUI BoosterPower;
 
     private ShipInstance _playerShip;
     private Vector2 _lastVelocity;
@@ -94,20 +95,42 @@ public class ShipStatsDebug : MonoBehaviour
 
         if (movementRuntimeData.InertiaDampingIsActive)
         {
-            float speed = movementRuntimeData.DirectThrottle > 0
-            ? movementStaticData.DirectMaxSpeed
-            : movementStaticData.ReverseMaxSpeed;
+            float speed;
+
+            if (movementRuntimeData.BoostersIsActive)
+            {
+                speed = movementStaticData.BoostersMaxSpeed;
+            }
+            else
+            {
+                speed = movementRuntimeData.DirectThrottle > 0
+                    ? movementStaticData.DirectMaxSpeed
+                    : movementStaticData.ReverseMaxSpeed;
+            }
 
             DirectSpeedDelta.text = $"TargetSpeed: {movementRuntimeData.DirectThrottle * speed * worldUnitModReversed:F0} м/с";
         }
         else
         {
             float accel = movementRuntimeData.DirectThrottle > 0
-            ? movementStaticData.DirectAcceleration
-            : movementStaticData.ReverseAcceleration;
+                   ? movementStaticData.DirectAcceleration
+                   : movementStaticData.ReverseAcceleration;
+
+            if (movementRuntimeData.BoostersIsActive)
+            {
+                accel = movementStaticData.BoostersAcceleration;
+            }
+            else
+            {
+                accel = movementRuntimeData.DirectThrottle > 0
+                   ? movementStaticData.DirectAcceleration
+                   : movementStaticData.ReverseAcceleration;
+            }
 
             DirectSpeedDelta.text = $"Acceleration: {movementRuntimeData.DirectThrottle * accel * worldUnitModReversed:F0} м/с";
         }
+
+        BoosterPower.text = $"Power: {movementRuntimeData.BoostersPower:F1} м/с";
 
         _lastVelocity = _playerShip.Rigidbody.linearVelocity;
     }

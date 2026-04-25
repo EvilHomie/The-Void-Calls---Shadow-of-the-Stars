@@ -33,6 +33,7 @@ namespace Helpers
             var totalReverseThrust = mainEngine.ReverseThrust + mainEngineMods.ReverseThrustModPercent * mainEngine.ReverseThrust / 100;
             var totalStrafeThrust = sideEngine.StrafeThrust + sideEngineMods.StrafeThrustModPercent * sideEngine.StrafeThrust / 100;
             var totalRotateThrust = sideEngine.RotateThrust + sideEngineMods.RotateThrustModPercent * sideEngine.RotateThrust / 100;
+            var totalBoostThrust = mainEngine.BoostThrust + mainEngineMods.BoostThrustModPercent * mainEngine.BoostThrust / 100;
 
             movementCharacteristics.DirectMaxSpeed = totalDirectThrust / totalDirectDrag * worldUnitMod;
             movementCharacteristics.DirectAcceleration = totalDirectThrust / totalMass * worldUnitMod;
@@ -47,6 +48,11 @@ namespace Helpers
             movementCharacteristics.StrafeDampingAcceleration = totalStrafeDrag * inertiaDampingForce * worldUnitMod;
 
             movementCharacteristics.RotateSpeed = totalRotateThrust / totalRotateDrag;
+
+
+            movementCharacteristics.BoostersMaxSpeed = totalBoostThrust / totalDirectDrag * worldUnitMod;
+            movementCharacteristics.BoostersAcceleration = totalBoostThrust / totalMass * worldUnitMod;
+            movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
 
         }
     }

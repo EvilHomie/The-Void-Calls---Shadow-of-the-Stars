@@ -13,8 +13,10 @@ namespace Ships
 
         public float RotatePower;
 
-        public bool BoostersIsActive;
         public bool InertiaDampingIsActive;
         public float LastDampingThrottle;
+
+        public bool BoostersIsActive;
+        public float BoostersPower;
     }
 }

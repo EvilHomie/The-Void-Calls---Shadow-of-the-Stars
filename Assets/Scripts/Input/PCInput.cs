@@ -9,7 +9,7 @@ namespace GameInput
     {
         public Action<Vector2> MoveInputAction { get; set; }
         public Action<bool> ChangeAtackState { get; set; }
-        public Action ChangeBoostersState { get; set; }
+        public Action<bool> ChangeBoostersState { get; set; }
         public Action ToggleDamperAction { get; set; }
         public Action DisableEngineAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
@@ -61,7 +61,7 @@ namespace GameInput
 
         private void ToggleBoosters(InputAction.CallbackContext context)
         {
-            ChangeBoostersState?.Invoke();
+            ChangeBoostersState?.Invoke(context.performed);
         }
 
         private void OnMouseScroll(InputAction.CallbackContext context)
