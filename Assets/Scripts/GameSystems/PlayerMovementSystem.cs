@@ -41,6 +41,7 @@ namespace GameSystems
             _input.MoveInputAction += OnMoveInputAction;
             _input.ToggleDamperAction += OnToggleDamper;
             _input.DisableEngineAction += DisableEngine;
+            _input.ChangeBoostersState += OnToogleBoosters;
             GameFlowSystem.FixedGameTick += Simulate;
             EventBus.SpawnPlayerShip += OnSpawnPlayerShip;
         }
@@ -50,6 +51,7 @@ namespace GameSystems
             _input.MoveInputAction -= OnMoveInputAction;
             _input.ToggleDamperAction -= OnToggleDamper;
             _input.DisableEngineAction -= DisableEngine;
+            _input.ChangeBoostersState -= OnToogleBoosters;
             GameFlowSystem.FixedGameTick -= Simulate;
             EventBus.SpawnPlayerShip -= OnSpawnPlayerShip;
         }
@@ -68,9 +70,9 @@ namespace GameSystems
         private void OnToggleDamper()
         {
             ref var movementData = ref _playerShip.MovementRuntimeData;
-            movementData.InertiaDampingActive = !movementData.InertiaDampingActive;
+            movementData.InertiaDampingIsActive = !movementData.InertiaDampingIsActive;
 
-            if (movementData.InertiaDampingActive)
+            if (movementData.InertiaDampingIsActive)
             {
                 movementData.DirectThrottle = movementData.LastDampingThrottle;
             }
@@ -79,6 +81,12 @@ namespace GameSystems
                 movementData.LastDampingThrottle = movementData.DirectThrottle;
                 movementData.DirectThrottle = 0;
             }
+        }
+
+        private void OnToogleBoosters()
+        {
+            ref var movementData = ref _playerShip.MovementRuntimeData;
+            movementData.BoostersIsActive = !movementData.BoostersIsActive;
         }
 
         private void Simulate(float fixedDT)
@@ -99,7 +107,7 @@ namespace GameSystems
         {
             movementRuntimeData.StrafeThrottle = _inputValue.x; // боковое движение ровно инпуту
 
-            if (!movementRuntimeData.InertiaDampingActive) // если гаситель выключен то дросель всегда равен инпуту (будто отстреливает в ноль если нет инпута)
+            if (!movementRuntimeData.InertiaDampingIsActive) // если гаситель выключен то дросель всегда равен инпуту (будто отстреливает в ноль если нет инпута)
             {
                 movementRuntimeData.DirectThrottle = Mathf.MoveTowards(movementRuntimeData.DirectThrottle, _inputValue.y, _noDumpingThrottleMod * fixedDT);
                 return;
@@ -176,22 +184,40 @@ namespace GameSystems
             var directThrottle = movementRuntimeData.DirectThrottle;
             var strafeThrottle = movementRuntimeData.StrafeThrottle;
 
-            if (movementRuntimeData.InertiaDampingActive)
+
+            if (directThrottle != 0)
             {
-                ApplyMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
-                ApplyThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                if (movementRuntimeData.InertiaDampingIsActive)
+                {
+                    ApplyMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
+                }
+                else
+                {
+                    AddMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
+                }
+            }
+
+            if (strafeThrottle != 0)
+            {
+                if (movementRuntimeData.InertiaDampingIsActive)
+                {
+                    ApplyThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                }
+                else
+                {
+                    AddThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                }
+            }
+
+            if (movementRuntimeData.InertiaDampingIsActive)
+            {
                 ApplyDirectDamping(fixedDT, directThrottle, ref forwardVel, movementStaticData);
                 ApplyStrageDamping(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
-            }
-            else
-            {
-                AddMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData);
-                AddThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
             }
 
             movementRuntimeData.MainEnginePower = directThrottle;
             movementRuntimeData.ThrustersPower = strafeThrottle;
-            rb.linearVelocity = right * sideVel + forward * forwardVel;            
+            rb.linearVelocity = right * sideVel + forward * forwardVel;
         }
 
         private void ApplyDirectDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
@@ -273,11 +299,6 @@ namespace GameSystems
 
         private void ApplyMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
         {
-            if (throttle == 0)
-            {
-                return;
-            }
-
             var acceleration = throttle > 0
                       ? movementStaticData.DirectAcceleration
                       : -movementStaticData.ReverseAcceleration;
@@ -300,11 +321,6 @@ namespace GameSystems
 
         private void ApplyThrustersForce(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
         {
-            if (throttle == 0)
-            {
-                return;
-            }
-
             var acceleration = throttle > 0
                       ? movementStaticData.StrafeAcceleration
                       : -movementStaticData.StrafeAcceleration;
@@ -325,11 +341,6 @@ namespace GameSystems
 
         private void AddMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData)
         {
-            if (throttle == 0) // если дросель в нуле то ничего не делаем
-            {
-                return;
-            }
-
             var acceleration = throttle > 0
                 ? movementStaticData.DirectAcceleration
                 : movementStaticData.ReverseAcceleration;
@@ -338,11 +349,6 @@ namespace GameSystems
         }
         private void AddThrustersForce(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
         {
-            if (throttle == 0) // если дросель в нуле то ничего не делаем
-            {
-                return;
-            }
-
             var acceleration = movementStaticData.StrafeAcceleration;
             sideVel += acceleration * throttle * fixedDT;
         }

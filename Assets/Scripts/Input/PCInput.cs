@@ -9,6 +9,7 @@ namespace GameInput
     {
         public Action<Vector2> MoveInputAction { get; set; }
         public Action<bool> ChangeAtackState { get; set; }
+        public Action ChangeBoostersState { get; set; }
         public Action ToggleDamperAction { get; set; }
         public Action DisableEngineAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
@@ -29,6 +30,9 @@ namespace GameInput
             _inputActions.Player.Move.canceled += OnMove;
 
             _inputActions.Player.DisableEngine.performed += DisableEngine;
+
+            _inputActions.Player.ToggleBoosters.performed += ToggleBoosters;
+            _inputActions.Player.ToggleBoosters.canceled += ToggleBoosters;
 
             EventBus.GameStateChangeAction += OnGameStateChange;
         }
@@ -53,6 +57,11 @@ namespace GameInput
         private void ToggleDamper(InputAction.CallbackContext context)
         {
             ToggleDamperAction?.Invoke();
+        }
+
+        private void ToggleBoosters(InputAction.CallbackContext context)
+        {
+            ChangeBoostersState?.Invoke();
         }
 
         private void OnMouseScroll(InputAction.CallbackContext context)

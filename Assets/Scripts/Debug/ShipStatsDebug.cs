@@ -92,7 +92,7 @@ public class ShipStatsDebug : MonoBehaviour
 
         ThrottleText.text = $"Throttle: {movementRuntimeData.DirectThrottle * 100:F0} %";
 
-        if (movementRuntimeData.InertiaDampingActive)
+        if (movementRuntimeData.InertiaDampingIsActive)
         {
             float speed = movementRuntimeData.DirectThrottle > 0
             ? movementStaticData.DirectMaxSpeed

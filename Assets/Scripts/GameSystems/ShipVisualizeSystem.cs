@@ -38,6 +38,7 @@ namespace GameSystems
             ref var view = ref _playerShip.View;
             VisualizeMainEngine(movementRuntimeData, view);
             VisualizeThrusters(movementRuntimeData, view);
+            VisualizeBoosters(movementRuntimeData, view);
         }
 
         private void VisualizeMainEngine(in MovementRuntimeData movementVisualData, in View view)
@@ -79,6 +80,14 @@ namespace GameSystems
             view.ThrusterBR.SetPowerValue(currentThrustersPower.BackRight);
             view.ThrusterFL.SetPowerValue(currentThrustersPower.FrontLeft);
             view.ThrusterBL.SetPowerValue(currentThrustersPower.BackLeft);
+        }
+
+        private void VisualizeBoosters(in MovementRuntimeData movementVisualData, in View view)
+        {
+            foreach (var booster in view.BoostersPlumes)
+            {
+                booster.SetPowerValue(movementVisualData.BoostersIsActive ? 1 : 0);
+            }
         }
     }
 }

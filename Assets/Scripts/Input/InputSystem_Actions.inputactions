@@ -59,6 +59,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleBoosters",
+                    "type": "Button",
+                    "id": "8b26cac3-dffa-4ae7-adb4-129fcc1e9a2c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -213,6 +222,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "DisableEngine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cbd6fca9-d5e7-4b83-9a1b-270d58886b05",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ToggleBoosters",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
