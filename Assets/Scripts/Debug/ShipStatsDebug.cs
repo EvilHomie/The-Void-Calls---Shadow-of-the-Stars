@@ -3,12 +3,15 @@ using Ships;
 using TMPro;
 using UnityEngine;
 
-public class VisualDebug : MonoBehaviour
+public class ShipStatsDebug : MonoBehaviour
 {
     // StaticData
     [SerializeField] TextMeshProUGUI MaxDirectSpeedText;
+    [SerializeField] TextMeshProUGUI DirectDamperForceText;
     [SerializeField] TextMeshProUGUI MaxReverseSpeedText;
+    [SerializeField] TextMeshProUGUI ReverseDamperForceText;
     [SerializeField] TextMeshProUGUI MaxStrafeSpeedText;
+    [SerializeField] TextMeshProUGUI StrafeDamperForceText;
     [SerializeField] TextMeshProUGUI DirectAcceleration;
     [SerializeField] TextMeshProUGUI ReverseAcceleration;
     [SerializeField] TextMeshProUGUI StrafeAcceleration;
@@ -47,6 +50,10 @@ public class VisualDebug : MonoBehaviour
         MaxDirectSpeedText.text = $"MaxDirSpeed: {movementStaticData.DirectMaxSpeed * worldUnitModReversed:F0} м/с";
         MaxReverseSpeedText.text = $"MaxRevSpeed: {movementStaticData.ReverseMaxSpeed * worldUnitModReversed:F0} м/с";
         MaxStrafeSpeedText.text = $"MaxStrSpeed: {movementStaticData.StrafeMaxSpeed * worldUnitModReversed:F0} м/с";
+
+        DirectDamperForceText.text = $"DirectDamper: {movementStaticData.DirectDampingAcceleration * worldUnitModReversed:F0} м/с";
+        ReverseDamperForceText.text = $"ReverseDamper: {movementStaticData.ReverseDampingAcceleration * worldUnitModReversed:F0} м/с";
+        StrafeDamperForceText.text = $"StrafeDamper: {movementStaticData.StrafeDampingAcceleration * worldUnitModReversed:F0} м/с";
 
         float directAcceleration = movementStaticData.DirectAcceleration;
         float reverseAcceleration = movementStaticData.ReverseAcceleration;

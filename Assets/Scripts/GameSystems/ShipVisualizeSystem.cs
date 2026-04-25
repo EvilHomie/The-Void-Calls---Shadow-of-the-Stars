@@ -63,16 +63,16 @@ namespace GameSystems
                 currentThrustersPower.FrontRight = -movementRuntimeData.ThrustersPower;
             }
 
-            if (movementRuntimeData.RotateThrottle > 0)
+            if (movementRuntimeData.RotatePower > 0)
             {
-                if (currentThrustersPower.BackLeft == 0) currentThrustersPower.BackLeft = movementRuntimeData.RotateThrottle;
-                if (currentThrustersPower.FrontRight == 0) currentThrustersPower.FrontRight = movementRuntimeData.RotateThrottle;
+                if (currentThrustersPower.BackLeft == 0) currentThrustersPower.BackLeft = movementRuntimeData.RotatePower;
+                if (currentThrustersPower.FrontRight == 0) currentThrustersPower.FrontRight = movementRuntimeData.RotatePower;
 
             }
-            else if (movementRuntimeData.RotateThrottle < 0)
+            else if (movementRuntimeData.RotatePower < 0)
             {
-                if (currentThrustersPower.FrontLeft == 0) currentThrustersPower.FrontLeft = -movementRuntimeData.RotateThrottle;
-                if (currentThrustersPower.BackRight == 0) currentThrustersPower.BackRight = -movementRuntimeData.RotateThrottle;
+                if (currentThrustersPower.FrontLeft == 0) currentThrustersPower.FrontLeft = -movementRuntimeData.RotatePower;
+                if (currentThrustersPower.BackRight == 0) currentThrustersPower.BackRight = -movementRuntimeData.RotatePower;
             }
 
             view.ThrusterFR.SetPowerValue(currentThrustersPower.FrontRight);

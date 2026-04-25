@@ -11,7 +11,7 @@ namespace Ships
         public float StrafeThrottle;
         public float ThrustersPower;
 
-        public float RotateThrottle;
+        public float RotatePower;
 
         public bool InertiaDampingActive;
         public float LastDampingThrottle;
