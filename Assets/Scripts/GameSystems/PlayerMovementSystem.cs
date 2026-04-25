@@ -9,10 +9,15 @@ namespace GameSystems
     public class PlayerMovementSystem : GameSystemBase
     {
         private const float EPS = 0.001f;
-        private readonly float _minSmoothFactor = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") сглаживания ускорения
+        private readonly float _minAcceleration = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") при модификации ускорения
         private readonly float _noDumpingThrottleMod = 4; // модификатор изменения дросселя если выключены гасители инерции. Будто чуствительность перекладывания.
         private readonly float _smoothZoneTime = 0.2f; // время до ключевой скорости для сглаживания ускорения
         private float _smoothZoneMod; // 1/ _smoothZoneTime. сугубо чтобы уйти от деления в логике
+        private readonly float _damperMaxFactor = 2f; // усиление гасителей при макс скорости (будто выше сопротивление)
+        private readonly float _damperMinFactor = 0.2f; // сила гасителей при минимальной скорости (чтобы не залипало)
+        private readonly float _rotateSlowAngle = 20f;
+        private readonly float _minMouseDistanceSQR = 0.1f;
+
 
         private IPlayerInput _input;
         private Vector2 _inputValue;
@@ -133,48 +138,39 @@ namespace GameSystems
         private void HandleRotation(float fixedDT, Vector2 shipForward, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
         {
             var rb = _playerShip.Rigidbody;
-            var prevAngularVelocity = rb.angularVelocity;
-            var maxRotateSpeed = movementStaticData.RotateSpeed;
 
-            if (prevAngularVelocity > maxRotateSpeed)  // только гашение если больше максимального
-            {
-                rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, 0f, maxRotateSpeed * fixedDT);
-                movementRuntimeData.RotateThrottle = -Mathf.Sign(prevAngularVelocity);
-                return;
-            }
+            float maxSpeed = movementStaticData.RotateSpeed;
+            float velocity = rb.angularVelocity;
 
             Vector2 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            var mouseDirection = mouseWorld - rb.position;
+            Vector2 dir = mouseWorld - rb.position;
 
-            if (mouseDirection.sqrMagnitude < 0.1f) // только гашение если курсор наведен на свой корабль
+            bool targetOutSideShip = dir.sqrMagnitude >= _minMouseDistanceSQR;
+
+            if (Mathf.Abs(velocity) > maxSpeed || !targetOutSideShip) // только гашение если больше максимального или мышка на корабле
             {
-                rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, 0f, maxRotateSpeed * fixedDT);
-                movementRuntimeData.RotateThrottle = -Mathf.Sign(prevAngularVelocity);
+                velocity = Mathf.MoveTowards(velocity, 0f, maxSpeed * fixedDT);
+                rb.angularVelocity = velocity;
+
+                movementRuntimeData.RotateThrottle = Mathf.Abs(velocity) < EPS ? 0f : velocity / maxSpeed;
                 return;
             }
 
-            var angle = Vector2.SignedAngle(shipForward, mouseDirection);
+            var angle = Vector2.SignedAngle(shipForward, dir);
             var absAngle = Mathf.Abs(angle);
-            var angleSign = Mathf.Sign(angle);
 
-            var rotatePowerMod = Mathf.InverseLerp(0f, 20f, absAngle) * angleSign;
-            var rotateSpeed = maxRotateSpeed * rotatePowerMod;
+            var power = Mathf.InverseLerp(0f, _rotateSlowAngle, absAngle) * Mathf.Sign(angle);
+            var newVelocity = power * maxSpeed;
+            rb.angularVelocity = newVelocity;
 
-            var newAngularVelocity = Mathf.Clamp(rotateSpeed, -maxRotateSpeed, maxRotateSpeed);
-            rb.angularVelocity = newAngularVelocity;
-
-            if (Mathf.Abs(newAngularVelocity) >= maxRotateSpeed - 0.5f) // если достигли макс вращения
-            {
-                movementRuntimeData.RotateThrottle = Mathf.Sign(newAngularVelocity);
-                return;
-            }
-
-            movementRuntimeData.RotateThrottle = rotatePowerMod;
-
-            // версия которая при торможении включаем противоположные, но дерганная. использовать lerp не стал.
-            //var velocityDelta = Mathf.Abs(newAngularVelocity) - Mathf.Abs(prevAngularVelocity);
-            //movementRuntimeData.RotateThrottle = velocityDelta > 0 ? rotateSpeedMod : -rotateSpeedMod; 
+            movementRuntimeData.RotateThrottle = Mathf.Abs(newVelocity) < EPS ? 0f : newVelocity / maxSpeed;
         }
+
+
+
+
+
+
 
         private void HandleMovement(float fixedDT, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
         {
@@ -195,7 +191,7 @@ namespace GameSystems
             else
             {
                 ApplyMainEngineAcceleration(fixedDT, directThrottle, ref forwardVel, movementStaticData);
-                ApplyThrustersAcceleration(fixedDT, strafeThrottle, ref sideVel, ref movementRuntimeData, movementStaticData);
+                ApplyThrustersAcceleration(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
             }
 
             rb.linearVelocity = right * sideVel + forward * forwardVel;
@@ -242,6 +238,11 @@ namespace GameSystems
                 }
             }
 
+
+            var k = Mathf.Abs(forwardVel) / maxSpeed;
+            var curve = k * k;
+            var factor = Mathf.Lerp(_damperMinFactor, _damperMaxFactor, curve); // Усиливаем гашение на макс скорости и уменьнаем при минимальной
+            acceleration *= factor;
             forwardVel = Mathf.MoveTowards(forwardVel, desiredSpeed, acceleration * fixedDT);
 
 
@@ -408,11 +409,11 @@ namespace GameSystems
         {
             float timeToTarget = speedDiff / acceleration;
 
-            if (timeToTarget > 0.2f) return;
+            if (timeToTarget > _smoothZoneTime) return;
 
-            float t = timeToTarget * 5;
+            float t = timeToTarget * _smoothZoneMod;
             float curve = t * t;
-            float accelFactor = Mathf.Lerp(_minSmoothFactor, 1f, curve);
+            float accelFactor = Mathf.Lerp(_minAcceleration, 1f, curve);
             acceleration *= accelFactor;
         }
 
@@ -532,7 +533,6 @@ namespace GameSystems
 
 
 
-        
 
 
 
@@ -552,13 +552,8 @@ namespace GameSystems
 
 
 
-        //private void CacheMovementData()
-        //{
-        //    var rb = _playerShip.Rigidbody;
-        //    _playerLinearVelocity = rb.linearVelocity;
-        //    _playerAngularVelocity = rb.angularVelocity;
-        //    _playerRotation = rb.rotation;
-        //}
+
+
 
         //private void SimulateMovement(float fixedDT)
         //{
@@ -578,12 +573,7 @@ namespace GameSystems
         //    HandleRotation(fixedDT, ref movementData, ref movementVisualData, movementStaticData, targetDirection, forward);
         //}
 
-        //private void ApplyMovementData()
-        //{
-        //    var rb = _playerShip.Rigidbody;
-        //    rb.linearVelocity = _playerLinearVelocity;
-        //    rb.angularVelocity = _playerAngularVelocity;
-        //}
+
 
         //private readonly float _throttleZeroDelay = 0.3f; // продолжительность задерки на нуле.
         //private float _throttleZeroDelayTimer = 0f; // текущий таймер задержки
@@ -620,56 +610,7 @@ namespace GameSystems
         //      * movementData.Throttle;
         //}
 
-        //private void HandleRotation1(float fixedDT, Vector2 shipForward, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
-        //{
-        //    var rb = _playerShip.Rigidbody;
-        //    Vector2 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        //    var mouseDirection = mouseWorld - rb.position;
 
-        //    // цель совпадает с позицией (когда игрок сам на себя мышку навел, то просто гасим)
-        //    if (mouseDirection.sqrMagnitude < 0.1f)
-        //    {
-        //        rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, 0f, movementStaticData.RotateAcceleration * fixedDT);
-        //        movementRuntimeData.RotateThrottle = 0;
-        //        return;
-        //    }
-
-        //    // угол между forward и направлением на цель (в градусах)
-        //    float dot = Vector2.Dot(shipForward, mouseDirection);
-        //    float cross = shipForward.x * mouseDirection.y - shipForward.y * mouseDirection.x;
-        //    float angleDiff = Mathf.Atan2(cross, dot) * Mathf.Rad2Deg;
-
-        //    float absAngle = Mathf.Abs(angleDiff);
-        //    float sign = Mathf.Sign(angleDiff);
-
-        //    float rotateSpeed = rb.angularVelocity;
-        //    float accel = movementStaticData.RotateAcceleration;
-        //    float maxSpeed = movementStaticData.RotateMaxSpeed;
-
-        //    // анти-дребезг
-        //    if (absAngle < 0.5f && Mathf.Abs(rotateSpeed) < 1f)
-        //    {
-        //        rb.angularVelocity = 0f;
-        //        movementRuntimeData.RotateThrottle = 0f;
-        //        return;
-        //    }
-
-        //    // защита от слишком большой скорости вращения (например при столкновении)
-        //    float clampedSpeed = Mathf.Clamp(rotateSpeed, -maxSpeed, maxSpeed);
-
-        //    // тормозной угол 
-        //    float brakingAngle = (clampedSpeed * clampedSpeed) / (2f * accel);
-
-        //    Debug.Log(brakingAngle);
-
-        //    float targetSpeed = absAngle <= brakingAngle ? 0 : sign * maxSpeed;
-
-        //    // плавное изменение скорости
-        //    rb.angularVelocity = Mathf.MoveTowards(rb.angularVelocity, targetSpeed, accel * fixedDT);
-
-        //    // для визуала (движки)
-        //    movementRuntimeData.RotateThrottle = Mathf.Clamp(targetSpeed / maxSpeed, -1f, 1f);
-        //}
 
         //private void HandleMovement(float fixedDT, ref MovementRuntimeData movementData, in MovementStaticData movementCharacteristicsData, Vector2 forward, Vector2 right)
         //{
@@ -800,3 +741,58 @@ namespace GameSystems
         //}
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+//    //Чуть более грязный но рабочий вариант поворота. Нужно потестировать и удалить если не будет нареканий
+//    private void HandleRotation(float fixedDT, Vector2 shipForward, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
+//{
+//    var rb = _playerShip.Rigidbody;
+//    var angularVelocity = rb.angularVelocity;
+//    var maxRotateSpeed = movementStaticData.RotateSpeed;
+
+//    if (angularVelocity > maxRotateSpeed)  // только гашение если больше максимального
+//    {
+//        angularVelocity = Mathf.MoveTowards(angularVelocity, 0f, maxRotateSpeed * fixedDT);
+//        movementRuntimeData.RotateThrottle = -Mathf.Sign(angularVelocity);
+//        return;
+//    }
+
+//    Vector2 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+//    var mouseDirection = mouseWorld - rb.position;
+
+//    if (mouseDirection.sqrMagnitude < 0.1f) // только гашение если курсор наведен на свой корабль
+//    {
+//        angularVelocity = Mathf.MoveTowards(angularVelocity, 0f, maxRotateSpeed * fixedDT);
+//        rb.angularVelocity = angularVelocity;
+
+//        movementRuntimeData.RotateThrottle = Mathf.Abs(angularVelocity) < EPS ? 0 : -Mathf.Sign(angularVelocity);
+//        return;
+//    }
+
+//    var angle = Vector2.SignedAngle(shipForward, mouseDirection);
+//    var absAngle = Mathf.Abs(angle);
+//    var angleSign = Mathf.Sign(angle);
+
+//    var rotatePowerMod = Mathf.InverseLerp(0f, 20f, absAngle) * angleSign;
+//    var rotateSpeed = maxRotateSpeed * rotatePowerMod;
+
+//    angularVelocity = Mathf.Clamp(rotateSpeed, -maxRotateSpeed, maxRotateSpeed);
+//    rb.angularVelocity = angularVelocity;
+
+//    if (Mathf.Abs(angularVelocity) > maxRotateSpeed - EPS) // если достигли макс вращения
+//    {
+//        movementRuntimeData.RotateThrottle = Mathf.Sign(angularVelocity);
+//        return;
+//    }
+
+//    movementRuntimeData.RotateThrottle = rotatePowerMod < EPS ? 0 : rotatePowerMod;
+//}
