@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1246952594385550387}
   - component: {fileID: 1057076752324012925}
   - component: {fileID: 3112111538413779746}
-  - component: {fileID: 835261309461879340}
   m_Layer: 7
   m_Name: Asteroid_Gold
   m_TagString: Untagged
@@ -263,26 +262,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <RB>k__BackingField: {fileID: 1057076752324012925}
-  <HealthData>k__BackingField: {fileID: 835261309461879340}
+  <HealthData>k__BackingField: {fileID: 0}
   <AsteroidType>k__BackingField: 144
---- !u!114 &835261309461879340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4416990920378949209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 503b366b420245e4f8ceae8c6da3f9b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ResistanceType: 0
-  DefaultHealthPoints:
-    HullPoints: 0
-    ArmorPoints: 0
-    ShieldPoints: 0
-  CurrentHealthPoints:
-    HullPoints: 0
-    ArmorPoints: 0
-    ShieldPoints: 0

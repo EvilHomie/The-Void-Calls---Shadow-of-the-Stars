@@ -1,5 +1,6 @@
 using GameCamera;
 using GameInput;
+using Registries;
 using Ships;
 using UnityEngine;
 
@@ -16,6 +17,8 @@ namespace DI
             Container.Bind<ShipInstance>().FromInstance(playerShip).AsSingleton();
             Container.Bind<Camera>().FromInstance(mainCamera).AsSingleton();
             Container.Bind<MouseCursor>().FromInstance(mouseCursor).AsSingleton();
+
+            Container.Bind<ShipRegistry>().AsSingleton();
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {

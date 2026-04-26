@@ -9,8 +9,8 @@ namespace GameSystems
 {
     public class EventBus : MonoBehaviour
     {
-        public static Action<ShipInstance> SpawnNonPlayerShip { get; set; }
-        public static Action<int> RemoveNonPlayerShip { get; set; }
+        public static Action<ShipInstance> SpawnOtherShip { get; set; }
+        public static Action<ShipInstance> RemoveOtherShip { get; set; }
         public static Action<ShipInstance> SpawnPlayerShip { get; set; }
         public static Action RemovePlayerShip { get; set; }
 

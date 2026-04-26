@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 5043179483001390502}
   - component: {fileID: 8241648857600082667}
   - component: {fileID: 3099152169615494874}
-  - component: {fileID: 4416170077388437246}
   m_Layer: 7
   m_Name: Asteroid_Titanium
   m_TagString: Untagged
@@ -263,26 +262,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <RB>k__BackingField: {fileID: 8241648857600082667}
-  <HealthData>k__BackingField: {fileID: 4416170077388437246}
+  <HealthData>k__BackingField: {fileID: 0}
   <AsteroidType>k__BackingField: 129
---- !u!114 &4416170077388437246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72494188183028475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 503b366b420245e4f8ceae8c6da3f9b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ResistanceType: 0
-  DefaultHealthPoints:
-    HullPoints: 0
-    ArmorPoints: 0
-    ShieldPoints: 0
-  CurrentHealthPoints:
-    HullPoints: 0
-    ArmorPoints: 0
-    ShieldPoints: 0

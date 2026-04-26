@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6915234641311099472}
   - component: {fileID: 2942389180757809219}
   - component: {fileID: 8371470208684024397}
-  - component: {fileID: 6894978791350825922}
   m_Layer: 7
   m_Name: Asteroid_Empty
   m_TagString: Untagged
@@ -259,26 +258,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <RB>k__BackingField: {fileID: 2942389180757809219}
-  <HealthData>k__BackingField: {fileID: 6894978791350825922}
+  <HealthData>k__BackingField: {fileID: 0}
   <AsteroidType>k__BackingField: 160
---- !u!114 &6894978791350825922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5523111450782268480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 503b366b420245e4f8ceae8c6da3f9b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ResistanceType: 0
-  DefaultHealthPoints:
-    HullPoints: 0
-    ArmorPoints: 0
-    ShieldPoints: 0
-  CurrentHealthPoints:
-    HullPoints: 0
-    ArmorPoints: 0
-    ShieldPoints: 0

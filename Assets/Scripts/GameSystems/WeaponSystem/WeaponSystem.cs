@@ -1,4 +1,5 @@
 //using DI;
+//using GameCamera;
 //using GameInput;
 //using Helpers;
 //using Ships;
@@ -16,10 +17,11 @@
 
 //        private IPlayerInput _playerInput;
 //        private ShipInstance _playerShip;
+//        private MouseCursor _mouseCursor;
 //        private bool _playerAttacking;
 
 //        [Inject]
-//        public void Construct(IPlayerInput playerInput, ShipInstance playerShip)
+//        public void Construct(IPlayerInput playerInput, ShipInstance playerShip, MouseCursor mouseCursor)
 //        {
 //            _playerInput = playerInput;
 //            _playerShip = playerShip;
@@ -69,11 +71,9 @@
 
 //        private void PlayerAim(float dTime)
 //        {
-//            for (int i = 0; i <= _objectsStorage.LastUsedIndex; i++)
+//            foreach (var weaponSlot in _playerShip.WeaponSlots)
 //            {
-//                ref var view = ref _objectsStorage.Views[i];
-//                ref var aimPos = ref _objectsStorage.TargetPositions[i];
-//                AimToTarget(view.WeaponSlots, aimPos, dTime);
+//                WeaponSystemHelper.AimAtTarget(weaponSlot.Weapon, dTime, _mouseCursor.WorldPostition);
 //            }
 //        }
 

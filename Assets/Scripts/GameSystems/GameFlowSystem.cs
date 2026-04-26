@@ -9,12 +9,10 @@ namespace GameSystems
         public static Action PreFixedGameTick { get; set; }
         public static Action<float> FixedGameTick { get; set; }
         public static Action PostFixedGameTick { get; set; }
-
         public static Action PreUpdateTick { get; set; }
         public static Action<float> UpdateTick { get; set; }
         public static Action PostUpdateTick { get; set; }
         public static Action<float> LateGameTick { get; set; }
-        public static Action<GameState> GameStateChange { get; set; }
         public static float CoreTime { get; private set; }
         public static float CoreDeltaTime { get; private set; }
 

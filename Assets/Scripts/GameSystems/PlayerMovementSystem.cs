@@ -1,9 +1,9 @@
 ﻿using DI;
-using GameCamera;
 using GameInput;
+using Registries;
 using Ships;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using MouseCursor = GameCamera.MouseCursor;
 
 namespace GameSystems
 {
@@ -27,17 +27,22 @@ namespace GameSystems
         private IPlayerInput _input;
         private Vector2 _inputValue;
         private MouseCursor _mouseCursor;
-        private ShipInstance _playerShip;
+        private ShipRegistry _shipRegystry;
+
+        private bool _isActive;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, MouseCursor mouseCursor)
+        public void Construct(IPlayerInput playerInput, MouseCursor mouseCursor, ShipRegistry shipRegystry)
         {
+            _shipRegystry = shipRegystry;
             _input = playerInput;
             _mouseCursor = mouseCursor;
             _smoothZoneMod = 1f / _smoothZoneTime;
         }
 
-        protected override void AwakeInit() { }
+        protected override void AwakeInit()
+        { 
+        }
 
         protected override void Subscribe()
         {
@@ -45,8 +50,8 @@ namespace GameSystems
             _input.ToggleDamperAction += OnToggleDamper;
             _input.DisableEngineAction += DisableEngine;
             _input.ChangeBoostersState += OnToogleBoosters;
+            EventBus.GameStateChangeAction += OnGameStateChange;
             GameFlowSystem.FixedGameTick += Simulate;
-            EventBus.SpawnPlayerShip += OnSpawnPlayerShip;
         }
 
         protected override void Unsubscribe()
@@ -55,13 +60,13 @@ namespace GameSystems
             _input.ToggleDamperAction -= OnToggleDamper;
             _input.DisableEngineAction -= DisableEngine;
             _input.ChangeBoostersState -= OnToogleBoosters;
+            EventBus.GameStateChangeAction -= OnGameStateChange;
             GameFlowSystem.FixedGameTick -= Simulate;
-            EventBus.SpawnPlayerShip -= OnSpawnPlayerShip;
         }
 
-        private void OnSpawnPlayerShip(ShipInstance shipInstance)
+        private void OnGameStateChange(GameState gameState)
         {
-            _playerShip = shipInstance;
+            _isActive = gameState == GameState.CoreGameplay;
         }
 
         private void OnMoveInputAction(Vector2 input)
@@ -72,7 +77,8 @@ namespace GameSystems
 
         private void OnToggleDamper()
         {
-            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
+            var playerShip = _shipRegystry.PlayerShip;
+            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
             movementRuntimeData.InertiaDampingIsActive = !movementRuntimeData.InertiaDampingIsActive;
 
             if (movementRuntimeData.InertiaDampingIsActive)
@@ -88,8 +94,10 @@ namespace GameSystems
 
         private void OnToogleBoosters(bool state)
         {
-            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
-            ref var movementStaticData = ref _playerShip.MovementStaticData;
+            var playerShip = _shipRegystry.PlayerShip;
+
+            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
+            ref var movementStaticData = ref playerShip.MovementStaticData;
 
             if (state)
             {
@@ -109,17 +117,35 @@ namespace GameSystems
 
         private void Simulate(float fixedDT)
         {
-            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
-            ref var movementStaticData = ref _playerShip.MovementStaticData;
+            if (!_isActive)
+            {
+                return;
+            }
 
-            var rad = _playerShip.Rigidbody.rotation * Mathf.Deg2Rad;
+            var playerShip = _shipRegystry.PlayerShip;
+            var mousePos = _mouseCursor.WorldPostition;
+
+            var rb = playerShip.Rigidbody;
+            var rotation = rb.rotation;
+            var angularVelocity = rb.angularVelocity;
+            var linearVelocity = rb.linearVelocity;
+            var shipPos = rb.position;
+
+            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
+            ref var movementStaticData = ref playerShip.MovementStaticData;
+
+            var rad = rotation * Mathf.Deg2Rad;
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
             var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+            var directionToTarget = mousePos - shipPos;
 
             UpdateBoostersPower(fixedDT, movementStaticData, ref movementRuntimeData);
             HandleInput(fixedDT, ref movementRuntimeData);
-            HandleRotation(fixedDT, shipForward, movementStaticData, ref movementRuntimeData);
-            HandleMovement(fixedDT, ref movementRuntimeData, movementStaticData, shipForward, shipRight);
+            HandleRotation(fixedDT, ref angularVelocity, directionToTarget, shipForward, movementStaticData, ref movementRuntimeData);
+            HandleMovement(fixedDT, ref linearVelocity, ref movementRuntimeData, movementStaticData, shipForward, shipRight);
+
+            rb.angularVelocity = angularVelocity;
+            rb.linearVelocity = linearVelocity;
         }
 
         private void HandleInput(float fixedDT, ref MovementRuntimeData movementRuntimeData)
@@ -185,46 +211,39 @@ namespace GameSystems
 
         private void DisableEngine()
         {
-            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
+            var playerShip = _shipRegystry.PlayerShip;
+            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
             movementRuntimeData.DirectThrottle = 0;
         }
 
-        private void HandleRotation(float fixedDT, Vector2 shipForward, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
+        private void HandleRotation(float fixedDT, ref float angularVelocity, Vector2 direction, Vector2 shipForward, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
         {
-            var rb = _playerShip.Rigidbody;
-
             float maxSpeed = movementStaticData.RotateSpeed;
-            float velocity = rb.angularVelocity;
+            bool targetOutSideShip = direction.sqrMagnitude >= _minMouseDistanceSQR;
 
-            Vector2 dir = _mouseCursor.WorldPostition - rb.position;
-
-            bool targetOutSideShip = dir.sqrMagnitude >= _minMouseDistanceSQR;
-
-            if (Mathf.Abs(velocity) > maxSpeed || !targetOutSideShip) // только гашение если больше максимального или мышка на корабле
+            if (Mathf.Abs(angularVelocity) > maxSpeed || !targetOutSideShip) // только гашение если больше максимального или мышка на корабле
             {
-                velocity = Mathf.MoveTowards(velocity, 0f, maxSpeed * fixedDT);
-                rb.angularVelocity = velocity;
+                angularVelocity = Mathf.MoveTowards(angularVelocity, 0f, maxSpeed * fixedDT);
 
-                movementRuntimeData.RotatePower = Mathf.Abs(velocity) < EPS ? 0f : velocity / maxSpeed;
+
+                movementRuntimeData.RotatePower = Mathf.Abs(angularVelocity) < EPS ? 0f : angularVelocity / maxSpeed;
                 return;
             }
 
-            var angle = Vector2.SignedAngle(shipForward, dir);
+            var angle = Vector2.SignedAngle(shipForward, direction);
             var absAngle = Mathf.Abs(angle);
 
             var power = Mathf.InverseLerp(0f, _rotateSlowAngle, absAngle) * Mathf.Sign(angle);
             var newVelocity = power * maxSpeed;
-            rb.angularVelocity = newVelocity;
+            angularVelocity = newVelocity;
 
             movementRuntimeData.RotatePower = Mathf.Abs(newVelocity) < EPS ? 0f : newVelocity / maxSpeed;
         }
 
-        private void HandleMovement(float fixedDT, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
+        private void HandleMovement(float fixedDT, ref Vector2 linearVelocity, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
         {
-            var rb = _playerShip.Rigidbody;
-            var velocity = rb.linearVelocity;
-            var forwardVel = Vector2.Dot(velocity, forward);
-            var sideVel = Vector2.Dot(velocity, right);
+            var forwardVel = Vector2.Dot(linearVelocity, forward);
+            var sideVel = Vector2.Dot(linearVelocity, right);
 
             var directThrottle = movementRuntimeData.DirectThrottle;
             var strafeThrottle = movementRuntimeData.StrafeThrottle;
@@ -262,7 +281,7 @@ namespace GameSystems
 
             movementRuntimeData.MainEnginePower = boostersIsActive ? 1 : directThrottle;
             movementRuntimeData.ThrustersPower = strafeThrottle;
-            rb.linearVelocity = right * sideVel + forward * forwardVel;
+            linearVelocity = right * sideVel + forward * forwardVel;
         }
 
         private void ApplyDirectDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
