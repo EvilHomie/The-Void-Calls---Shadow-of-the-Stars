@@ -91,16 +91,16 @@ namespace GamePools
 
         private void PrewarmPool(ObjectPool<T> pool, int count)
         {
-            var stack = new T[count];
+            var items = new T[count];
 
             for (int i = 0; i < count; i++)
             {
                 var instance = pool.Get();
-                stack[i] =instance;
-                
+                items[i] = instance;
+
             }
 
-            foreach (var item in stack)
+            foreach (var item in items)
             {
                 pool.Release(item);
             }

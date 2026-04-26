@@ -9,8 +9,8 @@ namespace GameSystems
     {
         private ShipRegistry _shipRegystry;
 
-        private HashSet<ShipInstance> _shipsToAdd = new(20);
-        private HashSet<ShipInstance> _shipsToRemove = new(20);
+        private readonly HashSet<ShipInstance> _shipsToAdd = new(20);
+        private readonly HashSet<ShipInstance> _shipsToRemove = new(20);
 
 
         [Inject]
@@ -26,19 +26,19 @@ namespace GameSystems
         protected override void Subscribe()
         {
             EventBus.SpawnPlayerShip += OnPlayerShipSpawned;
-            EventBus.RemovePlayerShip += OnPlayerShipDestroyed;
+            EventBus.DestroyPlayerShip += OnPlayerShipDestroyed;
             EventBus.SpawnOtherShip += OnOtherShipSpawned;
-            EventBus.RemoveOtherShip += OnOtherShipDestroyed;
-            GameFlowSystem.PreUpdateTick += SyncShipRegistry;
+            EventBus.DestroyOtherShip += OnOtherShipDestroyed;
+            GameFlowSystem.PreUpdateTick += SyncOtherShipsRegistry;
         }
 
         protected override void Unsubscribe()
         {
             EventBus.SpawnPlayerShip -= OnPlayerShipSpawned;
-            EventBus.RemovePlayerShip -= OnPlayerShipDestroyed;
+            EventBus.DestroyPlayerShip -= OnPlayerShipDestroyed;
             EventBus.SpawnOtherShip -= OnOtherShipSpawned;
-            EventBus.RemoveOtherShip -= OnOtherShipDestroyed;
-            GameFlowSystem.PreUpdateTick -= SyncShipRegistry;
+            EventBus.DestroyOtherShip -= OnOtherShipDestroyed;
+            GameFlowSystem.PreUpdateTick -= SyncOtherShipsRegistry;
         }
 
         private void OnPlayerShipSpawned(ShipInstance shipInstance)
@@ -46,7 +46,7 @@ namespace GameSystems
             _shipRegystry.RegisterPlayerShip(shipInstance);
         }
 
-        private void OnPlayerShipDestroyed()
+        private void OnPlayerShipDestroyed(ShipInstance shipInstance)
         {
             _shipRegystry.UnRegiserPlayerShip();
         }
@@ -63,7 +63,7 @@ namespace GameSystems
             _shipsToRemove.Add(shipInstance);
         }
 
-        private void SyncShipRegistry()
+        private void SyncOtherShipsRegistry()
         {
             foreach (var ship in _shipsToRemove)
             {

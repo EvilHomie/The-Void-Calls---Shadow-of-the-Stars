@@ -5,8 +5,8 @@ namespace Registries
 {
     public class ShipRegistry
     {
-        public ShipInstance _playerShip;
-        public HashSet<ShipInstance> _otherShips = new(200); // за исключением игрока
+        private ShipInstance _playerShip;
+        private HashSet<ShipInstance> _otherShips = new(200); // за исключением игрока
 
         public ShipInstance PlayerShip => _playerShip;
         public IReadOnlyCollection<ShipInstance> OtherShips => _otherShips;

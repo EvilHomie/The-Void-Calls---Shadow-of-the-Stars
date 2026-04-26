@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeater : WeaponBase
+    public class BoltRepeater : WeaponBase, IShipVelocityAware
     {
         public override WeaponType WeaponType => WeaponType.BoltRepeater;
         [field: SerializeField] public PoolReference ProjectilePoolReference { get; private set; }
@@ -12,14 +12,18 @@ namespace Weapons
         [field: SerializeField] public float SpreadAngle { get; private set; }
         [field: SerializeField] public float ProjectileSpeed { get; private set; }
         [field: SerializeField] public Rigidbody2D ShipRigidBody { get; private set; }
+        public float ShootDelay { get; private set; }
 
         public float NextShootTime;
-        public float ShootDelay;
 
-        private void Init()
+        public override void Init()
         {
             ShootDelay = 1 / FireRate;
-            ShipRigidBody = GetComponentInParent<Rigidbody2D>();
+        }
+
+        public void SetShipRigidbody(Rigidbody2D rb)
+        {
+            ShipRigidBody = rb;
         }
     }
 }

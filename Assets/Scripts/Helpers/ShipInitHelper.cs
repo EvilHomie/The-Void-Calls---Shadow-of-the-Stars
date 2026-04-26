@@ -1,4 +1,6 @@
+using GameSystems;
 using Ships;
+using Weapons;
 
 namespace Helpers
 {
@@ -54,6 +56,30 @@ namespace Helpers
             movementCharacteristics.BoostersAcceleration = totalBoostThrust / totalMass * worldUnitMod;
             movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
 
+        }
+
+        public static void InitWeapons(ShipInstance shipInstance)
+        {
+            var shipRb = shipInstance.Rigidbody;
+
+            foreach (var slot in shipInstance.WeaponSlots)
+            {
+                var weapon = slot.Weapon;
+                weapon.Init();
+
+                if (weapon is IShipVelocityAware aware)
+                {
+                    aware.SetShipRigidbody(shipRb);
+                }
+            }
+        }
+
+        public static void RegisterWeapons(ShipInstance shipInstance)
+        {
+            foreach (var slot in shipInstance.WeaponSlots)
+            {
+                EventBus.WeaponCreated?.Invoke(slot.Weapon);
+            }
         }
     }
 }

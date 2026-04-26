@@ -1,12 +1,13 @@
 using DI;
 using GameSystems;
+using Registries;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace GameCamera
 {
-    public class MouseCursor : MonoBehaviour
+    public class MouseCursor : MonoBehaviour , ISyncable
     {
         [SerializeField] CursorConfig CoreGamePlayConfig;        
         
@@ -16,29 +17,35 @@ namespace GameCamera
         private Transform _transform;
 
         [Inject]
-        public void Construct(Camera camera)
+        public void Construct(Camera camera, RegistrySyncSystem registrySyncSystem)
         {
             _mainCamera = camera;
             _transform = transform;
-        }
-
-
-        private void OnEnable()
-        {
-            GameFlowSystem.PreUpdateTick += UpdatePositions;
+            registrySyncSystem.Add(this);
             Cursor.SetCursor(CoreGamePlayConfig.CursorTexture, CoreGamePlayConfig.CursorHotspot, CursorMode.Auto);
         }
 
-        private void OnDisable()
-        {
-            GameFlowSystem.PreUpdateTick -= UpdatePositions;
-        }
+
+        //private void OnEnable()
+        //{
+        //    GameFlowSystem.PreUpdateTick += UpdatePositions;            
+        //}
+
+        //private void OnDisable()
+        //{
+        //    GameFlowSystem.PreUpdateTick -= UpdatePositions;
+        //}
 
         private void UpdatePositions()
         {
             ScreenPostition = Mouse.current.position.ReadValue();
             WorldPostition = _mainCamera.ScreenToWorldPoint(ScreenPostition);
             _transform.position = WorldPostition;
+        }
+
+        public void Sync()
+        {
+            UpdatePositions();
         }
     }
 

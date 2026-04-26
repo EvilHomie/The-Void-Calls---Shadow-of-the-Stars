@@ -32,6 +32,8 @@ namespace GameSystems
         private void Start()
         {
             ShipInitHelper.InitShip(_playerShip);
+            ShipInitHelper.InitWeapons(_playerShip);
+
             EventBus.SpawnPlayerShip?.Invoke(_playerShip);
             EventBus.GameStateChangeAction?.Invoke(GameState.CoreGameplay);
         }

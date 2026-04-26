@@ -9,18 +9,21 @@ namespace GameSystems
 {
     public class EventBus : MonoBehaviour
     {
+        // Ships Actions
         public static Action<ShipInstance> SpawnOtherShip { get; set; }
-        public static Action<ShipInstance> RemoveOtherShip { get; set; }
+        public static Action<ShipInstance> DestroyOtherShip { get; set; }
         public static Action<ShipInstance> SpawnPlayerShip { get; set; }
-        public static Action RemovePlayerShip { get; set; }
+        public static Action<ShipInstance> DestroyPlayerShip { get; set; }
 
+
+        // Weapon Actions
+        public static Action<WeaponBase> WeaponStartAttack { get; set; }
+        public static Action<WeaponBase> WeaponStopAttack { get; set; }
+        public static Action<WeaponBase> WeaponCreated { get; set; }
+        public static Action<WeaponBase> WeaponDestroyed { get; set; }
 
 
         public static Action<float> ChangeCameraOrtoSize { get; set; }
-        public static Action<WeaponBase> CreateWeaponAction { get; set; }
-        public static Action<WeaponBase, bool> WeaponChangeShootState { get; set; }
-        public static Action<ShipInstance, bool> NonPlayerChangeAttackState { get; set; }
-
 
         public static Action<ProjectileBase, Collider2D> ProjectileHit { get; set; }
         public static Action<WeaponBase, Collider2D> BeamHit { get; set; }

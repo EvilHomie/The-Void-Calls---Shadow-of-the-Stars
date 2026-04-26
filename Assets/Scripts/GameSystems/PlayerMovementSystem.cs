@@ -95,7 +95,6 @@ namespace GameSystems
         private void OnToogleBoosters(bool state)
         {
             var playerShip = _shipRegystry.PlayerShip;
-
             ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
             ref var movementStaticData = ref playerShip.MovementStaticData;
 

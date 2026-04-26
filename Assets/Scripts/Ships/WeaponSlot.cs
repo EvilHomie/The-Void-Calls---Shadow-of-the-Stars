@@ -5,7 +5,7 @@ namespace Ships
 {
     public class WeaponSlot : MonoBehaviour
     {
-        [field: SerializeField] public bool IsActive { get; set; }
+        public bool IsActive;
         [field: SerializeField] public WeaponBase Weapon { get; set; }
     }
 }

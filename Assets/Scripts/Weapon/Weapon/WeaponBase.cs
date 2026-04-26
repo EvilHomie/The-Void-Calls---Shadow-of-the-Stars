@@ -12,5 +12,6 @@ namespace Weapons
         [field: SerializeField] public float MaxDistance { get; private set; }
         [field: SerializeField] public float MaxRotateAngle { get; private set; }
         [field: SerializeField] public float RotateSpeed { get; private set; }
+        public abstract void Init();
     }
 }
