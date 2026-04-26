@@ -10,7 +10,7 @@ namespace Projectiles
         public WeaponBase Weapon;
         public float DestroyTime;
         [field: SerializeField] public Rigidbody2D RigidBody { get; private set; }
-        [field: SerializeField] public PoolDataSO HitData { get; private set; }
+        [field: SerializeField] public PoolData HitData { get; private set; }
         [field: SerializeField] public Transform HitCollider { get; private set; }
        
         private void OnTriggerEnter2D(Collider2D other)

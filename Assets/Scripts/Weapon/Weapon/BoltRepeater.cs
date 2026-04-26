@@ -5,7 +5,7 @@ namespace Weapons
     public class BoltRepeater : WeaponBase
     {
         public override WeaponType WeaponType => WeaponType.BoltRepeater;
-        [field: SerializeField] public PoolDataSO ProjectilePoolData { get; private set; }
+        [field: SerializeField] public PoolData ProjectilePoolData { get; private set; }
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         [field: SerializeField] public Transform ShootPoint { get; private set; }
         [field: SerializeField] public float FireRate { get; private set; }

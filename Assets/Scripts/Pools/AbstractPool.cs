@@ -5,11 +5,11 @@ using UnityEngine.Pool;
 
 namespace GamePools
 {
-    public abstract class AbstractPool<T> : MonoBehaviour where T : MonoBehaviour, IPoolable
+    public abstract class AbstractPool<T> : MonoBehaviour where T : PoolObjectBase
     {
-        private readonly Dictionary<string, ObjectPool<T>> _poolByName = new();
-        private readonly Dictionary<string, T> _prefabByName = new();
-        private readonly Dictionary<string, Transform> _parentByName = new();
+        private readonly Dictionary<PoolReference, ObjectPool<T>> _pools = new();
+        private readonly Dictionary<PoolReference, T> _prefabs = new();
+        private readonly Dictionary<PoolReference, Transform> _poolsParents = new();
 
         private void Awake()
         {
@@ -30,33 +30,25 @@ namespace GamePools
         protected abstract void Unsubscribe();
         protected abstract void AwakeInit();
 
-        public T Getitem(string itemName)
+        public T Getitem(PoolReference poolDefinition)
         {
-            return FindPool(itemName).Get();
+            return FindPool(poolDefinition).Get();
         }
 
         public void ReleaseItem(T item)
         {
-            FindPool(item.PoolName).Release(item);
+            FindPool(item.PoolReference).Release(item);
         }
 
-        //protected void CreateItemPools(T[] prefab, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
-        //{
-        //    foreach (var prefabItem in prefab)
-        //    {
-        //        CreateItemPool(prefabItem, startCapacity, maxCapacity, parent, prewarmCount);
-        //    }
-        //}
-
-        protected void CreateItemPool(T prefab, string poolName, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
+        protected void CreateItemPool(PoolData poolData, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
-            var item = Instantiate(prefab, parent);
-            item.gameObject.SetActive(false);  
-            _prefabByName.Add(poolName, item);
+            var poolReference = poolData.PoolReference;
+            T cast = poolData.Prefab.GetComponent<T>();
+            _prefabs.Add(poolReference, cast);
 
             var newPool = new ObjectPool<T>(
 
-                   createFunc: () => OnCreate(poolName, parent),
+                   createFunc: () => OnCreate(poolReference, parent),
                    actionOnGet: OnGet,
                    actionOnRelease: OnRelease,
                    actionOnDestroy: OnDestroyItem,
@@ -64,31 +56,31 @@ namespace GamePools
                    maxSize: maxCapacity
                );
 
-            _parentByName.Add(poolName, parent);
-            _poolByName.Add(poolName, newPool);
+            _poolsParents.Add(poolReference, parent);
+            _pools.Add(poolReference, newPool);
 
             PrewarmPool(newPool, prewarmCount);
         }
 
-        private T OnCreate(string poolName, Transform parent)
+        private T OnCreate(PoolReference poolReference, Transform parent)
         {
-            var prefab = _prefabByName[poolName];
+            var prefab = _prefabs[poolReference];
             var instance = Instantiate(prefab, parent);
-            instance.PoolName = poolName;
-            instance.Init();
+            instance.Init(poolReference);
+            instance.CachedTransform.SetParent(_poolsParents[instance.PoolReference]);
             return instance;
         }
 
         private void OnGet(T item)
         {
-            item.InPool = false;
-            item.CachedTransform.SetParent(null);
+            item.SetPoolState(false);
+            //item.CachedTransform.SetParent(null);
             item.CachedGameObject.SetActive(true);
         }
         private void OnRelease(T item)
         {
-            item.InPool = true;
-            item.CachedTransform.SetParent(_parentByName[item.PoolName]);
+            item.SetPoolState(true);
+            //item.CachedTransform.SetParent(_poolsParents[item.PoolReference]);
             item.CachedGameObject.SetActive(false);
         }
 
@@ -99,25 +91,26 @@ namespace GamePools
 
         private void PrewarmPool(ObjectPool<T> pool, int count)
         {
-            List<T> items = new();
+            var stack = new T[count];
 
             for (int i = 0; i < count; i++)
             {
                 var instance = pool.Get();
-                items.Add(instance);
+                stack[i] =instance;
+                
             }
 
-            foreach (T item in items)
+            foreach (var item in stack)
             {
                 pool.Release(item);
             }
         }
 
-        private ObjectPool<T> FindPool(string name)
+        private ObjectPool<T> FindPool(PoolReference poolReference)
         {
-            if (!_poolByName.TryGetValue(name, out var pool))
+            if (!_pools.TryGetValue(poolReference, out var pool))
             {
-                throw new Exception($"Не найден пул с {name}");
+                throw new Exception($"Не найден пул с {poolReference.name}");
             }
 
             return pool;

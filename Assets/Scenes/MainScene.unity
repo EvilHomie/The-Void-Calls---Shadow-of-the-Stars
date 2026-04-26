@@ -15020,8 +15020,37 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3734830323868723499, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       insertIndex: 2
       addedObject: {fileID: 317858948}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2200187118415842127, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3928580358523079641}
+    - targetCorrespondingSourceObject: {fileID: 7750987560735232283, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 962024171159606105}
   m_SourcePrefab: {fileID: 100100000, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+--- !u!1 &962024171159606103 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2200187118415842127, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+  m_PrefabInstance: {fileID: 962024171159606102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &962024171159606104 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7750987560735232283, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+  m_PrefabInstance: {fileID: 962024171159606102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &962024171159606105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962024171159606104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4fac9a4692bfe4a96e3492d76818b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damage.HitBox
+  <HealthComponent>k__BackingField: {fileID: 3928580358523079641}
 --- !u!4 &3594393526968606791 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3734830323868723499, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
@@ -15032,12 +15061,31 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
   m_PrefabInstance: {fileID: 962024171159606102}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 962024171159606103}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
+--- !u!114 &3928580358523079641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962024171159606103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7722ada10e0afb458db81c2c5689bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damage.HealthComponent
+  HealthData:
+    <HealthType>k__BackingField: 0
+    HullPoints: 0
+    ShieldPoints: 0
+    ArmorPoints: 0
+    EnergyDamageResistance: 0
+    KineticDamageResistance: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

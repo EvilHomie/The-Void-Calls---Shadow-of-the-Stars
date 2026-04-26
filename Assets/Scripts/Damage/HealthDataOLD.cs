@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace Damage
 {
-    public class HealthData : MonoBehaviour
+    public class HealthDataOLD : MonoBehaviour
     {
+        [SerializeField]
         public ResistanceType ResistanceType;
         public HealthPoints DefaultHealthPoints;
         public HealthPoints CurrentHealthPoints;

@@ -32,7 +32,7 @@ namespace GameSystems
 
         private void OnProjectileHit(ProjectileBase projectile, Collider2D hitCollider)
         {
-            var hitEffect = EventBus.GetHitParticle(projectile.HitData.PoolName);
+            var hitEffect = EventBus.GetHitParticle(projectile.HitData.PoolReference);
             Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
             hitEffect.CachedTransform.position = hitPoint;
             _destroyedProjectiles.Add(projectile);

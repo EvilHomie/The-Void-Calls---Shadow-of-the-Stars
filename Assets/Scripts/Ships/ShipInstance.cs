@@ -1,3 +1,4 @@
+using Damage;
 using UnityEngine;
 
 namespace Ships
@@ -9,9 +10,6 @@ namespace Ships
         [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
 
         public Transform LockOnTransform;
-
-        public HealthData HealthData;
-
         public MovementStaticData MovementStaticData;
         public MovementRuntimeData MovementRuntimeData;
 
