@@ -1,4 +1,5 @@
 ﻿using DI;
+using GameCamera;
 using GameInput;
 using Ships;
 using UnityEngine;
@@ -25,14 +26,14 @@ namespace GameSystems
 
         private IPlayerInput _input;
         private Vector2 _inputValue;
-        private Camera _camera;
+        private MouseCursor _mouseCursor;
         private ShipInstance _playerShip;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, Camera camera)
+        public void Construct(IPlayerInput playerInput, MouseCursor mouseCursor)
         {
             _input = playerInput;
-            _camera = camera;
+            _mouseCursor = mouseCursor;
             _smoothZoneMod = 1f / _smoothZoneTime;
         }
 
@@ -195,8 +196,7 @@ namespace GameSystems
             float maxSpeed = movementStaticData.RotateSpeed;
             float velocity = rb.angularVelocity;
 
-            Vector2 mouseWorld = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Vector2 dir = mouseWorld - rb.position;
+            Vector2 dir = _mouseCursor.WorldPostition - rb.position;
 
             bool targetOutSideShip = dir.sqrMagnitude >= _minMouseDistanceSQR;
 

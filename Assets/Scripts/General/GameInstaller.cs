@@ -1,3 +1,4 @@
+using GameCamera;
 using GameInput;
 using Ships;
 using UnityEngine;
@@ -6,15 +7,15 @@ namespace DI
 {
     public class GameInstaller : Installer
     {
-        [SerializeField] ShipInstance _playerShip;
-        [SerializeField] Camera _mainCamera;
-        [SerializeField] LookAheadCursor _mouseCursor;
+        [SerializeField] ShipInstance playerShip;
+        [SerializeField] Camera mainCamera;
+        [SerializeField] MouseCursor  mouseCursor;
 
         protected override void InstallBindings()
         {
-            Container.Bind<ShipInstance>().FromInstance(_playerShip);
-            Container.Bind<Camera>().FromInstance(_mainCamera);
-            Container.Bind<LookAheadCursor>().FromInstance(_mouseCursor);
+            Container.Bind<ShipInstance>().FromInstance(playerShip).AsSingleton();
+            Container.Bind<Camera>().FromInstance(mainCamera).AsSingleton();
+            Container.Bind<MouseCursor>().FromInstance(mouseCursor).AsSingleton();
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {

@@ -5,7 +5,7 @@ namespace Weapons
     public class BoltRepeater : WeaponBase
     {
         public override WeaponType WeaponType => WeaponType.BoltRepeater;
-        [field: SerializeField] public PoolData ProjectilePoolData { get; private set; }
+        [field: SerializeField] public PoolReference ProjectilePoolReference { get; private set; }
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         [field: SerializeField] public Transform ShootPoint { get; private set; }
         [field: SerializeField] public float FireRate { get; private set; }
@@ -16,7 +16,7 @@ namespace Weapons
         public float NextShootTime;
         public float ShootDelay;
 
-        private void Awake()
+        private void Init()
         {
             ShootDelay = 1 / FireRate;
             ShipRigidBody = GetComponentInParent<Rigidbody2D>();

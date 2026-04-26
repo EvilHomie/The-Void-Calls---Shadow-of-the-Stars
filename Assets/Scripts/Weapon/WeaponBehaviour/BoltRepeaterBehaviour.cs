@@ -20,7 +20,7 @@ namespace Weapons
                 return;
             }
 
-            var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectilePoolData.PoolReference);
+            var projectile = EventBus.GetProjectile?.Invoke(weapon.ProjectilePoolReference);
             projectile.CachedTransform.SetPositionAndRotation(weapon.ShootPoint.position, weapon.Transform.rotation);
             projectile.Weapon = weapon;
             var weapontTransformUp = weapon.Transform.up;

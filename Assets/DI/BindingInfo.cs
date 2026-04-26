@@ -20,10 +20,12 @@ namespace DI
             ResolveType = ResolveType.Transient;
         }
 
-        public void FromInstance(object instance)
+        public BindingInfo FromInstance(object instance)
         {
             ResolveType = ResolveType.Instance;
             Instance = instance;
+
+            return this;
         }
 
         public BindingInfo To<T>()
