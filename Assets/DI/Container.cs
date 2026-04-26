@@ -7,7 +7,7 @@ namespace DI
     /// <summary>
     /// метод должен быть public
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor)]
     public class InjectAttribute : Attribute { }
     public enum ResolveType
     {
