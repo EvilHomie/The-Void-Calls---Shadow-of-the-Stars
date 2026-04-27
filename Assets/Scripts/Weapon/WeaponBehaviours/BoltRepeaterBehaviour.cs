@@ -1,8 +1,9 @@
 ﻿using GameSystems;
 using Helpers;
 using UnityEngine;
+using Weapons;
 
-namespace Weapons
+namespace WeaponBehaviours
 {
     public class BoltRepeaterBehaviour : IWeaponBehaviour<BoltRepeater>
     {

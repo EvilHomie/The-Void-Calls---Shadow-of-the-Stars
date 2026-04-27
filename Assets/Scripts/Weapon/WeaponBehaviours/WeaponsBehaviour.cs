@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Weapons;
 
-namespace GameSystems
+namespace WeaponBehaviours
 {
     public class WeaponsBehaviour
     {
