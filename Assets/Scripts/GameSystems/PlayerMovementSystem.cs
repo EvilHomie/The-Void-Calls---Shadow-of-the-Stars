@@ -7,7 +7,7 @@ using MouseCursor = GameCamera.MouseCursor;
 
 namespace GameSystems
 {
-    public class PlayerMovementSystem : GameSystemBase
+    public class PlayerMovementSystem : GameSystemBase, IFixedUpdateTickObserver
     {
         private const float EPS = 0.001f;
         private const float _minAcceleration = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") при модификации ускорения
@@ -29,8 +29,6 @@ namespace GameSystems
         private MouseCursor _mouseCursor;
         private ShipRegistry _shipRegystry;
 
-        private bool _isActive;
-
         [Inject]
         public void Construct(IPlayerInput playerInput, MouseCursor mouseCursor, ShipRegistry shipRegystry)
         {
@@ -38,35 +36,30 @@ namespace GameSystems
             _input = playerInput;
             _mouseCursor = mouseCursor;
             _smoothZoneMod = 1f / _smoothZoneTime;
-        }
-
-        protected override void AwakeInit()
-        { 
+            ActiveGameState = GameState.CoreGameplay;
         }
 
         protected override void Subscribe()
         {
+            base.Subscribe();
             _input.MoveInputAction += OnMoveInputAction;
             _input.ToggleDamperAction += OnToggleDamper;
             _input.DisableEngineAction += DisableEngine;
             _input.ChangeBoostersState += OnToogleBoosters;
-            EventBus.GameStateChangeAction += OnGameStateChange;
-            GameFlowSystem.FixedGameTick += Simulate;
         }
 
         protected override void Unsubscribe()
         {
+            base.Unsubscribe();
             _input.MoveInputAction -= OnMoveInputAction;
             _input.ToggleDamperAction -= OnToggleDamper;
             _input.DisableEngineAction -= DisableEngine;
             _input.ChangeBoostersState -= OnToogleBoosters;
-            EventBus.GameStateChangeAction -= OnGameStateChange;
-            GameFlowSystem.FixedGameTick -= Simulate;
         }
 
-        private void OnGameStateChange(GameState gameState)
+        public void FixedUpdateTick(float fixedDT)
         {
-            _isActive = gameState == GameState.CoreGameplay;
+            Simulate(fixedDT);
         }
 
         private void OnMoveInputAction(Vector2 input)
@@ -105,10 +98,7 @@ namespace GameSystems
                 var boostersPower = movementRuntimeData.BoostersPower;
                 var minPowerForEnable = movementStaticData.BoostersMaxPower * _minBoostersPowerForEnableMod;
 
-                if (boostersPower < minPowerForEnable)
-                {
-                    return;
-                }
+                if (boostersPower < minPowerForEnable) return;
             }
 
             movementRuntimeData.BoostersIsActive = state;
@@ -116,10 +106,7 @@ namespace GameSystems
 
         private void Simulate(float fixedDT)
         {
-            if (!_isActive)
-            {
-                return;
-            }
+            if (!SystemIsActive) return;
 
             var playerShip = _shipRegystry.PlayerShip;
             var mousePos = _mouseCursor.WorldPostition;
@@ -151,10 +138,7 @@ namespace GameSystems
         {
             movementRuntimeData.StrafeThrottle = _inputValue.x; // боковое движение ровно инпуту
 
-            if (movementRuntimeData.BoostersIsActive)
-            {
-                return;
-            }
+            if (movementRuntimeData.BoostersIsActive) return;
 
             if (!movementRuntimeData.InertiaDampingIsActive) // если гаситель выключен то дросель всегда равен инпуту (будто отстреливает в ноль если нет инпута)
             {
@@ -291,10 +275,7 @@ namespace GameSystems
                 return;
             }
 
-            if (boostersIsActive)
-            {
-                return;
-            }
+            if (boostersIsActive) return;
 
             var acceleration = forwardVel > 0
                 ? movementStaticData.DirectDampingAcceleration
@@ -319,10 +300,7 @@ namespace GameSystems
                 {
                     desiredSpeed = targetSpeed;
                 }
-                else
-                {
-                    return;
-                }
+                else return;
             }
 
             ApplyDampingSmooth(ref acceleration, forwardVel, maxSpeed);
@@ -355,10 +333,7 @@ namespace GameSystems
                 {
                     desiredSpeed = targetSpeed;
                 }
-                else
-                {
-                    return;
-                }
+                else return;
             }
 
             ApplyDampingSmooth(ref acceleration, sideVel, maxSpeed);
@@ -389,10 +364,7 @@ namespace GameSystems
             var targetSpeed = throttle * maxSpeed;
             var speedDiff = targetSpeed - forwardVel;
 
-            if (speedDiff * throttle <= 0f) // проверка если скорость достигла максимальной
-            {
-                return;
-            }
+            if (speedDiff * throttle <= 0f) return; // проверка если скорость достигла максимальной
 
             ApplyAccelerationSmooth(ref acceleration, speedDiff);
             forwardVel += acceleration * fixedDT;
@@ -409,10 +381,7 @@ namespace GameSystems
             var targetSpeed = throttle * maxSpeed;
             var speedDiff = targetSpeed - sideVel;
 
-            if (speedDiff * throttle <= 0f) // проверка если скорость достигла максимальной
-            {
-                return;
-            }
+            if (speedDiff * throttle <= 0f) return;// проверка если скорость достигла максимальной
 
             ApplyAccelerationSmooth(ref acceleration, speedDiff);
             sideVel += acceleration * fixedDT;

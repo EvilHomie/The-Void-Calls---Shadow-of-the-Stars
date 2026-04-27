@@ -1,13 +1,15 @@
 ﻿using DI;
 using GameInput;
-using GameSystems;
+using Registries;
 using Ships;
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
+using MouseCursor = GameCamera.MouseCursor;
 
-namespace GameCamera
+namespace GameSystems
 {
-    public class CameraRig : GameSystemBase
+    public class CameraRigSystem : GameSystemBase, IUpdateTickObserver
     {
         [MinMaxRangeSlider(1f, 10f)]
         [SerializeField] Vector2 _minMaxViewDistance;
@@ -17,7 +19,9 @@ namespace GameCamera
         [SerializeField] float _changeOrtSizeSpeed;
         [SerializeField] float _changeOrtSizeStep;
 
+        public  Action<float> CameraOrtoSizeChanged { get; set; }
         private MouseCursor _mouseCursor;
+        private ShipRegistry _shipRegistry;
 
         private IPlayerInput _input;
         private float _targetOrthographicSize;
@@ -25,28 +29,34 @@ namespace GameCamera
         private float _currentOrthographicSize;
 
         [Inject]
-        public void Construct(MouseCursor mouseCursor, IPlayerInput playerInput)
+        public void Construct(MouseCursor mouseCursor, IPlayerInput playerInput, ShipRegistry shipRegistry)
         {
+            _shipRegistry = shipRegistry;
             _mouseCursor = mouseCursor;
             _input = playerInput;
         }
 
-        protected override void AwakeInit()
-        {           
+        private void Start()
+        {
+            var playerShip = _shipRegistry.PlayerShip;
+            Init(playerShip);
+        }
+
+        public void UpdateTick(float deltaTime)
+        {
+            OnUpdateTick(deltaTime);
         }
 
         protected override void Subscribe()
         {
-            GameFlowSystem.UpdateTick += OnUpdateTick;
+            base.Subscribe();
             _input.ChangeZoomAction += OnMouseScroll;
-            EventBus.SpawnPlayerShip += OnSpawnPlayerShip;
         }
 
         protected override void Unsubscribe()
         {
-            GameFlowSystem.UpdateTick -= OnUpdateTick;
+            base.Unsubscribe();
             _input.ChangeZoomAction -= OnMouseScroll;
-            EventBus.SpawnPlayerShip -= OnSpawnPlayerShip;
         }
 
         private void OnUpdateTick(float dTime)
@@ -56,11 +66,11 @@ namespace GameCamera
                 _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, dTime * _changeOrtSizeSpeed);
                 _cinemachineCamera.Lens.OrthographicSize = _currentOrthographicSize;
                 float orthorelative = _currentOrthographicSize / _deffOrthographicSize;
-                EventBus.ChangeCameraOrtoSize?.Invoke(orthorelative);
+                CameraOrtoSizeChanged?.Invoke(orthorelative);
             }
         }
 
-        private void OnSpawnPlayerShip(ShipInstance shipInstance)
+        private void Init(ShipInstance shipInstance)
         {
             UpdateTargetGroup(shipInstance);
             _targetOrthographicSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;

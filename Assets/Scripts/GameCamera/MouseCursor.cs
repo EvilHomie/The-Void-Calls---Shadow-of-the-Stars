@@ -1,51 +1,39 @@
 using DI;
 using GameSystems;
-using Registries;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace GameCamera
 {
-    public class MouseCursor : MonoBehaviour , ISyncable
+    public class MouseCursor : MonoBehaviour , IPreUpdateTickObserver
     {
         [SerializeField] CursorConfig CoreGamePlayConfig;        
         
         public Vector2 ScreenPostition;
         public Vector2 WorldPostition;
-        private Camera _mainCamera;
+        private Camera _camera;
         private Transform _transform;
 
         [Inject]
-        public void Construct(Camera camera, RegistrySyncSystem registrySyncSystem)
+        public void Construct(Camera camera, GameFlowSystem gameFlowSystem)
         {
-            _mainCamera = camera;
+            _camera = camera;
             _transform = transform;
-            registrySyncSystem.Add(this);
+            gameFlowSystem.AddTickObserver(this);
             Cursor.SetCursor(CoreGamePlayConfig.CursorTexture, CoreGamePlayConfig.CursorHotspot, CursorMode.Auto);
         }
 
-
-        //private void OnEnable()
-        //{
-        //    GameFlowSystem.PreUpdateTick += UpdatePositions;            
-        //}
-
-        //private void OnDisable()
-        //{
-        //    GameFlowSystem.PreUpdateTick -= UpdatePositions;
-        //}
+        public void PreUpdateTick()
+        {
+            UpdatePositions();
+        }
 
         private void UpdatePositions()
         {
             ScreenPostition = Mouse.current.position.ReadValue();
-            WorldPostition = _mainCamera.ScreenToWorldPoint(ScreenPostition);
+            WorldPostition = _camera.ScreenToWorldPoint(ScreenPostition);
             _transform.position = WorldPostition;
-        }
-
-        public void Sync()
-        {
-            UpdatePositions();
         }
     }
 

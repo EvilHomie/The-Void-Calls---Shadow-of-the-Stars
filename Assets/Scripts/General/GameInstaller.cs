@@ -1,3 +1,4 @@
+using Environment;
 using GameCamera;
 using GameInput;
 using GameSystems;
@@ -12,17 +13,27 @@ namespace DI
         [SerializeField] ShipInstance playerShip;
         [SerializeField] Camera mainCamera;
         [SerializeField] MouseCursor mouseCursor;
-        [SerializeField] RegistrySyncSystem registrySyncSystem;
+        [SerializeField] GameFlowSystem gameFlowSystem;
+        [SerializeField] ShipRegistry  shipRegistry;
+        [SerializeField] WeaponRegistry  weaponRegistry;
+        [SerializeField] StarryCanvasView  starryCanvasView;
+        [SerializeField] CameraRigSystem  cameraRigSystem;
 
         protected override void InstallBindings()
         {
             Container.Bind<ShipInstance>().FromInstance(playerShip).AsSingleton();
-            Container.Bind<Camera>().FromInstance(mainCamera).AsSingleton();
-            Container.Bind<MouseCursor>().FromInstance(mouseCursor).AsSingleton();
-            Container.Bind<RegistrySyncSystem>().FromInstance(registrySyncSystem).AsSingleton();
+            Container.Bind<GameFlowSystem>().FromInstance(gameFlowSystem).AsSingleton();
+            Container.Bind<ShipRegistry>().FromInstance(shipRegistry).AsSingleton();
+            Container.Bind<WeaponRegistry>().FromInstance(weaponRegistry).AsSingleton();
 
-            Container.Bind<ShipRegistry>().AsSingleton();
-            //Container.Bind<WeaponRegistry>().AsSingleton();
+
+            Container.Bind<StarryCanvasView>().FromInstance(starryCanvasView).AsSingleton();
+
+            Container.Bind<Camera>().FromInstance(mainCamera).AsSingleton();
+            Container.Bind<CameraRigSystem>().FromInstance(cameraRigSystem).AsSingleton();
+            Container.Bind<MouseCursor>().FromInstance(mouseCursor).AsSingleton();
+
+            
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {

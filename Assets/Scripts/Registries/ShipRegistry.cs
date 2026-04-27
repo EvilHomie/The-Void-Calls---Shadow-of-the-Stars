@@ -1,34 +1,61 @@
 using Ships;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Registries
 {
-    public class ShipRegistry
+    public class ShipRegistry : MonoBehaviour, IPreUpdateTickObserver
     {
-        private ShipInstance _playerShip;
-        private HashSet<ShipInstance> _otherShips = new(200); // за исключением игрока
-
         public ShipInstance PlayerShip => _playerShip;
         public IReadOnlyCollection<ShipInstance> OtherShips => _otherShips;
 
-        public void RegisterPlayerShip(ShipInstance shipInstance)
+        private ShipInstance _playerShip;
+        private readonly HashSet<ShipInstance> _otherShips = new(200); // за исключением игрока
+        private readonly HashSet<ShipInstance> _shipsToAdd = new(20);
+        private readonly HashSet<ShipInstance> _shipsToRemove = new(20);
+
+        public void PreUpdateTick()
+        {
+            Sync();
+        }
+
+        public void RequestAddPlayerShip(ShipInstance shipInstance)
         {
             _playerShip = shipInstance;
         }
 
-        public void RegiserOtherShip(ShipInstance shipInstance)
-        {
-            _otherShips.Add(shipInstance);
-        }
-
-        public void UnRegiserPlayerShip()
+        public void RequestRemovePlayerShip(ShipInstance shipInstance)
         {
             _playerShip = null;
         }
 
-        public void UnRegiserOtherShip(ShipInstance shipInstance)
+        public void RequestAddOtherShip(ShipInstance shipInstance)
         {
-            _otherShips.Remove(shipInstance);
+            _shipsToRemove.Remove(shipInstance);
+            _shipsToAdd.Add(shipInstance);
+        }
+
+        public void RequestRemoveOtherShip(ShipInstance shipInstance)
+        {
+            _shipsToAdd.Remove(shipInstance);
+            _shipsToRemove.Add(shipInstance);
+        }
+
+        private void Sync()
+        {
+            foreach (var ship in _shipsToRemove)
+            {
+                _otherShips.Remove(ship);
+            }
+
+            _shipsToRemove.Clear();
+
+            foreach (var ship in _shipsToAdd)
+            {
+                _otherShips.Add(ship);
+            }
+
+            _shipsToAdd.Clear();
         }
     }
 }

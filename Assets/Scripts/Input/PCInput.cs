@@ -1,3 +1,4 @@
+using DI;
 using GameSystems;
 using System;
 using UnityEngine;
@@ -16,7 +17,8 @@ namespace GameInput
 
         private readonly InputSystem_Actions _inputActions;
 
-        public PCInput()
+        [Inject]
+        public PCInput(GameFlowSystem gameFlowSystem)
         {
             _inputActions = new InputSystem_Actions();
 
@@ -34,10 +36,10 @@ namespace GameInput
             _inputActions.Player.ToggleBoosters.performed += ToggleBoosters;
             _inputActions.Player.ToggleBoosters.canceled += ToggleBoosters;
 
-            EventBus.GameStateChangeAction += OnGameStateChange;
+            gameFlowSystem.GameStateChanged += OnGameStateChanged;
         }
 
-        private void OnGameStateChange(GameState gameState)
+        private void OnGameStateChanged(GameState gameState)
         {
             if (gameState == GameState.CoreGameplay) _inputActions.Player.Enable();
             else _inputActions.Player.Disable();

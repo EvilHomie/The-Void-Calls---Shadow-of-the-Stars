@@ -1,4 +1,4 @@
-using GameSystems;
+using Registries;
 using Ships;
 using Weapons;
 
@@ -55,7 +55,6 @@ namespace Helpers
             movementCharacteristics.BoostersMaxSpeed = totalBoostThrust / totalDirectDrag * worldUnitMod;
             movementCharacteristics.BoostersAcceleration = totalBoostThrust / totalMass * worldUnitMod;
             movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
-
         }
 
         public static void InitWeapons(ShipInstance shipInstance)
@@ -74,11 +73,23 @@ namespace Helpers
             }
         }
 
-        public static void RegisterWeapons(ShipInstance shipInstance)
+        public static void RegisterShip(ShipInstance shipInstance, ShipRegistry shipRegistry, bool asPlayer)
+        {
+            if (!asPlayer)
+            {
+                shipRegistry.RequestAddOtherShip(shipInstance);
+            }
+            else
+            {
+                shipRegistry.RequestAddPlayerShip(shipInstance);
+            }
+        }
+
+        public static void RegisterWeapons(ShipInstance shipInstance, WeaponRegistry weaponRegistry)
         {
             foreach (var slot in shipInstance.WeaponSlots)
             {
-                EventBus.WeaponCreated?.Invoke(slot.Weapon);
+                weaponRegistry.RequestAddOnCreate(slot.Weapon);
             }
         }
     }

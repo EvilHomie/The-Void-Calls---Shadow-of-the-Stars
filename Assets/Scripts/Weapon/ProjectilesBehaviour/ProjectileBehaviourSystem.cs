@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class ProjectileBehaviourSystem : GameSystemBase
+    public class ProjectileBehaviourSystem : GameSystemBase, IUpdateTickObserver
     {
         private HashSet<ProjectileBase> _activeProjectiles;
         private HashSet<ProjectileBase> _destroyedProjectiles;
@@ -13,19 +13,26 @@ namespace GameSystems
         {
             _activeProjectiles = new(500);
             _destroyedProjectiles = new(500);
+            ActiveGameState = GameState.CoreGameplay;
+        }
+
+        public void UpdateTick(float deltaTime)
+        {
+            if (!SystemIsActive) return;
+
+            OnGameTick(deltaTime);
         }
 
         protected override void Subscribe()
         {
-            GameFlowSystem.UpdateTick += OnGameTick;
+            base.Subscribe();
             EventBus.ProjectileFetched += OnProjectileFetched;
             EventBus.ProjectileHit += OnProjectileHit;
-
         }
 
         protected override void Unsubscribe()
         {
-            GameFlowSystem.UpdateTick -= OnGameTick;
+            base.Unsubscribe();
             EventBus.ProjectileFetched -= OnProjectileFetched;
             EventBus.ProjectileHit -= OnProjectileHit;
         }

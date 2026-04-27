@@ -6,7 +6,7 @@ using Weapons;
 
 namespace Registries
 {
-    public class WeaponRegistry : MonoBehaviour, ISyncable
+    public class WeaponRegistry : MonoBehaviour, IPreUpdateTickObserver
     {
         public IReadOnlyCollection<WeaponBase> ActiveWeapons => _activeWeapons;
         public IReadOnlyCollection<WeaponBase> AllWeapons => _allWeapons;
@@ -21,43 +21,23 @@ namespace Registries
         private readonly HashSet<WeaponBase> _weaponToRemove = new(20);
 
         [Inject]
-        public WeaponRegistry(RegistrySyncSystem registrySyncSystem)
+        public void Construct(GameFlowSystem gameFlowSystem)
         {
-            registrySyncSystem.Add(this);
-            Debug.LogError($"InjectConstructor {registrySyncSystem == null}");
+            gameFlowSystem.AddTickObserver(this);
         }
 
-        [Inject]
-        public WeaponRegistry(Camera registrySyncSystem)
+        public void PreUpdateTick()
         {
-            Debug.LogError($"CameraConstructor {registrySyncSystem == null}");
+            Sync();
         }
 
-        [Inject]
-        public WeaponRegistry()
-        {
-            Debug.LogError("Empty Constructor");
-        }
-
-        [Inject]
-        public void Init(RegistrySyncSystem registrySyncSystem)
-        {
-            Debug.LogError($"METHOD   {registrySyncSystem == null}");
-        }
-
-        [Inject]
-        public void Init2(RegistrySyncSystem registrySyncSystem)
-        {
-            Debug.LogError($"METHOD2   {registrySyncSystem == null}");
-        }
-
-        public void RequestCreate(WeaponBase weapon)
+        public void RequestAddOnCreate(WeaponBase weapon)
         {
             _weaponToRemove.Remove(weapon);
             _weaponToAdd.Add(weapon);
         }
 
-        public void RequestDestroy(WeaponBase weapon)
+        public void RequestRemoveOnDestroy(WeaponBase weapon)
         {
             _weaponToAdd.Remove(weapon);
             _weaponToRemove.Add(weapon);
@@ -65,7 +45,7 @@ namespace Registries
             _activeWeaponToRemove.Add(weapon);
         }
 
-        public void RequestStartAttack(WeaponBase weapon)
+        public void RequestAddOnStartAttack(WeaponBase weapon)
         {
             _weaponToRemove.Remove(weapon);
             _weaponToAdd.Add(weapon);
@@ -73,7 +53,7 @@ namespace Registries
             _activeWeaponToAdd.Add(weapon);
         }
 
-        public void RequestStopAttack(WeaponBase weapon)
+        public void RequestRemoveOnStopAttack(WeaponBase weapon)
         {
             _activeWeaponToAdd.Remove(weapon);
             _activeWeaponToRemove.Add(weapon);

@@ -1,41 +1,33 @@
 using DI;
+using Registries;
 using Ships;
 using UnityEngine;
 
 namespace GameSystems
 {
-    public class ShipVisualizeSystem : GameSystemBase
+    public class ShipVisualizeSystem : GameSystemBase, IPreUpdateTickObserver
     {
-        private ThrustersPower currentThrustersPower;
+        private ShipRegistry _shipRegistry;
 
-        private ShipInstance _playerShip;
-
-
-        protected override void AwakeInit()
+        [Inject]
+        public void Construct(ShipRegistry shipRegystry)
         {
+            _shipRegistry = shipRegystry;
+            ActiveGameState = GameState.CoreGameplay;
         }
 
-        protected override void Subscribe()
+        public void PreUpdateTick()
         {
-            GameFlowSystem.UpdateTick += OnUpdateTick;
-            EventBus.SpawnPlayerShip += OnSpawnPlayerShip;
-        }
+            if (!SystemIsActive) return;
 
-        protected override void Unsubscribe()
-        {
-            GameFlowSystem.UpdateTick -= OnUpdateTick;
-            EventBus.SpawnPlayerShip -= OnSpawnPlayerShip;
-        }
+            Visualize();
+        }        
 
-        private void OnSpawnPlayerShip(ShipInstance shipInstance)
+        private void Visualize()
         {
-            _playerShip = shipInstance;
-        }
-
-        private void OnUpdateTick(float deltaTime)
-        {
-            ref var movementRuntimeData = ref _playerShip.MovementRuntimeData;
-            ref var view = ref _playerShip.View;
+            var playerShip = _shipRegistry.PlayerShip;
+            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
+            ref var view = ref playerShip.View;
             VisualizeMainEngine(movementRuntimeData, view);
             VisualizeThrusters(movementRuntimeData, view);
             VisualizeBoosters(movementRuntimeData, view);

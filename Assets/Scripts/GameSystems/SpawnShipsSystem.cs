@@ -1,44 +1,34 @@
 using DI;
 using Helpers;
+using Registries;
 using Ships;
-using UnityEngine;
 
 namespace GameSystems
 {
     public class SpawnShipsSystem : GameSystemBase
     {
         private ShipInstance _playerShip;
+        private ShipRegistry _shipRegistry;
+        private WeaponRegistry _weaponRegistry;
+        private GameFlowSystem _gameFlowSystem;
 
         [Inject]
-        public void Construct(ShipInstance playerShip)
+        public void Construct(ShipInstance playerShip, ShipRegistry shipRegistry, WeaponRegistry weaponRegistry, GameFlowSystem gameFlowSystem)
         {
             _playerShip = playerShip;
-        }
-
-        protected override void AwakeInit()
-        {
-        }
-
-        protected override void Subscribe()
-        {
-
-        }
-
-        protected override void Unsubscribe()
-        {
-
+            _shipRegistry = shipRegistry;
+            _weaponRegistry = weaponRegistry;
+            _gameFlowSystem = gameFlowSystem;
         }
 
         private void Start()
         {
             ShipInitHelper.InitShip(_playerShip);
             ShipInitHelper.InitWeapons(_playerShip);
-
-            EventBus.SpawnPlayerShip?.Invoke(_playerShip);
-            EventBus.GameStateChangeAction?.Invoke(GameState.CoreGameplay);
+            ShipInitHelper.RegisterShip(_playerShip, _shipRegistry, asPlayer: true);
+            ShipInitHelper.RegisterWeapons(_playerShip, _weaponRegistry);
+            _gameFlowSystem.ChangeGameState(GameState.CoreGameplay);
         }
-
-
     }
 }
 
