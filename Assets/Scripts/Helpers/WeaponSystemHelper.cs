@@ -1,3 +1,4 @@
+using Ships;
 using UnityEngine;
 using Weapons;
 
@@ -24,6 +25,33 @@ namespace Helpers
             {
                 float clamped = Mathf.Clamp(localZ, -weapon.MaxRotateAngle, weapon.MaxRotateAngle);
                 weapon.Transform.localRotation = Quaternion.Euler(0, 0, clamped);
+            }
+        }
+
+        public static void AimAtTarget(ShipInstance shipInstance, float dTime)
+        {
+            Vector3 targetPos = shipInstance.TargetData.Position;
+
+            foreach (var slot in shipInstance.WeaponSlots)
+            {
+                var weapon = slot.Weapon;
+                var transform = weapon.Transform;
+                var maxRotateAngle = weapon.MaxRotateAngle;
+
+                Vector3 targetDir = targetPos - transform.position;
+                float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
+
+                float newAngle = Mathf.MoveTowardsAngle(transform.eulerAngles.z, targetAngle, weapon.RotateSpeed * dTime);
+
+                transform.rotation = Quaternion.Euler(0, 0, newAngle);
+
+                float localZ = Mathf.DeltaAngle(0, transform.localEulerAngles.z);
+
+                if (Mathf.Abs(localZ) > maxRotateAngle)
+                {
+                    float clamped = Mathf.Clamp(localZ, -maxRotateAngle, maxRotateAngle);
+                    transform.localRotation = Quaternion.Euler(0, 0, clamped);
+                }
             }
         }
 

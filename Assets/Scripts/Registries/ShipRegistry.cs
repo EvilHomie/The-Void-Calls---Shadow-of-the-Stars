@@ -1,18 +1,24 @@
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
+using Weapons;
 
 namespace Registries
 {
     public class ShipRegistry : MonoBehaviour, IPreUpdateTickObserver
     {
         public ShipInstance PlayerShip => _playerShip;
-        public IReadOnlyCollection<ShipInstance> OtherShips => _otherShips;
+        public IReadOnlyCollection<ShipInstance> OtherShips => _ships;
+        public IReadOnlyCollection<ShipInstance> ShipsInFight => _shipsInFight;
 
         private ShipInstance _playerShip;
-        private readonly HashSet<ShipInstance> _otherShips = new(200); // за исключением игрока
+        private readonly HashSet<ShipInstance> _ships = new(200); // за исключением игрока
         private readonly HashSet<ShipInstance> _shipsToAdd = new(20);
         private readonly HashSet<ShipInstance> _shipsToRemove = new(20);
+
+        private readonly HashSet<ShipInstance> _shipsInFight = new(200); // за исключением игрока
+        private readonly HashSet<ShipInstance> _shipsInFightToAdd = new(20);
+        private readonly HashSet<ShipInstance> _shipsInFightToRemove = new(20);
 
         public void PreUpdateTick()
         {
@@ -27,6 +33,18 @@ namespace Registries
         public void RequestRemovePlayerShip(ShipInstance shipInstance)
         {
             _playerShip = null;
+        }
+
+        public void RequestRemoveOnExitFight(ShipInstance shipInstance)
+        {
+            _shipsInFightToAdd.Remove(shipInstance);
+            _shipsInFightToRemove.Add(shipInstance);
+        }
+
+        public void RequestAddOnEnterFight(ShipInstance shipInstance)
+        {
+            _shipsInFightToRemove.Remove(shipInstance);
+            _shipsInFightToAdd.Add(shipInstance);
         }
 
         public void RequestAddOtherShip(ShipInstance shipInstance)
@@ -45,14 +63,14 @@ namespace Registries
         {
             foreach (var ship in _shipsToRemove)
             {
-                _otherShips.Remove(ship);
+                _ships.Remove(ship);
             }
 
             _shipsToRemove.Clear();
 
             foreach (var ship in _shipsToAdd)
             {
-                _otherShips.Add(ship);
+                _ships.Add(ship);
             }
 
             _shipsToAdd.Clear();

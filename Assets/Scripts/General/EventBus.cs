@@ -1,5 +1,6 @@
 using HitParticles;
 using Projectiles;
+using Ships;
 using System;
 using UnityEngine;
 using Weapons;
@@ -11,6 +12,7 @@ namespace GameSystems
         public static Action<ProjectileBase, Collider2D> ProjectileHit { get; set; }
         public static Action<WeaponBase, Collider2D> BeamHit { get; set; }
 
+        public static Action<ShipInstance, bool> NonPlayerChangeAttackState { get; set; }
 
 
         public static Func<PoolReference, ProjectileBase> GetProjectile { get; set; }

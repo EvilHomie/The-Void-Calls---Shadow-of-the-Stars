@@ -35,7 +35,7 @@ namespace GamePools
         private ProjectileBase GetProjectile(PoolReference poolReference)
         {
             var pr = Getitem(poolReference);
-            EventBus.ProjectileFetched(pr);
+            EventBus.ProjectileFetched?.Invoke(pr);
             return pr;
         }
     }

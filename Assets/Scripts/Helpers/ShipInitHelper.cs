@@ -84,14 +84,6 @@ namespace Helpers
                 shipRegistry.RequestAddPlayerShip(shipInstance);
             }
         }
-
-        public static void RegisterWeapons(ShipInstance shipInstance, WeaponRegistry weaponRegistry)
-        {
-            foreach (var slot in shipInstance.WeaponSlots)
-            {
-                weaponRegistry.RequestAddOnCreate(slot.Weapon);
-            }
-        }
     }
 }
 
