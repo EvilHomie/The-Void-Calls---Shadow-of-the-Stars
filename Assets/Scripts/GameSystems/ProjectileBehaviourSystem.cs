@@ -42,6 +42,7 @@ namespace GameSystems
             var hitEffect = EventBus.GetHitParticle(projectile.HitData.PoolReference);
             Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
             hitEffect.CachedTransform.position = hitPoint;
+            hitEffect.IsPlaying = true;
             _projectileRegistry.RequestRemoveActiveProjectile(projectile);
         }
 

@@ -1,4 +1,5 @@
 using DI;
+using GamePools;
 using GameSystems;
 using HitParticles;
 using System.Collections.Generic;
@@ -14,9 +15,12 @@ namespace Registries
         private readonly HashSet<HitParticle> _activeHitParticlesToAdd = new(20);
         private readonly HashSet<HitParticle> _activeHitParticlesToRemove = new(20);
 
+        private HitParticlesPool _hitParticlesPool;
+
         [Inject]
-        public void Construct(GameFlowSystem gameFlowSystem)
+        public void Construct(GameFlowSystem gameFlowSystem, HitParticlesPool hitParticlesPool)
         {
+            _hitParticlesPool = hitParticlesPool;
             gameFlowSystem.AddTickObserver(this);
         }
 
@@ -41,7 +45,7 @@ namespace Registries
         {
             foreach (var hitParticle in _activeHitParticlesToRemove)
             {
-                EventBus.ReturnHitParticleInPool(hitParticle);
+                _hitParticlesPool.ReleaseItem(hitParticle);
                 _activeHitParticles.Remove(hitParticle);
             }
 

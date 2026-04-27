@@ -1,9 +1,11 @@
 using Environment;
 using GameCamera;
 using GameInput;
+using GamePools;
 using GameSystems;
 using Registries;
 using Ships;
+using System;
 using UnityEngine;
 
 namespace DI
@@ -20,6 +22,9 @@ namespace DI
         [SerializeField] HitParticleRegistry hitParticleRegistry;
         [SerializeField] StarryCanvasView starryCanvasView;
         [SerializeField] CameraRigSystem cameraRigSystem;
+        [SerializeField] HitParticlesPool  hitParticlesPool;
+        [SerializeField] ProjectilesPool   ProjectilesPool;
+        
 
         protected override void InstallBindings()
         {
@@ -29,6 +34,9 @@ namespace DI
             Container.Bind<WeaponRegistry>().FromInstance(weaponRegistry).AsSingleton();
             Container.Bind<ProjectileRegistry>().FromInstance(projectileRegistry).AsSingleton();
             Container.Bind<HitParticleRegistry>().FromInstance(hitParticleRegistry).AsSingleton();
+
+            Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
+            Container.Bind<ProjectilesPool>().FromInstance(ProjectilesPool).AsSingleton();
 
 
             Container.Bind<StarryCanvasView>().FromInstance(starryCanvasView).AsSingleton();

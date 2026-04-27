@@ -1,4 +1,5 @@
 using DI;
+using GamePools;
 using GameSystems;
 using Projectiles;
 using System.Collections.Generic;
@@ -14,9 +15,12 @@ namespace Registries
         private readonly HashSet<ProjectileBase> _activeProjectilesToAdd = new(20);
         private readonly HashSet<ProjectileBase> _activeProjectilesToRemove = new(20);
 
+        private ProjectilesPool _projectilesPool;
+
         [Inject]
-        public void Construct(GameFlowSystem gameFlowSystem)
+        public void Construct(GameFlowSystem gameFlowSystem, ProjectilesPool projectilesPool)
         {
+            _projectilesPool = projectilesPool;
             gameFlowSystem.AddTickObserver(this);
         }
 
@@ -41,7 +45,7 @@ namespace Registries
         {
             foreach (var projectile in _activeProjectilesToRemove)
             {
-                EventBus.ReturnProjectileInPull(projectile);
+                _projectilesPool.ReleaseItem(projectile);
                 _activeProjectiles.Remove(projectile);
             }
 

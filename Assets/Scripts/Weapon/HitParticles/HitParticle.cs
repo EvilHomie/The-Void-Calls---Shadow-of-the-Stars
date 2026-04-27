@@ -1,13 +1,13 @@
 using GamePools;
-using GameSystems;
 
 namespace HitParticles
 {
     public class HitParticle : PoolObjectBase
     {
+        public bool IsPlaying;
         void OnParticleSystemStopped()
         {
-            EventBus.HitParticleStopped(this);
+            IsPlaying = false;
         }
     }
 }
