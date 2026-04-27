@@ -1,26 +1,26 @@
+using DI;
 using Projectiles;
-using System.Collections.Generic;
+using Registries;
 using UnityEngine;
 
 namespace GameSystems
 {
     public class ProjectileBehaviourSystem : GameSystemBase, IUpdateTickObserver
     {
-        private HashSet<ProjectileBase> _activeProjectiles;
-        private HashSet<ProjectileBase> _destroyedProjectiles;
+        private ProjectileRegistry _projectileRegistry;
 
-        protected override void AwakeInit()
+        [Inject]
+        public void Construct(ProjectileRegistry shipRegistry)
         {
-            _activeProjectiles = new(500);
-            _destroyedProjectiles = new(500);
-            ActiveGameState = GameState.CoreGameplay;
+            _projectileRegistry = shipRegistry;
+             ActiveGameState = GameState.CoreGameplay;
         }
 
         public void UpdateTick(float deltaTime)
         {
             if (!SystemIsActive) return;
 
-            OnGameTick(deltaTime);
+            OnGameTick();
         }
 
         protected override void Subscribe()
@@ -42,37 +42,22 @@ namespace GameSystems
             var hitEffect = EventBus.GetHitParticle(projectile.HitData.PoolReference);
             Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
             hitEffect.CachedTransform.position = hitPoint;
-            _destroyedProjectiles.Add(projectile);
-
-            Debug.LogError(hitCollider.name);
+            _projectileRegistry.RequestRemoveActiveProjectile(projectile);
         }
 
         private void OnProjectileFetched(ProjectileBase projectile)
         {
-            _activeProjectiles.Add(projectile);
+            _projectileRegistry.RequestAddActiveProjectile(projectile);
         }
-        private void OnGameTick(float dTime)
+        private void OnGameTick()
         {
-            ReturnDestroyed();
-
-            foreach (var projectile in _activeProjectiles)
+            foreach (var projectile in _projectileRegistry.ActiveProjectiles)
             {
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
-                    _destroyedProjectiles.Add(projectile);
-                    continue;
+                    _projectileRegistry.RequestRemoveActiveProjectile(projectile);
                 }
             }
-        }
-        private void ReturnDestroyed()
-        {
-            foreach (var projectile in _destroyedProjectiles)
-            {
-                _activeProjectiles.Remove(projectile);
-                EventBus.ReturnProjectile(projectile);
-            }
-
-            _destroyedProjectiles.Clear();
         }
     }
 }

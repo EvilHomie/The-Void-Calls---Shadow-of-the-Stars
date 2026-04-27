@@ -1,7 +1,6 @@
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
-using Weapons;
 
 namespace Registries
 {

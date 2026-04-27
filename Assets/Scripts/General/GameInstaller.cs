@@ -14,10 +14,11 @@ namespace DI
         [SerializeField] Camera mainCamera;
         [SerializeField] MouseCursor mouseCursor;
         [SerializeField] GameFlowSystem gameFlowSystem;
-        [SerializeField] ShipRegistry  shipRegistry;
-        [SerializeField] WeaponRegistry  weaponRegistry;
-        [SerializeField] StarryCanvasView  starryCanvasView;
-        [SerializeField] CameraRigSystem  cameraRigSystem;
+        [SerializeField] ShipRegistry shipRegistry;
+        [SerializeField] WeaponRegistry weaponRegistry;
+        [SerializeField] ProjectileRegistry projectileRegistry;
+        [SerializeField] StarryCanvasView starryCanvasView;
+        [SerializeField] CameraRigSystem cameraRigSystem;
 
         protected override void InstallBindings()
         {
@@ -25,6 +26,7 @@ namespace DI
             Container.Bind<GameFlowSystem>().FromInstance(gameFlowSystem).AsSingleton();
             Container.Bind<ShipRegistry>().FromInstance(shipRegistry).AsSingleton();
             Container.Bind<WeaponRegistry>().FromInstance(weaponRegistry).AsSingleton();
+            Container.Bind<ProjectileRegistry>().FromInstance(projectileRegistry).AsSingleton();
 
 
             Container.Bind<StarryCanvasView>().FromInstance(starryCanvasView).AsSingleton();
@@ -33,7 +35,7 @@ namespace DI
             Container.Bind<CameraRigSystem>().FromInstance(cameraRigSystem).AsSingleton();
             Container.Bind<MouseCursor>().FromInstance(mouseCursor).AsSingleton();
 
-            
+
 
             if (Application.platform == RuntimePlatform.WindowsPlayer || Application.isEditor)
             {

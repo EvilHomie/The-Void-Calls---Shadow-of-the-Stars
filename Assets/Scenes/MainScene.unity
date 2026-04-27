@@ -727,6 +727,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2205898bde2eb024e96af9cbbcf82ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &270608213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 270608214}
+  - component: {fileID: 270608215}
+  m_Layer: 0
+  m_Name: WeaponRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &270608214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270608213}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 781716962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &270608215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270608213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e211a2b4b2233684090583a030292735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Registries.WeaponRegistry
 --- !u!1 &317858947
 GameObject:
   m_ObjectHideFlags: 0
@@ -6284,6 +6328,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostersPlume
   boosterParticles: {fileID: 923370154}
+--- !u!1 &567994881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 567994882}
+  - component: {fileID: 567994883}
+  m_Layer: 0
+  m_Name: ShipRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &567994882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567994881}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 781716962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &567994883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567994881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073f8ced07b125d48aff7ed0fb53e14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Registries.ShipRegistry
 --- !u!1 &572172817
 GameObject:
   m_ObjectHideFlags: 0
@@ -6957,6 +7045,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &730494364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 730494365}
+  - component: {fileID: 730494366}
+  m_Layer: 0
+  m_Name: ProjectileRegistry
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &730494365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730494364}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 781716962}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &730494366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730494364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 139c9759f0b2df84babb29cfa2dffa88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Registries.ProjectileRegistry
 --- !u!1 &774036084
 GameObject:
   m_ObjectHideFlags: 0
@@ -7103,8 +7235,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 781716962}
-  - component: {fileID: 781716964}
-  - component: {fileID: 781716963}
   m_Layer: 0
   m_Name: Registries
   m_TagString: Untagged
@@ -7124,33 +7254,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 730494365}
+  - {fileID: 270608214}
+  - {fileID: 567994882}
   m_Father: {fileID: 1883150519}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &781716963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781716961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e211a2b4b2233684090583a030292735, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Registries.WeaponRegistry
---- !u!114 &781716964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781716961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073f8ced07b125d48aff7ed0fb53e14b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Registries.ShipRegistry
 --- !u!1 &789032728
 GameObject:
   m_ObjectHideFlags: 0
@@ -13291,7 +13400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1374963307
 Transform:
   m_ObjectHideFlags: 0
@@ -13863,8 +13972,9 @@ MonoBehaviour:
   mainCamera: {fileID: 519420031}
   mouseCursor: {fileID: 639390010}
   gameFlowSystem: {fileID: 163481654}
-  shipRegistry: {fileID: 781716964}
-  weaponRegistry: {fileID: 781716963}
+  shipRegistry: {fileID: 567994883}
+  weaponRegistry: {fileID: 270608215}
+  projectileRegistry: {fileID: 730494366}
   starryCanvasView: {fileID: 1015955415}
   cameraRigSystem: {fileID: 1027794157}
 --- !u!4 &1676256109
