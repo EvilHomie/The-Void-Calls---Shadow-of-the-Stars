@@ -17,10 +17,14 @@ namespace GameSystems
 
         public static Func<PoolReference, ProjectileBase> GetProjectile { get; set; }
         public static Action<ProjectileBase> ProjectileFetched { get; set; }
-        public static Action<ProjectileBase> ReturnInPull { get; set; }
+        public static Action<ProjectileBase> ReturnProjectileInPull { get; set; }
 
+
+
+        public static Action<HitParticle> HitParticleStopped { get; set; }
         public static Func<PoolReference, HitParticle> GetHitParticle { get; set; }
-        public static Action<HitParticle> ReturnHitParticle { get; set; }
+        public static Action<HitParticle> HitParticleFetched { get; set; }
+        public static Action<HitParticle> ReturnHitParticleInPool { get; set; }
     }
 }
 

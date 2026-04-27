@@ -23,20 +23,20 @@ namespace GamePools
         protected override void Subscribe()
         {
             EventBus.GetProjectile += GetProjectile;
-            EventBus.ReturnInPull += ReleaseItem;
+            EventBus.ReturnProjectileInPull += ReleaseItem;
         }
 
         protected override void Unsubscribe()
         {
             EventBus.GetProjectile -= GetProjectile;
-            EventBus.ReturnInPull -= ReleaseItem;
+            EventBus.ReturnProjectileInPull -= ReleaseItem;
         }
 
         private ProjectileBase GetProjectile(PoolReference poolReference)
         {
-            var pr = Getitem(poolReference);
-            EventBus.ProjectileFetched?.Invoke(pr);
-            return pr;
+            var projectile = Getitem(poolReference);
+            EventBus.ProjectileFetched?.Invoke(projectile);
+            return projectile;
         }
     }
 }

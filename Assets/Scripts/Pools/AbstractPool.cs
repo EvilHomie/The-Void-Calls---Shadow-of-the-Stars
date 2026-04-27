@@ -73,13 +73,11 @@ namespace GamePools
 
         private void OnGet(T item)
         {
-            item.SetPoolState(false);
             //item.CachedTransform.SetParent(null);
             item.CachedGameObject.SetActive(true);
         }
         private void OnRelease(T item)
         {
-            item.SetPoolState(true);
             //item.CachedTransform.SetParent(_poolsParents[item.PoolReference]);
             item.CachedGameObject.SetActive(false);
         }

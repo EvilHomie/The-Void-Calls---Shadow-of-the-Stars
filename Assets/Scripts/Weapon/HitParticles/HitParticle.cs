@@ -7,7 +7,7 @@ namespace HitParticles
     {
         void OnParticleSystemStopped()
         {
-            EventBus.ReturnHitParticle(this);
+            EventBus.HitParticleStopped(this);
         }
     }
 }

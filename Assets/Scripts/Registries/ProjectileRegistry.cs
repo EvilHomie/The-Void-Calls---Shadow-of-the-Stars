@@ -41,7 +41,7 @@ namespace Registries
         {
             foreach (var projectile in _activeProjectilesToRemove)
             {
-                EventBus.ReturnInPull(projectile);
+                EventBus.ReturnProjectileInPull(projectile);
                 _activeProjectiles.Remove(projectile);
             }
 
