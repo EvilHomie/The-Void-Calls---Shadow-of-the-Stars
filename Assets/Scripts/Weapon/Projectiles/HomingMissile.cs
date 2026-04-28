@@ -8,7 +8,8 @@ namespace Projectiles
 
         public Transform TargetTransform;
 
-        public float MoveSpeed;
+        public float AccelerationSpeed;
+        public float BrakingSpeed;
         public float RotateSpeed;
     }
 }

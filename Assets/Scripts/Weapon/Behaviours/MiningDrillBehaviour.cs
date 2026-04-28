@@ -5,20 +5,20 @@ namespace Weapons
 {
     public class MiningDrillBehaviour : IWeaponBehaviour<MiningDrill>
     {
-        public void StartShoot(MiningDrill weapon)
+        public void HandleStartShoot(MiningDrill weapon)
         {
-            ProceedShoot(weapon);
+            ProcessShooting(weapon);
             weapon.BeamLineGO.SetActive(true);
             weapon.ShootSpotPS.Play();
         }
 
-        public void CancelShoot(MiningDrill weapon)
+        public void HandleCancelShoot(MiningDrill weapon)
         {
             weapon.BeamLineGO.SetActive(false);
             weapon.ShootSpotPS.Stop();
         }
 
-        public void ProceedShoot(MiningDrill weapon)
+        public void ProcessShooting(MiningDrill weapon)
         {
             RaycastHit2D hit = Physics2D.Raycast(weapon.Transform.position, weapon.Transform.up, weapon.MaxDistance, weapon.HitLayers); 
 

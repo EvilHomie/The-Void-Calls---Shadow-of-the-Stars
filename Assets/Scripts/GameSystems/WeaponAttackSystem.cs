@@ -54,7 +54,6 @@ namespace GameSystems
             OnShipChangeAttackState(ship, state);
         }
 
-
         private void OnShipChangeAttackState(ShipInstance ship, bool state)
         {
             if (state)
@@ -64,7 +63,7 @@ namespace GameSystems
                     if (slot.IsActive)
                     {
                         _weaponRegistry.RequestAddOnStartAttack(slot.Weapon);
-                        _weaponsBehaviour.StartShoot(slot.Weapon);
+                        _weaponsBehaviour.HandleStartShoot(slot.Weapon);
                     }
                 }
             }
@@ -73,7 +72,7 @@ namespace GameSystems
                 foreach (var slot in ship.WeaponSlots)
                 {
                     _weaponRegistry.RequestRemoveOnStopAttack(slot.Weapon);
-                    _weaponsBehaviour.CancelShoot(slot.Weapon);
+                    _weaponsBehaviour.HandleCancelShoot(slot.Weapon);
                 }
             }
         }
@@ -99,7 +98,7 @@ namespace GameSystems
         {
             foreach (var weapon in _weaponRegistry.ActiveWeapons)
             {
-                _weaponsBehaviour.ProceedShoot(weapon);
+                _weaponsBehaviour.ProcessShooting(weapon);
             }
         }
     }

@@ -17,12 +17,21 @@ namespace GameSystems
         public static Action<ProjectileBase, Collider2D> ProjectileHitAction { get; set; }
 
 
+
+
+
         public delegate void SpawnBoltDelegate(in BoltSpawnData data);
         public static SpawnBoltDelegate SpawnBoltAction;
 
-
         public delegate void SpawnHitEffectDelegate(in HitEffectSpawnData data);
         public static SpawnHitEffectDelegate SpawnHitEffectAction;
+
+        public delegate void SpawnHomingMissileDelegate(in HomingMissileSpawnData data);
+        public static SpawnHomingMissileDelegate SpawnHomingMissileAction;
+
+        public delegate void SpawnStraightMissileDelegate(in StraightMissileSpawnData data);
+        public static SpawnStraightMissileDelegate SpawnStraightMissileAction;
+
     }
 }
 

@@ -4,6 +4,6 @@ namespace Projectiles
     {
         public override ProjectileType ProjectileType => ProjectileType.StraightMissile;
 
-        public float MoveSpeed;
+        public float AccelerationSpeed;
     }
 }

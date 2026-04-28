@@ -64,8 +64,28 @@ namespace GameSystems
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
                     _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+                    continue;
                 }
+
+                //if (projectile is StraightMissile straightMissile)
+                //{
+                //    ProcessStraightMissile(straightMissile);
+                //}
+                //else if (projectile is HomingMissile homingMissile)
+                //{
+                //    ProcessHomingMissile (homingMissile);
+                //}
             }
+        }
+
+        private void ProcessStraightMissile(StraightMissile straightMissile)
+        {
+
+        }
+
+        private void ProcessHomingMissile(HomingMissile homingMissile)
+        {
+
         }
     }
 }

@@ -2,15 +2,15 @@ namespace Weapons
 {
     public class BeamEmitterBehaviour : IWeaponBehaviour<BeamEmitter>
     {
-        public void StartShoot(BeamEmitter weapon)
+        public void HandleStartShoot(BeamEmitter weapon)
         {
         }
 
-        public void CancelShoot(BeamEmitter weapon)
+        public void HandleCancelShoot(BeamEmitter weapon)
         {
         }
 
-        public void ProceedShoot(BeamEmitter weapon)
+        public void ProcessShooting(BeamEmitter weapon)
         {
         }
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Weapons;
 
 namespace Weapons
 {
@@ -14,14 +13,14 @@ namespace Weapons
             RegisterInvokers();
         }
 
-        public void StartShoot(WeaponBase weapon)
-            => _invokers[weapon.WeaponType].StartShoot(weapon);
+        public void HandleStartShoot(WeaponBase weapon)
+            => _invokers[weapon.WeaponType].HandleStartShoot(weapon);
 
-        public void CancelShoot(WeaponBase weapon)
-            => _invokers[weapon.WeaponType].CancelShoot(weapon);
+        public void HandleCancelShoot(WeaponBase weapon)
+            => _invokers[weapon.WeaponType].HandleCancelShoot(weapon);
 
-        public void ProceedShoot(WeaponBase weapon)
-            => _invokers[weapon.WeaponType].ProceedShoot(weapon);
+        public void ProcessShooting(WeaponBase weapon)
+            => _invokers[weapon.WeaponType].ProcessShooting(weapon);
 
         private void RegisterInvokers()
         {
@@ -32,18 +31,18 @@ namespace Weapons
         private WeaponInvoker CreateInvoker<TWeapon>(IWeaponBehaviour<TWeapon> behaviour) where TWeapon : WeaponBase
         {
             return new WeaponInvoker(
-                w => behaviour.StartShoot((TWeapon)w),
-                w => behaviour.CancelShoot((TWeapon)w),
-                w => behaviour.ProceedShoot((TWeapon)w)
+                w => behaviour.HandleStartShoot((TWeapon)w),
+                w => behaviour.HandleCancelShoot((TWeapon)w),
+                w => behaviour.ProcessShooting((TWeapon)w)
             );
         }
     }
 
-    public interface IWeaponBehaviour<TWeapon> where TWeapon : WeaponBase
+    public interface IWeaponBehaviour<TProjectile> where TProjectile : WeaponBase
     {
-        void StartShoot(TWeapon weapon);
-        void CancelShoot(TWeapon weapon);
-        void ProceedShoot(TWeapon weapon);
+        void HandleStartShoot(TProjectile weapon);
+        void HandleCancelShoot(TProjectile weapon);
+        void ProcessShooting(TProjectile weapon);
     }
 
     public class WeaponInvoker
@@ -59,8 +58,8 @@ namespace Weapons
             _proceed = proceed;
         }
 
-        public void StartShoot(WeaponBase w) => _start(w);
-        public void CancelShoot(WeaponBase w) => _cancel(w);
-        public void ProceedShoot(WeaponBase w) => _proceed(w);
+        public void HandleStartShoot(WeaponBase w) => _start(w);
+        public void HandleCancelShoot(WeaponBase w) => _cancel(w);
+        public void ProcessShooting(WeaponBase w) => _proceed(w);
     }
 }
