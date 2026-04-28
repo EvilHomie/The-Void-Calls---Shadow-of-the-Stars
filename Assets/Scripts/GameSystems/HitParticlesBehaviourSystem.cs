@@ -1,18 +1,18 @@
 using DI;
-using HitParticles;
 using Registries;
+using Weapons;
 
 namespace GameSystems
 {
     public class HitParticlesBehaviourSystem : GameSystemBase, IUpdateTickObserver
     {
-        private HitParticleRegistry _hitParticleRegistry;
+        private HitEffectRegistry _hitEffectRegistry;
 
         [Inject]
-        public void Construct(HitParticleRegistry hitParticleRegistry)
+        public void Construct(HitEffectRegistry hitParticleRegistry)
         {
-            _hitParticleRegistry = hitParticleRegistry;
-             ActiveGameState = GameState.CoreGameplay;
+            _hitEffectRegistry = hitParticleRegistry;
+            ActiveGameState = GameState.CoreGameplay;
         }
 
         public void UpdateTick(float deltaTime)
@@ -25,30 +25,31 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.HitParticleFetched += OnHitParticleFetched;
+            EventBus.SpawnHitEffectAction += SpawnHitEffect;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.HitParticleFetched -= OnHitParticleFetched;
+            EventBus.SpawnHitEffectAction -= SpawnHitEffect;
         }
 
-        private void  CheckActive()
+        private void SpawnHitEffect(in HitEffectSpawnData spawnData)
         {
-            foreach (var  hitParticle  in _hitParticleRegistry.ActiveHitParticles)
+            var hitEffect = _hitEffectRegistry.Get(spawnData.PoolReference);
+            hitEffect.Transform.position = spawnData.Position;
+            hitEffect.IsPlaying = true;
+        }
+
+        private void CheckActive()
+        {
+            foreach (var hitParticle in _hitEffectRegistry.ActiveHitParticles)
             {
                 if (!hitParticle.IsPlaying)
                 {
-                    _hitParticleRegistry.RequestRemoveActiveHitParticle(hitParticle);
+                    _hitEffectRegistry.RequestRemoveActiveHitParticle(hitParticle);
                 }
             }
         }
-
-        private void OnHitParticleFetched(HitParticle hitParticle)
-        {
-            _hitParticleRegistry.RequestAddActiveHitParticle(hitParticle);
-        }
     }
 }
-

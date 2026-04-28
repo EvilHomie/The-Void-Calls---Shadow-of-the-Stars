@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6012e3f7f841caa43a3c3b23fe8df9c4, type: 3}
   m_Name: S_BoltRepeater_MK1_HitParticle_Data
   m_EditorClassIdentifier: 
-  <PoolReference>k__BackingField: {fileID: 11400000, guid: 6aaa9fe00aea48940947f34ddf4bc7da, type: 2}
+  <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <Prefab>k__BackingField: {fileID: 1237531300013582031, guid: 80c3337b1f37cd34ea08f09540bf8bc2, type: 3}

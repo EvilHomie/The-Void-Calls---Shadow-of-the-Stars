@@ -2,6 +2,7 @@ using DI;
 using Projectiles;
 using Registries;
 using UnityEngine;
+using Weapons;
 
 namespace GameSystems
 {
@@ -13,7 +14,7 @@ namespace GameSystems
         public void Construct(ProjectileRegistry shipRegistry)
         {
             _projectileRegistry = shipRegistry;
-             ActiveGameState = GameState.CoreGameplay;
+            ActiveGameState = GameState.CoreGameplay;
         }
 
         public void UpdateTick(float deltaTime)
@@ -26,30 +27,36 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.ProjectileFetched += OnProjectileFetched;
-            EventBus.ProjectileHit += OnProjectileHit;
+            EventBus.ProjectileHitAction += OnProjectileHit;
+            EventBus.SpawnBoltAction += SpawnBolt;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.ProjectileFetched -= OnProjectileFetched;
-            EventBus.ProjectileHit -= OnProjectileHit;
+            EventBus.ProjectileHitAction -= OnProjectileHit;
+            EventBus.SpawnBoltAction -= SpawnBolt;
+        }
+
+        private void SpawnBolt(in BoltSpawnData boltShootData)
+        {
+            var projectile = _projectileRegistry.GetBolt(boltShootData.PoolReference);
+
+            projectile.Transform.position = boltShootData.Position;
+            projectile.Transform.up = boltShootData.Velocity;
+            projectile.RigidBody.linearVelocity = boltShootData.Velocity;
+            projectile.DestroyTime = boltShootData.DestroyTime;
         }
 
         private void OnProjectileHit(ProjectileBase projectile, Collider2D hitCollider)
         {
-            var hitEffect = EventBus.GetHitParticle(projectile.HitData.PoolReference);
             Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
-            hitEffect.CachedTransform.position = hitPoint;
-            hitEffect.IsPlaying = true;
+            var projectileHitData = new HitEffectSpawnData(projectile.PoolReference, hitPoint);
             _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+
+            EventBus.SpawnHitEffectAction?.Invoke(projectileHitData);
         }
 
-        private void OnProjectileFetched(ProjectileBase projectile)
-        {
-            _projectileRegistry.RequestAddActiveProjectile(projectile);
-        }
         private void OnGameTick()
         {
             foreach (var projectile in _projectileRegistry.ActiveProjectiles)

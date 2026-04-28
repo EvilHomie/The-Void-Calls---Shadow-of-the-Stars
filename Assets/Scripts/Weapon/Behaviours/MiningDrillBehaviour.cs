@@ -1,8 +1,7 @@
 using GameSystems;
 using UnityEngine;
-using Weapons;
 
-namespace WeaponBehaviours
+namespace Weapons
 {
     public class MiningDrillBehaviour : IWeaponBehaviour<MiningDrill>
     {

@@ -1,6 +1,4 @@
-using GameSystems;
 using Projectiles;
-using System.Buffers.Text;
 using UnityEngine;
 using Weapons;
 
@@ -15,13 +13,13 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            EventBus.ProjectileHit += OnProjectileHit;
+            EventBus.ProjectileHitAction += OnProjectileHit;
             EventBus.BeamHit += OnBeamHit;
         }
 
         protected override void Unsubscribe()
         {
-            EventBus.ProjectileHit -= OnProjectileHit;
+            EventBus.ProjectileHitAction -= OnProjectileHit;
             EventBus.BeamHit -= OnBeamHit;
         }
 

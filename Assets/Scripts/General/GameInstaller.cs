@@ -19,7 +19,7 @@ namespace DI
         [SerializeField] ShipRegistry shipRegistry;
         [SerializeField] WeaponRegistry weaponRegistry;
         [SerializeField] ProjectileRegistry projectileRegistry;
-        [SerializeField] HitParticleRegistry hitParticleRegistry;
+        [SerializeField] HitEffectRegistry hitParticleRegistry;
         [SerializeField] StarryCanvasView starryCanvasView;
         [SerializeField] CameraRigSystem cameraRigSystem;
         [SerializeField] HitParticlesPool  hitParticlesPool;
@@ -33,7 +33,7 @@ namespace DI
             Container.Bind<ShipRegistry>().FromInstance(shipRegistry).AsSingleton();
             Container.Bind<WeaponRegistry>().FromInstance(weaponRegistry).AsSingleton();
             Container.Bind<ProjectileRegistry>().FromInstance(projectileRegistry).AsSingleton();
-            Container.Bind<HitParticleRegistry>().FromInstance(hitParticleRegistry).AsSingleton();
+            Container.Bind<HitEffectRegistry>().FromInstance(hitParticleRegistry).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(ProjectilesPool).AsSingleton();

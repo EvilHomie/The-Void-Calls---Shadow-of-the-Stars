@@ -8,15 +8,15 @@ namespace GameSystems
     {
         public static float CoreTime { get; private set; }
         public static float CoreDeltaTimeTick { get; private set; }
-        public Action<GameState> GameStateChanged { get; set; }
 
-        private GameState _currentGameState = GameState.None;
-        private float _gameSpeed = 1;
+        public Action<GameState> GameStateChanged { get; set; }
 
         private readonly List<IPreUpdateTickObserver> _preUpdateTickObservers = new();
         private readonly List<IUpdateTickObserver> _updateTickObservers = new();
         private readonly List<ILateUpdateTickObserver> _lateUpdateTickObservers = new();
         private readonly List<IFixedUpdateTickObserver> _fixedUpdateTickObservers = new();
+        private GameState _currentGameState = GameState.None;
+        private float _gameSpeed = 1;
 
         protected override void AwakeInit()
         {

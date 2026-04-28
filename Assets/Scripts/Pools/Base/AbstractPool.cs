@@ -15,19 +15,6 @@ namespace GamePools
         {
             AwakeInit();
         }
-
-        private void OnEnable()
-        {
-            Subscribe();
-        }
-
-        private void OnDisable()
-        {
-            Unsubscribe();
-        }
-
-        protected abstract void Subscribe();
-        protected abstract void Unsubscribe();
         protected abstract void AwakeInit();
 
         public T Getitem(PoolReference poolDefinition)
@@ -67,24 +54,24 @@ namespace GamePools
             var prefab = _prefabs[poolReference];
             var instance = Instantiate(prefab, parent);
             instance.Init(poolReference);
-            instance.CachedTransform.SetParent(_poolsParents[instance.PoolReference]);
+            instance.Transform.SetParent(_poolsParents[instance.PoolReference]);
             return instance;
         }
 
         private void OnGet(T item)
         {
             //item.CachedTransform.SetParent(null);
-            item.CachedGameObject.SetActive(true);
+            item.GameObject.SetActive(true);
         }
         private void OnRelease(T item)
         {
             //item.CachedTransform.SetParent(_poolsParents[item.PoolReference]);
-            item.CachedGameObject.SetActive(false);
+            item.GameObject.SetActive(false);
         }
 
         private void OnDestroyItem(T item)
         {
-            Destroy(item.CachedGameObject);
+            Destroy(item.GameObject);
         }
 
         private void PrewarmPool(ObjectPool<T> pool, int count)

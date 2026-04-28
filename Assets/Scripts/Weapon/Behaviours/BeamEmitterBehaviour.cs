@@ -1,6 +1,4 @@
-using Weapons;
-
-namespace WeaponBehaviours
+namespace Weapons
 {
     public class BeamEmitterBehaviour : IWeaponBehaviour<BeamEmitter>
     {

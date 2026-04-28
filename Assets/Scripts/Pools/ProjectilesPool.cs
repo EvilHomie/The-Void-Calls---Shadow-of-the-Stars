@@ -19,22 +19,5 @@ namespace GamePools
                 CreateItemPool(data, _startCapacity, _maxCapacity, container, _prewarmAmount);
             }
         }
-
-        protected override void Subscribe()
-        {
-            EventBus.GetProjectile += GetProjectile;
-        }
-
-        protected override void Unsubscribe()
-        {
-            EventBus.GetProjectile -= GetProjectile;
-        }
-
-        private ProjectileBase GetProjectile(PoolReference poolReference)
-        {
-            var projectile = Getitem(poolReference);
-            EventBus.ProjectileFetched?.Invoke(projectile);
-            return projectile;
-        }
     }
 }

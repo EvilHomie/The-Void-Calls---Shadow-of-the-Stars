@@ -2,6 +2,7 @@ using DI;
 using GamePools;
 using GameSystems;
 using Projectiles;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,9 +12,9 @@ namespace Registries
     {
         public IReadOnlyCollection<ProjectileBase> ActiveProjectiles => _activeProjectiles;
 
-        private readonly HashSet<ProjectileBase> _activeProjectiles = new(200);
-        private readonly HashSet<ProjectileBase> _activeProjectilesToAdd = new(20);
-        private readonly HashSet<ProjectileBase> _activeProjectilesToRemove = new(20);
+        private readonly HashSet<ProjectileBase> _activeProjectiles = new(500);
+        private readonly HashSet<ProjectileBase> _activeProjectilesToAdd = new(100);
+        private readonly HashSet<ProjectileBase> _activeProjectilesToRemove = new(100);
 
         private ProjectilesPool _projectilesPool;
 
@@ -27,6 +28,42 @@ namespace Registries
         public void PreUpdateTick()
         {
             Sync();
+        }
+
+        public Bolt GetBolt(PoolReference poolReference)
+        {
+            var projectile = _projectilesPool.Getitem(poolReference);
+
+#if UNITY_EDITOR
+            if (projectile is not Bolt) throw new Exception($"Expected Bolt, got {projectile.GetType()} from {poolReference.name}");
+#endif
+
+            RequestAddActiveProjectile(projectile);
+            return (Bolt)projectile;
+        }
+
+        public HomingMissile GetHomingMissile(PoolReference poolReference)
+        {
+            var projectile = _projectilesPool.Getitem(poolReference);
+
+#if UNITY_EDITOR
+            if (projectile is not Bolt) throw new Exception($"Expected HomingMissile, got {projectile.GetType()} from {poolReference.name}");
+#endif
+
+            RequestAddActiveProjectile(projectile);
+            return (HomingMissile)projectile;
+        }
+
+        public StraightMissile GetStraightMissile(PoolReference poolReference)
+        {
+            var projectile = _projectilesPool.Getitem(poolReference);
+
+#if UNITY_EDITOR
+            if (projectile is not Bolt) throw new Exception($"Expected StraightMissile, got {projectile.GetType()} from {poolReference.name}");
+#endif
+
+            RequestAddActiveProjectile(projectile);
+            return (StraightMissile)projectile;
         }
 
         public void RequestAddActiveProjectile(ProjectileBase projectile)

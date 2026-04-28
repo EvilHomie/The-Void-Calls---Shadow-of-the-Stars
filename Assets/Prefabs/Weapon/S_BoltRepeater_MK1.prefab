@@ -146,14 +146,14 @@ MonoBehaviour:
   <MaxDistance>k__BackingField: 10
   <MaxRotateAngle>k__BackingField: 25
   <RotateSpeed>k__BackingField: 45
-  <ProjectilePoolData>k__BackingField: {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
+  <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 8178394065935223340}
   <ShootPoint>k__BackingField: {fileID: 2403933954532205874}
   <FireRate>k__BackingField: 10
   <SpreadAngle>k__BackingField: 1
   <ProjectileSpeed>k__BackingField: 20
+  <ShipRigidBody>k__BackingField: {fileID: 0}
   NextShootTime: 0
-  ShootDelay: 0
 --- !u!1 &5033753141322967779
 GameObject:
   m_ObjectHideFlags: 0

@@ -13860,7 +13860,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 29905f6e1c9321b47801c7f5c32e817b, type: 2}
   _startCapacity: 500
   _maxCapacity: 1000
-  _prewarmAmount: 10
+  _prewarmAmount: 50
 --- !u!1 &1663515776
 GameObject:
   m_ObjectHideFlags: 0
@@ -14411,7 +14411,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cb1224526bed9a04db7177f77dc35c51, type: 2}
   _startCapacity: 500
   _maxCapacity: 1000
-  _prewarmAmount: 10
+  _prewarmAmount: 50
 --- !u!1 &1865616978
 GameObject:
   m_ObjectHideFlags: 0
@@ -15529,6 +15529,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: <PoolReference>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+    - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: <ProjectilePoolReference>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
@@ -15536,6 +15540,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainEnginePlume
       objectReference: {fileID: 0}
+    - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: <PoolReference>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: <ProjectilePoolReference>k__BackingField
       value: 

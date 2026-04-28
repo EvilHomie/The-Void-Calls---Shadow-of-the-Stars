@@ -3,7 +3,7 @@ using GameInput;
 using Helpers;
 using Registries;
 using Ships;
-using WeaponBehaviours;
+using Weapons;
 
 namespace GameSystems
 {
