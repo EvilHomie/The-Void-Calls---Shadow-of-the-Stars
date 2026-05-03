@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GamePools
 {
-    public class HitParticlesPool : AbstractPool<HitParticle>
+    public class HitParticlesPool : AbstractPool<HitEffectParticle>
     {
         [SerializeField] PoolData[] _poolsData;
         [SerializeField] int _startCapacity;

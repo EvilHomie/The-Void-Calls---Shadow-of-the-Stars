@@ -2,7 +2,7 @@
 
 namespace Weapons
 {
-    public readonly struct StraightMissileSpawnData
+    public readonly struct StraightMissileWeaponShootData
     {
         public readonly PoolReference PoolReference;
         public readonly float DestroyTime;
@@ -10,7 +10,7 @@ namespace Weapons
         public readonly Vector2 Velocity;
         public readonly float AccelerationSpeed;
 
-        public StraightMissileSpawnData(PoolReference poolReference, float destroyTime, Vector2 spawnPosition, Vector2 velocity, float accelerationSpeed)
+        public StraightMissileWeaponShootData(PoolReference poolReference, float destroyTime, Vector2 spawnPosition, Vector2 velocity, float accelerationSpeed)
         {
             PoolReference = poolReference;
             DestroyTime = destroyTime;

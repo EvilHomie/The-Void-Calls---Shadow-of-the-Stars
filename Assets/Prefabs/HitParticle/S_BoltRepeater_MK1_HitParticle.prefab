@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3522999337142788670}
   - component: {fileID: 4020895940121281893}
   - component: {fileID: 6692907616287224180}
-  - component: {fileID: 6113317967695869436}
+  - component: {fileID: 4018632620066726657}
   m_Layer: 0
   m_Name: S_BoltRepeater_MK1_HitParticle
   m_TagString: Untagged
@@ -4896,7 +4896,7 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!114 &6113317967695869436
+--- !u!114 &4018632620066726657
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4905,9 +4905,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1237531300013582031}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dc6efec66d8c37478c0ffe5f22a0d00, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f49cab1d277ae141bccc7b336951676, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitParticles.HitEffectParticle
   IsPlaying: 0
 --- !u!1 &7521144896696192875
 GameObject:

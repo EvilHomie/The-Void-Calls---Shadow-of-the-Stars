@@ -1,6 +1,7 @@
 using DI;
+using Projectiles;
 using Registries;
-using Weapons;
+using UnityEngine;
 
 namespace GameSystems
 {
@@ -25,19 +26,20 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.SpawnHitEffectAction += SpawnHitEffect;
+            EventBus.BoltHitAction += OnBoltHit;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.SpawnHitEffectAction -= SpawnHitEffect;
+            EventBus.BoltHitAction -= OnBoltHit;
         }
 
-        private void SpawnHitEffect(in HitEffectSpawnData spawnData)
+        private void OnBoltHit(Bolt bolt, Collider2D hitCollider)
         {
-            var hitEffect = _hitEffectRegistry.Get(spawnData.PoolReference);
-            hitEffect.Transform.position = spawnData.Position;
+            Vector2 hitPoint = hitCollider.ClosestPoint(bolt.ColliderTransform.position);
+            var hitEffect = _hitEffectRegistry.Get(bolt.PoolReference);
+            hitEffect.Transform.position = hitPoint;
             hitEffect.IsPlaying = true;
         }
 

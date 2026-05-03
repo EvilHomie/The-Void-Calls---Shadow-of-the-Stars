@@ -8,6 +8,7 @@ namespace Weapons
     {
         public void HandleStartShoot(BoltRepeater weapon)
         {
+            ProcessShooting(weapon);
         }
         public void HandleCancelShoot(BoltRepeater weapon)
         {
@@ -24,14 +25,14 @@ namespace Weapons
             var shipRB = weapon.ShipRigidBody;
             var shipForwardVel = Vector2.Dot(shipRB.linearVelocity, shipRB.transform.up);
             var velocity = direction * (weapon.ProjectileSpeed + shipForwardVel);
-            var destroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance / weapon.ProjectileSpeed;
+            var destroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance * weapon.InvProjectileSpeed;
             var spawnPos = weapon.ShootPoint.position;
-            var shootData = new BoltSpawnData(weapon.PoolReference, destroyTime, spawnPos, velocity);
+            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity);
 
             weapon.ShootSpotPS.Emit(1);
             weapon.NextShootTime = GameFlowSystem.CoreTime + weapon.ShootDelay;
 
-            EventBus.SpawnBoltAction?.Invoke(in shootData);
+            EventBus.BoltWeaponShootAction?.Invoke(in shootData);
         }
     }
 }

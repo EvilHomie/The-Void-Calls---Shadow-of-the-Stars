@@ -27,34 +27,30 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.ProjectileHitAction += OnProjectileHit;
-            EventBus.SpawnBoltAction += SpawnBolt;
+            EventBus.BoltHitAction += OnBoltHit;
+            EventBus.BoltWeaponShootAction += SpawnBolt;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.ProjectileHitAction -= OnProjectileHit;
-            EventBus.SpawnBoltAction -= SpawnBolt;
+            EventBus.BoltHitAction -= OnBoltHit;
+            EventBus.BoltWeaponShootAction -= SpawnBolt;
         }
 
-        private void SpawnBolt(in BoltSpawnData boltShootData)
+        private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
             var projectile = _projectileRegistry.GetBolt(boltShootData.PoolReference);
 
-            projectile.Transform.position = boltShootData.Position;
+            projectile.Transform.position = boltShootData.FirePointPosition;
             projectile.Transform.up = boltShootData.Velocity;
             projectile.RigidBody.linearVelocity = boltShootData.Velocity;
             projectile.DestroyTime = boltShootData.DestroyTime;
         }
 
-        private void OnProjectileHit(ProjectileBase projectile, Collider2D hitCollider)
+        private void OnBoltHit(Bolt bolt, Collider2D hitCollider)
         {
-            Vector2 hitPoint = hitCollider.ClosestPoint(projectile.HitCollider.position);
-            var projectileHitData = new HitEffectSpawnData(projectile.PoolReference, hitPoint);
-            _projectileRegistry.RequestRemoveActiveProjectile(projectile);
-
-            EventBus.SpawnHitEffectAction?.Invoke(projectileHitData);
+            _projectileRegistry.RequestRemoveActiveProjectile(bolt);
         }
 
         private void OnGameTick()

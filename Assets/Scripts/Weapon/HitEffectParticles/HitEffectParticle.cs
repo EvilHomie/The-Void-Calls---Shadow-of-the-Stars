@@ -2,7 +2,7 @@ using GamePools;
 
 namespace HitParticles
 {
-    public class HitParticle : PoolObjectBase
+    public class HitEffectParticle : PoolObjectBase
     {
         public bool IsPlaying;
         void OnParticleSystemStopped()

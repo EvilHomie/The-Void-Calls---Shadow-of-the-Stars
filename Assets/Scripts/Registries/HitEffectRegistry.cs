@@ -9,11 +9,11 @@ namespace Registries
 {
     public class HitEffectRegistry : MonoBehaviour, IPreUpdateTickObserver
     {
-        public IReadOnlyCollection<HitParticle> ActiveHitParticles => _activeHitParticles;
+        public IReadOnlyCollection<HitEffectParticle> ActiveHitParticles => _activeHitParticles;
 
-        private readonly HashSet<HitParticle> _activeHitParticles = new(200);
-        private readonly HashSet<HitParticle> _activeHitParticlesToAdd = new(20);
-        private readonly HashSet<HitParticle> _activeHitParticlesToRemove = new(20);
+        private readonly HashSet<HitEffectParticle> _activeHitParticles = new(200);
+        private readonly HashSet<HitEffectParticle> _activeHitParticlesToAdd = new(20);
+        private readonly HashSet<HitEffectParticle> _activeHitParticlesToRemove = new(20);
 
         private HitParticlesPool _hitParticlesPool;
 
@@ -29,20 +29,20 @@ namespace Registries
             Sync();
         }
 
-        public HitParticle Get(PoolReference poolReference)
+        public HitEffectParticle Get(PoolReference poolReference)
         {
             var hitParticle = _hitParticlesPool.Getitem(poolReference);
             RequestAddActiveHitParticle(hitParticle);
             return hitParticle;
         }
 
-        public void RequestAddActiveHitParticle(HitParticle hitParticle)
+        public void RequestAddActiveHitParticle(HitEffectParticle hitParticle)
         {
             _activeHitParticlesToRemove.Remove(hitParticle);
             _activeHitParticlesToAdd.Add(hitParticle);
         }
 
-        public void RequestRemoveActiveHitParticle(HitParticle hitParticle)
+        public void RequestRemoveActiveHitParticle(HitEffectParticle hitParticle)
         {
             _activeHitParticlesToAdd.Remove(hitParticle);
             _activeHitParticlesToRemove.Add(hitParticle);

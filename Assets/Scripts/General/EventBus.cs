@@ -1,4 +1,3 @@
-using HitParticles;
 using Projectiles;
 using Ships;
 using System;
@@ -8,30 +7,17 @@ using Weapons;
 namespace GameSystems
 {
     public class EventBus : MonoBehaviour
-    {    
+    {
         public static Action<ShipInstance, bool> NonPlayerChangeAttackState { get; set; }
-
-
-
         public static Action<WeaponBase, Collider2D> BeamHit { get; set; }
-        public static Action<ProjectileBase, Collider2D> ProjectileHitAction { get; set; }
 
 
+        // делегаты для оружия со снарядами Bolt
+        public delegate void BoltWeaponShootDelegate(in BoltWeaponShootData data);
+        public static BoltWeaponShootDelegate BoltWeaponShootAction;
 
-
-
-        public delegate void SpawnBoltDelegate(in BoltSpawnData data);
-        public static SpawnBoltDelegate SpawnBoltAction;
-
-        public delegate void SpawnHitEffectDelegate(in HitEffectSpawnData data);
-        public static SpawnHitEffectDelegate SpawnHitEffectAction;
-
-        public delegate void SpawnHomingMissileDelegate(in HomingMissileSpawnData data);
-        public static SpawnHomingMissileDelegate SpawnHomingMissileAction;
-
-        public delegate void SpawnStraightMissileDelegate(in StraightMissileSpawnData data);
-        public static SpawnStraightMissileDelegate SpawnStraightMissileAction;
-
+        public delegate void BoltHitDelegate(Bolt bolt, Collider2D collider2D);
+        public static BoltHitDelegate BoltHitAction;
     }
 }
 

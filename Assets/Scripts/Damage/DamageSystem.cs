@@ -13,14 +13,14 @@ namespace GameSystems
 
         protected override void Subscribe()
         {
-            EventBus.ProjectileHitAction += OnProjectileHit;
-            EventBus.BeamHit += OnBeamHit;
+            //EventBus.ProjectileHitAction += OnProjectileHit;
+            //EventBus.BeamHit += OnBeamHit;
         }
 
         protected override void Unsubscribe()
         {
-            EventBus.ProjectileHitAction -= OnProjectileHit;
-            EventBus.BeamHit -= OnBeamHit;
+            //EventBus.ProjectileHitAction -= OnProjectileHit;
+            //EventBus.BeamHit -= OnBeamHit;
         }
 
         void OnBeamHit(WeaponBase weapon, Collider2D hitedCollider)

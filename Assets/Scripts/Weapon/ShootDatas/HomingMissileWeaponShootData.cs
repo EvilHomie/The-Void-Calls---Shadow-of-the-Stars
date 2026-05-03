@@ -2,7 +2,7 @@
 
 namespace Weapons
 {
-    public readonly struct HomingMissileSpawnData
+    public readonly struct HomingMissileWeaponShootData
     {
         public readonly PoolReference PoolReference;
         public readonly float DestroyTime;
@@ -13,7 +13,7 @@ namespace Weapons
         public readonly float BrakingSpeed;
         public readonly float RotateSpeed;
 
-        public HomingMissileSpawnData(PoolReference poolReference, float destroyTime, Vector2 spawnPosition, Vector2 velocity, Transform targetTransform, float accelerationSpeed, float brakingSpeed, float rotateSpeed)
+        public HomingMissileWeaponShootData(PoolReference poolReference, float destroyTime, Vector2 spawnPosition, Vector2 velocity, Transform targetTransform, float accelerationSpeed, float brakingSpeed, float rotateSpeed)
         {
             PoolReference = poolReference;
             DestroyTime = destroyTime;
