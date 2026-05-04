@@ -5549,6 +5549,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5464590098680933385, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637235773049636516, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: FireRate
       value: 7
@@ -5557,6 +5565,22 @@ PrefabInstance:
       propertyPath: ProjectileSpeed
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.ProjectileSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.BaseStats.MaxDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.BaseStats.RotateSpeed
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.BaseStats.MaxRotateAngle
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: FireRate
       value: 7
@@ -5564,6 +5588,22 @@ PrefabInstance:
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: ProjectileSpeed
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.ProjectileSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.BaseStats.MaxDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.BaseStats.RotateSpeed
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: Stats.BaseStats.MaxRotateAngle
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

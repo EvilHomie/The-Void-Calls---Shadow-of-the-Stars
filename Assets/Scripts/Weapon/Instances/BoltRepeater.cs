@@ -10,18 +10,13 @@ namespace Weapons
         [field: SerializeField] public Transform ShootPoint { get; private set; }
         public Rigidbody2D ShipRigidBody { get; private set; }
 
-        public float FireRate;
-        public float SpreadAngle;
-        public float ProjectileSpeed;
-
-        public float NextShootTime;
-        public float ShootDelay;
-        public float InvProjectileSpeed;
+        public BoltWeaponStatsData Stats;
+        public override ref WeaponBaseStats BaseStats => ref Stats.BaseStats;
 
         public override void Init()
         {
-            ShootDelay = 1 / FireRate;
-            InvProjectileSpeed = 1 / ProjectileSpeed;
+            Stats.ShootDelay = 1 / Stats.FireRate;
+            Stats.InvProjectileSpeed = 1 / Stats.ProjectileSpeed;
         }
 
         public void SetShipRigidbody(Rigidbody2D rb)

@@ -10,8 +10,9 @@ namespace Weapons
         public readonly Vector2 Velocity;
         public readonly Vector2 Direction;
         public readonly LayerMask HitLayers;
+        public readonly DamageData DamageData;
 
-        public BoltWeaponShootData(PoolReference poolReference, float destroyTime, Vector2 firePointPosition, Vector2 velocity, Vector2 direction, LayerMask hitLayers)
+        public BoltWeaponShootData(PoolReference poolReference, float destroyTime, Vector2 firePointPosition, Vector2 velocity, Vector2 direction, LayerMask hitLayers, DamageData damageData)
         {
             HitLayers = hitLayers;
             PoolReference = poolReference;
@@ -19,6 +20,7 @@ namespace Weapons
             FirePointPosition = firePointPosition;
             Velocity = velocity;
             Direction = direction;
+            DamageData = damageData;
         }
     }
 }

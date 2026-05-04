@@ -16,22 +16,25 @@ namespace Weapons
 
         public void ProcessShooting(BoltRepeater weapon)
         {
-            if (GameFlowSystem.CoreTime <= weapon.NextShootTime)
+            ref var weaponStats = ref weapon.Stats;
+
+            if (GameFlowSystem.CoreTime <= weaponStats.NextShootTime)
             {
                 return;
             }
+            ref var baseStats = ref weapon.BaseStats;
 
-            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weapon.SpreadAngle);
+            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weaponStats.SpreadAngle);
             var shipRB = weapon.ShipRigidBody;
             var shipVelocity = shipRB.linearVelocity;
             var shipForwardVel = Vector2.Dot(shipVelocity, shipRB.transform.up);
-            var velocity = shipVelocity + direction * weapon.ProjectileSpeed;
-            var destroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance * weapon.InvProjectileSpeed;
+            var velocity = shipVelocity + direction * weaponStats.ProjectileSpeed;
+            var destroyTime = GameFlowSystem.CoreTime + baseStats.MaxDistance * weaponStats.InvProjectileSpeed;
             var spawnPos = weapon.ShootPoint.position;
-            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity, direction, weapon.HitLayers);
+            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity, direction, weapon.HitLayers, weapon.DamageData);
 
             weapon.ShootSpotPS.Emit(1);
-            weapon.NextShootTime = GameFlowSystem.CoreTime + weapon.ShootDelay;
+            weaponStats.NextShootTime = GameFlowSystem.CoreTime + weaponStats.ShootDelay;
 
             EventBus.BoltWeaponShootAction?.Invoke(in shootData);
         }

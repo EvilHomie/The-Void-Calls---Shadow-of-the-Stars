@@ -866,12 +866,12 @@ ParticleSystem:
           m_PostInfinity: 2
           m_RotationOrder: 4
   EmissionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 10
+      scalar: 20
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -9868,9 +9868,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 8000789201367927090}
-  MaxDistance: 5
-  MaxRotateAngle: 25
-  RotateSpeed: 45
   DamageData:
     ShieldDamage: 0
     ArmorDamage: 0
@@ -9884,10 +9881,13 @@ MonoBehaviour:
   <ShootSpotPS>k__BackingField: {fileID: 1158179561885953847}
   <HitSpotPS>k__BackingField: {fileID: 1515215191792676714}
   <HitSpotT>k__BackingField: {fileID: 3661464610588513740}
-  NextHitTime: 0
-  HitRate: 30
-  HitPos: {x: 0, y: 0, z: 0}
-  HitDelay: 0
+  HitPos: {x: 0, y: 0}
+  IsHit: 0
+  Stats:
+    BaseStats:
+      MaxDistance: 3
+      MaxRotateAngle: 25
+      RotateSpeed: 25
 --- !u!1 &6305653399485739902
 GameObject:
   m_ObjectHideFlags: 0

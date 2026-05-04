@@ -207,9 +207,7 @@ namespace GameSystems
             if (Mathf.Abs(angularVelocity) > maxSpeed || !targetOutSideShip) // только гашение если больше максимального или мышка на корабле
             {
                 angularVelocity = Mathf.MoveTowards(angularVelocity, 0f, maxSpeed * fixedDT);
-
-
-                movementRuntimeData.RotatePower = Mathf.Abs(angularVelocity) < EPS ? 0f : angularVelocity / maxSpeed;
+                movementRuntimeData.RotatePower = -Mathf.Sign(angularVelocity);
                 return;
             }
 

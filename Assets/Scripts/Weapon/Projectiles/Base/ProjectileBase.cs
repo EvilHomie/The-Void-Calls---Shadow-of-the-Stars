@@ -1,5 +1,6 @@
 using GamePools;
 using UnityEngine;
+using Weapons;
 
 namespace Projectiles
 {
@@ -7,6 +8,7 @@ namespace Projectiles
     {
         public float DestroyTime;
         public LayerMask HitLayers;
+        public DamageData DamageData;
 
         public abstract ProjectileType ProjectileType { get; }
     }

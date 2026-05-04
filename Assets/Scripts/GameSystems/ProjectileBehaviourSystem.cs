@@ -48,12 +48,6 @@ namespace GameSystems
             projectile.HitLayers = boltShootData.HitLayers;
         }
 
-        private void OnBoltHit(Bolt bolt, Collider2D hitCollider)
-        {
-            _projectileRegistry.RequestRemoveActiveProjectile(bolt);
-            //bolt.TrailRenderer.Clear();
-        }
-
         private void OnGameTick(float deltaTime)
         {
             foreach (var projectile in _projectileRegistry.ActiveProjectiles)
@@ -61,7 +55,6 @@ namespace GameSystems
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
                     _projectileRegistry.RequestRemoveActiveProjectile(projectile);
-                    //projectile.TrailRenderer.Clear();
                     continue;
                 }
 
@@ -69,15 +62,6 @@ namespace GameSystems
                 {
                     MoveBolts(bolt, deltaTime);
                 }
-
-                //if (projectile is StraightMissile straightMissile)
-                //{
-                //    ProcessStraightMissile(straightMissile);
-                //}
-                //else if (projectile is HomingMissile homingMissile)
-                //{
-                //    ProcessHomingMissile (homingMissile);
-                //}
             }
         }
 
@@ -87,9 +71,10 @@ namespace GameSystems
 
             var prevCenter = bolt.Position;
             var nextCenter = prevCenter + step;
+            var tipDirrectOffset = bolt.VelocityNorm * bolt.TipOffset;
 
-            var prevTip = prevCenter + bolt.VelocityNorm * bolt.TipOffset;
-            var nextTip = nextCenter + bolt.VelocityNorm * bolt.TipOffset;
+            var prevTip = prevCenter + tipDirrectOffset;
+            var nextTip = nextCenter + tipDirrectOffset;
 
             var hit = Physics2D.Linecast(prevTip, nextTip, bolt.HitLayers);
 

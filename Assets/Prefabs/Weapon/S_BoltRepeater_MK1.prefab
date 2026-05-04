@@ -143,9 +143,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 5791893213396587227}
-  MaxDistance: 10
-  MaxRotateAngle: 25
-  RotateSpeed: 90
   DamageData:
     ShieldDamage: 0
     ArmorDamage: 0
@@ -157,12 +154,17 @@ MonoBehaviour:
   <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 8178394065935223340}
   <ShootPoint>k__BackingField: {fileID: 2403933954532205874}
-  FireRate: 6
-  SpreadAngle: 1
-  ProjectileSpeed: 200
-  NextShootTime: 0
-  ShootDelay: 0
-  InvProjectileSpeed: 0
+  Stats:
+    BaseStats:
+      MaxDistance: 0
+      MaxRotateAngle: 0
+      RotateSpeed: 0
+    FireRate: 7
+    SpreadAngle: 1
+    ProjectileSpeed: 20
+    NextShootTime: 0
+    ShootDelay: 0
+    InvProjectileSpeed: 0
 --- !u!1 &5033753141322967779
 GameObject:
   m_ObjectHideFlags: 0

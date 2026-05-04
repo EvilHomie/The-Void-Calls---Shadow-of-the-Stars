@@ -16,33 +16,47 @@ namespace Weapons
         {
             weapon.BeamLineGO.SetActive(false);
             weapon.ShootSpotPS.Stop();
+
+            if (weapon.IsHit)
+            {
+                weapon.HitSpotPS.Stop();
+                weapon.IsHit = false;
+            }
         }
 
         public void ProcessShooting(MiningDrill weapon)
         {
-            RaycastHit2D hit = Physics2D.Raycast(weapon.Transform.position, weapon.Transform.up, weapon.MaxDistance, weapon.HitLayers); 
+            ref var baseStats = ref weapon.BaseStats;
+
+            var weaponPosition = weapon.Transform.position;
+            var weaponDirection = weapon.Transform.up;
+
+            RaycastHit2D hit = Physics2D.Raycast(weaponPosition, weaponDirection, baseStats.MaxDistance, weapon.HitLayers); 
 
             if (hit.collider != null)
             {
-                weapon.HitPos = hit.point;
-                weapon.HitSpotT.position = hit.point;
-                float coreTime = GameFlowSystem.CoreTime;
-
-                if (coreTime <= weapon.NextHitTime)
+                if (!weapon.IsHit)
                 {
-                    return;
+                    weapon.HitSpotPS.Play();
+                    weapon.IsHit = true;
                 }
 
-                weapon.HitSpotPS.Emit(1);
+                weapon.HitPos = hit.point;
+                weapon.HitSpotT.position = hit.point;
                 EventBus.BeamHit?.Invoke(weapon, hit.collider);
-                weapon.NextHitTime = coreTime + weapon.HitDelay;
             }
             else
             {
-                weapon.HitPos = weapon.Transform.position + weapon.Transform.up * weapon.MaxDistance;
+                if (weapon.IsHit)
+                {
+                    weapon.HitSpotPS.Stop();
+                    weapon.IsHit = false;
+                }
+
+                weapon.HitPos = weaponPosition + weaponDirection * baseStats.MaxDistance;
             }
 
-            weapon.BeamLineLR.SetPosition(0, weapon.Transform.position);
+            weapon.BeamLineLR.SetPosition(0, weaponPosition);
             weapon.BeamLineLR.SetPosition(1, weapon.HitPos);
         }
     }

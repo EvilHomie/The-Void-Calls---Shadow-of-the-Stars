@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.024, y: 0.085, z: 0}
-  m_LocalScale: {x: 1, y: 3, z: 1}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7443625430164756661}
@@ -110,9 +110,18 @@ MonoBehaviour:
   HitLayers:
     serializedVersion: 2
     m_Bits: 0
-  <TipOffset>k__BackingField: 0.12
+  DamageData:
+    ShieldDamage: 0
+    ArmorDamage: 0
+    HullDamage: 0
+    ShieldMultiplier: 0
+    ArmorMultiplier: 0
+    HullMultiplier: 0
+    AsteroidMultipler: 0
+  <TipOffset>k__BackingField: 0.24
   Position: {x: 0, y: 0}
   Velocity: {x: 0, y: 0}
+  VelocityNorm: {x: 0, y: 0}
 --- !u!114 &-2169160166794733236
 MonoBehaviour:
   m_ObjectHideFlags: 0
