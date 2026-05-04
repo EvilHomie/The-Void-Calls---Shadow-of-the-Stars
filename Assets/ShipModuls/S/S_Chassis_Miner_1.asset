@@ -17,6 +17,6 @@ MonoBehaviour:
   <Hull>k__BackingField: 500
   <Mass>k__BackingField: 5
   <DirectDrag>k__BackingField: 2
-  <ReverseDrag>k__BackingField: 8
+  <ReverseDrag>k__BackingField: 5
   <StrafeDrag>k__BackingField: 6
   <RotateDrag>k__BackingField: 2

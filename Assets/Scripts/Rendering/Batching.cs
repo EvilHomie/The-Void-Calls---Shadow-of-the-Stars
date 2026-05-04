@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Batching : MonoBehaviour
 {
     private SpriteRenderer _sr;

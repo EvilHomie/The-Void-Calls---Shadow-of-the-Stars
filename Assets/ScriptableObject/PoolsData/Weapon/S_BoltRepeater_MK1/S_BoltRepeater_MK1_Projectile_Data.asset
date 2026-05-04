@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: S_BoltRepeater_MK1_Projectile_Data
   m_EditorClassIdentifier: 
   <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
-  <Prefab>k__BackingField: {fileID: 5959500612152639483, guid: 23926265b84fc5a4eaf49b8994e63f9b, type: 3}
+  <Prefab>k__BackingField: {fileID: 5959500612152639483, guid: e346f9fdfb4e7cb44a57b5ad6ae53005, type: 3}

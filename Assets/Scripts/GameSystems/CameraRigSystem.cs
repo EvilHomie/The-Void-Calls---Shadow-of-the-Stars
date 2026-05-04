@@ -42,11 +42,6 @@ namespace GameSystems
             Init(playerShip);
         }
 
-        public void UpdateTick(float deltaTime)
-        {
-            OnUpdateTick(deltaTime);
-        }
-
         protected override void Subscribe()
         {
             base.Subscribe();
@@ -59,11 +54,11 @@ namespace GameSystems
             _input.ChangeZoomAction -= OnMouseScroll;
         }
 
-        private void OnUpdateTick(float dTime)
+        public void UpdateTick(float deltaTime)
         {
             if (_currentOrthographicSize != _targetOrthographicSize)
             {
-                _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, dTime * _changeOrtSizeSpeed);
+                _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, deltaTime * _changeOrtSizeSpeed);
                 _cinemachineCamera.Lens.OrthographicSize = _currentOrthographicSize;
                 float orthorelative = _currentOrthographicSize / _deffOrthographicSize;
                 CameraOrtoSizeChanged?.Invoke(orthorelative);

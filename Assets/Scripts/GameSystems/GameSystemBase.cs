@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class GameSystemBase : MonoBehaviour, ITickObserver
 {
-    protected GameState ActiveGameState { get; set; }
+    protected GameState ActiveGameState;
     protected GameFlowSystem GameFlowSystem;
     protected bool SystemIsActive;
 

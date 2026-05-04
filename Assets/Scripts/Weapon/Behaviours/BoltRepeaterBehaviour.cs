@@ -23,11 +23,12 @@ namespace Weapons
 
             var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weapon.SpreadAngle);
             var shipRB = weapon.ShipRigidBody;
-            var shipForwardVel = Vector2.Dot(shipRB.linearVelocity, shipRB.transform.up);
-            var velocity = direction * (weapon.ProjectileSpeed + shipForwardVel);
+            var shipVelocity = shipRB.linearVelocity;
+            var shipForwardVel = Vector2.Dot(shipVelocity, shipRB.transform.up);
+            var velocity = shipVelocity + direction * weapon.ProjectileSpeed;
             var destroyTime = GameFlowSystem.CoreTime + weapon.MaxDistance * weapon.InvProjectileSpeed;
             var spawnPos = weapon.ShootPoint.position;
-            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity);
+            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity, direction, weapon.HitLayers);
 
             weapon.ShootSpotPS.Emit(1);
             weapon.NextShootTime = GameFlowSystem.CoreTime + weapon.ShootDelay;

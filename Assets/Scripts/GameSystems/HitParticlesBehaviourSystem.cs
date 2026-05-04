@@ -35,11 +35,10 @@ namespace GameSystems
             EventBus.BoltHitAction -= OnBoltHit;
         }
 
-        private void OnBoltHit(Bolt bolt, Collider2D hitCollider)
+        private void OnBoltHit(Bolt bolt, Collider2D hitCollider, Vector2 position)
         {
-            Vector2 hitPoint = hitCollider.ClosestPoint(bolt.ColliderTransform.position);
             var hitEffect = _hitEffectRegistry.Get(bolt.PoolReference);
-            hitEffect.Transform.position = hitPoint;
+            hitEffect.Transform.position = position;
             hitEffect.IsPlaying = true;
         }
 

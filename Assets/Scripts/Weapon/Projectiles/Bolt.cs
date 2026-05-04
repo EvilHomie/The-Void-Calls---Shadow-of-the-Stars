@@ -1,4 +1,3 @@
-using GameSystems;
 using UnityEngine;
 
 namespace Projectiles
@@ -7,9 +6,10 @@ namespace Projectiles
     {
         public override ProjectileType ProjectileType => ProjectileType.Bolt;
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            EventBus.BoltHitAction?.Invoke(this, other);
-        }
+        [field: SerializeField] public float TipOffset { get; private set; }
+
+        public Vector2 Position;
+        public Vector2 Velocity;
+        public Vector2 VelocityNorm;
     }
 }

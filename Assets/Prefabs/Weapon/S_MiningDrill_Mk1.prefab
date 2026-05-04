@@ -9862,24 +9862,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49788d04f724094a852ecb1e5ff207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: S_MiningDrill_Mk1
   <Size>k__BackingField: 0
+  <Name>k__BackingField: S_MiningDrill_Mk1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 8000789201367927090}
-  <MaxDistance>k__BackingField: 3
-  <MaxRotateAngle>k__BackingField: 25
-  RotateSpeed: 25
-  IsShooting: 0
-  HitPos: {x: 0, y: 0, z: 0}
-  NextHitTime: 0
+  MaxDistance: 5
+  MaxRotateAngle: 25
+  RotateSpeed: 45
+  DamageData:
+    ShieldDamage: 0
+    ArmorDamage: 0
+    HullDamage: 0
+    ShieldMultiplier: 0
+    ArmorMultiplier: 0
+    HullMultiplier: 0
+    AsteroidMultipler: 0
   <BeamLineLR>k__BackingField: {fileID: 8208887166145653116}
   <BeamLineGO>k__BackingField: {fileID: 2184953884915563217}
   <ShootSpotPS>k__BackingField: {fileID: 1158179561885953847}
   <HitSpotPS>k__BackingField: {fileID: 1515215191792676714}
   <HitSpotT>k__BackingField: {fileID: 3661464610588513740}
-  <HitRate>k__BackingField: 10
+  NextHitTime: 0
+  HitRate: 30
+  HitPos: {x: 0, y: 0, z: 0}
+  HitDelay: 0
 --- !u!1 &6305653399485739902
 GameObject:
   m_ObjectHideFlags: 0

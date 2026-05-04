@@ -1,6 +1,9 @@
-namespace Damage
+using System;
+
+namespace Weapons
 {
-    struct DamageData
+    [Serializable]
+    public struct DamageData
     {
         public float ShieldDamage;
         public float ArmorDamage;

@@ -21,46 +21,53 @@ namespace GameSystems
         {
             if (!SystemIsActive) return;
 
-            OnGameTick();
+            OnGameTick(deltaTime);
         }
 
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.BoltHitAction += OnBoltHit;
             EventBus.BoltWeaponShootAction += SpawnBolt;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.BoltHitAction -= OnBoltHit;
             EventBus.BoltWeaponShootAction -= SpawnBolt;
         }
 
         private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
             var projectile = _projectileRegistry.GetBolt(boltShootData.PoolReference);
-
+            projectile.Position = boltShootData.FirePointPosition;
             projectile.Transform.position = boltShootData.FirePointPosition;
-            projectile.Transform.up = boltShootData.Velocity;
-            projectile.RigidBody.linearVelocity = boltShootData.Velocity;
+            projectile.Transform.up = boltShootData.Direction;
+            projectile.Velocity = boltShootData.Velocity;
+            projectile.VelocityNorm = boltShootData.Velocity.normalized;
             projectile.DestroyTime = boltShootData.DestroyTime;
+            projectile.HitLayers = boltShootData.HitLayers;
         }
 
         private void OnBoltHit(Bolt bolt, Collider2D hitCollider)
         {
             _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+            //bolt.TrailRenderer.Clear();
         }
 
-        private void OnGameTick()
+        private void OnGameTick(float deltaTime)
         {
             foreach (var projectile in _projectileRegistry.ActiveProjectiles)
             {
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
                     _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+                    //projectile.TrailRenderer.Clear();
                     continue;
+                }
+
+                if (projectile is Bolt bolt)
+                {
+                    MoveBolts(bolt, deltaTime);
                 }
 
                 //if (projectile is StraightMissile straightMissile)
@@ -72,6 +79,29 @@ namespace GameSystems
                 //    ProcessHomingMissile (homingMissile);
                 //}
             }
+        }
+
+        private void MoveBolts(Bolt bolt, float deltaTime)
+        {
+            var step = bolt.Velocity * deltaTime;
+
+            var prevCenter = bolt.Position;
+            var nextCenter = prevCenter + step;
+
+            var prevTip = prevCenter + bolt.VelocityNorm * bolt.TipOffset;
+            var nextTip = nextCenter + bolt.VelocityNorm * bolt.TipOffset;
+
+            var hit = Physics2D.Linecast(prevTip, nextTip, bolt.HitLayers);
+
+            if (hit.collider != null)
+            {
+                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+                EventBus.BoltHitAction?.Invoke(bolt, hit.collider, hit.point);
+                return;
+            }
+
+            bolt.Position = nextCenter;
+            bolt.Transform.position = bolt.Position;
         }
 
         private void ProcessStraightMissile(StraightMissile straightMissile)

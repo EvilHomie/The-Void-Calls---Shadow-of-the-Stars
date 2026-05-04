@@ -8,13 +8,14 @@ namespace Weapons
         [field: SerializeField] public PoolReference PoolReference { get; private set; }
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         [field: SerializeField] public Transform ShootPoint { get; private set; }
-        [field: SerializeField] public float FireRate { get; private set; }
-        [field: SerializeField] public float SpreadAngle { get; private set; }
-        [field: SerializeField] public float ProjectileSpeed { get; private set; }
-        [field: SerializeField] public Rigidbody2D ShipRigidBody { get; private set; }
-        public float ShootDelay { get; private set; }
+        public Rigidbody2D ShipRigidBody { get; private set; }
+
+        public float FireRate;
+        public float SpreadAngle;
+        public float ProjectileSpeed;
 
         public float NextShootTime;
+        public float ShootDelay;
         public float InvProjectileSpeed;
 
         public override void Init()

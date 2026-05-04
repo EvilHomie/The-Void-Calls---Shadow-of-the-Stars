@@ -47,7 +47,7 @@ Material:
     - _NarrowFactor: 1
     - _NoiseSpeed: 5
     - _NoiseTiling: 2.6
-    - _PowerValue: 1
+    - _PowerValue: 0.92
     - _Slider: -1
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}

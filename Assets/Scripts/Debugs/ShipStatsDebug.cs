@@ -1,5 +1,4 @@
 ﻿using DI;
-using GameSystems;
 using Registries;
 using Ships;
 using TMPro;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 namespace Debugs
 {
-    public class ShipStatsDebug : MonoBehaviour, IFixedUpdateTickObserver
+    public class ShipStatsDebug : MonoBehaviour
     {
         // StaticData
         [SerializeField] TextMeshProUGUI MaxDirectSpeedText;
@@ -33,20 +32,13 @@ namespace Debugs
 
         private ShipInstance _playerShip;
         private Vector2 _lastVelocity;
-        private GameFlowSystem _gameFlowSystem;
         private ShipRegistry _shipRegistry;
 
-        [Inject]
-        public void Construct(ShipRegistry shipRegystry, GameFlowSystem gameFlowSystem)
-        {
-            _gameFlowSystem = gameFlowSystem;
-            _shipRegistry = shipRegystry;
-            _gameFlowSystem.AddTickObserver(this);
-        }
 
-        public void FixedUpdateTick(float fixedDT)
+        [Inject]
+        public void Construct(ShipRegistry shipRegystry)
         {
-            UpdateRuntimeData(fixedDT);
+            _shipRegistry = shipRegystry;
         }
 
         private void Start()
@@ -55,9 +47,9 @@ namespace Debugs
             UpdateStaticData(playerShip);
         }
 
-        private void OnDestroy()
+        private void FixedUpdate()
         {
-            _gameFlowSystem.RemoveTickObserver(this);
+            UpdateRuntimeData(Time.fixedDeltaTime);
         }
 
         private void UpdateStaticData(ShipInstance shipInstance)

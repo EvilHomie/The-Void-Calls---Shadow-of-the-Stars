@@ -16,7 +16,7 @@ namespace GameSystems
         public delegate void BoltWeaponShootDelegate(in BoltWeaponShootData data);
         public static BoltWeaponShootDelegate BoltWeaponShootAction;
 
-        public delegate void BoltHitDelegate(Bolt bolt, Collider2D collider2D);
+        public delegate void BoltHitDelegate(Bolt bolt, Collider2D collider2D, Vector2 position);
         public static BoltHitDelegate BoltHitAction;
     }
 }

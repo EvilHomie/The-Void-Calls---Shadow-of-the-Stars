@@ -1,31 +1,33 @@
 using DI;
 using Environment;
-using GameCamera;
-using Registries;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace GameSystems
 {
-    public class EnvironmentSystem : GameSystemBase , IUpdateTickObserver
+    public class EnvironmentSystem : GameSystemBase, IUpdateTickObserver, ILateUpdateTickObserver
     {
         private Vector3 Vector3One;
         private CameraRigSystem _cameraRigSystem;
-        private ShipRegistry _shipRegistry;
         private StarryCanvasView _starryCanvasView;
+        private Camera _camera;
+
+        private Vector2 _lastCameraPos;
+
 
         [Inject]
-        public void Construct(CameraRigSystem cameraRig, ShipRegistry shipRegistry, StarryCanvasView starryCanvasView)
+        public void Construct(Camera camera, CameraRigSystem cameraRig, StarryCanvasView starryCanvasView)
         {
+            _camera = camera;
             _starryCanvasView = starryCanvasView;
-            _shipRegistry = shipRegistry;
             _cameraRigSystem = cameraRig;
             Vector3One = Vector3.one;
             ActiveGameState = GameState.CoreGameplay;
         }
 
-        protected override void AwakeInit( )
+        protected override void AwakeInit()
         {
-            foreach (var  layer in _starryCanvasView.Layers)
+            foreach (var layer in _starryCanvasView.Layers)
             {
                 Init(layer);
             }
@@ -34,6 +36,21 @@ namespace GameSystems
         {
             UpdateStarView(deltaTime);
         }
+
+        public void LateUpdateTick()
+        {
+            //UpdateStarView(1);
+        }
+
+        //private void OnEnable()
+        //{
+        //    CinemachineCore.CameraUpdatedEvent.AddListener(OnCameraUpdated);
+        //}
+
+        //private void OnDisable()
+        //{
+        //    CinemachineCore.CameraUpdatedEvent.RemoveListener(OnCameraUpdated);
+        //}
 
         protected override void Subscribe()
         {
@@ -64,17 +81,26 @@ namespace GameSystems
         {
             _starryCanvasView.Transform.localScale = Vector3One * relativeValue;
         }
+       
+        //private void OnCameraUpdated(CinemachineBrain brain)
+        //{
+        //    var cam = brain.OutputCamera;
+        //    var position = (Vector2)cam.transform.position;
+        //    _deltaPos = position - _lastCameraPos;
+        //    _starryCanvasView.Transform.position = position;
+        //    _lastCameraPos = position;
+        //}
 
         private void UpdateStarView(float dTime)
         {
-            var playerShip = _shipRegistry.PlayerShip;
-            var playerPosition = playerShip.Transform.position;
-            var playerVelocity = playerShip.Rigidbody.linearVelocity;
-            _starryCanvasView.Transform.position = playerPosition;                      
+            var position = (Vector2)_camera.transform.position;
+            var deltaPos = position - _lastCameraPos;
+            _starryCanvasView.Transform.position = position;
+            _lastCameraPos = position;
 
             foreach (var layer in _starryCanvasView.Layers)
             {
-                layer.LastOffset += dTime * layer.SpeedMod * playerVelocity;
+                layer.LastOffset += dTime * layer.SpeedMod * deltaPos;
                 layer.Material.SetVector(StarryCanvasLayer.OffsetID, layer.LastOffset);
             }
         }
