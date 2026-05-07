@@ -12,13 +12,13 @@ namespace ShipModules
         [field: SerializeField] public float BoostThrust { get; private set; }
         [field: SerializeField] public float BoostMaxTime { get; private set; }
 
-        public MainEngineModificators MainEngineModificators;
+        public MainEngineMultipliers MainEngineMultipliers;
     }
 
-    public struct MainEngineModificators
+    public struct MainEngineMultipliers
     {
-        public int DirectThrustModPercent;
-        public int ReverseThrustModPercent;
-        public int BoostThrustModPercent;
+        public float DirectThrustMultiplier;
+        public float ReverseThrustMultiplier;
+        public float BoostThrustMultiplier;
     }
 }

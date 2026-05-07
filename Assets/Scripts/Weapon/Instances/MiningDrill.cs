@@ -14,8 +14,12 @@ namespace Weapons
         public Vector2 HitPos;
         public bool IsHit;
 
-        public MiningDrillStatsData Stats;
-        public override ref WeaponBaseStats BaseStats => ref Stats.BaseStats;
-        public override void Init() { }
+        public MiningDrillStatsData WeaponStats;
+        public DamageData DamageData;
+
+        public override ref AimStatsData AimStats => ref WeaponStats.BaseStats.AimStats;
+        public override ref DamageData Damage => ref DamageData;
+        public override ref BaseDamageData BaseDamage => ref WeaponStats.BaseStats.BaseDamage;
+        public override ref DamageMultipliersData DamageMultipliers => ref WeaponStats.BaseStats.DamageMultipliers;
     }
 }

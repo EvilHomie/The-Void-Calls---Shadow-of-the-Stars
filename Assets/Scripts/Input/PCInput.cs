@@ -1,19 +1,31 @@
 using DI;
 using GameSystems;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace GameInput
 {
     public class PCInput : IPlayerInput
     {
         public Action<Vector2> MoveInputAction { get; set; }
-        public Action<bool> ChangeAtackState { get; set; }
+        public Action<bool> ChangeAttackState { get; set; }
         public Action<bool> ChangeBoostersState { get; set; }
         public Action ToggleDamperAction { get; set; }
         public Action DisableEngineAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
+        public Action<WeaponGroup> SwitchWeaponGroupAction { get; set; }
+
+        private readonly Dictionary<Key, WeaponGroup> _groupBindings = new()
+        {
+            { Key.Digit1, WeaponGroup.Group1 },
+            { Key.Digit2, WeaponGroup.Group2 },
+            { Key.Digit3, WeaponGroup.Group3 },
+            { Key.Digit4, WeaponGroup.Group4 },
+            { Key.Digit5, WeaponGroup.Group5 },
+        };
 
         private readonly InputSystem_Actions _inputActions;
 
@@ -36,6 +48,8 @@ namespace GameInput
             _inputActions.Player.ToggleBoosters.performed += ToggleBoosters;
             _inputActions.Player.ToggleBoosters.canceled += ToggleBoosters;
 
+            _inputActions.Player.SwitchWeaponsGroup.performed += SwitchWeaponsGroup;
+
             gameFlowSystem.GameStateChanged += OnGameStateChanged;
         }
 
@@ -53,7 +67,7 @@ namespace GameInput
 
         private void OnAttack(InputAction.CallbackContext context)
         {
-            ChangeAtackState?.Invoke(context.performed);
+            ChangeAttackState?.Invoke(context.performed);
         }
 
         private void ToggleDamper(InputAction.CallbackContext context)
@@ -74,6 +88,12 @@ namespace GameInput
         private void DisableEngine(InputAction.CallbackContext context)
         {
             DisableEngineAction?.Invoke();
+        }
+
+        private void SwitchWeaponsGroup(InputAction.CallbackContext context)
+        {
+            var key = ((KeyControl)context.control).keyCode;
+            SwitchWeaponGroupAction?.Invoke(_groupBindings[key]);
         }
     }
 }

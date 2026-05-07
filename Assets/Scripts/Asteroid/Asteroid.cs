@@ -7,7 +7,6 @@ namespace Asteroids
     public class Asteroid : PoolObjectBase
     {
         [field: SerializeField] public Rigidbody2D RB { get; private set; }
-        [field: SerializeField] public HealthDataOLD HealthData { get; private set; }
         [field: SerializeField] public AsteroidType AsteroidType { get; private set; }
 
         //public override void Init()
@@ -17,7 +16,7 @@ namespace Asteroids
         //}
         public void ResetParams()
         {
-            HealthData.CurrentHealthPoints = HealthData.DefaultHealthPoints;
+            //HealthData.CurrentHealthPoints = HealthData.DefaultHealthPoints;
         }
 
         private void OnBecameInvisible()

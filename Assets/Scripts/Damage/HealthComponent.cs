@@ -5,22 +5,32 @@ namespace Damage
 {
     public class HealthComponent : MonoBehaviour
     {
-        public HealthData HealthData;
+        [field: SerializeField] public ObjectType ObjectType { get; private set; }
+        public HealthStatsData Health;
+        public ResistanceStatsData Resistance;
+        public ResistanceStatsData ResistanceMultipliers;
+
+        public Action ShieldDestroyedAction;
+        public Action ArmorDestroyedAction;
+        public Action HullDestroyedAction;
     }
 
     [Serializable]
-    public struct HealthData
+    public struct HealthStatsData
     {
-        [field: SerializeField] public HealthType HealthType { get; private set; }
-
         public float HullPoints;
         public float ShieldPoints;
         public float ArmorPoints;
-        public float EnergyDamageResistance;
-        public float KineticDamageResistance;
     }
 
-    public enum HealthType
+    [Serializable]
+    public struct ResistanceStatsData
+    {
+        public float Energy;
+        public float Kinetic;
+    }
+
+    public enum ObjectType
     {
         Ship,
         Asteroid,

@@ -154,6 +154,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchWeaponsGroup"",
+                    ""type"": ""Button"",
+                    ""id"": ""15239e4e-4a12-4d25-ba5d-51f4ac61eea7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -319,6 +328,61 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""ToggleBoosters"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0ff821f4-ce1f-4722-af90-9d96836bc45b"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SwitchWeaponsGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""143e6927-eb7c-42f2-8551-f14dba5929eb"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SwitchWeaponsGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67e9133a-ba26-43d0-a597-8520ab8bc03f"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SwitchWeaponsGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c388c31d-0943-49b7-869d-4a878f44da33"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SwitchWeaponsGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""177f8d82-f630-4d58-94d4-fcddbced9478"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SwitchWeaponsGroup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1387,6 +1451,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_MouseScroll = m_Player.FindAction("MouseScroll", throwIfNotFound: true);
         m_Player_DisableEngine = m_Player.FindAction("DisableEngine", throwIfNotFound: true);
         m_Player_ToggleBoosters = m_Player.FindAction("ToggleBoosters", throwIfNotFound: true);
+        m_Player_SwitchWeaponsGroup = m_Player.FindAction("SwitchWeaponsGroup", throwIfNotFound: true);
         // PlayerOriginal
         m_PlayerOriginal = asset.FindActionMap("PlayerOriginal", throwIfNotFound: true);
         m_PlayerOriginal_Move = m_PlayerOriginal.FindAction("Move", throwIfNotFound: true);
@@ -1499,6 +1564,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MouseScroll;
     private readonly InputAction m_Player_DisableEngine;
     private readonly InputAction m_Player_ToggleBoosters;
+    private readonly InputAction m_Player_SwitchWeaponsGroup;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1538,6 +1604,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ToggleBoosters".
         /// </summary>
         public InputAction @ToggleBoosters => m_Wrapper.m_Player_ToggleBoosters;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SwitchWeaponsGroup".
+        /// </summary>
+        public InputAction @SwitchWeaponsGroup => m_Wrapper.m_Player_SwitchWeaponsGroup;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1585,6 +1655,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleBoosters.started += instance.OnToggleBoosters;
             @ToggleBoosters.performed += instance.OnToggleBoosters;
             @ToggleBoosters.canceled += instance.OnToggleBoosters;
+            @SwitchWeaponsGroup.started += instance.OnSwitchWeaponsGroup;
+            @SwitchWeaponsGroup.performed += instance.OnSwitchWeaponsGroup;
+            @SwitchWeaponsGroup.canceled += instance.OnSwitchWeaponsGroup;
         }
 
         /// <summary>
@@ -1617,6 +1690,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ToggleBoosters.started -= instance.OnToggleBoosters;
             @ToggleBoosters.performed -= instance.OnToggleBoosters;
             @ToggleBoosters.canceled -= instance.OnToggleBoosters;
+            @SwitchWeaponsGroup.started -= instance.OnSwitchWeaponsGroup;
+            @SwitchWeaponsGroup.performed -= instance.OnSwitchWeaponsGroup;
+            @SwitchWeaponsGroup.canceled -= instance.OnSwitchWeaponsGroup;
         }
 
         /// <summary>
@@ -2150,6 +2226,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleBoosters(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SwitchWeaponsGroup" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwitchWeaponsGroup(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerOriginal" which allows adding and removing callbacks.

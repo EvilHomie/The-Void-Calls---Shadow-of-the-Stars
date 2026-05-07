@@ -130,7 +130,7 @@ public class AsteroidsClusterGenerator : MonoBehaviour
             asteroidsCluster.Asteroids.Add(clusterAsteroid);
 
             clusterAsteroid.RB = asteroidComponent.RB;
-            clusterAsteroid.HealthData = asteroidComponent.HealthData;
+            //clusterAsteroid.HealthData = asteroidComponent.HealthData;
             clusterAsteroid.AsteroidType = asteroidComponent.AsteroidType;
             Destroy(asteroidComponent);
         }
@@ -140,13 +140,13 @@ public class AsteroidsClusterGenerator : MonoBehaviour
             clusterAsteroid.RB.angularDamping = 0;
             clusterAsteroid.RB.linearDamping = 0.2f;
             clusterAsteroid.RB.mass = _asteroidBaseMass * Mathf.Pow(clusterAsteroid.transform.localScale.x, 2f);
-            clusterAsteroid.HealthData.DefaultHealthPoints.HullPoints = clusterAsteroid.RB.mass;
+            //clusterAsteroid.HealthData.HullPoints = clusterAsteroid.RB.mass;
 
-            FlagsHelper.RemoveFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Drifting);
-            FlagsHelper.AddFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Cluster);                        
+            //FlagsHelper.RemoveFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Drifting);
+            //FlagsHelper.AddFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Cluster);                        
 
-            clusterAsteroid.HealthData.ResistanceType = ResistanceType.None;
-            FlagsHelper.AddFlag(ref clusterAsteroid.HealthData.ResistanceType, ResistanceType.None);
+            //clusterAsteroid.HealthData.ResistanceType = ResistanceType.None;
+            //FlagsHelper.AddFlag(ref clusterAsteroid.HealthData.ResistanceType, ResistanceType.None);
         }
     }
 }

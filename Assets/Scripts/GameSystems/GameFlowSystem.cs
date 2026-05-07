@@ -70,7 +70,7 @@ namespace GameSystems
 
         private void FixedUpdate()
         {
-            var fixedDTTick = Time.fixedDeltaTime * _gameSpeed;
+            var fixedDTTick = Time.fixedUnscaledDeltaTime * _gameSpeed;
 
             foreach (var observer in _fixedUpdateTickObservers) observer.FixedUpdateTick(fixedDTTick);
         }

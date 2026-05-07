@@ -26,12 +26,12 @@ namespace Weapons
 
         public void ProcessShooting(MiningDrill weapon)
         {
-            ref var baseStats = ref weapon.BaseStats;
+            ref var aimStats = ref weapon.AimStats;
 
             var weaponPosition = weapon.Transform.position;
             var weaponDirection = weapon.Transform.up;
 
-            RaycastHit2D hit = Physics2D.Raycast(weaponPosition, weaponDirection, baseStats.MaxDistance, weapon.HitLayers); 
+            RaycastHit2D hit = Physics2D.Raycast(weaponPosition, weaponDirection, aimStats.MaxDistance, weapon.HitLayers); 
 
             if (hit.collider != null)
             {
@@ -43,7 +43,14 @@ namespace Weapons
 
                 weapon.HitPos = hit.point;
                 weapon.HitSpotT.position = hit.point;
-                EventBus.BeamHit?.Invoke(weapon, hit.collider);
+
+                var damage = weapon.Damage;
+                var coreDeltaTime = GameFlowSystem.CoreDeltaTimeTick;
+                damage.Energy *= coreDeltaTime;
+                damage.Kinetic *= coreDeltaTime;
+                damage.Asteroid *= coreDeltaTime;
+
+                EventBus.BeamHitAction?.Invoke(damage, hit.collider, weapon.HitPos);
             }
             else
             {
@@ -53,7 +60,7 @@ namespace Weapons
                     weapon.IsHit = false;
                 }
 
-                weapon.HitPos = weaponPosition + weaponDirection * baseStats.MaxDistance;
+                weapon.HitPos = weaponPosition + weaponDirection * aimStats.MaxDistance;
             }
 
             weapon.BeamLineLR.SetPosition(0, weaponPosition);

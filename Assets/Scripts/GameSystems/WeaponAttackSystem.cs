@@ -1,5 +1,4 @@
 using DI;
-using GameInput;
 using Helpers;
 using Registries;
 using Ships;
@@ -10,14 +9,12 @@ namespace GameSystems
     public class WeaponAttackSystem : GameSystemBase, IUpdateTickObserver
     {
         private WeaponsBehaviour _weaponsBehaviour;
-        private IPlayerInput _playerInput;
         private WeaponRegistry _weaponRegistry;
         private ShipRegistry _shipRegistry;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, WeaponRegistry weaponRegistry, ShipRegistry shipRegistry)
+        public void Construct(WeaponRegistry weaponRegistry, ShipRegistry shipRegistry)
         {
-            _playerInput = playerInput;
             _weaponRegistry = weaponRegistry;
             _shipRegistry = shipRegistry;
             _weaponsBehaviour = new WeaponsBehaviour();
@@ -34,46 +31,27 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            _playerInput.ChangeAtackState += OnPlayerChangeAttackState;
-            EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
+            EventBus.WeaponChangeAttackStateAction += OnWeaponChangeAttackStateAction;
         }
 
         protected override void Unsubscribe()
         {
-            _playerInput.ChangeAtackState -= OnPlayerChangeAttackState;
-            EventBus.NonPlayerChangeAttackState += OnNonPlayerChangeAttackState;
-        }
-        
-        private void OnPlayerChangeAttackState(bool state)
-        {
-            var playerShip = _shipRegistry.PlayerShip;
-            OnShipChangeAttackState(playerShip, state);
-        }
-        private void OnNonPlayerChangeAttackState(ShipInstance ship, bool state)
-        {
-            OnShipChangeAttackState(ship, state);
+            base.Unsubscribe();
+            EventBus.WeaponChangeAttackStateAction -= OnWeaponChangeAttackStateAction;
         }
 
-        private void OnShipChangeAttackState(ShipInstance ship, bool state)
+
+        private void OnWeaponChangeAttackStateAction(WeaponBase weapon, bool state)
         {
             if (state)
             {
-                foreach (var slot in ship.WeaponSlots)
-                {
-                    if (slot.IsActive)
-                    {
-                        _weaponRegistry.RequestAddOnStartAttack(slot.Weapon);
-                        _weaponsBehaviour.HandleStartShoot(slot.Weapon);
-                    }
-                }
+                _weaponRegistry.RequestAddOnStartAttack(weapon);
+                _weaponsBehaviour.HandleStartShoot(weapon);
             }
             else
             {
-                foreach (var slot in ship.WeaponSlots)
-                {
-                    _weaponRegistry.RequestRemoveOnStopAttack(slot.Weapon);
-                    _weaponsBehaviour.HandleCancelShoot(slot.Weapon);
-                }
+                _weaponRegistry.RequestRemoveOnStopAttack(weapon);
+                _weaponsBehaviour.HandleCancelShoot(weapon);
             }
         }
 

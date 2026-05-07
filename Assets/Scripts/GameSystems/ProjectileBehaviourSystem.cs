@@ -46,6 +46,7 @@ namespace GameSystems
             projectile.VelocityNorm = boltShootData.Velocity.normalized;
             projectile.DestroyTime = boltShootData.DestroyTime;
             projectile.HitLayers = boltShootData.HitLayers;
+            projectile.DamageData = boltShootData.DamageData;
         }
 
         private void OnGameTick(float deltaTime)
@@ -80,8 +81,8 @@ namespace GameSystems
 
             if (hit.collider != null)
             {
-                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
                 EventBus.BoltHitAction?.Invoke(bolt, hit.collider, hit.point);
+                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
                 return;
             }
 

@@ -16,25 +16,28 @@ namespace Weapons
 
         public void ProcessShooting(BoltRepeater weapon)
         {
-            ref var weaponStats = ref weapon.Stats;
+            ref var runTime = ref weapon.WeaponStats.Runtime;
 
-            if (GameFlowSystem.CoreTime <= weaponStats.NextShootTime)
+            if (GameFlowSystem.CoreTime <= runTime.NextShootTime)
             {
                 return;
             }
-            ref var baseStats = ref weapon.BaseStats;
 
-            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, weaponStats.SpreadAngle);
-            var shipRB = weapon.ShipRigidBody;
+            var aim = weapon.AimStats;
+            var config = weapon.WeaponStats.Config;
+            var cached = weapon.WeaponStats.Cached;
+
+            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, config.SpreadAngle);
+            var shipRB = weapon.ShipRB;
             var shipVelocity = shipRB.linearVelocity;
             var shipForwardVel = Vector2.Dot(shipVelocity, shipRB.transform.up);
-            var velocity = shipVelocity + direction * weaponStats.ProjectileSpeed;
-            var destroyTime = GameFlowSystem.CoreTime + baseStats.MaxDistance * weaponStats.InvProjectileSpeed;
+            var velocity = shipVelocity + direction * config.ProjectileSpeed;
+            var destroyTime = GameFlowSystem.CoreTime + aim.MaxDistance * cached.InvProjectileSpeed;
             var spawnPos = weapon.ShootPoint.position;
-            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity, direction, weapon.HitLayers, weapon.DamageData);
+            var shootData = new BoltWeaponShootData(weapon.PoolReference, destroyTime, spawnPos, velocity, direction, weapon.HitLayers, weapon.Damage);
 
             weapon.ShootSpotPS.Emit(1);
-            weaponStats.NextShootTime = GameFlowSystem.CoreTime + weaponStats.ShootDelay;
+            runTime.NextShootTime = GameFlowSystem.CoreTime + cached.ShootDelay;
 
             EventBus.BoltWeaponShootAction?.Invoke(in shootData);
         }

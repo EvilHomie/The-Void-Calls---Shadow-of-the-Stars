@@ -1,5 +1,4 @@
 using Projectiles;
-using Ships;
 using System;
 using UnityEngine;
 using Weapons;
@@ -8,8 +7,11 @@ namespace GameSystems
 {
     public class EventBus : MonoBehaviour
     {
-        public static Action<ShipInstance, bool> NonPlayerChangeAttackState { get; set; }
-        public static Action<WeaponBase, Collider2D> BeamHit { get; set; }
+        public static Action<WeaponBase, bool> WeaponChangeAttackStateAction;
+
+        // делегаты для лучего оружия (без промежуточных элементов по типу снаряда). Хит регистрируется сразу в оружии.
+        public delegate void BeamHitDelegate(in DamageData damageData , Collider2D collider2D, Vector2 position);
+        public static BeamHitDelegate BeamHitAction;
 
 
         // делегаты для оружия со снарядами Bolt

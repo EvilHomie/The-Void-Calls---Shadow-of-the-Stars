@@ -12,15 +12,15 @@ public class Chassis : ScriptableObject, IShipModule
     [field: SerializeField] public float StrafeDrag { get; private set; }
     [field: SerializeField] public float RotateDrag { get; private set; }
 
-     public ChassisModificators ChassisModificators;    
+    public ChassisMultipliers ChassisMultipliers;
 }
 
-public struct ChassisModificators
+public struct ChassisMultipliers
 {
-    public int MassModPercent;
-    public int HullModPercent;
-    public int DirectDragModPercent;
-    public int ReverseDragModPercent;
-    public int StrafeDragModPercent;
-    public int RotateDragModPercent;
+    public float MassMultiplier;
+    public float HullModPercent;
+    public float DirectDragMultiplier;
+    public float ReverseDragMultiplier;
+    public float StrafeDragMultiplier;
+    public float RotateDragMultiplier;
 }

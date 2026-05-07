@@ -8,20 +8,19 @@ namespace Weapons
         [field: SerializeField] public PoolReference PoolReference { get; private set; }
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         [field: SerializeField] public Transform ShootPoint { get; private set; }
-        public Rigidbody2D ShipRigidBody { get; private set; }
+        public Rigidbody2D ShipRB { get; private set; }
 
-        public BoltWeaponStatsData Stats;
-        public override ref WeaponBaseStats BaseStats => ref Stats.BaseStats;
+        public BoltWeaponStatsData WeaponStats;
+        public DamageData DamageData;
 
-        public override void Init()
-        {
-            Stats.ShootDelay = 1 / Stats.FireRate;
-            Stats.InvProjectileSpeed = 1 / Stats.ProjectileSpeed;
-        }
+        public override ref AimStatsData AimStats => ref WeaponStats.BaseStats.AimStats;
+        public override ref BaseDamageData BaseDamage => ref WeaponStats.BaseStats.BaseDamage;
+        public override ref DamageMultipliersData DamageMultipliers => ref WeaponStats.BaseStats.DamageMultipliers;
+        public override ref DamageData Damage => ref DamageData;
 
         public void SetShipRigidbody(Rigidbody2D rb)
         {
-            ShipRigidBody = rb;
+            ShipRB = rb;
         }
     }
 }

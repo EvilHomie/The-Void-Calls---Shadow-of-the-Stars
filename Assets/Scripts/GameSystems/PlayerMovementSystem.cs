@@ -89,14 +89,14 @@ namespace GameSystems
         {
             var playerShip = _shipRegystry.PlayerShip;
             ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            ref var movementStaticData = ref playerShip.MovementStaticData;
+            ref var movementStats = ref playerShip.MovementStats;
 
             if (state)
             {
                 movementRuntimeData.DirectThrottle = 1; // всегда включаем двигатель на макс есть был запрос через буст
 
                 var boostersPower = movementRuntimeData.BoostersPower;
-                var minPowerForEnable = movementStaticData.BoostersMaxPower * _minBoostersPowerForEnableMod;
+                var minPowerForEnable = movementStats.BoostersMaxPower * _minBoostersPowerForEnableMod;
 
                 if (boostersPower < minPowerForEnable) return;
             }
@@ -118,17 +118,17 @@ namespace GameSystems
             var shipPos = rb.position;
 
             ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            ref var movementStaticData = ref playerShip.MovementStaticData;
+            ref var movementStats = ref playerShip.MovementStats;
 
             var rad = rotation * Mathf.Deg2Rad;
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
             var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
             var directionToTarget = mousePos - shipPos;
 
-            UpdateBoostersPower(fixedDT, movementStaticData, ref movementRuntimeData);
+            UpdateBoostersPower(fixedDT, movementStats, ref movementRuntimeData);
             HandleInput(fixedDT, ref movementRuntimeData);
-            HandleRotation(fixedDT, ref angularVelocity, directionToTarget, shipForward, movementStaticData, ref movementRuntimeData);
-            HandleMovement(fixedDT, ref linearVelocity, ref movementRuntimeData, movementStaticData, shipForward, shipRight);
+            HandleRotation(fixedDT, ref angularVelocity, directionToTarget, shipForward, movementStats, ref movementRuntimeData);
+            HandleMovement(fixedDT, ref linearVelocity, ref movementRuntimeData, movementStats, shipForward, shipRight);
 
             rb.angularVelocity = angularVelocity;
             rb.linearVelocity = linearVelocity;
@@ -170,7 +170,7 @@ namespace GameSystems
             movementRuntimeData.DirectThrottle = Mathf.Clamp(newThrottle, -1, 1);
         }
 
-        private void UpdateBoostersPower(float fixedDT, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
+        private void UpdateBoostersPower(float fixedDT, in MovementStats movementStats, ref MovementRuntimeData movementRuntimeData)
         {
             var boostersPower = movementRuntimeData.BoostersPower;
 
@@ -188,7 +188,7 @@ namespace GameSystems
                 }
             }
 
-            boostersPower = Mathf.Clamp(boostersPower, 0, movementStaticData.BoostersMaxPower);
+            boostersPower = Mathf.Clamp(boostersPower, 0, movementStats.BoostersMaxPower);
             movementRuntimeData.BoostersPower = boostersPower;
         }
 
@@ -199,9 +199,9 @@ namespace GameSystems
             movementRuntimeData.DirectThrottle = 0;
         }
 
-        private void HandleRotation(float fixedDT, ref float angularVelocity, Vector2 direction, Vector2 shipForward, in MovementStaticData movementStaticData, ref MovementRuntimeData movementRuntimeData)
+        private void HandleRotation(float fixedDT, ref float angularVelocity, Vector2 direction, Vector2 shipForward, in MovementStats movementStats, ref MovementRuntimeData movementRuntimeData)
         {
-            float maxSpeed = movementStaticData.RotateSpeed;
+            float maxSpeed = movementStats.RotateSpeed;
             bool targetOutSideShip = direction.sqrMagnitude >= _minMouseDistanceSQR;
 
             if (Mathf.Abs(angularVelocity) > maxSpeed || !targetOutSideShip) // только гашение если больше максимального или мышка на корабле
@@ -221,7 +221,7 @@ namespace GameSystems
             movementRuntimeData.RotatePower = Mathf.Abs(newVelocity) < EPS ? 0f : newVelocity / maxSpeed;
         }
 
-        private void HandleMovement(float fixedDT, ref Vector2 linearVelocity, ref MovementRuntimeData movementRuntimeData, in MovementStaticData movementStaticData, Vector2 forward, Vector2 right)
+        private void HandleMovement(float fixedDT, ref Vector2 linearVelocity, ref MovementRuntimeData movementRuntimeData, in MovementStats movementStats, Vector2 forward, Vector2 right)
         {
             var forwardVel = Vector2.Dot(linearVelocity, forward);
             var sideVel = Vector2.Dot(linearVelocity, right);
@@ -234,11 +234,11 @@ namespace GameSystems
             {
                 if (movementRuntimeData.InertiaDampingIsActive)
                 {
-                    ApplyMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData, boostersIsActive);
+                    ApplyMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStats, boostersIsActive);
                 }
                 else
                 {
-                    AddMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStaticData, boostersIsActive);
+                    AddMainEngineForce(fixedDT, directThrottle, ref forwardVel, movementStats, boostersIsActive);
                 }
             }
 
@@ -246,18 +246,18 @@ namespace GameSystems
             {
                 if (movementRuntimeData.InertiaDampingIsActive)
                 {
-                    ApplyThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                    ApplyThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStats);
                 }
                 else
                 {
-                    AddThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                    AddThrustersForce(fixedDT, strafeThrottle, ref sideVel, movementStats);
                 }
             }
 
             if (movementRuntimeData.InertiaDampingIsActive)
             {
-                ApplyDirectDamping(fixedDT, directThrottle, ref forwardVel, movementStaticData, boostersIsActive);
-                ApplyStrafeDamping(fixedDT, strafeThrottle, ref sideVel, movementStaticData);
+                ApplyDirectDamping(fixedDT, directThrottle, ref forwardVel, movementStats, boostersIsActive);
+                ApplyStrafeDamping(fixedDT, strafeThrottle, ref sideVel, movementStats);
             }
 
             movementRuntimeData.MainEnginePower = boostersIsActive ? 1 : directThrottle;
@@ -265,7 +265,7 @@ namespace GameSystems
             linearVelocity = right * sideVel + forward * forwardVel;
         }
 
-        private void ApplyDirectDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
+        private void ApplyDirectDamping(float fixedDT, float throttle, ref float forwardVel, in MovementStats movementStats, bool boostersIsActive)
         {
             if (Mathf.Abs(forwardVel) < EPS) // если не двигаемся. 
             {
@@ -276,12 +276,12 @@ namespace GameSystems
             if (boostersIsActive) return;
 
             var acceleration = forwardVel > 0
-                ? movementStaticData.DirectDampingAcceleration
-                : movementStaticData.ReverseDampingAcceleration;
+                ? movementStats.DirectDampingAcceleration
+                : movementStats.ReverseDampingAcceleration;
 
             var maxSpeed = forwardVel > 0
-                ? movementStaticData.DirectMaxSpeed
-                : movementStaticData.ReverseMaxSpeed;
+                ? movementStats.DirectMaxSpeed
+                : movementStats.ReverseMaxSpeed;
 
             var targetSpeed = throttle * maxSpeed;
             float desiredSpeed;
@@ -306,7 +306,7 @@ namespace GameSystems
             forwardVel += (desiredSpeed - forwardVel) * acceleration * fixedDT;
         }
 
-        private void ApplyStrafeDamping(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
+        private void ApplyStrafeDamping(float fixedDT, float throttle, ref float sideVel, in MovementStats movementStats)
         {
             if (Mathf.Abs(sideVel) < EPS) // если не двигаемся. 
             {
@@ -314,8 +314,8 @@ namespace GameSystems
                 return;
             }
 
-            var acceleration = movementStaticData.StrafeDampingAcceleration;
-            var maxSpeed = movementStaticData.StrafeMaxSpeed;
+            var acceleration = movementStats.StrafeDampingAcceleration;
+            var maxSpeed = movementStats.StrafeMaxSpeed;
 
             var targetSpeed = throttle * maxSpeed;
             float desiredSpeed;
@@ -340,25 +340,25 @@ namespace GameSystems
             sideVel += (desiredSpeed - sideVel) * acceleration * fixedDT;
         }
 
-        private void ApplyMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
+        private void ApplyMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStats movementStats, bool boostersIsActive)
         {
             float acceleration;
             float maxSpeed;
 
             if (boostersIsActive)
             {
-                acceleration = movementStaticData.BoostersAcceleration;
-                maxSpeed = movementStaticData.BoostersMaxSpeed;
+                acceleration = movementStats.BoostersAcceleration;
+                maxSpeed = movementStats.BoostersMaxSpeed;
             }
             else
             {
                 acceleration = throttle > 0
-                      ? movementStaticData.DirectAcceleration
-                      : -movementStaticData.ReverseAcceleration;
+                      ? movementStats.DirectAcceleration
+                      : -movementStats.ReverseAcceleration;
 
                 maxSpeed = throttle > 0
-                          ? movementStaticData.DirectMaxSpeed
-                          : movementStaticData.ReverseMaxSpeed;
+                          ? movementStats.DirectMaxSpeed
+                          : movementStats.ReverseMaxSpeed;
             }
 
             var targetSpeed = throttle * maxSpeed;
@@ -370,13 +370,13 @@ namespace GameSystems
             forwardVel += acceleration * fixedDT;
         }
 
-        private void ApplyThrustersForce(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
+        private void ApplyThrustersForce(float fixedDT, float throttle, ref float sideVel, in MovementStats movementStats)
         {
             var acceleration = throttle > 0
-                      ? movementStaticData.StrafeAcceleration
-                      : -movementStaticData.StrafeAcceleration;
+                      ? movementStats.StrafeAcceleration
+                      : -movementStats.StrafeAcceleration;
 
-            var maxSpeed = movementStaticData.StrafeMaxSpeed;
+            var maxSpeed = movementStats.StrafeMaxSpeed;
 
             var targetSpeed = throttle * maxSpeed;
             var speedDiff = targetSpeed - sideVel;
@@ -387,26 +387,26 @@ namespace GameSystems
             sideVel += acceleration * fixedDT;
         }
 
-        private void AddMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStaticData movementStaticData, bool boostersIsActive)
+        private void AddMainEngineForce(float fixedDT, float throttle, ref float forwardVel, in MovementStats movementStats, bool boostersIsActive)
         {
             float acceleration;
 
             if (boostersIsActive)
             {
-                acceleration = movementStaticData.BoostersAcceleration;
+                acceleration = movementStats.BoostersAcceleration;
             }
             else
             {
                 acceleration = throttle > 0
-                ? movementStaticData.DirectAcceleration
-                : movementStaticData.ReverseAcceleration;
+                ? movementStats.DirectAcceleration
+                : movementStats.ReverseAcceleration;
             }
 
             forwardVel += acceleration * throttle * fixedDT;
         }
-        private void AddThrustersForce(float fixedDT, float throttle, ref float sideVel, in MovementStaticData movementStaticData)
+        private void AddThrustersForce(float fixedDT, float throttle, ref float sideVel, in MovementStats movementStats)
         {
-            var acceleration = movementStaticData.StrafeAcceleration;
+            var acceleration = movementStats.StrafeAcceleration;
             sideVel += acceleration * throttle * fixedDT;
         }
 

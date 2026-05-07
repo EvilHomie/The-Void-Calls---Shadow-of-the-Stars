@@ -5,7 +5,7 @@ namespace Helpers
     public static class FlagsHelper
     {
         /// <summary>Проверяет, установлен ли флаг.</summary>
-        public static bool HasFlag<T>(T value, T flag) where T : Enum
+        public static bool ContainsAny<T>(T value, T flag) where T : Enum
         {
             return (Convert.ToInt32(value) & Convert.ToInt32(flag)) != 0;
         }
@@ -35,6 +35,49 @@ namespace Helpers
         public static void SetFlags<T>(ref T value, params T[] flags) where T : Enum
         {
             value = CombineFlags(flags);
+        }
+    }
+
+    public static class FlagsExtensions
+    {
+        /// <summary>
+        /// Есть ли хотя бы одно совпадение флагов.
+        /// </summary>
+        public static bool ContainsAny<T>(this T value, T flags)
+            where T : Enum
+        {
+            return (Convert.ToInt32(value) & Convert.ToInt32(flags)) != 0;
+        }
+
+        /// <summary>
+        /// Содержит ли значение все указанные флаги.
+        /// Аналог Enum.HasFlag().
+        /// </summary>
+        public static bool ContainsAll<T>(this T value, T flags)
+            where T : Enum
+        {
+            int v = Convert.ToInt32(value);
+            int f = Convert.ToInt32(flags);
+
+            return (v & f) == f;
+        }
+
+        /// <summary>
+        /// Добавляет флаги.
+        /// </summary>
+        public static T AddFlags<T>(this T value, T flags)
+            where T : Enum
+        {
+            return (T)(object)(Convert.ToInt32(value) | Convert.ToInt32(flags));
+        }
+
+        /// <summary>
+        /// Удаляет флаги.
+        /// </summary>
+        public static T RemoveFlags<T>(this T value, T flags)
+            where T : Enum
+        {
+            return (T)(object)(Convert.ToInt32(value) & ~Convert.ToInt32(flags));
         }
     }
 }

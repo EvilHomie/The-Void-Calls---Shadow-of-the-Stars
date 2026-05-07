@@ -699,7 +699,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &257707062
 Transform:
   m_ObjectHideFlags: 0
@@ -771,6 +771,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e211a2b4b2233684090583a030292735, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Registries.WeaponRegistry
+--- !u!1 &381012119 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7863458149921933340, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
+  m_PrefabInstance: {fileID: 1253329095}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &381012126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381012119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7722ada10e0afb458db81c2c5689bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damage.HealthComponent
+  <ObjectType>k__BackingField: 1
+  Health:
+    HullPoints: 100
+    ShieldPoints: 0
+    ArmorPoints: 0
+  Resistance:
+    Energy: 0
+    Kinetic: 0
+  ResistanceMultipliers:
+    Energy: 0
+    Kinetic: 0
+--- !u!114 &381012127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381012119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b4fac9a4692bfe4a96e3492d76818b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damage.HitBox
+  <HealthComponent>k__BackingField: {fileID: 381012126}
 --- !u!1 &428943705
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,6 +1255,7 @@ Transform:
   - {fileID: 1062493947}
   - {fileID: 1374963307}
   - {fileID: 1865616979}
+  - {fileID: 1537065681}
   m_Father: {fileID: 1883150519}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
@@ -3473,11 +3515,21 @@ PrefabInstance:
       propertyPath: <HealthData>k__BackingField
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8424865364333852199, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
+      propertyPath: <HealthData>k__BackingField.HullPoints
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8430481173968022018, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7863458149921933340, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 381012126}
+    - targetCorrespondingSourceObject: {fileID: 7863458149921933340, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 381012127}
   m_SourcePrefab: {fileID: 100100000, guid: 31873e4575df0d549ac0cdddd8d09885, type: 3}
 --- !u!1 &1287717962
 GameObject:
@@ -3720,6 +3772,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7edd4504b55a287458131c19acdaf45c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Registries.HitParticleRegistry
+--- !u!1 &1537065680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1537065681}
+  - component: {fileID: 1537065682}
+  m_Layer: 0
+  m_Name: PlayerWeaponSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1537065681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537065680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 497810451}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1537065682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537065680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d605ec93bf4b03e45b8df2774fa22348, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSystem
 --- !u!1 &1554658857
 GameObject:
   m_ObjectHideFlags: 0
@@ -5505,9 +5601,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 62361182898651322, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponGroup
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2200187118415842127, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: m_Name
       value: Ship_Miner_S_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2709886303130241493, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponGroup
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3734830323868723499, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5553,6 +5657,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5753759993797196858, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.BaseDamage.Energy
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753759993797196858, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.BaseDamage.Kinetic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753759993797196858, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Energy
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753759993797196858, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Kinetic
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753759993797196858, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Asteroid
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6637235773049636516, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: looping
       value: 1
@@ -5566,20 +5690,24 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.ProjectileSpeed
-      value: 3
+      propertyPath: Damage.EnergyDamage
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.BaseStats.MaxDistance
-      value: 5
+      propertyPath: Damage.KineticDamage
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.BaseStats.RotateSpeed
-      value: 90
+      propertyPath: Damage.EnergyDamageMultiplier
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.BaseStats.MaxRotateAngle
-      value: 25
+      propertyPath: Damage.KineticDamageMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7489062351971220425, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Asteroid
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: FireRate
@@ -5590,20 +5718,28 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.ProjectileSpeed
-      value: 3
+      propertyPath: Damage.EnergyDamage
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.BaseStats.MaxDistance
-      value: 5
+      propertyPath: Damage.KineticDamage
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.BaseStats.RotateSpeed
-      value: 90
+      propertyPath: Damage.EnergyDamageMultiplier
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
-      propertyPath: Stats.BaseStats.MaxRotateAngle
-      value: 25
+      propertyPath: Damage.KineticDamageMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7526879336668903538, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Asteroid
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700731002519729756, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: WeaponGroup
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

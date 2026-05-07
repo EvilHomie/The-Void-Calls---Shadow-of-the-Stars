@@ -8,23 +8,23 @@ namespace Helpers
     {
         public static void AimAtTarget(WeaponBase weapon, float dTime, in Vector3 targetPos)
         {
-            ref var baseStats = ref weapon.BaseStats;
+            ref var aimStats = ref weapon.AimStats;
             Vector2 dir = targetPos - weapon.Transform.position;
             float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
 
             float newAngle = Mathf.MoveTowardsAngle(
                 weapon.Transform.eulerAngles.z,
                 targetAngle,
-                baseStats.RotateSpeed * dTime
+                aimStats.RotateSpeed * dTime
             );
 
             weapon.Transform.rotation = Quaternion.Euler(0, 0, newAngle);
 
             float localZ = Mathf.DeltaAngle(0, weapon.Transform.localEulerAngles.z);
 
-            if (Mathf.Abs(localZ) > baseStats.MaxRotateAngle)
+            if (Mathf.Abs(localZ) > aimStats.MaxRotateAngle)
             {
-                float clamped = Mathf.Clamp(localZ, -baseStats.MaxRotateAngle, baseStats.MaxRotateAngle);
+                float clamped = Mathf.Clamp(localZ, -aimStats.MaxRotateAngle, aimStats.MaxRotateAngle);
                 weapon.Transform.localRotation = Quaternion.Euler(0, 0, clamped);
             }
         }
@@ -36,14 +36,14 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                ref var baseStats = ref weapon.BaseStats;
+                ref var aimStats = ref weapon.AimStats;
                 var transform = weapon.Transform;
-                var maxRotateAngle = baseStats.MaxRotateAngle;
+                var maxRotateAngle = aimStats.MaxRotateAngle;
 
                 Vector3 targetDir = targetPos - transform.position;
                 float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
 
-                float newAngle = Mathf.MoveTowardsAngle(transform.eulerAngles.z, targetAngle, baseStats.RotateSpeed * dTime);
+                float newAngle = Mathf.MoveTowardsAngle(transform.eulerAngles.z, targetAngle, aimStats.RotateSpeed * dTime);
 
                 transform.rotation = Quaternion.Euler(0, 0, newAngle);
 
@@ -59,9 +59,9 @@ namespace Helpers
 
         public static bool CanFire(WeaponBase weapon, LayerMask hitLayers)
         {
-            ref var baseStats = ref weapon.BaseStats;
+            ref var aimStats = ref weapon.AimStats;
             Ray ray = new(weapon.Transform.position, weapon.Transform.up);
-            return Physics.Raycast(ray, baseStats.MaxDistance, hitLayers);
+            return Physics.Raycast(ray, aimStats.MaxDistance, hitLayers);
         }
 
         public static Vector2 GetDirectionWithSpreadBrookTaylor(Vector2 baseDir, float spreadAngleDeg)

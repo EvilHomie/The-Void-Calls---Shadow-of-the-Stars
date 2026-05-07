@@ -3,7 +3,7 @@ using System;
 namespace Ships
 {
     [Serializable]
-    public struct MovementStaticData
+    public struct MovementStats
     {
         public float DirectMaxSpeed;
         public float DirectAcceleration;

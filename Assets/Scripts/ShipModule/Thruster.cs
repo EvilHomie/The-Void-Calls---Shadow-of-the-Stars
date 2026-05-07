@@ -10,13 +10,13 @@ namespace ShipModules
         [field: SerializeField] public float StrafeThrust { get; private set; }
         [field: SerializeField] public float RotateThrust { get; private set; }
 
-        public ThrustersModificators ThrustersModificators;
+        public ThrustersMultipliers ThrustersMultipliers;
     }
 
-    public struct ThrustersModificators
+    public struct ThrustersMultipliers
     {
-        public int StrafeThrustModPercent;
-        public int RotateThrustModPercent;
+        public float StrafeThrustMultiplier;
+        public float RotateThrustMultiplier;
     }
 }
 

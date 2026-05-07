@@ -1,6 +1,6 @@
-using Damage;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Weapons;
 
 namespace Ships
 {
@@ -10,18 +10,19 @@ namespace Ships
         [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
 
+        public bool IsAttacking;
+        public WeaponGroup ActiveWeaponGroup;
         public TargetData TargetData;
-        public MovementStaticData MovementStaticData;
+        public MovementStats MovementStats;
         public MovementRuntimeData MovementRuntimeData;
 
         public EquipData Equip;
         public View View;
     }
-
-    [Serializable]
-    public struct TargetData
-    {
-        public Transform Transform;
-        public Vector2 Position;
-    }
 }
+
+//FlagsHelper.RemoveFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Drifting);
+//FlagsHelper.AddFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Cluster);                        
+
+//clusterAsteroid.HealthData.ResistanceType = ResistanceType.None;
+//FlagsHelper.AddFlag(ref clusterAsteroid.HealthData.ResistanceType, ResistanceType.None);

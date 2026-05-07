@@ -9868,14 +9868,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 8000789201367927090}
-  DamageData:
-    ShieldDamage: 0
-    ArmorDamage: 0
-    HullDamage: 0
-    ShieldMultiplier: 0
-    ArmorMultiplier: 0
-    HullMultiplier: 0
-    AsteroidMultipler: 0
   <BeamLineLR>k__BackingField: {fileID: 8208887166145653116}
   <BeamLineGO>k__BackingField: {fileID: 2184953884915563217}
   <ShootSpotPS>k__BackingField: {fileID: 1158179561885953847}
@@ -9883,11 +9875,23 @@ MonoBehaviour:
   <HitSpotT>k__BackingField: {fileID: 3661464610588513740}
   HitPos: {x: 0, y: 0}
   IsHit: 0
-  Stats:
+  WeaponStats:
     BaseStats:
-      MaxDistance: 3
-      MaxRotateAngle: 25
-      RotateSpeed: 25
+      AimStats:
+        MaxDistance: 3
+        MaxRotateAngle: 25
+        RotateSpeed: 45
+      BaseDamage:
+        Energy: 0
+        Kinetic: 0
+      DamageMultipliers:
+        Energy: 0
+        Kinetic: 0
+        Asteroid: 0
+  DamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
 --- !u!1 &6305653399485739902
 GameObject:
   m_ObjectHideFlags: 0

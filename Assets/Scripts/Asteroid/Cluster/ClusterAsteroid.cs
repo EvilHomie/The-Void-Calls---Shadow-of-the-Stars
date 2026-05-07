@@ -7,7 +7,6 @@ namespace Asteroids
     {
         public AsteroidType AsteroidType;
         [field: SerializeField] public Rigidbody2D RB { get; set; }
-        [field: SerializeField] public HealthDataOLD HealthData { get; set; }
 
         private void OnBecameInvisible()
         {
