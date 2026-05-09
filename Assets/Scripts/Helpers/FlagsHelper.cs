@@ -79,6 +79,16 @@ namespace Helpers
         {
             return (T)(object)(Convert.ToInt32(value) & ~Convert.ToInt32(flags));
         }
+
+        /// <summary>
+        /// Содержит ли определенный флаг
+        /// </summary>
+        public static bool Contains<T>(this T value, T flag)
+            where T : Enum
+        {
+            return (Convert.ToInt32(value) & Convert.ToInt32(flag))
+                   == Convert.ToInt32(flag);
+        }
     }
 }
 

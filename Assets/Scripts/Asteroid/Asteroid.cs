@@ -1,32 +1,31 @@
-using Damage;
+using DefenseLayers;
 using GamePools;
+using Helpers;
 using UnityEngine;
 
 namespace Asteroids
 {
     public class Asteroid : PoolObjectBase
     {
-        [field: SerializeField] public Rigidbody2D RB { get; private set; }
+        [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public AsteroidType AsteroidType { get; private set; }
-
-        //public override void Init()
-        //{
-        //    base.Init();
-        //    HealthData.ResistanceType = ResistanceType.None;
-        //}
-        public void ResetParams()
-        {
-            //HealthData.CurrentHealthPoints = HealthData.DefaultHealthPoints;
-        }
+        [field: SerializeField] public AsteroidHullLayer AsteroidHullLayer { get; private set; }
 
         private void OnBecameInvisible()
         {
-            RB.simulated = false;
+            Rigidbody.simulated = false;
         }
 
         private void OnBecameVisible()
         {
-            RB.simulated = true;
+            Rigidbody.simulated = true;
+        }
+
+        // тестовая часть
+        private void Start()
+        {
+            Init(null);
+            InitHelper.InitAsteroid(this);
         }
     }
 }

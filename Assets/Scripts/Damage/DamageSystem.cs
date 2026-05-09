@@ -1,4 +1,4 @@
-using Damage;
+using DefenseLayers;
 using Projectiles;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,15 +8,16 @@ namespace GameSystems
 {
     public class DamageSystem : GameSystemBase
     {
-        public delegate void DamageAction(HealthComponent healthComponent, in DamageData damageData);
+        public delegate void DamageAction(DefenseLayerBase defenseLayer, in DamageData damageData);
 
-        private Dictionary<ObjectType, DamageAction> _damageStrategies = new();
+        private readonly Dictionary<DefenseLayerType, DamageAction> _damageStrategies = new();
 
         protected override void AwakeInit()
         {
-            _damageStrategies.Add(ObjectType.Asteroid, ApplyDamageAsteroid);
-            _damageStrategies.Add(ObjectType.Ship, ApplyDamageShip);
-            _damageStrategies.Add(ObjectType.Station, ApplyDamageStation);
+            _damageStrategies.Add(DefenseLayerType.Hull, ApplyHullDamage);
+            _damageStrategies.Add(DefenseLayerType.Armor, ApplyArmorDamage);
+            _damageStrategies.Add(DefenseLayerType.Shield, ApplyShieldDamage);
+            _damageStrategies.Add(DefenseLayerType.AsteroidHull, ApplyAsteroidHullDamage);
         }
 
         protected override void Subscribe()
@@ -35,111 +36,68 @@ namespace GameSystems
 
         private void OnBeamHit(in DamageData damageData, Collider2D collider2D, Vector2 position)
         {
-            if (!collider2D.TryGetComponent(out HitBox hitBox)) return;
+            if (!collider2D.TryGetComponent(out DefenseLayerBase defenseLayer)) return;
 
-            if (hitBox.HealthComponent.Health.HullPoints <= 0) return;
+            var layerType = defenseLayer.LayerType;
+            _damageStrategies[layerType].Invoke(defenseLayer, damageData);
 
-            var objectType = hitBox.HealthComponent.ObjectType;
-            _damageStrategies[objectType].Invoke(hitBox.HealthComponent, damageData);
+            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer);
         }
 
         private void OnProjectileHit(Bolt bolt, Collider2D collider2D, Vector2 position)
         {
-            if (!collider2D.TryGetComponent(out HitBox hitBox)) return;
+            if (!collider2D.TryGetComponent(out DefenseLayerBase defenseLayer)) return;
 
-            if (hitBox.HealthComponent.Health.HullPoints <= 0) return;
+            var layerType = defenseLayer.LayerType;
+            _damageStrategies[layerType].Invoke(defenseLayer, bolt.DamageData);
 
-            var objectType = hitBox.HealthComponent.ObjectType;
-            _damageStrategies[objectType].Invoke(hitBox.HealthComponent, bolt.DamageData);
+            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer);
         }
 
-        private void ApplyDamageAsteroid(HealthComponent healthComponent, in DamageData damageData)
-        {
-            ref var healthData = ref healthComponent.Health;
-            healthData.HullPoints -= damageData.Asteroid;
 
-            if (healthData.HullPoints <= 0)
+        private void ApplyShieldDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
+        {
+            var damageMultiplier = defenseLayer.ResistanceMultipliers.Energy;
+            defenseLayer.CurrentHealthPoints -= damageData.Energy * damageMultiplier;            
+
+            if (defenseLayer.CurrentHealthPoints <= 0)
             {
-                healthData.HullPoints = 0;
-                healthComponent.HullDestroyedAction?.Invoke();
+                defenseLayer.CurrentHealthPoints = 0;
             }
         }
 
-        private void ApplyDamageShip(HealthComponent healthComponent, in DamageData damageData)
+        private void ApplyArmorDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
         {
-            ref var healthData = ref healthComponent.Health;
+            var damageMultiplier = defenseLayer.ResistanceMultipliers.Kinetic;
+            defenseLayer.CurrentHealthPoints -= damageData.Kinetic * damageMultiplier;
 
-            if (healthData.ShieldPoints > 0)
+            if (defenseLayer.CurrentHealthPoints <= 0)
             {
-                ApplyShieldDamage(healthComponent, damageData);
-                return;
-            }
-
-            if (healthData.ArmorPoints > 0)
-            {
-                ApplyArmorDamage(healthComponent, damageData);
-                return;
-            }
-
-            ApplyHullDamage(healthComponent, damageData);
-        }
-
-        private void ApplyDamageStation(HealthComponent healthComponent, in DamageData damageData)
-        {
-            ref var healthData = ref healthComponent.Health;
-
-            if (healthData.ShieldPoints > 0)
-            {
-                ApplyShieldDamage(healthComponent, damageData);
-                return;
-            }
-
-            ApplyHullDamage(healthComponent, damageData);
-        }
-
-        private void ApplyShieldDamage(HealthComponent healthComponent, in DamageData damageData)
-        {
-            ref var healthData = ref healthComponent.Health;
-            var resistanceMultipliers = healthComponent.ResistanceMultipliers;
-
-            healthData.ShieldPoints -= damageData.Energy * resistanceMultipliers.Energy;
-
-            if (healthData.ShieldPoints <= 0)
-            {
-                healthData.ShieldPoints = 0;
-                healthComponent.ShieldDestroyedAction?.Invoke();
+                defenseLayer.CurrentHealthPoints = 0;
             }
         }
-        private void ApplyArmorDamage(HealthComponent healthComponent, in DamageData damageData)
+        private void ApplyHullDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
         {
-            ref var healthData = ref healthComponent.Health;
-            var resistanceMultipliers = healthComponent.ResistanceMultipliers;
+            var energyMultiplier = defenseLayer.ResistanceMultipliers.Energy;
+            var energyDamage = damageData.Energy * energyMultiplier;
+            var kineticMultiplier = defenseLayer.ResistanceMultipliers.Kinetic;
+            var kineticDamage = damageData.Kinetic * kineticMultiplier;
+            defenseLayer.CurrentHealthPoints -= energyDamage + kineticDamage;
 
-            healthData.ArmorPoints -= damageData.Kinetic * resistanceMultipliers.Kinetic;
-
-            if (healthData.ArmorPoints <= 0)
+            if (defenseLayer.CurrentHealthPoints <= 0)
             {
-                healthData.ArmorPoints = 0;
-                healthComponent.ArmorDestroyedAction?.Invoke();
+                defenseLayer.CurrentHealthPoints = 0;
             }
-
         }
-        private void ApplyHullDamage(HealthComponent healthComponent, in DamageData damageData)
+
+        private void ApplyAsteroidHullDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
         {
-            ref var healthData = ref healthComponent.Health;
-            var resistanceMultipliers = healthComponent.ResistanceMultipliers;
+            defenseLayer.CurrentHealthPoints -= damageData.Asteroid;
 
-            var energyDamage = damageData.Energy * resistanceMultipliers.Energy;
-            var kineticDamage = damageData.Kinetic * resistanceMultipliers.Kinetic;
-            var hullDamage = energyDamage + kineticDamage;
-            healthData.HullPoints -= hullDamage;
-
-            if (healthData.HullPoints <= 0)
+            if (defenseLayer.CurrentHealthPoints <= 0)
             {
-                healthData.HullPoints = 0;
-                healthComponent.HullDestroyedAction?.Invoke();
+                defenseLayer.CurrentHealthPoints = 0;
             }
-
         }
     }
 }

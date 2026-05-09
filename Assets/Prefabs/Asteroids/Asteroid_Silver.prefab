@@ -262,5 +262,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <RB>k__BackingField: {fileID: 6527772960036661419}
-  <HealthData>k__BackingField: {fileID: 0}
   <AsteroidType>k__BackingField: 132

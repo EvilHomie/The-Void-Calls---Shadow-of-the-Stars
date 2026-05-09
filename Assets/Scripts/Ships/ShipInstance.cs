@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+using DefenseLayers;
+using System;
 using UnityEngine;
-using Weapons;
 
 namespace Ships
 {
@@ -9,6 +9,7 @@ namespace Ships
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
+        [field: SerializeField] public DefenseLayerBase[] DefenseLayers { get; private set; }
 
         public bool IsAttacking;
         public WeaponGroup ActiveWeaponGroup;
@@ -18,11 +19,14 @@ namespace Ships
 
         public EquipData Equip;
         public View View;
+
+        public ResistanceStatsData ResistanceStats;
     }
 }
 
-//FlagsHelper.RemoveFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Drifting);
-//FlagsHelper.AddFlag(ref clusterAsteroid.AsteroidType, AsteroidType.Cluster);                        
-
-//clusterAsteroid.HealthData.ResistanceType = ResistanceType.None;
-//FlagsHelper.AddFlag(ref clusterAsteroid.HealthData.ResistanceType, ResistanceType.None);
+[Serializable]
+public struct ResistanceStatsData
+{
+    public float Energy;
+    public float Kinetic;
+}

@@ -1,9 +1,9 @@
-using UnityEngine;
+//using UnityEngine;
 
-namespace Damage
-{
-    public class HitBox : MonoBehaviour
-    {
-        [field: SerializeField] public HealthComponent HealthComponent { get; private set; }
-    }
-}
+//namespace Damage
+//{
+//    public class HitBox : MonoBehaviour
+//    {
+//        [field: SerializeField] public HealthComponent HealthComponent { get; private set; }
+//    }
+//}

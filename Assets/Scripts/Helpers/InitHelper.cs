@@ -1,15 +1,21 @@
-using Damage;
+using Asteroids;
+using DefenseLayers;
 using Registries;
 using Ships;
-using System;
 using UnityEngine;
 using Weapons;
 
 namespace Helpers
 {
-    public class ShipInitHelper
+    public class InitHelper
     {
         public static void InitShip(ShipInstance shipInstance)
+        {
+            InitShipStats(shipInstance);
+            InitDefenceLayers(shipInstance);
+        }
+
+        private static void InitShipStats(ShipInstance shipInstance)
         {
             ref var movement = ref shipInstance.MovementRuntimeData;
             movement.InertiaDampingIsActive = true;
@@ -60,20 +66,77 @@ namespace Helpers
             movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
         }
 
-        public static void UpdateHealthStats(ShipInstance shipInstance)
+        private static void InitDefenceLayers(ShipInstance shipInstance)
         {
-            if (!shipInstance.TryGetComponent(out HealthComponent component))
+            var resistanceStats = shipInstance.ResistanceStats;
+            var maxResistance = WorldConfig.MaxResistance;
+            var energyResistance = Mathf.Clamp(resistanceStats.Energy, 0f, maxResistance);
+            var kineticResistance = Mathf.Clamp(resistanceStats.Kinetic, 0f, maxResistance);
+
+            var resistanceMultipliers = new ResistanceMultipliers
             {
-                throw new Exception($"HealthComponent NotFound  {shipInstance.gameObject.name}");
+                Energy = 1 - energyResistance,
+                Kinetic = 1 - kineticResistance
+            };
+
+            foreach (var defenseLayer in shipInstance.DefenseLayers)
+            {
+                defenseLayer.ResistanceMultipliers = resistanceMultipliers;
+
+                if (defenseLayer.LayerType == DefenseLayerType.Hull)
+                {
+                    defenseLayer.CurrentHealthPoints = shipInstance.Equip.Chassis.Hull;
+                }
+                else if (defenseLayer.LayerType == DefenseLayerType.Shield)
+                {
+
+                }
+                else //if (defenseLayer.LayerType == DefenseLayerType.Armor)
+                {
+
+                }
+            }
+        }
+
+        public static void InitAsteroid(Asteroid asteroid)
+        {
+            var rigidBody = asteroid.Rigidbody;
+
+            if (asteroid.AsteroidType.Contains(AsteroidType.Cluster))
+            {
+                rigidBody.angularDamping = WorldConfig.ClusterAsteroidAngularDamping;
+                rigidBody.linearDamping = WorldConfig.ClusterAsteroidLinearDamping;
+            }
+            else
+            {
+                rigidBody.angularDamping = WorldConfig.DriftingAsteroidAngularDamping;
+                rigidBody.linearDamping = WorldConfig.DriftingAsteroidLinearDamping;
             }
 
-            ref var resistanceMultipliers = ref component.ResistanceMultipliers;
-            var resistance = component.Resistance;
-            var maxResistance = WorldConfig.MaxResistance;
-            var energyResistance = Mathf.Clamp(resistance.Energy, 0f, maxResistance);
-            var kineticResistance = Mathf.Clamp(resistance.Kinetic, 0f, maxResistance);
-            resistanceMultipliers.Energy = 1 - energyResistance;
-            resistanceMultipliers.Kinetic = 1 - kineticResistance;
+            var massMod = GetMassModifier(asteroid.AsteroidType);
+            var scale = asteroid.Transform.localScale.x;
+            var baseMass = WorldConfig.AsteroidBaseMass * scale * scale;
+            rigidBody.mass = massMod * baseMass;
+
+            ref var resistanceMultipliers = ref asteroid.AsteroidHullLayer.ResistanceMultipliers;
+            resistanceMultipliers.Energy = 1;
+            resistanceMultipliers.Kinetic = 1;
+        }
+
+        public static float GetMassModifier(AsteroidType asteroidType)
+        {
+            float sum = 0f;
+            int count = 0;
+
+            foreach (var pair in WorldConfig.AsteroidMassModByType)
+            {
+                if (!asteroidType.Contains(pair.Key)) continue;
+
+                sum += pair.Value;
+                count++;
+            }
+
+            return count == 0 ? 1f : sum / count;
         }
 
         public static void InitWeapons(ShipInstance shipInstance)
@@ -102,9 +165,10 @@ namespace Helpers
                 weaponStats.Cached.InvProjectileSpeed = 1 / weaponStats.Config.ProjectileSpeed;
             }
 
-            ref var damage = ref weaponBase.Damage;
             var baseDamage = weaponBase.BaseDamage;
             var multipliers = weaponBase.DamageMultipliers;
+
+            ref var damage = ref weaponBase.Damage;
             damage.Energy = multipliers.Energy * baseDamage.Energy;
             damage.Kinetic = multipliers.Kinetic * baseDamage.Kinetic;
             damage.Asteroid = multipliers.Asteroid * (damage.Energy + damage.Kinetic);

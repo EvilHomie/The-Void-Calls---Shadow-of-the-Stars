@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsActive: 0
+  WeaponGroup: 0
   <Weapon>k__BackingField: {fileID: 5753759993797196858}
 --- !u!1 &926649730153616371
 GameObject:
@@ -10005,7 +10005,6 @@ GameObject:
   - component: {fileID: 3734830323868723499}
   - component: {fileID: 7298752721928705147}
   - component: {fileID: 611267203205586013}
-  - component: {fileID: 1155298554016439481}
   m_Layer: 0
   m_Name: Ship_Miner_S_1
   m_TagString: Untagged
@@ -10078,10 +10077,13 @@ MonoBehaviour:
   - {fileID: 8700731002519729756}
   - {fileID: 62361182898651322}
   - {fileID: 2709886303130241493}
+  <DefenseLayers>k__BackingField: []
+  IsAttacking: 0
+  ActiveWeaponGroup: 0
   TargetData:
     Transform: {fileID: 0}
     Position: {x: 0, y: 0}
-  MovementStaticData:
+  MovementStats:
     DirectMaxSpeed: 0
     DirectAcceleration: 0
     DirectDampingAcceleration: 0
@@ -10119,25 +10121,9 @@ MonoBehaviour:
     <ThrusterFR>k__BackingField: {fileID: 3040269647119789972}
     <ThrusterBL>k__BackingField: {fileID: 541397461601186480}
     <ThrusterBR>k__BackingField: {fileID: 8685503314767073583}
---- !u!114 &1155298554016439481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2200187118415842127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7722ada10e0afb458db81c2c5689bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Damage.HealthComponent
-  HealthData:
-    <HealthType>k__BackingField: 0
-    HullPoints: 0
-    ShieldPoints: 0
-    ArmorPoints: 0
-    EnergyDamageResistance: 0
-    KineticDamageResistance: 0
+  ResistanceStats:
+    Energy: 0
+    Kinetic: 0
 --- !u!1 &2774913637439140067
 GameObject:
   m_ObjectHideFlags: 0
@@ -10183,7 +10169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsActive: 1
+  WeaponGroup: 0
   <Weapon>k__BackingField: {fileID: 7526879336668903538}
 --- !u!1 &2822973351010206120
 GameObject:
@@ -15075,7 +15061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsActive: 1
+  WeaponGroup: 0
   <Weapon>k__BackingField: {fileID: 7489062351971220425}
 --- !u!1 &3954665675024936469
 GameObject:
@@ -20519,7 +20505,6 @@ GameObject:
   - component: {fileID: 7923124462641424111}
   - component: {fileID: 130904925155301629}
   - component: {fileID: 3655543516224062867}
-  - component: {fileID: 5553568609265564212}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -20658,19 +20643,6 @@ PolygonCollider2D:
       - {x: 0.27972722, y: -0.16774395}
       - {x: 0.28346267, y: 0.083850875}
   m_UseDelaunayMesh: 0
---- !u!114 &5553568609265564212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7750987560735232283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b4fac9a4692bfe4a96e3492d76818b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Damage.HitBox
-  <HealthComponent>k__BackingField: {fileID: 1155298554016439481}
 --- !u!1001 &5267825034733316558
 PrefabInstance:
   m_ObjectHideFlags: 0

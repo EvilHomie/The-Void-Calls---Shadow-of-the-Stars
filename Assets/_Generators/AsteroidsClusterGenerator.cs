@@ -129,7 +129,7 @@ public class AsteroidsClusterGenerator : MonoBehaviour
             var clusterAsteroid = spawnedAsteroid.AddComponent<ClusterAsteroid>();
             asteroidsCluster.Asteroids.Add(clusterAsteroid);
 
-            clusterAsteroid.RB = asteroidComponent.RB;
+            clusterAsteroid.RB = asteroidComponent.Rigidbody;
             //clusterAsteroid.HealthData = asteroidComponent.HealthData;
             clusterAsteroid.AsteroidType = asteroidComponent.AsteroidType;
             Destroy(asteroidComponent);
