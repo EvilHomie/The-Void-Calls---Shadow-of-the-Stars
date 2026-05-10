@@ -26,13 +26,13 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.BoltHitAction += OnBoltHit;
+            //EventBus.BoltHitAction += OnBoltHit;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.BoltHitAction -= OnBoltHit;
+            //EventBus.BoltHitAction -= OnBoltHit;
         }
 
         private void OnBoltHit(Bolt bolt, Collider2D hitCollider, Vector2 position)

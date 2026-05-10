@@ -41,7 +41,7 @@ namespace GameSystems
             var layerType = defenseLayer.LayerType;
             _damageStrategies[layerType].Invoke(defenseLayer, damageData);
 
-            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer);
+            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer, position);
         }
 
         private void OnProjectileHit(Bolt bolt, Collider2D collider2D, Vector2 position)
@@ -51,7 +51,7 @@ namespace GameSystems
             var layerType = defenseLayer.LayerType;
             _damageStrategies[layerType].Invoke(defenseLayer, bolt.DamageData);
 
-            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer);
+            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer, position);
         }
 
 
@@ -63,6 +63,7 @@ namespace GameSystems
             if (defenseLayer.CurrentHealthPoints <= 0)
             {
                 defenseLayer.CurrentHealthPoints = 0;
+                defenseLayer.Collider.enabled = false;
             }
         }
 
@@ -74,6 +75,7 @@ namespace GameSystems
             if (defenseLayer.CurrentHealthPoints <= 0)
             {
                 defenseLayer.CurrentHealthPoints = 0;
+                defenseLayer.Collider.enabled = false;
             }
         }
         private void ApplyHullDamage(DefenseLayerBase defenseLayer, in DamageData damageData)

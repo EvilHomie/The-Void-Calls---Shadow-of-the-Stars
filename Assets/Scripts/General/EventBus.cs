@@ -1,8 +1,9 @@
+using DefenseLayers;
 using Projectiles;
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Weapons;
-using DefenseLayers;
 
 namespace GameSystems
 {
@@ -22,7 +23,7 @@ namespace GameSystems
         public delegate void BoltHitDelegate(Bolt bolt, Collider2D collider2D, Vector2 position);
         public static BoltHitDelegate BoltHitAction;
 
-        public static Action<DefenseLayerBase> DefenseLayerDamagedAction;
+        public static Action<DefenseLayerBase, Vector2> DefenseLayerDamagedAction;
     }
 }
 

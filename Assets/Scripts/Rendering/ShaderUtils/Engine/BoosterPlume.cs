@@ -19,7 +19,7 @@ public class BoosterPlume : MonoBehaviour
     {
         _sr = GetComponent<SpriteRenderer>();
         _matBlock = new MaterialPropertyBlock();
-        _sr.maskInteraction = SpriteMaskInteraction.None;
+        //_sr.maskInteraction = SpriteMaskInteraction.None;
         SetPowerValue(0);
     }
     public void SetPowerValue(float value)
@@ -30,36 +30,19 @@ public class BoosterPlume : MonoBehaviour
         }
 
         _lastPowerValue = value;
-        //_sr.GetPropertyBlock(_matBlock);
         _matBlock.SetFloat(_powerValueID, value);
         _sr.SetPropertyBlock(_matBlock);
+
+        Debug.LogError(value);
 
         if (value == 0)
         {
             boosterParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            return;
         }
         else
         {
             boosterParticles.Play();
         }
-
-        _lastPowerValue = value;
-        //_sr.GetPropertyBlock(_matBlock);
-        _matBlock.SetFloat(_powerValueID, value);
-        _sr.SetPropertyBlock(_matBlock);
     }
-
-    //#if UNITY_EDITOR
-    //    [SerializeField] float _masterThrust;
-    //    private void OnValidate()
-    //    {
-    //        if (_sr == null)
-    //            _sr = GetComponent<SpriteRenderer>();
-    //        if (_matBlock == null)
-    //            _matBlock = new MaterialPropertyBlock();
-
-    //        _masterThrust = Mathf.Clamp01(_masterThrust);
-    //        SetThrustValue(_masterThrust);
-    //    }
-    //#endif
 }

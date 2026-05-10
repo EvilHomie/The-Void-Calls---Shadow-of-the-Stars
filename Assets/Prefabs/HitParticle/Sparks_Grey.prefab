@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6692907616287224180}
   - component: {fileID: 4018632620066726657}
   m_Layer: 0
-  m_Name: S_BoltRepeater_MK1_HitParticle
+  m_Name: Sparks_Grey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1360,7 +1360,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 1
+    enabled: 0
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -4842,7 +4842,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31b7c91f083dd4742917839d68791f0a, type: 2}
+  - {fileID: 2100000, guid: e4628e80fce87134c800e3aad8eef7ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9749,7 +9749,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31b7c91f083dd4742917839d68791f0a, type: 2}
+  - {fileID: 2100000, guid: e4628e80fce87134c800e3aad8eef7ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

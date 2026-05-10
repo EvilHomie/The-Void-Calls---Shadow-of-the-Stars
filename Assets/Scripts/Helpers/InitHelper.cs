@@ -82,6 +82,7 @@ namespace Helpers
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
                 defenseLayer.ResistanceMultipliers = resistanceMultipliers;
+                defenseLayer.Init();
 
                 if (defenseLayer.LayerType == DefenseLayerType.Hull)
                 {

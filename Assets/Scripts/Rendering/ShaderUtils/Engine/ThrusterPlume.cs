@@ -18,7 +18,7 @@ public class ThrusterPlume : MonoBehaviour
     {
         _sr = GetComponent<SpriteRenderer>();
         _matBlock = new MaterialPropertyBlock();
-        _sr.maskInteraction = SpriteMaskInteraction.None;
+        //_sr.maskInteraction = SpriteMaskInteraction.None;
         SetPowerValue(0);
     }
     public void SetPowerValue(float value)
