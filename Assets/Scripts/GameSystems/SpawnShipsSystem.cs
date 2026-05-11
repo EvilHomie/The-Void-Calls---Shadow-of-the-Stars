@@ -24,7 +24,6 @@ namespace GameSystems
         private void Start()
         {
             InitHelper.InitShip(_playerShip);
-            InitHelper.InitWeapons(_playerShip);
             InitHelper.RegisterShip(_playerShip, _shipRegistry, asPlayer: true);
             _gameFlowSystem.ChangeGameState(GameState.CoreGameplay);
         }

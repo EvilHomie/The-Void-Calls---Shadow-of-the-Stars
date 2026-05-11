@@ -13,6 +13,7 @@ namespace Helpers
         {
             InitShipStats(shipInstance);
             InitDefenceLayers(shipInstance);
+            InitWeapons(shipInstance);
         }
 
         private static void InitShipStats(ShipInstance shipInstance)
@@ -68,6 +69,12 @@ namespace Helpers
 
         private static void InitDefenceLayers(ShipInstance shipInstance)
         {
+            if (shipInstance.Id == 0)
+            {
+                var newId = EntityIdGenerator.Generate();
+                shipInstance.Id = newId;
+            }
+
             var resistanceStats = shipInstance.ResistanceStats;
             var maxResistance = WorldConfig.MaxResistance;
             var energyResistance = Mathf.Clamp(resistanceStats.Energy, 0f, maxResistance);
@@ -82,19 +89,19 @@ namespace Helpers
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
                 defenseLayer.ResistanceMultipliers = resistanceMultipliers;
-                defenseLayer.Init();
 
                 if (defenseLayer.LayerType == DefenseLayerType.Hull)
                 {
-                    defenseLayer.CurrentHealthPoints = shipInstance.Equip.Chassis.Hull;
+                    var hp = shipInstance.Equip.Chassis.Hull;
+                    defenseLayer.Init(hp, shipInstance.Id);
                 }
                 else if (defenseLayer.LayerType == DefenseLayerType.Shield)
                 {
-
+                    defenseLayer.Init(200, shipInstance.Id);
                 }
                 else //if (defenseLayer.LayerType == DefenseLayerType.Armor)
                 {
-
+                    defenseLayer.Init(200, shipInstance.Id);
                 }
             }
         }
@@ -102,6 +109,12 @@ namespace Helpers
         public static void InitAsteroid(Asteroid asteroid)
         {
             var rigidBody = asteroid.Rigidbody;
+
+            if (asteroid.Id == 0)
+            {
+                var newId = EntityIdGenerator.Generate();
+                asteroid.Id = newId;
+            }
 
             if (asteroid.AsteroidType.Contains(AsteroidType.Cluster))
             {
@@ -117,11 +130,15 @@ namespace Helpers
             var massMod = GetMassModifier(asteroid.AsteroidType);
             var scale = asteroid.Transform.localScale.x;
             var baseMass = WorldConfig.AsteroidBaseMass * scale * scale;
-            rigidBody.mass = massMod * baseMass;
+            var mass = massMod * baseMass;
+            rigidBody.mass = mass;
 
             ref var resistanceMultipliers = ref asteroid.AsteroidHullLayer.ResistanceMultipliers;
             resistanceMultipliers.Energy = 1;
             resistanceMultipliers.Kinetic = 1;
+
+            var hp = mass * WorldConfig.AsteroidTonHP;
+            asteroid.AsteroidHullLayer.Init(hp, asteroid.Id);
         }
 
         public static float GetMassModifier(AsteroidType asteroidType)
@@ -147,6 +164,7 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
+                weapon.OwnerId = shipInstance.Id;
 
                 UpdateWeaponStats(weapon);
 
@@ -165,13 +183,13 @@ namespace Helpers
                 weaponStats.Cached.ShootDelay = 1f / weaponStats.Config.FireRate;
                 weaponStats.Cached.InvProjectileSpeed = 1f / weaponStats.Config.ProjectileSpeed;
             }
-            else if((weaponBase is MiningDrill  miningDrill))
+            else if ((weaponBase is MiningDrill miningDrill))
             {
                 ref var weaponStats = ref miningDrill.WeaponStats;
                 weaponStats.Cached.HitDelay = 1f / weaponStats.Config.HitRate;
                 weaponStats.Cached.NoHitTargetPoint = Vector2.up * weaponBase.AimStats.MaxDistance;
             }
-            
+
 
             var baseDamage = weaponBase.BaseDamage;
             var multipliers = weaponBase.DamageMultipliers;
@@ -192,6 +210,16 @@ namespace Helpers
             {
                 shipRegistry.RequestAddPlayerShip(shipInstance);
             }
+        }
+    }
+
+    public static class EntityIdGenerator
+    {
+        private static uint _nextId = 1;
+        
+        public static uint Generate()
+        {            
+            return _nextId++;
         }
     }
 }

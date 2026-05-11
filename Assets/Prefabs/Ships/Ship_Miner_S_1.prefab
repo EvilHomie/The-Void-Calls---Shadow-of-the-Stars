@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 556399815167351872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.339, y: -0.15, z: 0}
+  m_LocalPosition: {x: -0.278, y: -0.201, z: 0}
   m_LocalScale: {x: 0.049999997, y: 0.1, z: 0.49999997}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -130,7 +130,7 @@ Transform:
   m_GameObject: {fileID: 710193255557663559}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.2195, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponGroup: 0
+  WeaponGroup: 5
   <Weapon>k__BackingField: {fileID: 5753759993797196858}
 --- !u!1 &926649730153616371
 GameObject:
@@ -245,7 +245,7 @@ Transform:
   m_GameObject: {fileID: 1693702633207029392}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.339, y: 0.055, z: 0}
+  m_LocalPosition: {x: -0.278, y: 0.128, z: 0}
   m_LocalScale: {x: 0.049999997, y: 0.1, z: 0.49999997}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10150,7 +10150,7 @@ Transform:
   m_GameObject: {fileID: 2774913637439140067}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.215, y: 0.163, z: 0}
+  m_LocalPosition: {x: -0.137, y: 0.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10169,7 +10169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponGroup: 0
+  WeaponGroup: 6
   <Weapon>k__BackingField: {fileID: 7526879336668903538}
 --- !u!1 &2822973351010206120
 GameObject:
@@ -15042,7 +15042,7 @@ Transform:
   m_GameObject: {fileID: 3212050392638218659}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.215, y: 0.163, z: 0}
+  m_LocalPosition: {x: 0.137, y: 0.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15061,7 +15061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponGroup: 0
+  WeaponGroup: 6
   <Weapon>k__BackingField: {fileID: 7489062351971220425}
 --- !u!1 &3954665675024936469
 GameObject:
@@ -15090,7 +15090,7 @@ Transform:
   m_GameObject: {fileID: 3954665675024936469}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.339, y: 0.055, z: 0}
+  m_LocalPosition: {x: 0.278, y: 0.128, z: 0}
   m_LocalScale: {x: 0.049999997, y: 0.1, z: 0.49999997}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15194,7 +15194,7 @@ Transform:
   m_GameObject: {fileID: 3974529797858184150}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
-  m_LocalPosition: {x: -0.11, y: -0.35, z: 0}
+  m_LocalPosition: {x: -0.11, y: -0.342, z: 0}
   m_LocalScale: {x: 0.03, y: 0.07, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15300,7 +15300,7 @@ Transform:
   m_GameObject: {fileID: 4094835944471051124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.339, y: -0.15, z: 0}
+  m_LocalPosition: {x: 0.278, y: -0.201, z: 0}
   m_LocalScale: {x: 0.049999997, y: 0.1, z: 0.49999997}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20275,7 +20275,7 @@ Transform:
   m_GameObject: {fileID: 6143440207438687605}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
-  m_LocalPosition: {x: 0.11, y: -0.35, z: 0}
+  m_LocalPosition: {x: 0.11, y: -0.339, z: 0}
   m_LocalScale: {x: 0.03, y: 0.07, z: 0.05}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20415,8 +20415,8 @@ Transform:
   m_GameObject: {fileID: 7526021372394374952}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -1, w: 0}
-  m_LocalPosition: {x: 0, y: -0.3833, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalPosition: {x: 0, y: -0.385, z: 0}
+  m_LocalScale: {x: 0.13207501, y: 0.15, z: 0.15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4113374441802643558}
@@ -20574,14 +20574,14 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8955198729614340310, guid: efcedeb4e48fa7b4cbaf5e672f8f7f99, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3906f9be6f2895a44b62ac72194c5e0d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.37, y: 0.43}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -20625,7 +20625,7 @@ PolygonCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.64, y: 0.64}
-    newSize: {x: 0.37, y: 0.43}
+    newSize: {x: 0.64, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -20651,18 +20651,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3137091104937942937}
     m_Modifications:
-    - target: {fileID: 487062553001907700, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
-      propertyPath: <HitRate>k__BackingField
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 1158179561885953847, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2184953884915563217, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5415149461915584563, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_Name
       value: S_MiningDrill_Mk1
@@ -20681,7 +20669,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8000789201367927090, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9999109
       objectReference: {fileID: 0}
     - target: {fileID: 8000789201367927090, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_LocalRotation.x
@@ -20693,7 +20681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8000789201367927090, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.013351341
       objectReference: {fileID: 0}
     - target: {fileID: 8000789201367927090, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -20705,7 +20693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8000789201367927090, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -1.53
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20736,18 +20724,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2696112140653816411}
     m_Modifications:
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: FireRate
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: ProjectileSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: <ShipRB>k__BackingField
-      value: 
-      objectReference: {fileID: 6017611796855989182, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
     - target: {fileID: 808967256646746838, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Name
       value: S_BoltRepeater_MK1
@@ -20791,10 +20767,6 @@ PrefabInstance:
     - target: {fileID: 5791893213396587227, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7023785037818923506, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: m_SortingOrder
-      value: -10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20825,18 +20797,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 564893233740561079}
     m_Modifications:
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: FireRate
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: ProjectileSpeed
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: <ShipRB>k__BackingField
-      value: 
-      objectReference: {fileID: 6017611796855989182, guid: 59bb04b94c3687d49b0fd93a344f82bb, type: 3}
     - target: {fileID: 808967256646746838, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Name
       value: S_BoltRepeater_MK1
@@ -20880,10 +20840,6 @@ PrefabInstance:
     - target: {fileID: 5791893213396587227, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7023785037818923506, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: m_SortingOrder
-      value: -10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -34,24 +34,20 @@ namespace GameSystems
             EventBus.BeamHitAction -= OnBeamHit;
         }
 
-        private void OnBeamHit(in DamageData damageData, Collider2D collider2D, Vector2 position)
+        private void OnBeamHit(in DamageData damageData, DefenseLayerBase layer, Vector2 position)
         {
-            if (!collider2D.TryGetComponent(out DefenseLayerBase defenseLayer)) return;
+            var layerType = layer.LayerType;
+            _damageStrategies[layerType].Invoke(layer, damageData);
 
-            var layerType = defenseLayer.LayerType;
-            _damageStrategies[layerType].Invoke(defenseLayer, damageData);
-
-            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer, position);
+            EventBus.DefenseLayerDamagedAction?.Invoke(layer, position);
         }
 
-        private void OnProjectileHit(Bolt bolt, Collider2D collider2D, Vector2 position)
+        private void OnProjectileHit(Bolt bolt, DefenseLayerBase layer, Vector2 position)
         {
-            if (!collider2D.TryGetComponent(out DefenseLayerBase defenseLayer)) return;
+            var layerType = layer.LayerType;
+            _damageStrategies[layerType].Invoke(layer, bolt.DamageData);
 
-            var layerType = defenseLayer.LayerType;
-            _damageStrategies[layerType].Invoke(defenseLayer, bolt.DamageData);
-
-            EventBus.DefenseLayerDamagedAction?.Invoke(defenseLayer, position);
+            EventBus.DefenseLayerDamagedAction?.Invoke(layer, position);
         }
 
 

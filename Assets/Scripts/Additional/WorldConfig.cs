@@ -9,6 +9,7 @@ public class WorldConfig
     public static readonly float MaxResistance = 0.9f;
 
     public static readonly float AsteroidBaseMass = 10; // масса для астероидов в тоннах при scale = 1;
+    public static readonly float AsteroidTonHP = 10; // кол-во хп для одной тонны
 
     public static readonly float ClusterAsteroidAngularDamping = 0.1f;
     public static readonly float ClusterAsteroidLinearDamping = 0.2f;

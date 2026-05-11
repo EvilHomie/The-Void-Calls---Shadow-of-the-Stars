@@ -1,3 +1,4 @@
+using DefenseLayers;
 using DI;
 using Projectiles;
 using Registries;
@@ -47,6 +48,7 @@ namespace GameSystems
             projectile.DestroyTime = boltShootData.DestroyTime;
             projectile.HitLayers = boltShootData.HitLayers;
             projectile.DamageData = boltShootData.DamageData;
+            projectile.OwnerId = boltShootData.OwnerId;
         }
 
         private void OnGameTick(float deltaTime)
@@ -79,15 +81,19 @@ namespace GameSystems
 
             var hit = Physics2D.Linecast(prevTip, nextTip, bolt.HitLayers);
 
-            if (hit)
+            if (!hit)
             {
-                EventBus.BoltHitAction?.Invoke(bolt, hit.collider, hit.point);
-                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+                bolt.Position = nextCenter;
+                bolt.Transform.position = bolt.Position;
                 return;
             }
 
-            bolt.Position = nextCenter;
-            bolt.Transform.position = bolt.Position;
+            if (hit.collider.TryGetComponent(out DefenseLayerBase defenseLayer))
+            {
+                if (defenseLayer.OwnerId == bolt.OwnerId) return;
+                EventBus.BoltHitAction?.Invoke(bolt, defenseLayer, hit.point);
+                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+            }
         }
 
         private void ProcessStraightMissile(StraightMissile straightMissile)

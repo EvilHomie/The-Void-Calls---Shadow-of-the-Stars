@@ -10,7 +10,7 @@ namespace Asteroids
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public AsteroidType AsteroidType { get; private set; }
         [field: SerializeField] public AsteroidHullLayer AsteroidHullLayer { get; private set; }
-
+        public uint Id;
         private void OnBecameInvisible()
         {
             Rigidbody.simulated = false;
@@ -31,10 +31,9 @@ namespace Asteroids
 
             foreach (var layer in layers)
             {
-                layer.CurrentHealthPoints = 500;
                 layer.ResistanceMultipliers.Energy = 1;
                 layer.ResistanceMultipliers.Kinetic = 1;
-                layer.Init();
+                layer.Init(500, Id);
             }
             Rigidbody.AddTorque(2, ForceMode2D.Impulse);
         }

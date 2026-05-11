@@ -9,6 +9,7 @@ namespace Projectiles
         public float DestroyTime;
         public LayerMask HitLayers;
         public DamageData DamageData;
+        public uint OwnerId;
 
         public abstract ProjectileType ProjectileType { get; }
     }

@@ -1,3 +1,4 @@
+using DefenseLayers;
 using GameSystems;
 using UnityEngine;
 
@@ -5,6 +6,7 @@ namespace Weapons
 {
     public class MiningDrillBehaviour : IWeaponBehaviour<MiningDrill>
     {
+        private static readonly RaycastHit2D[] _beamHits = new RaycastHit2D[16];
         public void HandleStartShoot(MiningDrill weapon)
         {
             weapon.BeamLineLR.enabled = true;
@@ -26,35 +28,45 @@ namespace Weapons
             var startPosition = beamTransform.position;
             var weaponDirection = beamTransform.up;
 
-            var hit = Physics2D.Raycast(startPosition, weaponDirection, aimStats.MaxDistance, weapon.HitLayers);
+            int hitCount = Physics2D.RaycastNonAlloc(startPosition, weaponDirection, _beamHits, aimStats.MaxDistance, weapon.HitLayers);
+            DefenseLayerBase hitLayer = null;
+            Vector2 hitPos = weapon.WeaponStats.Cached.NoHitTargetPoint;
 
-            Vector2 hitPos;
-
-            if (hit)
+            for (int i = 0; i < hitCount; i++)
             {
-                Vector2 worldHitPos = hit.point;
-                ref var runTime = ref weapon.WeaponStats.Runtime;
+                var hit = _beamHits[i];
 
-                if (runTime.NextHitTime < GameFlowSystem.CoreTime)
-                {
-                    var hitDelay = weapon.WeaponStats.Cached.HitDelay;
-                    runTime.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
-                    var damage = weapon.Damage;
-                    damage.Energy *= hitDelay;
-                    damage.Kinetic *= hitDelay;
-                    damage.Asteroid *= hitDelay;
+                if (!hit.collider.TryGetComponent(out DefenseLayerBase layer)) continue;
+                if (layer.OwnerId == weapon.OwnerId) continue;
 
-                    EventBus.BeamHitAction?.Invoke(damage, hit.collider, worldHitPos);
-                }
-
-                hitPos = beamTransform.InverseTransformPoint(worldHitPos);
-            }
-            else
-            {
-                hitPos = weapon.WeaponStats.Cached.NoHitTargetPoint;
+                hitPos = hit.point;
+                hitLayer = layer;
+                break;
             }
 
-            weapon.BeamLineLR.SetPosition(1, hitPos);
+
+            if (hitLayer == null)
+            {
+                weapon.BeamLineLR.SetPosition(1, hitPos);
+                return;
+            }
+
+            ref var runTime = ref weapon.WeaponStats.Runtime;
+
+            if (runTime.NextHitTime < GameFlowSystem.CoreTime)
+            {
+                var hitDelay = weapon.WeaponStats.Cached.HitDelay;
+                runTime.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
+                var damage = weapon.Damage;
+                damage.Energy *= hitDelay;
+                damage.Kinetic *= hitDelay;
+                damage.Asteroid *= hitDelay;
+
+                EventBus.BeamHitAction?.Invoke(damage, hitLayer, hitPos);
+            }
+
+            Vector2 localHitPos = beamTransform.InverseTransformPoint(hitPos);
+            weapon.BeamLineLR.SetPosition(1, localHitPos);
         }
     }
 }

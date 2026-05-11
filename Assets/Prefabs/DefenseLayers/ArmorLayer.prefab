@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4271986654203969796
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5824865425314915930}
+  - component: {fileID: 6794583967231614322}
+  - component: {fileID: 1436649124865380246}
+  m_Layer: 7
+  m_Name: ArmorLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5824865425314915930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271986654203969796}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.01, y: 1.01, z: 1.01}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &6794583967231614322
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271986654203969796}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.85333335, y: 0.80444443}
+    newSize: {x: 3.84, y: 3.62}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.20666668, y: -0.31111112}
+      - {x: 0.22222222, y: -0.29777777}
+      - {x: 0.2488889, y: -0.26000002}
+      - {x: 0.2777778, y: -0.24666667}
+      - {x: 0.29777777, y: -0.23333333}
+      - {x: 0.31555557, y: -0.20888889}
+      - {x: 0.3511111, y: -0.17111112}
+      - {x: 0.36222222, y: -0.14888889}
+      - {x: 0.38222224, y: -0.10666667}
+      - {x: 0.39555556, y: -0.08222222}
+      - {x: 0.40222225, y: -0.037777778}
+      - {x: 0.4, y: 0.0022222223}
+      - {x: 0.39333335, y: 0.035555556}
+      - {x: 0.40444446, y: 0.053333335}
+      - {x: 0.4088889, y: 0.06666667}
+      - {x: 0.41333336, y: 0.093333334}
+      - {x: 0.41333336, y: 0.21555556}
+      - {x: 0.41111112, y: 0.22222222}
+      - {x: 0.40444446, y: 0.24444444}
+      - {x: 0.39111114, y: 0.26444444}
+      - {x: 0.37555557, y: 0.28}
+      - {x: 0.32222223, y: 0.32222223}
+      - {x: 0.30222222, y: 0.33333334}
+      - {x: 0.16666667, y: 0.35777777}
+      - {x: 0.13333334, y: 0.37777779}
+      - {x: 0.097777784, y: 0.39555556}
+      - {x: 0.064444445, y: 0.39555556}
+      - {x: 0.046666667, y: 0.3866667}
+      - {x: 0, y: 0.37777779}
+      - {x: -0.091111116, y: 0.36888888}
+      - {x: -0.104444444, y: 0.37333333}
+      - {x: -0.12666667, y: 0.37777779}
+      - {x: -0.16, y: 0.35777777}
+      - {x: -0.16666667, y: 0.3377778}
+      - {x: -0.18888889, y: 0.33333334}
+      - {x: -0.20888889, y: 0.32444444}
+      - {x: -0.22222222, y: 0.30666667}
+      - {x: -0.24666667, y: 0.27111113}
+      - {x: -0.24444444, y: 0.25333333}
+      - {x: -0.26444444, y: 0.23111111}
+      - {x: -0.30444446, y: 0.15333334}
+      - {x: -0.34666666, y: 0.108888894}
+      - {x: -0.36888888, y: 0.08}
+      - {x: -0.3888889, y: 0.055555556}
+      - {x: -0.40222225, y: 0.033333335}
+      - {x: -0.4088889, y: -0.0022222223}
+      - {x: -0.42000002, y: -0.051111113}
+      - {x: -0.42222223, y: -0.06888889}
+      - {x: -0.42222223, y: -0.07777778}
+      - {x: -0.41111112, y: -0.10666667}
+      - {x: -0.38222224, y: -0.14888889}
+      - {x: -0.3511111, y: -0.1688889}
+      - {x: -0.32666668, y: -0.18444444}
+      - {x: -0.27555555, y: -0.2288889}
+      - {x: -0.26444444, y: -0.24666667}
+      - {x: -0.23333333, y: -0.2911111}
+      - {x: -0.24444444, y: -0.30444446}
+      - {x: -0.24444444, y: -0.32}
+      - {x: -0.2288889, y: -0.33333334}
+      - {x: -0.20444445, y: -0.34444445}
+      - {x: -0.15777779, y: -0.35777777}
+      - {x: -0.12666667, y: -0.36444446}
+      - {x: -0.086666666, y: -0.37777779}
+      - {x: -0.022222223, y: -0.37555557}
+      - {x: -0.008888889, y: -0.3866667}
+      - {x: 0.015555556, y: -0.39111114}
+      - {x: 0.053333335, y: -0.39111114}
+      - {x: 0.091111116, y: -0.38444445}
+      - {x: 0.12888889, y: -0.36222222}
+      - {x: 0.18, y: -0.32222223}
+  m_UseDelaunayMesh: 0
+--- !u!114 &1436649124865380246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4271986654203969796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98fe6211522fec42804d9979e403b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ArmorLayer
+  CurrentHealthPoints: 0
+  MaxHealthPoints: 0
+  ResistanceMultipliers:
+    Energy: 0
+    Kinetic: 0

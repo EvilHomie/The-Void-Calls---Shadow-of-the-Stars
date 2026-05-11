@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DefenseLayers
 {
-    //[RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(Collider2D))]
     public abstract class DefenseLayerBase : MonoBehaviour
     {
         public abstract DefenseLayerType LayerType { get; }
@@ -11,13 +11,18 @@ namespace DefenseLayers
         public Transform Transform { get; private set; }
 
         public float CurrentHealthPoints;
-        public float MaxHealthPoints;
+        public float MaxHealthPoints { get; private set; }
+        public uint OwnerId { get; private set; }
+
         public ResistanceMultipliers ResistanceMultipliers;
 
-        public virtual void Init()
+        public virtual void Init(float HP, uint ownerId)
         {
             Collider = GetComponent<Collider2D>();
             Transform = transform;
+            CurrentHealthPoints = HP;
+            MaxHealthPoints = HP;
+            OwnerId = ownerId;
         }
     }
 
