@@ -42,8 +42,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 1
     - _EdgeSoftness: 0.03
-    - _FadeDuration: 0.5
+    - _FadeDuration: 0.2
     - _FadeSpeed: 1
     - _HitTime: 0
     - _Length: 0.77
@@ -55,7 +56,7 @@ Material:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _HitPos: {r: 0, g: 0, b: 0, a: 0}
     - _HitUV: {r: -1615.7, g: -640.37, b: 0, a: 0}
-    - _ShieldColor: {r: 0, g: 0, b: 10.432952, a: 1}
+    - _ShieldColor: {r: 3.2410386, g: 3.2410362, b: 23.968626, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6353070514287679218

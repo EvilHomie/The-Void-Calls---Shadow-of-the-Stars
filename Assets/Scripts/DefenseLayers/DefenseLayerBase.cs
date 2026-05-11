@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DefenseLayers
 {
-    [RequireComponent(typeof(Collider2D))]
+    //[RequireComponent(typeof(Collider2D))]
     public abstract class DefenseLayerBase : MonoBehaviour
     {
         public abstract DefenseLayerType LayerType { get; }

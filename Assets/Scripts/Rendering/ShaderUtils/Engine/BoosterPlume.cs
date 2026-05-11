@@ -33,12 +33,9 @@ public class BoosterPlume : MonoBehaviour
         _matBlock.SetFloat(_powerValueID, value);
         _sr.SetPropertyBlock(_matBlock);
 
-        Debug.LogError(value);
-
         if (value == 0)
         {
             boosterParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-            return;
         }
         else
         {

@@ -79,7 +79,7 @@ namespace GameSystems
 
             var hit = Physics2D.Linecast(prevTip, nextTip, bolt.HitLayers);
 
-            if (hit.collider != null)
+            if (hit)
             {
                 EventBus.BoltHitAction?.Invoke(bolt, hit.collider, hit.point);
                 _projectileRegistry.RequestRemoveActiveProjectile(bolt);

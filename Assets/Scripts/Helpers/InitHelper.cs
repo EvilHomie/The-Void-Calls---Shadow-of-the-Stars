@@ -162,9 +162,16 @@ namespace Helpers
             if (weaponBase is BoltRepeater boltRepeater)
             {
                 ref var weaponStats = ref boltRepeater.WeaponStats;
-                weaponStats.Cached.ShootDelay = 1 / weaponStats.Config.FireRate;
-                weaponStats.Cached.InvProjectileSpeed = 1 / weaponStats.Config.ProjectileSpeed;
+                weaponStats.Cached.ShootDelay = 1f / weaponStats.Config.FireRate;
+                weaponStats.Cached.InvProjectileSpeed = 1f / weaponStats.Config.ProjectileSpeed;
             }
+            else if((weaponBase is MiningDrill  miningDrill))
+            {
+                ref var weaponStats = ref miningDrill.WeaponStats;
+                weaponStats.Cached.HitDelay = 1f / weaponStats.Config.HitRate;
+                weaponStats.Cached.NoHitTargetPoint = Vector2.up * weaponBase.AimStats.MaxDistance;
+            }
+            
 
             var baseDamage = weaponBase.BaseDamage;
             var multipliers = weaponBase.DamageMultipliers;

@@ -31,11 +31,12 @@ namespace Asteroids
 
             foreach (var layer in layers)
             {
-                layer.CurrentHealthPoints = 50;
+                layer.CurrentHealthPoints = 500;
                 layer.ResistanceMultipliers.Energy = 1;
                 layer.ResistanceMultipliers.Kinetic = 1;
                 layer.Init();
             }
+            Rigidbody.AddTorque(2, ForceMode2D.Impulse);
         }
     }
 }

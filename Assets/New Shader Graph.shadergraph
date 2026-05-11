@@ -1469,9 +1469,9 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "_FadeDuration",
+    "m_Name": "FadeDuration",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "_FadeDuration",
+    "m_RefNameGeneratedByDisplayName": "FadeDuration",
     "m_DefaultReferenceName": "_FadeDuration",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -2379,7 +2379,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "8a0776296894409ea0b522bb41908f42",
     "m_Id": 0,
-    "m_DisplayName": "_FadeDuration",
+    "m_DisplayName": "FadeDuration",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -3401,8 +3401,8 @@
     "m_ObjectId": "cac4b7cef3824260974c3e24d6d7ca2b",
     "m_Title": "FADE",
     "m_Position": {
-        "x": -1471.9998779296875,
-        "y": 6620.0
+        "x": -1472.0,
+        "y": 6619.99951171875
     }
 }
 
