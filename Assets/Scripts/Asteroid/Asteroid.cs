@@ -1,6 +1,5 @@
 using DefenseLayers;
 using GamePools;
-using Helpers;
 using UnityEngine;
 
 namespace Asteroids
@@ -19,23 +18,6 @@ namespace Asteroids
         private void OnBecameVisible()
         {
             Rigidbody.simulated = true;
-        }
-
-        // тестовая часть
-        private void Start()
-        {
-            Init(null);
-            InitHelper.InitAsteroid(this);
-
-            var layers = GetComponentsInChildren<DefenseLayerBase>();
-
-            foreach (var layer in layers)
-            {
-                layer.ResistanceMultipliers.Energy = 1;
-                layer.ResistanceMultipliers.Kinetic = 1;
-                layer.Init(500, Id);
-            }
-            Rigidbody.AddTorque(2, ForceMode2D.Impulse);
         }
     }
 }

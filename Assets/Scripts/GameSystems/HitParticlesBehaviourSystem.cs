@@ -1,7 +1,5 @@
 using DI;
-using Projectiles;
 using Registries;
-using UnityEngine;
 
 namespace GameSystems
 {
@@ -26,20 +24,11 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            //EventBus.BoltHitAction += OnBoltHit;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            //EventBus.BoltHitAction -= OnBoltHit;
-        }
-
-        private void OnBoltHit(Bolt bolt, Collider2D hitCollider, Vector2 position)
-        {
-            var hitEffect = _hitEffectRegistry.Get(bolt.PoolReference);
-            hitEffect.Transform.position = position;
-            hitEffect.IsPlaying = true;
         }
 
         private void CheckActive()

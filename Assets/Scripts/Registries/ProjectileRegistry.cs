@@ -30,36 +30,36 @@ namespace Registries
             Sync();
         }
 
-        public Bolt GetBolt(PoolReference poolReference)
+        public Bolt GetBolt(uint poolId)
         {
-            var projectile = _projectilesPool.Getitem(poolReference);
+            var projectile = _projectilesPool.Getitem(poolId);
 
 #if UNITY_EDITOR
-            if (projectile is not Bolt) throw new Exception($"Expected Bolt, got {projectile.GetType()} from {poolReference.name}");
+            if (projectile is not Bolt) throw new Exception($"Expected Bolt, got {projectile.GetType()} from pool {poolId}");
 #endif
 
             RequestAddActiveProjectile(projectile);
             return (Bolt)projectile;
         }
 
-        public HomingMissile GetHomingMissile(PoolReference poolReference)
+        public HomingMissile GetHomingMissile(uint poolId)
         {
-            var projectile = _projectilesPool.Getitem(poolReference);
+            var projectile = _projectilesPool.Getitem(poolId);
 
 #if UNITY_EDITOR
-            if (projectile is not Bolt) throw new Exception($"Expected HomingMissile, got {projectile.GetType()} from {poolReference.name}");
+            if (projectile is not Bolt) throw new Exception($"Expected HomingMissile, got {projectile.GetType()} from pool {poolId}");
 #endif
 
             RequestAddActiveProjectile(projectile);
             return (HomingMissile)projectile;
         }
 
-        public StraightMissile GetStraightMissile(PoolReference poolReference)
+        public StraightMissile GetStraightMissile(uint poolId)
         {
-            var projectile = _projectilesPool.Getitem(poolReference);
+            var projectile = _projectilesPool.Getitem(poolId);
 
 #if UNITY_EDITOR
-            if (projectile is not Bolt) throw new Exception($"Expected StraightMissile, got {projectile.GetType()} from {poolReference.name}");
+            if (projectile is not Bolt) throw new Exception($"Expected StraightMissile, got {projectile.GetType()} from pool {poolId}");
 #endif
 
             RequestAddActiveProjectile(projectile);

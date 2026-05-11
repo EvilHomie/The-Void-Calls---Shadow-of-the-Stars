@@ -29,9 +29,9 @@ namespace Registries
             Sync();
         }
 
-        public HitEffectParticle Get(PoolReference poolReference)
+        public HitEffectParticle Get(uint poolId)
         {
-            var hitParticle = _hitParticlesPool.Getitem(poolReference);
+            var hitParticle = _hitParticlesPool.Getitem(poolId);
             RequestAddActiveHitParticle(hitParticle);
             return hitParticle;
         }

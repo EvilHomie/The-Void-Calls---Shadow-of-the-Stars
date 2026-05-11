@@ -39,7 +39,7 @@ namespace GameSystems
 
         private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
-            var projectile = _projectileRegistry.GetBolt(boltShootData.PoolReference);
+            var projectile = _projectileRegistry.GetBolt(boltShootData.PoolId);
             projectile.Position = boltShootData.FirePointPosition;
             projectile.Transform.position = boltShootData.FirePointPosition;
             projectile.Transform.up = boltShootData.Direction;

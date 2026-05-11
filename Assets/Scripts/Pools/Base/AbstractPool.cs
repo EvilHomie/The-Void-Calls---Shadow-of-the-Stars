@@ -7,9 +7,9 @@ namespace GamePools
 {
     public abstract class AbstractPool<T> : MonoBehaviour where T : PoolObjectBase
     {
-        private readonly Dictionary<PoolReference, ObjectPool<T>> _pools = new();
-        private readonly Dictionary<PoolReference, T> _prefabs = new();
-        private readonly Dictionary<PoolReference, Transform> _poolsParents = new();
+        private readonly Dictionary<uint, ObjectPool<T>> _pools = new();
+        private readonly Dictionary<uint, T> _prefabs = new();
+        private readonly Dictionary<uint, Transform> _poolsParents = new();
 
         private void Awake()
         {
@@ -17,25 +17,25 @@ namespace GamePools
         }
         protected abstract void AwakeInit();
 
-        public T Getitem(PoolReference poolDefinition)
+        public T Getitem(uint poolId)
         {
-            return FindPool(poolDefinition).Get();
+            return FindPool(poolId).Get();
         }
 
         public void ReleaseItem(T item)
         {
-            FindPool(item.PoolReference).Release(item);
+            FindPool(item.PoolId).Release(item);
         }
 
         protected void CreateItemPool(PoolData poolData, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
-            var poolReference = poolData.PoolReference;
+            var poolId = poolData.PoolReference.Id;
             T cast = poolData.Prefab.GetComponent<T>();
-            _prefabs.Add(poolReference, cast);
+            _prefabs.Add(poolId, cast);
 
             var newPool = new ObjectPool<T>(
 
-                   createFunc: () => OnCreate(poolReference, parent),
+                   createFunc: () => OnCreate(poolId, parent),
                    actionOnGet: OnGet,
                    actionOnRelease: OnRelease,
                    actionOnDestroy: OnDestroyItem,
@@ -43,18 +43,18 @@ namespace GamePools
                    maxSize: maxCapacity
                );
 
-            _poolsParents.Add(poolReference, parent);
-            _pools.Add(poolReference, newPool);
+            _poolsParents.Add(poolId, parent);
+            _pools.Add(poolId, newPool);
 
             PrewarmPool(newPool, prewarmCount);
         }
 
-        private T OnCreate(PoolReference poolReference, Transform parent)
+        private T OnCreate(uint poolId, Transform parent)
         {
-            var prefab = _prefabs[poolReference];
+            var prefab = _prefabs[poolId];
             var instance = Instantiate(prefab, parent);
-            instance.Init(poolReference);
-            instance.Transform.SetParent(_poolsParents[instance.PoolReference]);
+            instance.Init(poolId);
+            instance.Transform.SetParent(_poolsParents[instance.PoolId]);
             return instance;
         }
 
@@ -91,11 +91,11 @@ namespace GamePools
             }
         }
 
-        private ObjectPool<T> FindPool(PoolReference poolReference)
+        private ObjectPool<T> FindPool(uint poolId)
         {
-            if (!_pools.TryGetValue(poolReference, out var pool))
+            if (!_pools.TryGetValue(poolId, out var pool))
             {
-                throw new Exception($"Не найден пул с {poolReference.name}");
+                throw new Exception($"Не найден пул с Id {poolId}");
             }
 
             return pool;

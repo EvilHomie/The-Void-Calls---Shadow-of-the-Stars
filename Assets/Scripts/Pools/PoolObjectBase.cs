@@ -4,13 +4,13 @@ namespace GamePools
 {
     public abstract class PoolObjectBase : MonoBehaviour
     {
-        public PoolReference PoolReference { get; private set; }
+        public uint PoolId { get; private set; }
         public GameObject GameObject { get; private set; }
         public Transform Transform { get; private set; }
 
-        public void Init(PoolReference poolReference)
+        public void Init(uint poolId)
         {
-            PoolReference = poolReference;
+            PoolId = poolId;
             GameObject = gameObject;
             Transform = transform;
         }

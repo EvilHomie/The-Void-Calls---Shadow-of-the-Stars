@@ -65,20 +65,20 @@ namespace GameSystems
 
         private void OnHullDamaged(Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(hullHitEffectReference);
+            var hitEffect = _hitEffectRegistry.Get(hullHitEffectReference.Id);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
         }
         private void OnArmorDamaged(Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(armorHitEffectReference);
+            var hitEffect = _hitEffectRegistry.Get(armorHitEffectReference.Id);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
         }
 
         private void OnShieldDamaged(DefenseLayerBase layerBase, Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(shieldHitEffectReference);
+            var hitEffect = _hitEffectRegistry.Get(shieldHitEffectReference.Id);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
 
@@ -96,7 +96,7 @@ namespace GameSystems
 
         private void OnAsteroidHullDamaged(Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(hullHitEffectReference);
+            var hitEffect = _hitEffectRegistry.Get(hullHitEffectReference.Id);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
         }
