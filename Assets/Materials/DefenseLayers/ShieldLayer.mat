@@ -47,6 +47,11 @@ Material:
     - _FadeDuration: 0.2
     - _FadeSpeed: 1
     - _HitTime: 0
+    - _IdleAlpha: 1
+    - _IdleInnerRadius: 0.477
+    - _IdleOuterRadius: 0.5
+    - _IdleSoftness: 0.98
+    - _IdleThickness: 0.421
     - _Length: 0.77
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -56,6 +61,8 @@ Material:
     - White: {r: 1, g: 1, b: 1, a: 1}
     - _HitPos: {r: 0, g: 0, b: 0, a: 0}
     - _HitUV: {r: -1615.7, g: -640.37, b: 0, a: 0}
+    - _IdleColor: {r: 0, g: 0, b: 4.8671436, a: 1}
+    - _ImpactColor: {r: 3.011759, g: 12.549769, b: 191.74902, a: 1}
     - _ShieldColor: {r: 8.031373, g: 8.031373, b: 766.99615, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -23,6 +23,8 @@ namespace GameSystems
         public static BoltHitDelegate BoltHitAction;
 
         public static Action<DefenseLayerBase, Vector2> DefenseLayerDamagedAction;
+
+        public static Action<Collider2D, Transform, bool> OnShieldCross;
     }
 }
 

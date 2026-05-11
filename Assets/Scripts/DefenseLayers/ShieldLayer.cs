@@ -1,3 +1,4 @@
+using GameSystems;
 using UnityEngine;
 
 namespace DefenseLayers
@@ -14,6 +15,16 @@ namespace DefenseLayers
             base.Init(HP, ownerId);
             SpriteRenderer = GetComponent<SpriteRenderer>();
             MaterialBlock = new MaterialPropertyBlock();
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {            
+            EventBus.OnShieldCross?.Invoke(other, Transform, true);
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            EventBus.OnShieldCross?.Invoke(other, Transform, false);
         }
     }
 }
