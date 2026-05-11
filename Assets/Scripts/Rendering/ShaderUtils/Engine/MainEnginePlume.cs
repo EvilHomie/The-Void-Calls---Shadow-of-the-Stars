@@ -5,7 +5,7 @@ public class MainEnginePlume : MonoBehaviour
 {
     [SerializeField] ParticleSystem forwardParticles;
     [SerializeField] ParticleSystem reverseParticles;
-    private SpriteRenderer _sr;
+    private SpriteRenderer _spriteRenderer;
     private MaterialPropertyBlock _matBlock;
     private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
 
@@ -18,7 +18,8 @@ public class MainEnginePlume : MonoBehaviour
 
     public void Init()
     {
-        _sr = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
         _matBlock = new MaterialPropertyBlock();
         //_sr.maskInteraction = SpriteMaskInteraction.None;
         SetPowerValue(0);
@@ -32,7 +33,7 @@ public class MainEnginePlume : MonoBehaviour
 
         _lastPowerValue = value;
         _matBlock.SetFloat(_powerValueID, value);
-        _sr.SetPropertyBlock(_matBlock);
+        _spriteRenderer.SetPropertyBlock(_matBlock);
 
         if (value == 0)
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 public class BoosterPlume : MonoBehaviour
 {
     [SerializeField] ParticleSystem boosterParticles;
-    private SpriteRenderer _sr;
+    private SpriteRenderer _spriteRenderer;
     private MaterialPropertyBlock _matBlock;
     private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
 
@@ -17,9 +17,9 @@ public class BoosterPlume : MonoBehaviour
 
     public void Init()
     {
-        _sr = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _matBlock = new MaterialPropertyBlock();
-        //_sr.maskInteraction = SpriteMaskInteraction.None;
+        _spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
         SetPowerValue(0);
     }
     public void SetPowerValue(float value)
@@ -31,7 +31,7 @@ public class BoosterPlume : MonoBehaviour
 
         _lastPowerValue = value;
         _matBlock.SetFloat(_powerValueID, value);
-        _sr.SetPropertyBlock(_matBlock);
+        _spriteRenderer.SetPropertyBlock(_matBlock);
 
         if (value == 0)
         {

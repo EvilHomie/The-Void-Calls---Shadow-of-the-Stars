@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 
-public class WorldConfig
+public static class WorldConfig
 {
-    public static readonly float WorldUnitMod = 0.01f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
-    public static readonly float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
-    public static readonly float InertiaDampingForce = 50f; // значение торможения за еденицу drag у корабля. Будто пассивное торможение 
+    public const float WorldUnitMod = 0.01f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
+    public const float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
+    public const float InertiaDampingForce = 50f; // значение торможения за еденицу drag у корабля. Будто пассивное торможение 
 
-    public static readonly float MaxResistance = 0.9f;
+    public const float MaxResistance = 0.9f;
 
-    public static readonly float AsteroidBaseMass = 10; // масса для астероидов в тоннах при scale = 1;
-    public static readonly float AsteroidTonHP = 10; // кол-во хп для одной тонны
+    public const float AsteroidBaseMass = 10; // масса для астероидов в тоннах при scale = 1;
+    public const float AsteroidTonHP = 10; // кол-во хп для одной тонны
 
-    public static readonly float ClusterAsteroidAngularDamping = 0.1f;
-    public static readonly float ClusterAsteroidLinearDamping = 0.2f;
-    public static readonly float DriftingAsteroidAngularDamping = 0;
-    public static readonly float DriftingAsteroidLinearDamping = 0;
+    public const float ClusterAsteroidAngularDamping = 0.1f;
+    public const float ClusterAsteroidLinearDamping = 0.2f;
+    public const float DriftingAsteroidAngularDamping = 0;
+    public const float DriftingAsteroidLinearDamping = 0;
 
     public static readonly Dictionary<AsteroidType, float> AsteroidMassModByType = new() // доп модификатор массы в зависимости от типа
     {
@@ -25,4 +25,14 @@ public class WorldConfig
         {AsteroidType.Nickel, 3f },
         {AsteroidType.Gold, 3.5f }
     };
+}
+
+public static class SpriteSortingOrders
+{
+    public const int StarryCanvas = -150;
+    public const int WeaponsUnderHull = -100;
+    public const int Engine = -50;
+    public const int Ship = 0;
+    public const int Asteroid = 0;
+    public const int WeaponsOnHull = 50;
 }

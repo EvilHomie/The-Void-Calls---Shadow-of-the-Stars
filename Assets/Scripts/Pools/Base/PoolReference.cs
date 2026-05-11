@@ -7,6 +7,7 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "PoolReference", menuName = "Scriptable Objects/PoolReference")]
 public class PoolReference : ScriptableObject
 {
+    [SerializeField, HideInInspector] // критически важно оставить атрибуты иначе у всех будет значение по умолчанию
     private uint _id;
     public uint Id => _id;
 

@@ -8,7 +8,7 @@ namespace Environment
         [field: SerializeField] public float SpeedMod { get; private set; }
         [field: SerializeField] public SpriteRenderer Renderer { get; set; }
         [field: SerializeField] public Transform Transform { get; set; }
-        public Material Material;
+        public MaterialPropertyBlock PropertyBlock;
         public Vector2 LastOffset;
     }
 }

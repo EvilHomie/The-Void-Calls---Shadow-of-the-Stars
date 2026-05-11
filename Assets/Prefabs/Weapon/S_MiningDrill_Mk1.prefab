@@ -5040,6 +5040,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 8000789201367927090}
+  <BodySprite>k__BackingField: {fileID: 2520657962333094926}
+  OwnerId: 0
   <BeamLineLR>k__BackingField: {fileID: 8208887166145653116}
   <BeamLineTransform>k__BackingField: {fileID: 4740417065212234407}
   <ShootSpotPS>k__BackingField: {fileID: 1158179561885953847}

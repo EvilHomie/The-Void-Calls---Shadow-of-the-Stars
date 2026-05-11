@@ -143,6 +143,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <Transform>k__BackingField: {fileID: 5791893213396587227}
+  <BodySprite>k__BackingField: {fileID: 7023785037818923506}
+  OwnerId: 0
   <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 8178394065935223340}
   <ShootPoint>k__BackingField: {fileID: 2403933954532205874}

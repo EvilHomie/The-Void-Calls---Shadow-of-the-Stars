@@ -9,6 +9,7 @@ namespace Asteroids
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public AsteroidType AsteroidType { get; private set; }
         [field: SerializeField] public AsteroidHullLayer AsteroidHullLayer { get; private set; }
+        [field: SerializeField] public SpriteRenderer BodySprite { get; private set; }
         public uint Id;
         private void OnBecameInvisible()
         {

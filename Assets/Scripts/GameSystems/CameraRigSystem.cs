@@ -34,6 +34,7 @@ namespace GameSystems
             _shipRegistry = shipRegistry;
             _mouseCursor = mouseCursor;
             _input = playerInput;
+            ActiveGameState = GameState.CoreGameplay;
         }
 
         private void Start()
@@ -56,6 +57,8 @@ namespace GameSystems
 
         public void UpdateTick(float deltaTime)
         {
+            if (!SystemIsActive) return;
+
             if (_currentOrthographicSize != _targetOrthographicSize)
             {
                 _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, deltaTime * _changeOrtSizeSpeed);

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class ThrusterPlume : MonoBehaviour
 {
-    private SpriteRenderer _sr;
+    private SpriteRenderer _spriteRenderer;
     private MaterialPropertyBlock _matBlock;
     private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
 
@@ -16,9 +16,9 @@ public class ThrusterPlume : MonoBehaviour
 
     public void Init()
     {
-        _sr = GetComponent<SpriteRenderer>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _matBlock = new MaterialPropertyBlock();
-        //_sr.maskInteraction = SpriteMaskInteraction.None;
+        _spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
         SetPowerValue(0);
     }
     public void SetPowerValue(float value)
@@ -27,6 +27,6 @@ public class ThrusterPlume : MonoBehaviour
 
         _lastPowerValue = value;
         _matBlock.SetFloat(_powerValueID, value);
-        _sr.SetPropertyBlock(_matBlock);
+        _spriteRenderer.SetPropertyBlock(_matBlock);
     }
 }

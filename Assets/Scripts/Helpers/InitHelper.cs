@@ -75,6 +75,8 @@ namespace Helpers
                 shipInstance.Id = newId;
             }
 
+            shipInstance.BodySprite.sortingOrder = SpriteSortingOrders.Ship;
+
             var resistanceStats = shipInstance.ResistanceStats;
             var maxResistance = WorldConfig.MaxResistance;
             var energyResistance = Mathf.Clamp(resistanceStats.Energy, 0f, maxResistance);
@@ -109,6 +111,7 @@ namespace Helpers
         public static void InitAsteroid(Asteroid asteroid)
         {
             var rigidBody = asteroid.Rigidbody;
+            asteroid.BodySprite.sortingOrder = SpriteSortingOrders.Asteroid;
 
             if (asteroid.Id == 0)
             {
@@ -166,6 +169,8 @@ namespace Helpers
                 var weapon = slot.Weapon;
                 weapon.OwnerId = shipInstance.Id;
 
+                var spriteOrder = slot.WeaponMountLayer == WeaponMountLayer.UnderHull ? SpriteSortingOrders.WeaponsUnderHull : SpriteSortingOrders.WeaponsOnHull;
+                weapon.BodySprite.sortingOrder = spriteOrder;
                 UpdateWeaponStats(weapon);
 
                 if (weapon is IShipVelocityAware aware)
