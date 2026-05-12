@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5824865425314915930}
   - component: {fileID: 6794583967231614322}
   - component: {fileID: 1436649124865380246}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: ArmorLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ArmorLayer
   CurrentHealthPoints: 0
-  MaxHealthPoints: 0
   ResistanceMultipliers:
     Energy: 0
     Kinetic: 0

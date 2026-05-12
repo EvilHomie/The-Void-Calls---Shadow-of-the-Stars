@@ -1,6 +1,4 @@
-using DefenseLayers;
 using GamePools;
-using System.Collections.Generic;
 using UnityEngine;
 using Weapons;
 
@@ -11,8 +9,9 @@ namespace Projectiles
         public float DestroyTime;
         public LayerMask HitLayers;
         public DamageData DamageData;
-        public uint OwnerId;
-        public HashSet<DefenseLayerBase> IgnoredLayers = new(6);
+        //public uint OwnerId;
+        public Collider2D[] IgnoredColliders = new Collider2D[12];
+        public int IgnoredCount;
 
         public abstract ProjectileType ProjectileType { get; }
     }

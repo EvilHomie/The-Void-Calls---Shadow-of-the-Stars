@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2602377838457592863}
   - component: {fileID: 4661343211938399354}
   - component: {fileID: 1988072611886307080}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: FrontShieldLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,11 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   CurrentHealthPoints: 0
-  MaxHealthPoints: 0
   ResistanceMultipliers:
     Energy: 0
     Kinetic: 0
-  SpriteRenderer: {fileID: 0}
 --- !u!212 &4661343211938399354
 SpriteRenderer:
   serializedVersion: 2

@@ -594,6 +594,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.1
       objectReference: {fileID: 0}
+    - target: {fileID: 3730754208418035358, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3734830323868723499, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.46
@@ -1900,6 +1904,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 593265671}
   m_CullTransparentMesh: 1
+--- !u!114 &607546062 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2709886303130241493, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+  m_PrefabInstance: {fileID: 962024171159606102}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -3470,6 +3485,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628f35fbeb817304db32458bb4b37fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestAsteroid
+--- !u!114 &1264025837 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8700731002519729756, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+  m_PrefabInstance: {fileID: 962024171159606102}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1287717962
 GameObject:
   m_ObjectHideFlags: 0
@@ -4868,6 +4894,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3887232152afe48ad5a02f19e8d8bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Registries.ShieldRepulsionRegistry
+--- !u!114 &1861099378 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 62361182898651322, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+  m_PrefabInstance: {fileID: 962024171159606102}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47503f9edddb646af243ac0bde4797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1865616978
 GameObject:
   m_ObjectHideFlags: 0
@@ -5710,6 +5747,134 @@ PrefabInstance:
     - target: {fileID: 200900408996356548, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: <WeaponSlots>k__BackingField.Array.size
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1264025837}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1861099378}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[2]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[3]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[4]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[5]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[6]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[7]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[8]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[9]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[10]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[11]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[12]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[13]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[14]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[15]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[16]'
+      value: 
+      objectReference: {fileID: 607546062}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[17]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[18]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[19]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[20]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[21]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[22]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[23]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[24]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[25]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[26]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[27]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[28]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[29]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 611267203205586013, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
+      propertyPath: '<WeaponSlots>k__BackingField.Array.data[30]'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1436348491151396962, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: m_IsActive

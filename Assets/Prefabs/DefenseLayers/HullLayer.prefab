@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 210432265852457852}
   - component: {fileID: 4573583429473661979}
   - component: {fileID: 7966430907710897517}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: HullLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullLayer
   CurrentHealthPoints: 0
-  MaxHealthPoints: 0
   ResistanceMultipliers:
     Energy: 0
     Kinetic: 0

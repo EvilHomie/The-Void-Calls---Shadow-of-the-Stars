@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class WorldConfig
 {
@@ -35,4 +36,11 @@ public static class SpriteSortingOrders
     public const int Ship = 0;
     public const int Asteroid = 0;
     public const int WeaponsOnHull = 50;
+}
+
+public static class LayersId
+{
+    public static int ShieldLayer = LayerMask.NameToLayer("Shield");
+    public static int ArmorLayer = LayerMask.NameToLayer("Armor");
+    public static int HullLayer = LayerMask.NameToLayer("Hull");
 }

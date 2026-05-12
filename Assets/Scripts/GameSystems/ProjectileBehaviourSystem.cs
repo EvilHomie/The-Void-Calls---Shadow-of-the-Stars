@@ -50,23 +50,28 @@ namespace GameSystems
             projectile.DestroyTime = boltShootData.DestroyTime;
             projectile.HitLayers = boltShootData.HitLayers;
             projectile.DamageData = boltShootData.DamageData;
-            projectile.OwnerId = boltShootData.OwnerId;
+            //projectile.OwnerId = boltShootData.OwnerId;
 
-            projectile.IgnoredLayers.Clear();
+            projectile.IgnoredCount = 0;
             int count = Physics2D.OverlapPointNonAlloc(boltShootData.FirePointPosition, _colliders);
-
 
             for (int i = 0; i < count; i++)
             {
-                if (_colliders[i].TryGetComponent(out DefenseLayerBase defenseLayer))
+                var collider = _colliders[i];
+
+                if (collider.TryGetComponent(out DefenseLayerBase defenseLayer))
                 {
                     if (defenseLayer.OwnerId == boltShootData.OwnerId)
                     {
-                        projectile.IgnoredLayers.Add(defenseLayer);
+                        projectile.IgnoredColliders[projectile.IgnoredCount] = collider;
+                        projectile.IgnoredCount++;
+                        continue;
                     }
-                    else if (defenseLayer is ShieldLayer)
+
+                    if (defenseLayer.LayerType == DefenseLayerType.Shield)
                     {
-                        projectile.IgnoredLayers.Add(defenseLayer);
+                        projectile.IgnoredColliders[projectile.IgnoredCount] = collider;
+                        projectile.IgnoredCount++;
                     }
                 }
             }
@@ -100,66 +105,35 @@ namespace GameSystems
             var prevTip = prevCenter + tipDirrectOffset;
             var nextTip = nextCenter + tipDirrectOffset;
 
-            float closestFraction = float.MaxValue;
-            DefenseLayerBase closestLayer = null;
-            Vector2 closestHit = default;
-
             var hitCount = Physics2D.LinecastNonAlloc(prevTip, nextTip, _hits, bolt.HitLayers);
 
             for (int i = 0; i < hitCount; i++)
             {
                 RaycastHit2D hit = _hits[i];
 
-                if (!hit.collider.TryGetComponent(out DefenseLayerBase layer))
-                    continue;
-
-                if (bolt.IgnoredLayers.Contains(layer))
-                    continue;
-
-                if (layer is ArmorLayer)
+                for (int j = 0; j < bolt.IgnoredCount; j++)
                 {
-                    closestLayer = layer;
-                    closestHit = hit.point;
-                    break;
+                    if (bolt.IgnoredColliders[j] == hit.collider)
+                    {
+                        bolt.Position = nextCenter;
+                        bolt.Transform.position = nextCenter;
+                        return;
+                    }
                 }
 
-                if (hit.fraction < closestFraction)
-                {
-                    closestFraction = hit.fraction;
-                    closestLayer = layer;
-                    closestHit = hit.point;
-                }
-            }
+                int colliderLayer = hit.collider.gameObject.layer;
 
-            if (closestLayer != null)
-            {
-                EventBus.BoltHitAction?.Invoke(bolt, closestLayer, closestHit);
-                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
-                return;
+                if (colliderLayer == LayersId.ShieldLayer || colliderLayer == LayersId.ArmorLayer || colliderLayer == LayersId.HullLayer)
+                {
+                    hit.collider.TryGetComponent(out DefenseLayerBase defenceLayer);
+                    EventBus.BoltHitAction?.Invoke(bolt, defenceLayer, hit.point);
+                    _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+                    return;
+                }
             }
 
             bolt.Position = nextCenter;
-            bolt.Transform.position = bolt.Position;
-
-            //if (!hit)
-            //{
-            //    bolt.Position = nextCenter;
-            //    bolt.Transform.position = bolt.Position;
-            //    return;
-            //}
-
-            //if (hit.collider.TryGetComponent(out DefenseLayerBase defenseLayer))
-            //{
-            //    if (bolt.IgnoredLayers.Contains(defenseLayer))
-            //    {
-            //        bolt.Position = nextCenter;
-            //        bolt.Transform.position = bolt.Position;
-            //        return;
-            //    }
-
-            //    EventBus.BoltHitAction?.Invoke(bolt, defenseLayer, hit.point);
-            //    _projectileRegistry.RequestRemoveActiveProjectile(bolt);
-            //}
+            bolt.Transform.position = nextCenter;
         }
 
         private void ProcessStraightMissile(StraightMissile straightMissile)
