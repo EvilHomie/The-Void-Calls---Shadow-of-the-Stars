@@ -4,6 +4,7 @@ using Projectiles;
 using Registries;
 using UnityEngine;
 using Weapons;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace GameSystems
 {
@@ -11,7 +12,7 @@ namespace GameSystems
     {
         private ProjectileRegistry _projectileRegistry;
         private static readonly Collider2D[] _colliders = new Collider2D[16];
-        private static readonly RaycastHit2D[] _hits = new RaycastHit2D[8];
+        private static readonly RaycastHit2D[] _hits = new RaycastHit2D[16];
 
         [Inject]
         public void Construct(ProjectileRegistry shipRegistry)
@@ -39,6 +40,23 @@ namespace GameSystems
             EventBus.BoltWeaponShootAction -= SpawnBolt;
         }
 
+        private void OnGameTick(float deltaTime)
+        {
+            foreach (var projectile in _projectileRegistry.ActiveProjectiles)
+            {
+                if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
+                {
+                    _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+                    continue;
+                }
+
+                if (projectile is Bolt bolt)
+                {
+                    MoveBolts(bolt, deltaTime);
+                }
+            }
+        }
+
         private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
             var projectile = _projectileRegistry.GetBolt(boltShootData.PoolId);
@@ -61,79 +79,75 @@ namespace GameSystems
 
                 if (collider.TryGetComponent(out DefenseLayerBase defenseLayer))
                 {
-                    if (defenseLayer.OwnerId == boltShootData.OwnerId)
-                    {
-                        projectile.IgnoredColliders[projectile.IgnoredCount] = collider;
-                        projectile.IgnoredCount++;
-                        continue;
-                    }
-
-                    if (defenseLayer.LayerType == DefenseLayerType.Shield)
+                    if (defenseLayer.OwnerId == boltShootData.OwnerId || defenseLayer.LayerType == DefenseLayerType.Shield)
                     {
                         projectile.IgnoredColliders[projectile.IgnoredCount] = collider;
                         projectile.IgnoredCount++;
                     }
-                }
-            }
-        }
-
-        private void OnGameTick(float deltaTime)
-        {
-            foreach (var projectile in _projectileRegistry.ActiveProjectiles)
-            {
-                if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
-                {
-                    _projectileRegistry.RequestRemoveActiveProjectile(projectile);
-                    continue;
-                }
-
-                if (projectile is Bolt bolt)
-                {
-                    MoveBolts(bolt, deltaTime);
                 }
             }
         }
 
         private void MoveBolts(Bolt bolt, float deltaTime)
         {
-            var step = bolt.Velocity * deltaTime;
+            var prevPos = bolt.Position;
+            var nextPos = prevPos + bolt.Velocity * deltaTime;
 
-            var prevCenter = bolt.Position;
-            var nextCenter = prevCenter + step;
-            var tipDirrectOffset = bolt.VelocityNorm * bolt.TipOffset;
+            var hitCount = Physics2D.LinecastNonAlloc(prevPos, nextPos, _hits, bolt.HitLayers);
 
-            var prevTip = prevCenter + tipDirrectOffset;
-            var nextTip = nextCenter + tipDirrectOffset;
+            if (hitCount == 0)
+            {
+                bolt.Position = nextPos;
+                bolt.Transform.position = nextPos;
+            }
 
-            var hitCount = Physics2D.LinecastNonAlloc(prevTip, nextTip, _hits, bolt.HitLayers);
+            Collider2D bestCollider = null;
+            Vector2 bestHitPos = default;
+            int bestPriority = int.MaxValue;
 
             for (int i = 0; i < hitCount; i++)
             {
                 RaycastHit2D hit = _hits[i];
+                var collider = hit.collider;
+                bool ignored = false;
 
                 for (int j = 0; j < bolt.IgnoredCount; j++)
                 {
-                    if (bolt.IgnoredColliders[j] == hit.collider)
+                    if (bolt.IgnoredColliders[j] == collider)
                     {
-                        bolt.Position = nextCenter;
-                        bolt.Transform.position = nextCenter;
-                        return;
+                        ignored = true;
+                        break;
                     }
                 }
 
-                int colliderLayer = hit.collider.gameObject.layer;
+                if (ignored) continue;
 
-                if (colliderLayer == LayersId.ShieldLayer || colliderLayer == LayersId.ArmorLayer || colliderLayer == LayersId.HullLayer)
+                int priority;
+                int layer = collider.gameObject.layer;
+
+                if (layer == LayersId.ShieldLayer) priority = 0;
+                else if (layer == LayersId.ArmorLayer) priority = 1;
+                else priority = 2;
+
+                if (priority < bestPriority)
                 {
-                    hit.collider.TryGetComponent(out DefenseLayerBase defenceLayer);
-                    EventBus.BoltHitAction?.Invoke(bolt, defenceLayer, hit.point);
-                    _projectileRegistry.RequestRemoveActiveProjectile(bolt);
-                    return;
+                    bestPriority = priority;
+                    bestCollider = hit.collider;
+                    bestHitPos = hit.point;
                 }
             }
 
-            bolt.Position = nextCenter;
-            bolt.Transform.position = nextCenter;
+            if (bestCollider != null)
+            {
+                bestCollider.TryGetComponent(out DefenseLayerBase defenceLayer);
+                EventBus.BoltHitAction?.Invoke(bolt, defenceLayer, bestHitPos);
+                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+            }
+            else
+            {
+                bolt.Position = nextPos;
+                bolt.Transform.position = nextPos;
+            }
         }
 
         private void ProcessStraightMissile(StraightMissile straightMissile)

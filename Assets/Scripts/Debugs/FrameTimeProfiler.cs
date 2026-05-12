@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86;
 
 namespace Debugs
 {
@@ -13,11 +14,13 @@ namespace Debugs
         private int _count;
 
         private float _time;
+        private float _nextFpsUpdateTime;
 
         [Header("Settings")]
         [SerializeField] private float _interval = 2f;
         [SerializeField] private float _warmupTime = 3f;
         [SerializeField] private TextMeshProUGUI _text;
+        [SerializeField] private TextMeshProUGUI _fpsText;
 
         void Awake()
         {
@@ -28,6 +31,14 @@ namespace Debugs
 
         void Update()
         {
+            if (Time.time >= _nextFpsUpdateTime)
+            {
+                _nextFpsUpdateTime = Time.time + 0.5f;
+
+                float fps = 1f / Time.deltaTime;
+                _fpsText.text = $"FPS: {fps:F1}";
+            }
+
             // пропускаем прогрев
             if (Time.time < _warmupTime)
                 return;
@@ -68,13 +79,13 @@ namespace Debugs
             float p95 = temp[(int)(_count * 0.95f)];
             float p99 = temp[(int)(_count * 0.99f)];
             float max = temp[_count - 1];
-
             float fps = 1000f / avg;
+
 
             if (_text != null)
             {
                 _text.text =
-                    $"FPS: {fps:F1}\n" +
+                    $"AVGFPS: {fps:F1}\n" +
                     $"avg: {avg:F2} ms\n" +
                     $"p95: {p95:F2} ms\n" +
                     $"p99: {p99:F2} ms\n" +

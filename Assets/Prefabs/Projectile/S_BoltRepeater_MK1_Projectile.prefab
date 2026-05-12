@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -125
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 37de8d56c989d6343bc533452bf5de85, type: 3}
   m_Color: {r: 1, g: 1, b: 0, a: 1}
@@ -111,13 +111,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   DamageData:
-    ShieldDamage: 0
-    ArmorDamage: 0
-    HullDamage: 0
-    ShieldMultiplier: 0
-    ArmorMultiplier: 0
-    HullMultiplier: 0
-    AsteroidMultipler: 0
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
+  IgnoredColliders:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  IgnoredCount: 0
   <TipOffset>k__BackingField: 0.24
   Position: {x: 0, y: 0}
   Velocity: {x: 0, y: 0}
