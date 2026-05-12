@@ -23,7 +23,8 @@ namespace DI
         [SerializeField] StarryCanvasView starryCanvasView;
         [SerializeField] CameraRigSystem cameraRigSystem;
         [SerializeField] HitParticlesPool  hitParticlesPool;
-        [SerializeField] ProjectilesPool   ProjectilesPool;
+        [SerializeField] ProjectilesPool   projectilesPool;
+        [SerializeField] ShieldRepulsionRegistry shieldRepulsionRegistry;
         
 
         protected override void InstallBindings()
@@ -34,9 +35,10 @@ namespace DI
             Container.Bind<WeaponRegistry>().FromInstance(weaponRegistry).AsSingleton();
             Container.Bind<ProjectileRegistry>().FromInstance(projectileRegistry).AsSingleton();
             Container.Bind<HitEffectRegistry>().FromInstance(hitParticleRegistry).AsSingleton();
+            Container.Bind<ShieldRepulsionRegistry>().FromInstance(shieldRepulsionRegistry).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
-            Container.Bind<ProjectilesPool>().FromInstance(ProjectilesPool).AsSingleton();
+            Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();
 
 
             Container.Bind<StarryCanvasView>().FromInstance(starryCanvasView).AsSingleton();

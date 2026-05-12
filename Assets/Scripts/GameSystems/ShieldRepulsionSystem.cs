@@ -1,19 +1,20 @@
-using DefenseLayers;
 using DI;
-using GameCamera;
 using Registries;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameSystems
 {
     public class ShieldRepulsionSystem : GameSystemBase, IFixedUpdateTickObserver
     {
+        [SerializeField] private float _shieldForce = 25f;
+        [SerializeField] private float _deadZone = 0.02f;
+
+        private ShieldRepulsionRegistry _shieldRepulsionRegistry;
+
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, MouseCursor mouseCursor)
+        public void Construct(ShieldRepulsionRegistry shieldRepulsionRegistry)
         {
-            //_mouseCursor = mouseCursor;
-            //_shipRegistry = shipRegistry;
+            _shieldRepulsionRegistry = shieldRepulsionRegistry;
             ActiveGameState = GameState.CoreGameplay;
         }
 
@@ -21,11 +22,8 @@ namespace GameSystems
         {
             if (!SystemIsActive) return;
 
-            foreach ((Rigidbody2D rb, Transform transform) in _trackedBodies)
+            foreach ((Rigidbody2D rb, Transform transform) in _shieldRepulsionRegistry.TrackedBodies)
             {
-                if (!rb)
-                    continue;
-
                 ProcessRepulsion(rb, transform);
             }
         }
@@ -42,58 +40,38 @@ namespace GameSystems
             EventBus.OnShieldCross -= HandleShieldCross;
         }
 
-
-        [SerializeField] private float _shieldForce = 25f;
-        [SerializeField] private float _deadZone = 0.02f;
-
-        private readonly HashSet<(Rigidbody2D rb, Transform transform)> _trackedBodies = new();
-
         private void HandleShieldCross(Collider2D other, Transform transform, bool entered)
         {
-            if (!other.attachedRigidbody)
-                return;
+            if (!other.attachedRigidbody) return;
+            var rb = other.attachedRigidbody;
 
-            Rigidbody2D rb = other.attachedRigidbody;
-
-            if (entered)
-            {
-                _trackedBodies.Add((rb, transform));
-            }
-            else
-            {
-                _trackedBodies.Remove((rb, transform));
-            }
+            if (entered) _shieldRepulsionRegistry.RequestAdd(rb, transform);
+            else _shieldRepulsionRegistry.RequestRemove(rb, transform);
         }
 
         private void ProcessRepulsion(Rigidbody2D rb, Transform transform)
         {
             Vector2 shieldCenter = transform.position;
-            Vector2 objectPosition = rb.position;
+            var objectPosition = rb.position;
 
-            Vector2 fromCenter = objectPosition - shieldCenter;
+            var fromCenter = objectPosition - shieldCenter;
 
             // Shield ellipse radius
-            float radiusX = transform.localScale.x * 0.5f;
-            float radiusY = transform.localScale.y * 0.5f;
+            var radiusX = transform.localScale.x * 0.5f;
+            var radiusY = transform.localScale.y * 0.5f;
+            var x = fromCenter.x / radiusX;
+            var y = fromCenter.y / radiusY;
+            var normalizedDistanceSq = x * x + y * y;
 
-            // Distance inside ellipse
-            float normalizedDistance =
-                Mathf.Sqrt(
-                    Mathf.Pow(fromCenter.x / radiusX, 2f) +
-                    Mathf.Pow(fromCenter.y / radiusY, 2f));
+            // глубина проникновения где 0 = edge 1 = center
+            var penetration = 1f - normalizedDistanceSq;
+            // отсекает эффект на границе и если за пределами.
+            if (penetration <= _deadZone) return;
 
-            // 0 = edge
-            // 1 = center
-            float penetration = 1f - normalizedDistance;
+            // Чем глубже объект внутри тем сильнее выталкивание
+            var pushForce = penetration * _shieldForce;
 
-            if (penetration <= _deadZone)
-                return;
-
-            // Чем глубже объект внутри —
-            // тем сильнее выталкивание
-            float pushForce = penetration * _shieldForce;
-
-            rb.AddForce(fromCenter * pushForce, ForceMode2D.Force);
+            rb.AddForce(fromCenter.normalized * pushForce, ForceMode2D.Force);
         }
     }
 }

@@ -18,7 +18,9 @@ namespace DefenseLayers
         }
 
         private void OnTriggerEnter2D(Collider2D other)
-        {            
+        {
+            //if (!Collider.IsTouching(other)) return;
+
             EventBus.OnShieldCross?.Invoke(other, Transform, true);
         }
 
