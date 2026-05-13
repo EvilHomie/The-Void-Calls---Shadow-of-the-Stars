@@ -19,7 +19,7 @@ public class BoosterPlume : MonoBehaviour
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _matBlock = new MaterialPropertyBlock();
-        _spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
+        //_spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
         SetPowerValue(0);
     }
     public void SetPowerValue(float value)

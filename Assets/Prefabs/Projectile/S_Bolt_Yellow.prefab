@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5575952141292230622}
   - component: {fileID: 4695306909407032288}
   - component: {fileID: -2169160166794733236}
-  m_Layer: 8
-  m_Name: S_BoltRepeater_MK1_Projectile
+  m_Layer: 19
+  m_Name: S_Bolt_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,11 +28,10 @@ Transform:
   m_GameObject: {fileID: 5959500612152639483}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.024, y: 0.085, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7443625430164756661}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5575952141292230622
@@ -82,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -125
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 37de8d56c989d6343bc533452bf5de85, type: 3}
   m_Color: {r: 1, g: 1, b: 0, a: 1}
@@ -114,22 +113,8 @@ MonoBehaviour:
     Energy: 0
     Kinetic: 0
     Asteroid: 0
-  IgnoredColliders:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  IgnoredCount: 0
   <TipOffset>k__BackingField: 0.24
-  Position: {x: 0, y: 0}
+  Position: {x: 0, y: 0, z: 0}
   Velocity: {x: 0, y: 0}
   VelocityNorm: {x: 0, y: 0}
 --- !u!114 &-2169160166794733236
@@ -144,34 +129,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbb7b1c649744f4a9bde1509b8fa4ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Batching
---- !u!1 &8513256963205710185
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7443625430164756661}
-  m_Layer: 8
-  m_Name: TipPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7443625430164756661
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8513256963205710185}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.12, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7638931385160695529}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -23,95 +23,95 @@ namespace Weapons
 
         public void ProcessShooting(MiningDrill weapon)
         {
-            ref var aimStats = ref weapon.AimStats;
+            //ref var aimStats = ref weapon.AimStats;
 
-            var beamTransform = weapon.BeamLineTransform;
-            var startPosition = beamTransform.position;
-            var direction = beamTransform.up;
+            //var beamTransform = weapon.BeamLineTransform;
+            //var startPosition = beamTransform.position;
+            //var direction = beamTransform.up;
 
-            int ignoredCount = 0;
+            //int ignoredCount = 0;
 
-            int overlapCount = Physics2D.OverlapPointNonAlloc(startPosition, _overlapHits);
+            //int overlapCount = Physics2D.OverlapPointNonAlloc(startPosition, _overlapHits);
 
-            for (int i = 0; i < overlapCount; i++)
-            {
-                var collider = _overlapHits[i];
+            //for (int i = 0; i < overlapCount; i++)
+            //{
+            //    var collider = _overlapHits[i];
 
-                if (!collider.TryGetComponent(out DefenseLayerBase layer)) continue;
+            //    if (!collider.TryGetComponent(out DefenseLayerBase layer)) continue;
 
-                if (layer.OwnerId == weapon.OwnerId || layer.LayerType == DefenseLayerType.Shield)
-                {
-                    _overlapHits[ignoredCount] = collider;
-                    ignoredCount++;
-                }
-            }
+            //    if (layer.OwnerId == weapon.OwnerId || layer.LayerType == DefenseLayerType.Shield)
+            //    {
+            //        _overlapHits[ignoredCount] = collider;
+            //        ignoredCount++;
+            //    }
+            //}
 
-            Vector2 endPosition = startPosition + direction * aimStats.MaxDistance;
-            int hitCount = Physics2D.LinecastNonAlloc(startPosition, endPosition, _beamHits, weapon.HitLayers);
+            //Vector2 endPosition = startPosition + direction * aimStats.MaxDistance;
+            //int hitCount = Physics2D.LinecastNonAlloc(startPosition, endPosition, _beamHits, weapon.HitLayers);
 
-            Collider2D bestCollider = null;
-            Vector2 bestHitPos = weapon.WeaponStats.Cached.NoHitTargetPoint;
-            int bestPriority = int.MaxValue;
+            //Collider2D bestCollider = null;
+            //Vector2 bestHitPos = weapon.WeaponStats.Cached.NoHitTargetPoint;
+            //int bestPriority = int.MaxValue;
 
-            for (int i = 0; i < hitCount; i++)
-            {
-                var hit = _beamHits[i];
-                var collider = hit.collider;
-                bool ignored = false;
+            //for (int i = 0; i < hitCount; i++)
+            //{
+            //    var hit = _beamHits[i];
+            //    var collider = hit.collider;
+            //    bool ignored = false;
 
-                for (int j = 0; j < ignoredCount; j++)
-                {
-                    if (_overlapHits[j] == collider)
-                    {
-                        ignored = true;
-                        break;
-                    }
-                }
+            //    for (int j = 0; j < ignoredCount; j++)
+            //    {
+            //        if (_overlapHits[j] == collider)
+            //        {
+            //            ignored = true;
+            //            break;
+            //        }
+            //    }
 
-                if (ignored) continue;
+            //    if (ignored) continue;
 
-                int priority;
-                int layer = collider.gameObject.layer;
+            //    int priority;
+            //    int layer = collider.gameObject.layer;
 
-                if (layer == LayersId.ShieldLayer) priority = 0;
-                else if (layer == LayersId.ArmorLayer) priority = 1;
-                else priority = 2;
+            //    if (layer == LayersId.ShieldLayer) priority = 0;
+            //    else if (layer == LayersId.ArmorLayer) priority = 1;
+            //    else priority = 2;
 
-                if (priority < bestPriority)
-                {
-                    bestPriority = priority;
-                    bestCollider = hit.collider;
-                    bestHitPos = hit.point;
-                }
-            }
+            //    if (priority < bestPriority)
+            //    {
+            //        bestPriority = priority;
+            //        bestCollider = hit.collider;
+            //        bestHitPos = hit.point;
+            //    }
+            //}
 
-            if (bestCollider == null)
-            {
-                weapon.BeamLineLR.SetPosition(1, bestHitPos);
-                return;
-            }
+            //if (bestCollider == null)
+            //{
+            //    weapon.BeamLineLR.SetPosition(1, bestHitPos);
+            //    return;
+            //}
 
-            bestCollider.TryGetComponent(out DefenseLayerBase hitLayer);
+            //bestCollider.TryGetComponent(out DefenseLayerBase hitLayer);
 
-            ref var runTime = ref weapon.WeaponStats.Runtime;
+            //ref var runTime = ref weapon.WeaponStats.Runtime;
 
-            if (runTime.NextHitTime < GameFlowSystem.CoreTime)
-            {
-                var hitDelay = weapon.WeaponStats.Cached.HitDelay;
+            //if (runTime.NextHitTime < GameFlowSystem.CoreTime)
+            //{
+            //    var hitDelay = weapon.WeaponStats.Cached.HitDelay;
 
-                runTime.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
+            //    runTime.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
 
-                var damage = weapon.Damage;
+            //    var damage = weapon.Damage;
 
-                damage.Energy *= hitDelay;
-                damage.Kinetic *= hitDelay;
-                damage.Asteroid *= hitDelay;
+            //    damage.Energy *= hitDelay;
+            //    damage.Kinetic *= hitDelay;
+            //    damage.Asteroid *= hitDelay;
 
-                EventBus.BeamHitAction?.Invoke(damage, hitLayer, bestHitPos);
-            }
+            //    EventBus.BeamHitAction?.Invoke(damage, hitLayer, bestHitPos);
+            //}
 
-            Vector2 localHitPos = beamTransform.InverseTransformPoint(bestHitPos);
-            weapon.BeamLineLR.SetPosition(1, localHitPos);
+            //Vector2 localHitPos = beamTransform.InverseTransformPoint(bestHitPos);
+            //weapon.BeamLineLR.SetPosition(1, localHitPos);
         }
     }
 }

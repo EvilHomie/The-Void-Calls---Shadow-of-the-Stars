@@ -30,12 +30,13 @@ public static class WorldConfig
 
 public static class SpriteSortingOrders
 {
-    public const int StarryCanvas = -150;
-    public const int WeaponsUnderHull = -100;
-    public const int Engine = -50;
-    public const int Ship = 0;
-    public const int Asteroid = 0;
-    public const int WeaponsOnHull = 50;
+    //public const int StarryCanvas = -150;
+    //public const int WeaponsUnderHull = -100;
+    //public const int Engine = -50;
+    //public const int Ship = 0;
+    //public const int Asteroid = 0;
+    //public const int WeaponsOnHull = 50;
+    //public const int Projectile = 200;
 }
 
 public static class LayersId

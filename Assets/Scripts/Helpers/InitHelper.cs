@@ -69,13 +69,7 @@ namespace Helpers
 
         private static void InitDefenceLayers(ShipInstance shipInstance)
         {
-            if (shipInstance.Id == 0)
-            {
-                var newId = EntityIdGenerator.Generate();
-                shipInstance.Id = newId;
-            }
-
-            shipInstance.BodySprite.sortingOrder = SpriteSortingOrders.Ship;
+            //shipInstance.BodySprite.sortingOrder = SpriteSortingOrders.Ship;
 
             var resistanceStats = shipInstance.ResistanceStats;
             var maxResistance = WorldConfig.MaxResistance;
@@ -90,34 +84,30 @@ namespace Helpers
 
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
-                defenseLayer.ResistanceMultipliers = resistanceMultipliers;
+                defenseLayer.ResistanceMultipliers = resistanceMultipliers;                
 
                 if (defenseLayer.LayerType == DefenseLayerType.Hull)
                 {
                     var hp = shipInstance.Equip.Chassis.Hull;
-                    defenseLayer.Init(hp, shipInstance.Id);
+                    defenseLayer.Init(hp);
                 }
                 else if (defenseLayer.LayerType == DefenseLayerType.Shield)
                 {
-                    defenseLayer.Init(200, shipInstance.Id);
+                    defenseLayer.Init(200);
                 }
                 else //if (defenseLayer.LayerType == DefenseLayerType.Armor)
                 {
-                    defenseLayer.Init(200, shipInstance.Id);
+                    defenseLayer.Init(200);
                 }
+
+                shipInstance.IgnoredColliders.Add(defenseLayer.Collider);
             }
         }
 
         public static void InitAsteroid(Asteroid asteroid)
         {
             var rigidBody = asteroid.Rigidbody;
-            asteroid.BodySprite.sortingOrder = SpriteSortingOrders.Asteroid;
-
-            if (asteroid.Id == 0)
-            {
-                var newId = EntityIdGenerator.Generate();
-                asteroid.Id = newId;
-            }
+            //asteroid.BodySprite.sortingOrder = SpriteSortingOrders.Asteroid;           
 
             if (asteroid.AsteroidType.Contains(AsteroidType.Cluster))
             {
@@ -141,7 +131,7 @@ namespace Helpers
             resistanceMultipliers.Kinetic = 1;
 
             var hp = mass * WorldConfig.AsteroidTonHP;
-            asteroid.AsteroidHullLayer.Init(hp, asteroid.Id);
+            asteroid.AsteroidHullLayer.Init(hp);
         }
 
         public static float GetMassModifier(AsteroidType asteroidType)
@@ -167,10 +157,9 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                weapon.OwnerId = shipInstance.Id;
-
-                var spriteOrder = slot.WeaponMountLayer == WeaponMountLayer.UnderHull ? SpriteSortingOrders.WeaponsUnderHull : SpriteSortingOrders.WeaponsOnHull;
-                weapon.BodySprite.sortingOrder = spriteOrder;
+                weapon.IgnoredColliders = shipInstance.IgnoredColliders;
+                //var spriteOrder = slot.WeaponMountLayer == WeaponMountLayer.UnderHull ? SpriteSortingOrders.WeaponsUnderHull : SpriteSortingOrders.WeaponsOnHull;
+                //weapon.BodySprite.sortingOrder = spriteOrder;
                 UpdateWeaponStats(weapon);
 
                 if (weapon is IShipVelocityAware aware)

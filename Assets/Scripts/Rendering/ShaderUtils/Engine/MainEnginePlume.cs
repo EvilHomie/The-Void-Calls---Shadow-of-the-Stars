@@ -19,9 +19,8 @@ public class MainEnginePlume : MonoBehaviour
     public void Init()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
+        //_spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
         _matBlock = new MaterialPropertyBlock();
-        //_sr.maskInteraction = SpriteMaskInteraction.None;
         SetPowerValue(0);
     }
     public void SetPowerValue(float value)

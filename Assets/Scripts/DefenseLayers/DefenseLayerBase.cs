@@ -12,17 +12,15 @@ namespace DefenseLayers
 
         public float CurrentHealthPoints;
         public float MaxHealthPoints { get; private set; }
-        public uint OwnerId { get; private set; }
 
         public ResistanceMultipliers ResistanceMultipliers;
 
-        public virtual void Init(float HP, uint ownerId)
+        public virtual void Init(float HP)
         {
             Collider = GetComponent<Collider2D>();
             Transform = transform;
             CurrentHealthPoints = HP;
             MaxHealthPoints = HP;
-            OwnerId = ownerId;
         }
     }
 

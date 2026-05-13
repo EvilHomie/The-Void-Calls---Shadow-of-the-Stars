@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Weapons
@@ -15,6 +16,6 @@ namespace Weapons
         [field: SerializeField] public Transform Transform { get; private set; }
         [field: SerializeField] public SpriteRenderer BodySprite { get; private set; }
 
-        public uint OwnerId;
+        public HashSet<Collider2D> IgnoredColliders;
     }
 }

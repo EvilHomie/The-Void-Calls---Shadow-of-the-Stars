@@ -65,7 +65,7 @@ namespace GameSystems
             layer.LastOffset = randomOffset;
             layer.PropertyBlock.SetVector(StarryCanvasLayer.OffsetID, randomOffset);
             layer.Renderer.SetPropertyBlock(layer.PropertyBlock);
-            layer.Renderer.sortingOrder = SpriteSortingOrders.StarryCanvas;
+            //layer.Renderer.sortingOrder = SpriteSortingOrders.StarryCanvas;
         }
 
         private void UpdateStarView(float dTime)

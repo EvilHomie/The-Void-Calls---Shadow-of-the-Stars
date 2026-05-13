@@ -1,5 +1,6 @@
 using DefenseLayers;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ships
@@ -11,7 +12,7 @@ namespace Ships
         [field: SerializeField] public SpriteRenderer BodySprite { get; private set; }
         [field: SerializeField] public WeaponSlot[] WeaponSlots { get; private set; }
         [field: SerializeField] public DefenseLayerBase[] DefenseLayers { get; private set; }
-        public uint Id;
+        public HashSet<Collider2D> IgnoredColliders = new();
 
         public bool IsAttacking;
         public WeaponGroup ActiveWeaponGroup;

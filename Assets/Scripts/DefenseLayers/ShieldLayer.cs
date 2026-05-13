@@ -10,9 +10,9 @@ namespace DefenseLayers
         public SpriteRenderer SpriteRenderer { get; private set; }
         public MaterialPropertyBlock MaterialBlock { get; private set; }
 
-        public override void Init(float HP, uint ownerId)
+        public override void Init(float HP)
         {
-            base.Init(HP, ownerId);
+            base.Init(HP);
             SpriteRenderer = GetComponent<SpriteRenderer>();
             MaterialBlock = new MaterialPropertyBlock();
         }
