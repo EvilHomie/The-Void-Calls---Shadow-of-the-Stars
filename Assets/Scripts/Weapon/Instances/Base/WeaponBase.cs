@@ -10,7 +10,7 @@ namespace Weapons
         public abstract ref DamageData Damage { get; }
         public abstract ref BaseDamageData BaseDamage { get; }
         public abstract ref DamageMultipliersData DamageMultipliers { get; }
-        [field: SerializeField] public Size Size { get; private set; }
+        [field: SerializeField] public SizeType Size { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public LayerMask HitLayers { get; private set; }
         [field: SerializeField] public Transform Transform { get; private set; }

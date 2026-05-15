@@ -12,31 +12,31 @@ TagManager:
   - Water
   - UI
   - 
-  - LargeBody
-  - SmallBody
-  - AsteroidBody
+  - Asteroid
   - 
-  - LargeShield
-  - SmallShield
   - 
-  - Armor
-  - Hull
-  - Module
+  - SBody
+  - MBody
+  - LBody
+  - XLBody
+  - 
+  - 
+  - SShield
+  - MShield
+  - LShield
+  - XLShield
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - DestructibleProjectile
   - UnDestructibleProjectile
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

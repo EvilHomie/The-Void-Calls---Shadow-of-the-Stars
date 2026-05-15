@@ -6,7 +6,7 @@ namespace ShipModules
     public class MainEngine : ScriptableObject, IShipModule
     {
         [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public Size Size { get; private set; }
+        [field: SerializeField] public SizeType Size { get; private set; }
         [field: SerializeField] public float DirectThrust { get; private set; }
         [field: SerializeField] public float ReverseThrust { get; private set; }
         [field: SerializeField] public float BoostThrust { get; private set; }

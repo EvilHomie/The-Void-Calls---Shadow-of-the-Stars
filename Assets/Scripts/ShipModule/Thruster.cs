@@ -6,7 +6,7 @@ namespace ShipModules
     public class Thruster : ScriptableObject, IShipModule
     {
         [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public Size Size { get; private set; }
+        [field: SerializeField] public SizeType Size { get; private set; }
         [field: SerializeField] public float StrafeThrust { get; private set; }
         [field: SerializeField] public float RotateThrust { get; private set; }
 

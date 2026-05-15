@@ -1,5 +1,5 @@
 public interface IShipModule
 {
-    public Size Size { get; }
+    public SizeType Size { get; }
     public string Name { get; }
 }

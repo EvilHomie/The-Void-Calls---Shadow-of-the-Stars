@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Chassis", menuName = "Scriptable Objects/Chassis")]
 public class Chassis : ScriptableObject, IShipModule
 {
     [field: SerializeField] public string Name { get; private set; }
-    [field: SerializeField] public Size Size { get; private set; }
+    [field: SerializeField] public SizeType Size { get; private set; }
     [field: SerializeField] public int Hull { get; private set; }
     [field: SerializeField] public float Mass { get; private set; }
     [field: SerializeField] public float DirectDrag { get; private set; }
@@ -23,4 +24,13 @@ public struct ChassisMultipliers
     public float ReverseDragMultiplier;
     public float StrafeDragMultiplier;
     public float RotateDragMultiplier;
+}
+
+[Serializable]
+public enum SizeType
+{
+    S,
+    M,
+    L,
+    XL
 }

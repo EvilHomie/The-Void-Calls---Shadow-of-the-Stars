@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: S_Chassis_Miner_1
   m_EditorClassIdentifier: Assembly-CSharp::Chassis
   <Name>k__BackingField: S_Chassis_Miner_1
-  <Size>k__BackingField: 0
+  <Size>k__BackingField: 1
   <Hull>k__BackingField: 500
   <Mass>k__BackingField: 5
   <DirectDrag>k__BackingField: 2

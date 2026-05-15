@@ -12,8 +12,8 @@ namespace GameSystems
         [SerializeField] PoolReference hullHitEffectReference;
         private HitEffectRegistry _hitEffectRegistry;
 
-        private static readonly int HitUvId = Shader.PropertyToID("_HitUV");
-        private static readonly int HitTimeId = Shader.PropertyToID("_HitTime");
+        private static readonly int CollisionUVId = Shader.PropertyToID("_CollisionUV");
+        private static readonly int CollisionTimeId = Shader.PropertyToID("_CollisionTime");
 
         [Inject]
         public void Construct(HitEffectRegistry hitEffectRegistry)
@@ -89,8 +89,8 @@ namespace GameSystems
             Vector3 local = layerTransform.InverseTransformPoint(hitPosition);
             Vector2 uv = new(local.x + 0.5f, local.y + 0.5f);
 
-            materialBlock.SetVector(HitUvId, uv);
-            materialBlock.SetFloat(HitTimeId, Time.time);
+            materialBlock.SetVector(CollisionUVId, uv);
+            materialBlock.SetFloat(CollisionTimeId, Time.time);
             shieldLayer.SpriteRenderer.SetPropertyBlock(materialBlock);
         }
 
