@@ -8,7 +8,7 @@ namespace GamePools
         public GameObject GameObject { get; private set; }
         public Transform Transform { get; private set; }
 
-        public void Init(uint poolId)
+        public virtual void Init(uint poolId)
         {
             PoolId = poolId;
             GameObject = gameObject;

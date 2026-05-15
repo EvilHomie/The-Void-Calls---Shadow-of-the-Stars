@@ -43,33 +43,35 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha: 0.5
-    - _CollisionFadeDuration: 0.5
-    - _CollisionLength: 0.36
+    - _CollisionFadeDuration: 0.2
+    - _CollisionLength: 0.52
     - _CollisionSegmentLength: 0.35
-    - _CollisionThickness: 0.62
-    - _CollisionTime: 0
+    - _CollisionThickness: 0.5
+    - _CollisionTime: -1
     - _EdgeSoftness: 0.03
     - _FadeDuration: 0.2
     - _FadeSpeed: 1
     - _Float: 11.98
-    - _HitFadeDuration: 0.5
-    - _HitIntensity: 2
-    - _HitRadius: 0.24
-    - _HitSoftness: -0.09
-    - _HitTime: -2.3
+    - _HitFadeDuration: 0.1
+    - _HitIntensity: -0.55
+    - _HitRadius: 0.1
+    - _HitSize: 0.21
+    - _HitSoftness: 0.07
+    - _HitTime: -1
     - _IdleAlpha: 1
     - _IdleInnerRadius: 0.477
     - _IdleOuterRadius: 0.5
-    - _IdleSoftness: 2.69
-    - _IdleThickness: 0.43
+    - _IdleSoftness: 3.25
+    - _IdleThickness: 0.461
     - _Length: 0.77
+    - _Power: 2.46
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SegmentLength: 0.7
     - _Thickness: 0.52
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _CollisionColor: {r: 0, g: 11.817568, b: 89.4541, a: 1}
+    - _CollisionColor: {r: 0, g: 3.7068503, b: 89.45409, a: 1}
     - _CollisionSegmentColor: {r: 0, g: 5.619435, b: 34.29675, a: 1}
     - _CollisionUV: {r: 1, g: 0.5, b: 0, a: 0}
     - _HitPos: {r: 0, g: 0, b: 0, a: 0}
