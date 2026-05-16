@@ -39,7 +39,7 @@ namespace GameSystems
             var layerType = layer.LayerType;
             _damageStrategies[layerType].Invoke(layer, damageData);
 
-            EventBus.DefenseLayerDamagedAction?.Invoke(layer, position);
+            EventBus.DefenseLayerHitAction?.Invoke(layer, position);
         }
 
         private void OnProjectileHit(Bolt bolt, DefenseLayerBase layer, Vector2 position)
@@ -47,7 +47,7 @@ namespace GameSystems
             var layerType = layer.LayerType;
             _damageStrategies[layerType].Invoke(layer, bolt.DamageData);
 
-            EventBus.DefenseLayerDamagedAction?.Invoke(layer, position);
+            EventBus.DefenseLayerHitAction?.Invoke(layer, position);
         }
 
 

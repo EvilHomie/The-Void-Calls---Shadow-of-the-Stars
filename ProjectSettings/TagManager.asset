@@ -15,16 +15,16 @@ TagManager:
   - Asteroid
   - 
   - 
-  - SBody
-  - MBody
-  - LBody
-  - XLBody
+  - S
+  - M
+  - L
+  - XL
   - 
   - 
-  - SShield
-  - MShield
-  - LShield
-  - XLShield
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4695306909407032288}
   - component: {fileID: -2169160166794733236}
   m_Layer: 19
-  m_Name: S_Bolt_Yellow
+  m_Name: Bolt_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

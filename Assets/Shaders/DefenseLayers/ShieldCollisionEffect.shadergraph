@@ -547,10 +547,10 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "CollisionThickness",
+    "m_Name": "Thickness",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "CollisionThickness",
-    "m_DefaultReferenceName": "_CollisionThickness",
+    "m_RefNameGeneratedByDisplayName": "Thickness",
+    "m_DefaultReferenceName": "_Thickness",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -684,7 +684,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "0fff9d7f609a4baca75a11725aab514c",
     "m_Id": 0,
-    "m_DisplayName": "CollisionThickness",
+    "m_DisplayName": "Thickness",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -813,7 +813,7 @@
     "m_Title": "COLLISION SEGMENT",
     "m_Position": {
         "x": -2944.0,
-        "y": 5878.66650390625
+        "y": 5878.6669921875
     }
 }
 
@@ -962,8 +962,8 @@
     "m_ObjectId": "2fb96ceb93e941b4a47eabb03a99af5f",
     "m_Title": "CENTER OFFSET",
     "m_Position": {
-        "x": -4044.666748046875,
-        "y": 5782.66650390625
+        "x": -4044.66650390625,
+        "y": 5782.6669921875
     }
 }
 
@@ -1431,10 +1431,10 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "CollisionLength",
+    "m_Name": "Length",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "CollisionLength",
-    "m_DefaultReferenceName": "_CollisionLength",
+    "m_RefNameGeneratedByDisplayName": "Length",
+    "m_DefaultReferenceName": "_Length",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1520,7 +1520,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "816a293d7c0541faa2d38ad9d07e9644",
     "m_Id": 0,
-    "m_DisplayName": "CollisionLength",
+    "m_DisplayName": "Length",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -2003,10 +2003,10 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "CollisionUV",
+    "m_Name": "EffectUV",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "CollisionUV",
-    "m_DefaultReferenceName": "_CollisionUV",
+    "m_RefNameGeneratedByDisplayName": "EffectUV",
+    "m_DefaultReferenceName": "_EffectUV",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -2439,8 +2439,8 @@
     "m_ObjectId": "cd7ed6a935464d27af9cef6a1f13bb25",
     "m_Title": "COLLISION SEGMENT INNER EDGE",
     "m_Position": {
-        "x": -3348.666748046875,
-        "y": 5519.33349609375
+        "x": -3348.66650390625,
+        "y": 5519.3330078125
     }
 }
 
@@ -2652,10 +2652,10 @@
     "promotedFromAssetID": "",
     "promotedFromCategoryName": "",
     "promotedOrdering": -1,
-    "m_Name": "CollisionColor",
+    "m_Name": "Color",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "CollisionColor",
-    "m_DefaultReferenceName": "_CollisionColor",
+    "m_RefNameGeneratedByDisplayName": "Color",
+    "m_DefaultReferenceName": "_Color",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -2948,7 +2948,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "f4315125edeb4db283d7c6ae7d0e4709",
     "m_Id": 0,
-    "m_DisplayName": "CollisionColor",
+    "m_DisplayName": "Color",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -3035,8 +3035,8 @@
     "m_ObjectId": "f689e3d189fa416a8824792e92d42a95",
     "m_Title": "OUTER MASK",
     "m_Position": {
-        "x": -3258.666748046875,
-        "y": 5901.99951171875
+        "x": -3258.66650390625,
+        "y": 5902.0
     }
 }
 
@@ -3047,7 +3047,7 @@
     "m_Title": "COLLISION MASK",
     "m_Position": {
         "x": -4202.0,
-        "y": 6143.33349609375
+        "y": 6143.3330078125
     }
 }
 
@@ -3099,7 +3099,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
     "m_ObjectId": "fd7fa8af3e3a456ebb19091d38ce3aea",
     "m_Id": 0,
-    "m_DisplayName": "CollisionUV",
+    "m_DisplayName": "EffectUV",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

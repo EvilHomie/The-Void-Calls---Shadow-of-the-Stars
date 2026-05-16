@@ -34,7 +34,7 @@ namespace Weapons
             var velocity = shipVelocity + direction * config.ProjectileSpeed;
             var destroyTime = GameFlowSystem.CoreTime + aim.MaxDistance * cached.InvProjectileSpeed;
             var spawnPos = weapon.ShootPoint.position;
-            var shootData = new BoltWeaponShootData(weapon.PoolReference.Id, weapon.IgnoredColliders, destroyTime, spawnPos, velocity, direction, weapon.HitLayers, weapon.Damage);
+            var shootData = new BoltWeaponShootData(weapon.PoolId, weapon.IgnoredColliders, destroyTime, spawnPos, velocity, direction, weapon.HitLayers, weapon.Damage);
 
             weapon.ShootSpotPS.Emit(1);
             runTime.NextShootTime = GameFlowSystem.CoreTime + cached.ShootDelay;

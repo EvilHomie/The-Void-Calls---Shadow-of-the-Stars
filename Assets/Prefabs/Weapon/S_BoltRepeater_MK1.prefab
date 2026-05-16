@@ -141,10 +141,10 @@ MonoBehaviour:
   <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 120832
+    m_Bits: 1073757312
   <Transform>k__BackingField: {fileID: 5791893213396587227}
   <BodySprite>k__BackingField: {fileID: 7023785037818923506}
-  <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+  projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 2262729934748537378}
   <ShootPoint>k__BackingField: {fileID: 2285394175697246666}
   WeaponStats:

@@ -14,9 +14,6 @@
         },
         {
             "m_Id": "30dd9f56d7874ab9bf67b99bb901a793"
-        },
-        {
-            "m_Id": "ff7e1a743d8b4af49bba9528975b8661"
         }
     ],
     "m_Keywords": [],
@@ -74,9 +71,6 @@
         },
         {
             "m_Id": "c21e7870f40b40109c23e1742bed901e"
-        },
-        {
-            "m_Id": "e1d1bd60739b464f98fed401a998ec56"
         }
     ],
     "m_GroupDatas": [
@@ -217,20 +211,6 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "8f32e6cc9bd342cbb70fad332682fda5"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "e1d1bd60739b464f98fed401a998ec56"
-                },
-                "m_SlotId": 0
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "f245f7d76a854c0d970c753ac2c120c2"
                 },
                 "m_SlotId": 0
             }
@@ -443,8 +423,8 @@
     "m_ObjectId": "0d9e57e10d924bc2bfcb32a47df3062e",
     "m_Title": "RING",
     "m_Position": {
-        "x": -3400.666748046875,
-        "y": 5700.6669921875
+        "x": -3400.66650390625,
+        "y": 5700.66650390625
     }
 }
 
@@ -647,28 +627,12 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
-    "m_ObjectId": "2860377c335c4c06976b2253858e40fb",
-    "m_Id": 0,
-    "m_DisplayName": "PowerValue",
-    "m_SlotType": 1,
-    "m_Hidden": false,
-    "m_ShaderOutputName": "Out",
-    "m_StageCapability": 3,
-    "m_Value": 0.0,
-    "m_DefaultValue": 0.0,
-    "m_Labels": [],
-    "m_LiteralMode": false
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.GroupData",
     "m_ObjectId": "2fb96ceb93e941b4a47eabb03a99af5f",
     "m_Title": "CENTER OFFSET",
     "m_Position": {
-        "x": -4255.33349609375,
-        "y": 5788.0
+        "x": -4255.3330078125,
+        "y": 5787.99951171875
     }
 }
 
@@ -1234,9 +1198,6 @@
         },
         {
             "m_Id": "30dd9f56d7874ab9bf67b99bb901a793"
-        },
-        {
-            "m_Id": "ff7e1a743d8b4af49bba9528975b8661"
         }
     ]
 }
@@ -1540,8 +1501,8 @@
     "m_ObjectId": "bf8698c342444f348df15b9209ef7b5d",
     "m_Title": "INNER EDGE",
     "m_Position": {
-        "x": -3798.666748046875,
-        "y": 5546.6669921875
+        "x": -3798.66650390625,
+        "y": 5546.66650390625
     }
 }
 
@@ -1774,42 +1735,6 @@
 
 {
     "m_SGVersion": 0,
-    "m_Type": "UnityEditor.ShaderGraph.PropertyNode",
-    "m_ObjectId": "e1d1bd60739b464f98fed401a998ec56",
-    "m_Group": {
-        "m_Id": ""
-    },
-    "m_Name": "Property",
-    "m_DrawState": {
-        "m_Expanded": true,
-        "m_Position": {
-            "serializedVersion": "2",
-            "x": -3131.332763671875,
-            "y": 6012.66650390625,
-            "width": 138.0,
-            "height": 36.0
-        }
-    },
-    "m_Slots": [
-        {
-            "m_Id": "2860377c335c4c06976b2253858e40fb"
-        }
-    ],
-    "synonyms": [],
-    "m_Precision": 0,
-    "m_PreviewExpanded": true,
-    "m_DismissedVersion": 0,
-    "m_PreviewMode": 0,
-    "m_CustomColors": {
-        "m_SerializableColors": []
-    },
-    "m_Property": {
-        "m_Id": "ff7e1a743d8b4af49bba9528975b8661"
-    }
-}
-
-{
-    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "e3137aee8f7c4964a543e7eab00b5631",
     "m_Id": 0,
@@ -1971,8 +1896,8 @@
     "m_ObjectId": "f689e3d189fa416a8824792e92d42a95",
     "m_Title": "OUTER EDGE",
     "m_Position": {
-        "x": -3624.666748046875,
-        "y": 5790.0
+        "x": -3624.66650390625,
+        "y": 5789.99951171875
     }
 }
 
@@ -2050,49 +1975,5 @@
         "w": 0.0
     },
     "m_LiteralMode": false
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty",
-    "m_ObjectId": "ff7e1a743d8b4af49bba9528975b8661",
-    "m_Guid": {
-        "m_GuidSerialized": "06d2b459-6c5b-44ee-8dd3-df34c0454c2a"
-    },
-    "promotedFromAssetID": "",
-    "promotedFromCategoryName": "",
-    "promotedOrdering": -1,
-    "m_Name": "PowerValue",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "PowerValue",
-    "m_DefaultReferenceName": "_PowerValue",
-    "m_OverrideReferenceName": "",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_PerRendererData": false,
-    "m_customAttributes": [],
-    "m_Value": 1.0,
-    "m_FloatType": 1,
-    "m_LiteralFloatMode": false,
-    "m_RangeValues": {
-        "x": 0.0,
-        "y": 1.0
-    },
-    "m_SliderType": 0,
-    "m_SliderPower": 3.0,
-    "m_EnumType": 0,
-    "m_CSharpEnumString": "",
-    "m_EnumNames": [
-        "Default"
-    ],
-    "m_EnumValues": [
-        0
-    ]
 }
 

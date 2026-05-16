@@ -22,7 +22,8 @@ namespace GameSystems
         public delegate void BoltHitDelegate(Bolt bolt, DefenseLayerBase layer, Vector2 position);
         public static BoltHitDelegate BoltHitAction;
 
-        public static Action<DefenseLayerBase, Vector2> DefenseLayerDamagedAction;
+        public static Action<DefenseLayerBase, Vector2> DefenseLayerHitAction;
+        public static Action<DefenseLayerBase, Vector2> DefenseLayerCollisionAction;
 
         public static Action<Collider2D, Transform, bool> OnShieldCross;
     }

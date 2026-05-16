@@ -11,13 +11,23 @@ namespace GameSystems
         [SerializeField] PoolReference sparksPoolYellow;
         [SerializeField] PoolReference sparksPoolGrey;
         [SerializeField] PoolReference _shieldCollisionPoolEffect;
+        [SerializeField] PoolReference _shieldHitPoolEffect;
         ShieldsEffectRegistry _shieldsEffectRegistry;
         private HitEffectRegistry _hitEffectRegistry;
 
         private readonly float _collisionEffectDuration = 0.2f;
         private float _reversedEffectDuration;
 
-        private static readonly int CollisionUVId = Shader.PropertyToID("_CollisionUV");
+
+        uint _shieldHitPoolId;
+        uint _shieldCollisionPoolId;
+        uint _sparksPoolBlueId;
+        uint _sparksPoolYellowId;
+        uint _sparksPoolGreyId;
+
+
+
+        private static readonly int EffectUVId = Shader.PropertyToID("_EffectUV");
 
         [Inject]
         public void Construct(HitEffectRegistry hitEffectRegistry, ShieldsEffectRegistry shieldsEffectRegistry)
@@ -26,25 +36,54 @@ namespace GameSystems
             _shieldsEffectRegistry = shieldsEffectRegistry;
             _reversedEffectDuration = 1 / _collisionEffectDuration;
             ActiveGameState = GameState.CoreGameplay;
+
+            _shieldHitPoolId = _shieldHitPoolEffect.Id;
+            _shieldCollisionPoolId = _shieldCollisionPoolEffect.Id;
+            _sparksPoolBlueId = sparksPoolBlue.Id;
+            _sparksPoolYellowId = sparksPoolYellow.Id;
+            _sparksPoolGreyId = sparksPoolGrey.Id;
         }
 
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.DefenseLayerDamagedAction += OnDefenseLayerDamagedAction;
+            EventBus.DefenseLayerHitAction += OnDefenseLayerHitAction;
+            EventBus.DefenseLayerCollisionAction += OnDefenseLayerCollisionAction;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.DefenseLayerDamagedAction -= OnDefenseLayerDamagedAction;
+            EventBus.DefenseLayerHitAction -= OnDefenseLayerHitAction;
+            EventBus.DefenseLayerCollisionAction -= OnDefenseLayerCollisionAction;
         }
         public void UpdateTick(float deltaTime)
         {
             UpdateShieldEffects();
         }
 
-        private void OnDefenseLayerDamagedAction(DefenseLayerBase layerBase, Vector2 hitPosition)
+        private void OnDefenseLayerHitAction(DefenseLayerBase layerBase, Vector2 hitPosition)
+        {
+            switch (layerBase.LayerType)
+            {
+                case DefenseLayerType.Shield:
+                    OnShieldDamaged(layerBase, hitPosition);
+                    break;
+                case DefenseLayerType.Armor:
+                    OnArmorDamaged(hitPosition);
+                    break;
+                case DefenseLayerType.Hull:
+                    OnHullDamaged(hitPosition);
+                    break;
+                case DefenseLayerType.AsteroidHull:
+                    OnAsteroidHullDamaged(hitPosition);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OnDefenseLayerCollisionAction(DefenseLayerBase layerBase, Vector2 hitPosition)
         {
             switch (layerBase.LayerType)
             {
@@ -67,36 +106,37 @@ namespace GameSystems
 
         private void OnHullDamaged(Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(sparksPoolGrey.Id);
+            var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
         }
         private void OnArmorDamaged(Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(sparksPoolYellow.Id);
+            var hitEffect = _hitEffectRegistry.Get(_sparksPoolYellowId);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
         }
 
         private void OnShieldDamaged(DefenseLayerBase layerBase, Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(sparksPoolBlue.Id);
-            hitEffect.Transform.position = hitPosition;
-            hitEffect.IsPlaying = true;
+            var effect = _hitEffectRegistry.Get(_sparksPoolBlueId);
+            effect.Transform.position = hitPosition;
+            effect.IsPlaying = true;
 
-            ShowShieldCollision(layerBase, hitPosition);
+            SetUpShieldEffect(layerBase, hitPosition, _shieldCollisionPoolId);
+            SetUpShieldEffect(layerBase, hitPosition, _shieldHitPoolId);
         }
 
         private void OnAsteroidHullDamaged(Vector2 hitPosition)
         {
-            var hitEffect = _hitEffectRegistry.Get(sparksPoolGrey.Id);
+            var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
             hitEffect.Transform.position = hitPosition;
             hitEffect.IsPlaying = true;
         }
 
-        private void ShowShieldCollision(DefenseLayerBase shieldLayer, Vector2 worldHitPos)
+        private void SetUpShieldEffect(DefenseLayerBase shieldLayer, Vector2 worldHitPos, uint effectPoolId)
         {
-            var effect = _shieldsEffectRegistry.Get(_shieldCollisionPoolEffect.Id);
+            var effect = _shieldsEffectRegistry.Get(effectPoolId);
 
             var materialBlock = effect.MaterialBlock;
             var shieldTransform = shieldLayer.Transform;
@@ -114,7 +154,7 @@ namespace GameSystems
             local.x += 0.5f;
             local.y += 0.5f;
 
-            materialBlock.SetVector(CollisionUVId, local);
+            materialBlock.SetVector(EffectUVId, local);
             effect.SpriteRenderer.SetPropertyBlock(materialBlock);
         }
 
