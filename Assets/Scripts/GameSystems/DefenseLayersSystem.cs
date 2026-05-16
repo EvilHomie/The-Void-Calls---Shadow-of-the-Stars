@@ -4,7 +4,7 @@ using Registries;
 
 namespace GameSystems
 {
-    public class DefenseLayersSystem : GameSystemBase, IPreUpdateTickObserver
+    public class DefenseLayersSystem : GameSystemBase, ICorePreUpdateTickObserver
     {
         private ShipRegistry _shipRegistry;
         private MouseCursor _mouseCursor;
@@ -14,13 +14,10 @@ namespace GameSystems
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
-            //if (!SystemIsActive) return;
-
             //var playerShip = _shipRegistry.PlayerShip;
             //ref var targetData = ref playerShip.TargetData;
             //targetData.Position = _mouseCursor.WorldPostition;

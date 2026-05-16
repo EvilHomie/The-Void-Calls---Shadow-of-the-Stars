@@ -93,11 +93,11 @@ namespace Helpers
                 }
                 else if (defenseLayer.LayerType == DefenseLayerType.Shield)
                 {
-                    defenseLayer.Init(200);
+                    defenseLayer.Init(2000);
                 }
                 else //if (defenseLayer.LayerType == DefenseLayerType.Armor)
                 {
-                    defenseLayer.Init(200);
+                    defenseLayer.Init(2000);
                 }
 
                 shipInstance.IgnoredColliders.Add(defenseLayer.Collider);
@@ -161,6 +161,7 @@ namespace Helpers
                 //var spriteOrder = slot.WeaponMountLayer == WeaponMountLayer.UnderHull ? SpriteSortingOrders.WeaponsUnderHull : SpriteSortingOrders.WeaponsOnHull;
                 //weapon.BodySprite.sortingOrder = spriteOrder;
                 UpdateWeaponStats(weapon);
+                weapon.Init(shipInstance.TargetData);
 
                 if (weapon is IShipVelocityAware aware)
                 {
@@ -175,7 +176,9 @@ namespace Helpers
             {
                 ref var weaponStats = ref boltRepeater.WeaponStats;
                 weaponStats.Cached.ShootDelay = 1f / weaponStats.Config.FireRate;
-                weaponStats.Cached.InvProjectileSpeed = 1f / weaponStats.Config.ProjectileSpeed;
+                var invProjectileSpeed = 1f / weaponStats.Config.ProjectileSpeed;
+                weaponStats.Cached.InvProjectileSpeed = invProjectileSpeed;
+                weaponStats.Cached.ProjectileLifeTime = boltRepeater.AimStats.MaxDistance * invProjectileSpeed;
             }
             else if ((weaponBase is MiningDrill miningDrill))
             {

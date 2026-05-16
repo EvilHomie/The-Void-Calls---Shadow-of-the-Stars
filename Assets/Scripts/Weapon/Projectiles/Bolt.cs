@@ -8,8 +8,9 @@ namespace Projectiles
 
         [field: SerializeField] public float TipOffset { get; private set; }
 
-        public Vector3 Position;
+        public Vector2 Position;
         public Vector2 Velocity;
-        public Vector2 VelocityNorm;
+        public bool IsMissed;
+        //public Vector2 VelocityNorm;
     }
 }

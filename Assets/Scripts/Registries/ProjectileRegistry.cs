@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Registries
 {
-    public class ProjectileRegistry : MonoBehaviour, IPreUpdateTickObserver
+    public class ProjectileRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public IReadOnlyCollection<ProjectileBase> ActiveProjectiles => _activeProjectiles;
 
@@ -25,7 +25,7 @@ namespace Registries
             gameFlowSystem.AddTickObserver(this);
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             Sync();
         }

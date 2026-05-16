@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class ShipVisualizeSystem : GameSystemBase, IPreUpdateTickObserver
+    public class ShipVisualizeSystem : GameSystemBase, ICorePreUpdateTickObserver
     {
         private ShipRegistry _shipRegistry;
 
@@ -13,13 +13,10 @@ namespace GameSystems
         public void Construct(ShipRegistry shipRegystry)
         {
             _shipRegistry = shipRegystry;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
-            if (!SystemIsActive) return;
-
             Visualize();
         }        
 

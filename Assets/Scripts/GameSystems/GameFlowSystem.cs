@@ -11,10 +11,10 @@ namespace GameSystems
 
         public Action<GameState> GameStateChanged { get; set; }
 
-        private readonly List<IPreUpdateTickObserver> _preUpdateTickObservers = new();
-        private readonly List<IUpdateTickObserver> _updateTickObservers = new();
-        private readonly List<ILateUpdateTickObserver> _lateUpdateTickObservers = new();
-        private readonly List<IFixedUpdateTickObserver> _fixedUpdateTickObservers = new();
+        private readonly List<ICorePreUpdateTickObserver> _corePreUpdateTickObservers = new();
+        private readonly List<ICoreUpdateTickObserver> _coreUpdateTickObservers = new();
+        private readonly List<ICoreLateUpdateTickObserver> _coreLateUpdateTickObservers = new();
+        private readonly List<ICoreFixedUpdateTickObserver> _coreFixedUpdateTickObservers = new();
         private GameState _currentGameState = GameState.None;
         private float _gameSpeed = 1;
 
@@ -27,18 +27,18 @@ namespace GameSystems
 
         public void AddTickObserver(ITickObserver observer)
         {
-            if (observer is IPreUpdateTickObserver preUpdateTickObserver) _preUpdateTickObservers.Add(preUpdateTickObserver);
-            if (observer is IUpdateTickObserver updateTickObserver) _updateTickObservers.Add(updateTickObserver);
-            if (observer is ILateUpdateTickObserver lateUpdateTickObserver) _lateUpdateTickObservers.Add(lateUpdateTickObserver);
-            if (observer is IFixedUpdateTickObserver fixedUpdateTickObserver) _fixedUpdateTickObservers.Add(fixedUpdateTickObserver);
+            if (observer is ICorePreUpdateTickObserver preUpdateTickObserver) _corePreUpdateTickObservers.Add(preUpdateTickObserver);
+            if (observer is ICoreUpdateTickObserver updateTickObserver) _coreUpdateTickObservers.Add(updateTickObserver);
+            if (observer is ICoreLateUpdateTickObserver lateUpdateTickObserver) _coreLateUpdateTickObservers.Add(lateUpdateTickObserver);
+            if (observer is ICoreFixedUpdateTickObserver fixedUpdateTickObserver) _coreFixedUpdateTickObservers.Add(fixedUpdateTickObserver);
         }
 
         public void RemoveTickObserver(ITickObserver tickObserver)
         {
-            if (tickObserver is IPreUpdateTickObserver preUpdateTickObserver) _preUpdateTickObservers.Remove(preUpdateTickObserver);
-            if (tickObserver is IUpdateTickObserver updateTickObserver) _updateTickObservers.Remove(updateTickObserver);
-            if (tickObserver is ILateUpdateTickObserver lateUpdateTickObserver) _lateUpdateTickObservers.Remove(lateUpdateTickObserver);
-            if (tickObserver is IFixedUpdateTickObserver fixedUpdateTickObserver) _fixedUpdateTickObservers.Remove(fixedUpdateTickObserver);
+            if (tickObserver is ICorePreUpdateTickObserver preUpdateTickObserver) _corePreUpdateTickObservers.Remove(preUpdateTickObserver);
+            if (tickObserver is ICoreUpdateTickObserver updateTickObserver) _coreUpdateTickObservers.Remove(updateTickObserver);
+            if (tickObserver is ICoreLateUpdateTickObserver lateUpdateTickObserver) _coreLateUpdateTickObservers.Remove(lateUpdateTickObserver);
+            if (tickObserver is ICoreFixedUpdateTickObserver fixedUpdateTickObserver) _coreFixedUpdateTickObservers.Remove(fixedUpdateTickObserver);
         }
 
         public void ChangeGameState(GameState newState)
@@ -54,30 +54,33 @@ namespace GameSystems
         }
 
         void Update()
-        {
-            var deltaTimeTick = Time.unscaledDeltaTime * _gameSpeed;
-
+        {  
             if (_currentGameState == GameState.CoreGameplay)
             {
-                CoreTime += deltaTimeTick;
-                CoreDeltaTimeTick = deltaTimeTick;
+                var coreDeltaTimeTick = Time.unscaledDeltaTime * _gameSpeed;
+                CoreTime += coreDeltaTimeTick;
+                CoreDeltaTimeTick = coreDeltaTimeTick;
+                foreach (var observer in _corePreUpdateTickObservers) observer.CorePreUpdateTick();
+                foreach (var observer in _coreUpdateTickObservers) observer.CoreUpdateTick(coreDeltaTimeTick);
             }
-
-            foreach (var observer in _preUpdateTickObservers) observer.PreUpdateTick();
-            foreach (var observer in _updateTickObservers) observer.UpdateTick(deltaTimeTick);
-
         }
 
         private void FixedUpdate()
         {
-            var fixedDTTick = Time.fixedUnscaledDeltaTime * _gameSpeed;
+            if (_currentGameState == GameState.CoreGameplay)
+            {
+                var coreFixedDTTick = Time.fixedUnscaledDeltaTime * _gameSpeed;
 
-            foreach (var observer in _fixedUpdateTickObservers) observer.FixedUpdateTick(fixedDTTick);
+                foreach (var observer in _coreFixedUpdateTickObservers) observer.CoreFixedUpdateTick(coreFixedDTTick);
+            }  
         }
 
         private void LateUpdate()
         {
-            foreach (var observer in _lateUpdateTickObservers) observer.LateUpdateTick();
+            if (_currentGameState == GameState.CoreGameplay)
+            {
+                foreach (var observer in _coreLateUpdateTickObservers) observer.CoreLateUpdateTick();
+            }
         }
     }
 }
@@ -90,19 +93,19 @@ public enum GameState
 }
 public interface ITickObserver { }
 
-public interface IPreUpdateTickObserver : ITickObserver
+public interface ICorePreUpdateTickObserver : ITickObserver
 {
-    public void PreUpdateTick();
+    public void CorePreUpdateTick();
 }
-public interface IUpdateTickObserver : ITickObserver
+public interface ICoreUpdateTickObserver : ITickObserver
 {
-    public void UpdateTick(float deltaTime);
+    public void CoreUpdateTick(float deltaTime);
 }
-public interface ILateUpdateTickObserver : ITickObserver
+public interface ICoreLateUpdateTickObserver : ITickObserver
 {
-    public void LateUpdateTick();
+    public void CoreLateUpdateTick();
 }
-public interface IFixedUpdateTickObserver : ITickObserver
+public interface ICoreFixedUpdateTickObserver : ITickObserver
 {
-    public void FixedUpdateTick(float fixedDT);
+    public void CoreFixedUpdateTick(float fixedDT);
 }

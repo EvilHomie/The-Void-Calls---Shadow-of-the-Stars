@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Registries
 {
-    public class ShieldsEffectRegistry : MonoBehaviour, IPreUpdateTickObserver
+    public class ShieldsEffectRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public IReadOnlyCollection<ShieldEffect> ActiveEffects => _activeShieldEffects;
 
@@ -24,7 +24,7 @@ namespace Registries
             gameFlowSystem.AddTickObserver(this);
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             Sync();
         }

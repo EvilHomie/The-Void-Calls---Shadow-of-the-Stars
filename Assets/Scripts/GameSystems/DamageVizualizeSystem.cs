@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class DamageVizualizeSystem : GameSystemBase, IUpdateTickObserver
+    public class DamageVizualizeSystem : GameSystemBase, ICoreUpdateTickObserver
     {
         [SerializeField] PoolReference sparksPoolBlue;
         [SerializeField] PoolReference sparksPoolYellow;
@@ -35,7 +35,6 @@ namespace GameSystems
             _hitEffectRegistry = hitEffectRegistry;
             _shieldsEffectRegistry = shieldsEffectRegistry;
             _reversedEffectDuration = 1 / _collisionEffectDuration;
-            ActiveGameState = GameState.CoreGameplay;
 
             _shieldHitPoolId = _shieldHitPoolEffect.Id;
             _shieldCollisionPoolId = _shieldCollisionPoolEffect.Id;
@@ -57,7 +56,7 @@ namespace GameSystems
             EventBus.DefenseLayerHitAction -= OnDefenseLayerHitAction;
             EventBus.DefenseLayerCollisionAction -= OnDefenseLayerCollisionAction;
         }
-        public void UpdateTick(float deltaTime)
+        public void CoreUpdateTick(float deltaTime)
         {
             UpdateShieldEffects();
         }
@@ -67,7 +66,7 @@ namespace GameSystems
             switch (layerBase.LayerType)
             {
                 case DefenseLayerType.Shield:
-                    OnShieldDamaged(layerBase, hitPosition);
+                    OnShieldHit(layerBase, hitPosition);
                     break;
                 case DefenseLayerType.Armor:
                     OnArmorDamaged(hitPosition);
@@ -88,7 +87,7 @@ namespace GameSystems
             switch (layerBase.LayerType)
             {
                 case DefenseLayerType.Shield:
-                    OnShieldDamaged(layerBase, hitPosition);
+                    OnShieldCollision(layerBase, hitPosition);
                     break;
                 case DefenseLayerType.Armor:
                     OnArmorDamaged(hitPosition);
@@ -117,14 +116,18 @@ namespace GameSystems
             hitEffect.IsPlaying = true;
         }
 
-        private void OnShieldDamaged(DefenseLayerBase layerBase, Vector2 hitPosition)
+        private void OnShieldHit(DefenseLayerBase layerBase, Vector2 hitPosition)
         {
             var effect = _hitEffectRegistry.Get(_sparksPoolBlueId);
             effect.Transform.position = hitPosition;
             effect.IsPlaying = true;
 
-            SetUpShieldEffect(layerBase, hitPosition, _shieldCollisionPoolId);
             SetUpShieldEffect(layerBase, hitPosition, _shieldHitPoolId);
+        }
+
+        private void OnShieldCollision(DefenseLayerBase layerBase, Vector2 hitPosition)
+        {
+            SetUpShieldEffect(layerBase, hitPosition, _shieldCollisionPoolId);
         }
 
         private void OnAsteroidHullDamaged(Vector2 hitPosition)
@@ -148,7 +151,7 @@ namespace GameSystems
             effect.SpriteRenderer.color = effect.Color;
 
             effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
-            effectTransform.localScale = shieldTransform.localScale;
+            effectTransform.localScale = shieldTransform.lossyScale;
 
             Vector2 local = shieldTransform.InverseTransformPoint(worldHitPos);
             local.x += 0.5f;
@@ -173,7 +176,7 @@ namespace GameSystems
                 var shieldTransform = effect.ShieldTransform;
                 var effectTransform = effect.Transform;
                 effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
-                effectTransform.localScale = shieldTransform.localScale;
+                effectTransform.localScale = shieldTransform.lossyScale;
                 effect.Color.a = effect.RemainingLifetime * _reversedEffectDuration;
                 effect.SpriteRenderer.color = effect.Color;
             }

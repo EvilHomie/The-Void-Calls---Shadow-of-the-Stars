@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Registries
 {
-    public class ShieldRepulsionRegistry : MonoBehaviour, IPreUpdateTickObserver
+    public class ShieldRepulsionRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public IReadOnlyCollection<(Rigidbody2D rb, Transform transform)> TrackedBodies => _trackedBodies;
 
@@ -19,7 +19,7 @@ namespace Registries
             gameFlowSystem.AddTickObserver(this);
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             Sync();
         }

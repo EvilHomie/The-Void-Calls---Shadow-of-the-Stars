@@ -1,12 +1,12 @@
 using DI;
 using Helpers;
 using Registries;
-using Ships;
+using UnityEngine;
 using Weapons;
 
 namespace GameSystems
 {
-    public class WeaponAttackSystem : GameSystemBase, IUpdateTickObserver
+    public class WeaponAttackSystem : GameSystemBase, ICoreUpdateTickObserver
     {
         private WeaponsBehaviour _weaponsBehaviour;
         private WeaponRegistry _weaponRegistry;
@@ -18,14 +18,12 @@ namespace GameSystems
             _weaponRegistry = weaponRegistry;
             _shipRegistry = shipRegistry;
             _weaponsBehaviour = new WeaponsBehaviour();
-            ActiveGameState = GameState.CoreGameplay;
         }
 
-        public void UpdateTick(float deltaTime)
+        public void CoreUpdateTick(float deltaTime)
         {
-            if (!SystemIsActive) return;
-
-            OnUpdateTick(deltaTime);
+            Aim(deltaTime);
+            ProceedShooting();
         }
 
         protected override void Subscribe()
@@ -53,12 +51,6 @@ namespace GameSystems
                 _weaponRegistry.RequestRemoveOnStopAttack(weapon);
                 _weaponsBehaviour.HandleCancelShoot(weapon);
             }
-        }
-
-        private void OnUpdateTick(float dTime)
-        {
-            Aim(dTime);
-            ProceedShooting();
         }
 
         private void Aim(float dTime)

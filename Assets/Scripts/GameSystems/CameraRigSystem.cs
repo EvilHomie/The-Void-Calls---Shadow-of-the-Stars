@@ -9,7 +9,7 @@ using MouseCursor = GameCamera.MouseCursor;
 
 namespace GameSystems
 {
-    public class CameraRigSystem : GameSystemBase, IUpdateTickObserver
+    public class CameraRigSystem : GameSystemBase, ICoreUpdateTickObserver
     {
         [MinMaxRangeSlider(1f, 10f)]
         [SerializeField] Vector2 _minMaxViewDistance;
@@ -34,7 +34,6 @@ namespace GameSystems
             _shipRegistry = shipRegistry;
             _mouseCursor = mouseCursor;
             _input = playerInput;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
         private void Start()
@@ -55,10 +54,8 @@ namespace GameSystems
             _input.ChangeZoomAction -= OnMouseScroll;
         }
 
-        public void UpdateTick(float deltaTime)
+        public void CoreUpdateTick(float deltaTime)
         {
-            if (!SystemIsActive) return;
-
             if (_currentOrthographicSize != _targetOrthographicSize)
             {
                 _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, deltaTime * _changeOrtSizeSpeed);

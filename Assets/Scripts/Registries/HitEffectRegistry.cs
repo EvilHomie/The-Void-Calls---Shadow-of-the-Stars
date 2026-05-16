@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Registries
 {
-    public class HitEffectRegistry : MonoBehaviour, IPreUpdateTickObserver
+    public class HitEffectRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public IReadOnlyCollection<HitEffectParticle> ActiveHitParticles => _activeHitParticles;
 
@@ -24,7 +24,7 @@ namespace Registries
             gameFlowSystem.AddTickObserver(this);
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             Sync();
         }

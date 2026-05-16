@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameSystems
 {
-    public class ShieldRepulsionSystem : GameSystemBase, IFixedUpdateTickObserver
+    public class ShieldRepulsionSystem : GameSystemBase, ICoreFixedUpdateTickObserver
     {
         [SerializeField] private float _shieldForce = 25f;
         [SerializeField] private float _deadZone = 0.02f;
@@ -15,13 +15,10 @@ namespace GameSystems
         public void Construct(ShieldRepulsionRegistry shieldRepulsionRegistry)
         {
             _shieldRepulsionRegistry = shieldRepulsionRegistry;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
-        public void FixedUpdateTick(float fixedDT)
+        public void CoreFixedUpdateTick(float fixedDT)
         {
-            if (!SystemIsActive) return;
-
             foreach ((Rigidbody2D rb, Transform transform) in _shieldRepulsionRegistry.TrackedBodies)
             {
                 ProcessRepulsion(rb, transform);

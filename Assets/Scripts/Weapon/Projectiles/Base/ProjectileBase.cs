@@ -8,6 +8,7 @@ namespace Projectiles
     public abstract class ProjectileBase : PoolObjectBase
     {
         public float DestroyTime;
+        public float HitTime;
         public LayerMask HitLayers;
         public DamageData DamageData;
         public HashSet<Collider2D> IgnoredColliders = new();

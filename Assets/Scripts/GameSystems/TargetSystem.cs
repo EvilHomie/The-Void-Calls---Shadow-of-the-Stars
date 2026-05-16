@@ -4,7 +4,7 @@ using Registries;
 
 namespace GameSystems
 {
-    public class TargetSystem : GameSystemBase, IPreUpdateTickObserver
+    public class TargetSystem : GameSystemBase, ICorePreUpdateTickObserver
     {
         private ShipRegistry _shipRegistry;
         private MouseCursor _mouseCursor;
@@ -14,21 +14,17 @@ namespace GameSystems
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
-            if (!SystemIsActive) return;
-
             var playerShip = _shipRegistry.PlayerShip;
-            ref var targetData = ref playerShip.TargetData;
-            targetData.Position = _mouseCursor.WorldPostition;
+            playerShip.TargetData.ShootPosition = _mouseCursor.WorldPostition;
 
             foreach (var ship in _shipRegistry.ShipsInFight)
             {
-                ref var shipTargetData = ref ship.TargetData;
-                shipTargetData.Position = shipTargetData.Transform.position;
+                var shipTargetData = ship.TargetData;
+                shipTargetData.ShootPosition = shipTargetData.Transform.position;
             }
         }
     }

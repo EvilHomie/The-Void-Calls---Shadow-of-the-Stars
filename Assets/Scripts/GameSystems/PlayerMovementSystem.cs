@@ -7,7 +7,7 @@ using MouseCursor = GameCamera.MouseCursor;
 
 namespace GameSystems
 {
-    public class PlayerMovementSystem : GameSystemBase, IFixedUpdateTickObserver
+    public class PlayerMovementSystem : GameSystemBase, ICoreFixedUpdateTickObserver
     {
         private const float EPS = 0.001f;
         private const float _minAcceleration = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") при модификации ускорения
@@ -36,7 +36,6 @@ namespace GameSystems
             _input = playerInput;
             _mouseCursor = mouseCursor;
             _smoothZoneMod = 1f / _smoothZoneTime;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
         protected override void Subscribe()
@@ -57,7 +56,7 @@ namespace GameSystems
             _input.ChangeBoostersState -= OnToogleBoosters;
         }
 
-        public void FixedUpdateTick(float fixedDT)
+        public void CoreFixedUpdateTick(float fixedDT)
         {
             Simulate(fixedDT);
         }
@@ -106,8 +105,6 @@ namespace GameSystems
 
         private void Simulate(float fixedDT)
         {
-            if (!SystemIsActive) return;
-
             var playerShip = _shipRegystry.PlayerShip;
             var mousePos = _mouseCursor.WorldPostition;
 

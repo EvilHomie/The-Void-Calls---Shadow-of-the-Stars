@@ -3,7 +3,7 @@ using Registries;
 
 namespace GameSystems
 {
-    public class HitParticlesBehaviourSystem : GameSystemBase, IUpdateTickObserver
+    public class HitParticlesBehaviourSystem : GameSystemBase, ICoreUpdateTickObserver
     {
         private HitEffectRegistry _hitEffectRegistry;
 
@@ -11,13 +11,10 @@ namespace GameSystems
         public void Construct(HitEffectRegistry hitParticleRegistry)
         {
             _hitEffectRegistry = hitParticleRegistry;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
-        public void UpdateTick(float deltaTime)
+        public void CoreUpdateTick(float deltaTime)
         {
-            if (!SystemIsActive) return;
-
             CheckActive();
         }
 

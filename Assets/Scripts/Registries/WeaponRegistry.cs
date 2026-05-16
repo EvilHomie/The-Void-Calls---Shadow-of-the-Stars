@@ -6,7 +6,7 @@ using Weapons;
 
 namespace Registries
 {
-    public class WeaponRegistry : MonoBehaviour, IPreUpdateTickObserver
+    public class WeaponRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public IReadOnlyCollection<WeaponBase> ActiveWeapons => _activeWeapons;
 
@@ -20,7 +20,7 @@ namespace Registries
             gameFlowSystem.AddTickObserver(this);
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             Sync();
         }

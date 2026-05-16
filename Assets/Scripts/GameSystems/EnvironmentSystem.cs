@@ -1,11 +1,10 @@
 using DI;
 using Environment;
-using Unity.Cinemachine;
 using UnityEngine;
 
 namespace GameSystems
 {
-    public class EnvironmentSystem : GameSystemBase, IUpdateTickObserver
+    public class EnvironmentSystem : GameSystemBase, ICoreUpdateTickObserver
     {
         private Vector3 Vector3One;
         private CameraRigSystem _cameraRigSystem;
@@ -22,7 +21,6 @@ namespace GameSystems
             _starryCanvasView = starryCanvasView;
             _cameraRigSystem = cameraRig;
             Vector3One = Vector3.one;
-            ActiveGameState = GameState.CoreGameplay;
         }
 
         protected override void AwakeInit()
@@ -32,7 +30,7 @@ namespace GameSystems
                 Init(layer);
             }
         }
-        public void UpdateTick(float deltaTime)
+        public void CoreUpdateTick(float deltaTime)
         {
             UpdateStarView(deltaTime);
         }

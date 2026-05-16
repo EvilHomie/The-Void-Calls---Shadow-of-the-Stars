@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Ships
 {
     [Serializable]
-    public struct TargetData
+    public class TargetData
     {
         public Transform Transform;
-        public Vector2 Position;
+        public Vector2 ShootPosition;
     }
 }

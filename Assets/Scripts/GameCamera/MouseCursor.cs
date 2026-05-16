@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace GameCamera
 {
-    public class MouseCursor : MonoBehaviour , IPreUpdateTickObserver
+    public class MouseCursor : MonoBehaviour , ICorePreUpdateTickObserver
     {
         [SerializeField] CursorConfig CoreGamePlayConfig;        
         
@@ -24,7 +24,7 @@ namespace GameCamera
             Cursor.SetCursor(CoreGamePlayConfig.CursorTexture, CoreGamePlayConfig.CursorHotspot, CursorMode.Auto);
         }
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             UpdatePositions();
         }

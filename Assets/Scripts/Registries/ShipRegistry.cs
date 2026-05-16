@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Registries
 {
-    public class ShipRegistry : MonoBehaviour, IPreUpdateTickObserver
+    public class ShipRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public ShipInstance PlayerShip => _playerShip;
         public IReadOnlyCollection<ShipInstance> OtherShips => _ships;
@@ -19,7 +19,7 @@ namespace Registries
         private readonly HashSet<ShipInstance> _shipsInFightToAdd = new(20);
         private readonly HashSet<ShipInstance> _shipsInFightToRemove = new(20);
 
-        public void PreUpdateTick()
+        public void CorePreUpdateTick()
         {
             Sync();
         }

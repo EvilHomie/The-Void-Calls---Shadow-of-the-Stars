@@ -15,6 +15,6 @@ MonoBehaviour:
   <Name>k__BackingField: S_MainEngine_MK1
   <Size>k__BackingField: 1
   <DirectThrust>k__BackingField: 1000
-  <ReverseThrust>k__BackingField: 500
+  <ReverseThrust>k__BackingField: 2000
   <BoostThrust>k__BackingField: 2000
   <BoostMaxTime>k__BackingField: 5
