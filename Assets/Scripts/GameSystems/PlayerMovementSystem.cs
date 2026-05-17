@@ -121,10 +121,11 @@ namespace GameSystems
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
             var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
             var directionToTarget = mousePos - shipPos;
+            var targetInsideShip = playerShip.HullCollider.OverlapPoint(mousePos);
 
             UpdateBoostersPower(fixedDT, movementStats, ref movementRuntimeData);
             HandleInput(fixedDT, ref movementRuntimeData);
-            HandleRotation(fixedDT, ref angularVelocity, directionToTarget, shipForward, movementStats, ref movementRuntimeData);
+            HandleRotation(fixedDT, ref angularVelocity, targetInsideShip, directionToTarget, shipForward, movementStats, ref movementRuntimeData);
             HandleMovement(fixedDT, ref linearVelocity, ref movementRuntimeData, movementStats, shipForward, shipRight);
 
             rb.angularVelocity = angularVelocity;
@@ -196,12 +197,11 @@ namespace GameSystems
             movementRuntimeData.DirectThrottle = 0;
         }
 
-        private void HandleRotation(float fixedDT, ref float angularVelocity, Vector2 direction, Vector2 shipForward, in MovementStats movementStats, ref MovementRuntimeData movementRuntimeData)
+        private void HandleRotation(float fixedDT, ref float angularVelocity, bool targetInsideShip, Vector2 direction, Vector2 shipForward, in MovementStats movementStats, ref MovementRuntimeData movementRuntimeData)
         {
             float maxSpeed = movementStats.RotateSpeed;
-            bool targetOutSideShip = direction.sqrMagnitude >= _minMouseDistanceSQR;
 
-            if (Mathf.Abs(angularVelocity) > maxSpeed || !targetOutSideShip) // только гашение если больше максимального или мышка на корабле
+            if (Mathf.Abs(angularVelocity) > maxSpeed || targetInsideShip) // только гашение если больше максимального или мышка на корабле
             {
                 angularVelocity = Mathf.MoveTowards(angularVelocity, 0f, maxSpeed * fixedDT);
                 //movementRuntimeData.RotatePower = -Mathf.Sign(angularVelocity);

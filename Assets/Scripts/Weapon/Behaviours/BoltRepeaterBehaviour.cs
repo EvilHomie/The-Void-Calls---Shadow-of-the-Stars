@@ -17,8 +17,9 @@ namespace Weapons
         public void ProcessShooting(BoltRepeater weapon)
         {
             ref var runTime = ref weapon.WeaponStats.Runtime;
+            var coreTime = GameFlowSystem.CoreTime;
 
-            if (GameFlowSystem.CoreTime <= runTime.NextShootTime)
+            if (coreTime <= runTime.NextShootTime)
             {
                 return;
             }
@@ -26,19 +27,24 @@ namespace Weapons
             var aim = weapon.AimStats;
             var config = weapon.WeaponStats.Config;
             var cached = weapon.WeaponStats.Cached;
-            var shootPosition = weapon.TargetData.ShootPosition;
+            var targetData = weapon.TargetData;
 
             var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, config.SpreadAngle);
-            Vector2 spawnPos = weapon.ShootPoint.position;
+            var spawnPos = weapon.ShootPoint.position;
             var shipVelocity = weapon.ShipRB.linearVelocity;
 
             var boltVelocity = shipVelocity + direction * config.ProjectileSpeed;
-            var distance = Vector2.Distance(shootPosition, spawnPos);
-            float speed = boltVelocity.magnitude;
+            var targetRelativeVelocity = boltVelocity - targetData.TargetVelocity;
 
-            float timeToTarget = distance / speed;
-            var hitTime = GameFlowSystem.CoreTime + timeToTarget;
-            var destroyTime = GameFlowSystem.CoreTime + cached.ProjectileLifeTime;
+            if (targetRelativeVelocity.sqrMagnitude < 0.0001f)
+            {
+                return;
+            }
+
+            var timeToAimPos = (targetData.TargetPosition - (Vector2)spawnPos).magnitude / targetRelativeVelocity.magnitude;
+
+            var hitTime = coreTime + timeToAimPos;
+            var destroyTime = coreTime + cached.ProjectileLifeTime;
 
             var shootData = new BoltWeaponShootData(weapon.PoolId, weapon.IgnoredColliders, destroyTime, hitTime, spawnPos, boltVelocity, direction, weapon.HitLayers, weapon.Damage);
 
@@ -49,3 +55,23 @@ namespace Weapons
         }
     }
 }
+
+
+
+
+//var distance = Vector2.Distance(aimPosition, spawnPos);
+
+//Vector2 toAim = (aimPosition - spawnPos).normalized;
+//float toAimSpeed = Vector2.Dot(boltVelocity, toAim);
+//var timeToAimPos = distance / toAimSpeed;
+
+//var timeToAimPos = (aimPosition - spawnPos).magnitude / boltVelocity.magnitude;
+
+/*
+ * 
+ * var boltForwardSpeed = Vector2.Dot(targetRelativeVelocity, direction);
+            var distance = Vector2.Distance(aimPosition, spawnPos);
+
+            var timeToAimPos = distance / boltForwardSpeed;
+ * 
+ * */

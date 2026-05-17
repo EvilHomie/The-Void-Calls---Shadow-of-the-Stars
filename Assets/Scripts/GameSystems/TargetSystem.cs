@@ -19,12 +19,16 @@ namespace GameSystems
         public void CorePreUpdateTick()
         {
             var playerShip = _shipRegistry.PlayerShip;
-            playerShip.TargetData.ShootPosition = _mouseCursor.WorldPostition;
+            var targetData = playerShip.TargetData;
+            targetData.TargetPosition = _mouseCursor.WorldPostition;
+            targetData.TargetVelocity = playerShip.Rigidbody.linearVelocity;
 
             foreach (var ship in _shipRegistry.ShipsInFight)
             {
                 var shipTargetData = ship.TargetData;
-                shipTargetData.ShootPosition = shipTargetData.Transform.position;
+                var targetRigidBody = shipTargetData.TargetRigidBody;
+                shipTargetData.TargetPosition = targetRigidBody.position;
+                shipTargetData.TargetVelocity = targetRigidBody.linearVelocity;
             }
         }
     }

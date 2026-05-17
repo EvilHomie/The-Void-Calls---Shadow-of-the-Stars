@@ -10116,11 +10116,12 @@ MonoBehaviour:
   - {fileID: 619849551031469362}
   - {fileID: 1360192019337194522}
   - {fileID: 9152525993583956532}
+  <HullCollider>k__BackingField: {fileID: 6443796434893769796}
   IsAttacking: 0
   ActiveWeaponGroup: 0
   TargetData:
     Transform: {fileID: 0}
-    Position: {x: 0, y: 0}
+    ShootPosition: {x: 0, y: 0}
   MovementStats:
     DirectMaxSpeed: 0
     DirectAcceleration: 0
@@ -20910,18 +20911,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2696112140653816411}
     m_Modifications:
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: <HitLayers>k__BackingField.m_Bits
-      value: 72064
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Energy
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Kinetic
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 720790560663544227, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
       value: 10
@@ -21067,6 +21056,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8fb4bf730f45d4b96ab2b129b1a1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullLayer
+--- !u!60 &6443796434893769796 stripped
+PolygonCollider2D:
+  m_CorrespondingSourceObject: {fileID: 4573583429473661979, guid: 39cc4ceead200ef4fa4c0d3805c49e4c, type: 3}
+  m_PrefabInstance: {fileID: 7355600101951567967}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7277760191885273891 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 210432265852457852, guid: 39cc4ceead200ef4fa4c0d3805c49e4c, type: 3}
@@ -21080,26 +21074,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 564893233740561079}
     m_Modifications:
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Energy
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 154731953666808260, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: WeaponStats.BaseStats.DamageMultipliers.Kinetic
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 214810940014344331, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 214810940014344331, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 214810940014344331, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 720790560663544227, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
       value: 10

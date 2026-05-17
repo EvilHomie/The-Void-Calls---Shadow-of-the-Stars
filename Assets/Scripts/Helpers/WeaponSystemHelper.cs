@@ -31,16 +31,17 @@ namespace Helpers
 
         public static void AimAtTarget(ShipInstance shipInstance, float dTime)
         {
-            Vector3 targetPos = shipInstance.TargetData.ShootPosition;
+            Vector2 targetPos = shipInstance.TargetData.TargetPosition;
 
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
                 ref var aimStats = ref weapon.AimStats;
                 var transform = weapon.Transform;
+                Vector2 weaponPosition = transform.position;
                 var maxRotateAngle = aimStats.MaxRotateAngle;
 
-                Vector3 targetDir = targetPos - transform.position;
+                Vector2 targetDir = targetPos - weaponPosition;
                 float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
 
                 float newAngle = Mathf.MoveTowardsAngle(transform.eulerAngles.z, targetAngle, aimStats.RotateSpeed * dTime);

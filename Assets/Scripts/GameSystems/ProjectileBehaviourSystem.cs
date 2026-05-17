@@ -53,21 +53,17 @@ namespace GameSystems
 
         private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
-            var projectile = _projectileRegistry.GetBolt(boltShootData.PoolId);
+            var projectile = _projectileRegistry.GetBolt(boltShootData.ProjectilePoolId);
             projectile.Position = boltShootData.FirePointPosition;
             projectile.Transform.position = boltShootData.FirePointPosition;
             projectile.Transform.up = boltShootData.Direction;
             projectile.Velocity = boltShootData.Velocity;
-            //projectile.VelocityNorm = boltShootData.Velocity.normalized;
             projectile.DestroyTime = boltShootData.DestroyTime;
             projectile.HitTime = boltShootData.HitTime;
             projectile.HitLayers = boltShootData.HitLayers;
             projectile.DamageData = boltShootData.DamageData;
             projectile.IgnoredColliders = boltShootData.IgnoredColliders;
             projectile.IsMissed = false;
-
-            //Debug.LogError(GameFlowSystem.CoreTime);
-            //Debug.LogError(boltShootData.HitTime);
         }
 
         private void MoveBolts(Bolt bolt, float deltaTime)
@@ -82,18 +78,13 @@ namespace GameSystems
                 return;
             }
 
+            //_projectileRegistry.RequestRemoveActiveProjectile(bolt);
+            //return;
+
+
             var hit = Physics2D.OverlapPoint(currentPosition, bolt.HitLayers);
 
-            if (hit == null)
-            {
-                bolt.IsMissed = true;
-                var nextPos = currentPosition + bolt.Velocity * deltaTime;
-                bolt.Position = nextPos;
-                bolt.Transform.position = nextPos;
-                return;
-            }
-
-            if (bolt.IgnoredColliders.Contains(hit))
+            if (hit == null || bolt.IgnoredColliders.Contains(hit))
             {
                 bolt.IsMissed = true;
                 var nextPos = currentPosition + bolt.Velocity * deltaTime;
@@ -105,32 +96,6 @@ namespace GameSystems
             hit.TryGetComponent(out DefenseLayerBase defenceLayer);
             EventBus.BoltHitAction?.Invoke(bolt, defenceLayer, currentPosition);
             _projectileRegistry.RequestRemoveActiveProjectile(bolt);
-
-
-            //if (GameFlowSystem.CoreTime > bolt.HitTime || bolt.IsMissed)
-            //{
-            //    var nextPos = currentPosition + bolt.Velocity * deltaTime;
-            //    bolt.Position = nextPos;
-            //    bolt.Transform.position = nextPos;
-            //    return;
-            //}
-
-
-            //var hit = Physics2D.OverlapPoint(currentPosition, bolt.HitLayers);
-
-            //if (hit == null || bolt.IgnoredColliders.Contains(hit))
-            //{
-            //    bolt.IsMissed = true;
-            //    var nextPos = currentPosition + bolt.Velocity * deltaTime;
-            //    bolt.Position = nextPos;
-            //    bolt.Transform.position = nextPos;
-            //    return;
-            //}
-
-            //hit.TryGetComponent(out DefenseLayerBase defenceLayer);
-
-            //EventBus.BoltHitAction?.Invoke(bolt, defenceLayer, currentPosition);
-            //_projectileRegistry.RequestRemoveActiveProjectile(bolt);
         }
 
         private void ProcessStraightMissile(StraightMissile straightMissile)

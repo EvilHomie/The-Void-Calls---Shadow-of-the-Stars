@@ -6,7 +6,8 @@ namespace Ships
     [Serializable]
     public class TargetData
     {
-        public Transform Transform;
-        public Vector2 ShootPosition;
+        public Rigidbody2D TargetRigidBody;
+        public Vector2 TargetPosition;
+        public Vector2 TargetVelocity;
     }
 }

@@ -157,8 +157,8 @@ MonoBehaviour:
         Energy: 1
         Kinetic: 1
       DamageMultipliers:
-        Energy: 1
-        Kinetic: 1
+        Energy: 3
+        Kinetic: 3
         Asteroid: 0.2
     Config:
       FireRate: 7
@@ -199,7 +199,7 @@ Transform:
   m_GameObject: {fileID: 2854612594575193005}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1686, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1686, z: 0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
