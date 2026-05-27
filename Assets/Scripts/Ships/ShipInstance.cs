@@ -17,7 +17,7 @@ namespace Ships
 
         public bool IsAttacking;
         public WeaponGroup ActiveWeaponGroup;
-        public TargetData TargetData;
+        public AimData AimData;
         public MovementStats MovementStats;
         public MovementRuntimeData MovementRuntimeData;
 

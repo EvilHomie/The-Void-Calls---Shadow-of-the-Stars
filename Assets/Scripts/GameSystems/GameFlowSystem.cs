@@ -62,7 +62,7 @@ namespace GameSystems
                 CoreDeltaTimeTick = coreDeltaTimeTick;
                 foreach (var observer in _corePreUpdateTickObservers) observer.CorePreUpdateTick();
                 foreach (var observer in _coreUpdateTickObservers) observer.CoreUpdateTick(coreDeltaTimeTick);
-            }
+            }            
         }
 
         private void FixedUpdate()

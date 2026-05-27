@@ -4,10 +4,9 @@ using UnityEngine;
 namespace Ships
 {
     [Serializable]
-    public class TargetData
+    public class AimData
     {
         public Rigidbody2D TargetRigidBody;
-        public Vector2 TargetPosition;
-        public Vector2 TargetVelocity;
+        public Vector2 AimPosition;
     }
 }

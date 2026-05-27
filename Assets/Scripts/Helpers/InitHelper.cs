@@ -161,7 +161,7 @@ namespace Helpers
                 //var spriteOrder = slot.WeaponMountLayer == WeaponMountLayer.UnderHull ? SpriteSortingOrders.WeaponsUnderHull : SpriteSortingOrders.WeaponsOnHull;
                 //weapon.BodySprite.sortingOrder = spriteOrder;
                 UpdateWeaponStats(weapon);
-                weapon.Init(shipInstance.TargetData);
+                weapon.Init(shipInstance.AimData);
 
                 if (weapon is IShipVelocityAware aware)
                 {

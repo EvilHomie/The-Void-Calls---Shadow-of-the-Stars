@@ -31,7 +31,7 @@ namespace Helpers
 
         public static void AimAtTarget(ShipInstance shipInstance, float dTime)
         {
-            Vector2 targetPos = shipInstance.TargetData.TargetPosition;
+            Vector2 targetPos = shipInstance.AimData.AimPosition;
 
             foreach (var slot in shipInstance.WeaponSlots)
             {

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4695306909407032288}
   - component: {fileID: -2169160166794733236}
   m_Layer: 19
-  m_Name: Bolt_Yellow
+  m_Name: S_Bolt_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
