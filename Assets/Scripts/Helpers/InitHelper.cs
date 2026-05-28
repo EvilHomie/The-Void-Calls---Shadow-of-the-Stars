@@ -158,8 +158,6 @@ namespace Helpers
             {
                 var weapon = slot.Weapon;
                 weapon.IgnoredColliders = shipInstance.IgnoredColliders;
-                //var spriteOrder = slot.WeaponMountLayer == WeaponMountLayer.UnderHull ? SpriteSortingOrders.WeaponsUnderHull : SpriteSortingOrders.WeaponsOnHull;
-                //weapon.BodySprite.sortingOrder = spriteOrder;
                 UpdateWeaponStats(weapon);
                 weapon.Init(shipInstance.AimData);
 

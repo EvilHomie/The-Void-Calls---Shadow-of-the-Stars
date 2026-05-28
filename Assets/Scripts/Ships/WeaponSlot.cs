@@ -7,7 +7,7 @@ namespace Ships
     public class WeaponSlot : MonoBehaviour
     {
         public WeaponGroup WeaponGroup;
-        public WeaponMountLayer WeaponMountLayer;
+        public WeaponMountType WeaponMountType;
         [field: SerializeField] public WeaponBase Weapon { get; set; }
     }
 }
@@ -23,8 +23,8 @@ public enum WeaponGroup
     Group5 = 1 << 4,
 }
 
-public enum WeaponMountLayer
+public enum WeaponMountType
 {
-    UnderHull,
-    OnHull
+    MainWeapon,
+    Turret
 }

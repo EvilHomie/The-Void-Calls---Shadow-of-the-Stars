@@ -6,7 +6,6 @@ namespace Weapons
     {
         public override WeaponType WeaponType => WeaponType.MiningDrill;
         [field: SerializeField] public LineRenderer BeamLineLR { get; private set; }
-        [field: SerializeField] public Transform BeamLineTransform { get; private set; }
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
 
         public MiningDrillStatsData WeaponStats;

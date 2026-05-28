@@ -4,7 +4,7 @@ using Registries;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using Weapons;
 
 namespace GameSystems
 {
@@ -17,9 +17,9 @@ namespace GameSystems
         [SerializeField] Transform leadMarkerPrefab;
         [SerializeField] Transform weaponAimMarkerPrefab;
 
-
         private Transform _leadMarker;
         private List<Transform> _weaponsAimMarkers;
+        private List<WeaponAimData>  _weaponAimDatas;
 
         [Inject]
         public void Construct(ShipRegistry shipRegistry, MouseCursor mouseCursor, GameFlowSystem gameFlowSystem)
@@ -27,33 +27,67 @@ namespace GameSystems
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;
             _gameFlowSystem = gameFlowSystem;
-
-
-            
-
-            gameFlowSystem.GameStateChanged += OnGameStateChanged;
         }
+
+        protected override void AwakeInit()
+        {
+            base.AwakeInit();
+            _weaponsAimMarkers = new();
+            _weaponAimDatas = new();
+
+            for (int i = 0; i < WorldConfig.MaxMainWeaponSlotsCount; i++)
+            {
+                var weaponMarker = Instantiate(weaponAimMarkerPrefab);
+                weaponMarker.gameObject.SetActive(false);
+                _weaponsAimMarkers.Add(weaponMarker);                
+            }
+
+            _leadMarker = Instantiate(leadMarkerPrefab);
+            _leadMarker.gameObject.SetActive(false);
+        }
+
+        protected override void Subscribe()
+        {
+            base.Subscribe();
+            _gameFlowSystem.GameStateChanged += OnGameStateChanged;
+        }
+
+        protected override void Unsubscribe()
+        {
+            base.Unsubscribe();
+            _gameFlowSystem.GameStateChanged -= OnGameStateChanged;
+        }
+
 
         private void OnGameStateChanged(GameState state)
         {
-            if (state == GameState.CoreGameplay)
+            if (state != GameState.CoreGameplay)
             {
-                if(_leadMarker == null) _leadMarker = Instantiate(leadMarkerPrefab);
-
-                if (_weaponsAimMarkers == null)
+                foreach (var marker in _weaponsAimMarkers)
                 {
-                    _weaponsAimMarkers = new();
-                    var playerShip = _shipRegistry.PlayerShip;
-
-                    for (int i = 0; i < playerShip.WeaponSlots.Length; i++)
-                    {
-
-                    }
+                    marker.gameObject.SetActive(false);
                 }
+
+                _leadMarker.gameObject.SetActive(false);
             }
             else
             {
-                
+                var playerShip = _shipRegistry.PlayerShip;
+
+                for (int i = 0; i < playerShip.WeaponSlots.Count; i++)
+                {
+                    var weapon = playerShip.WeaponSlots[i].Weapon;
+                    var weaponAimData = new WeaponAimData()
+                    {
+                        ShootPoint = weapon.ShootPoint,
+
+                    };
+
+                    if (weapon is BoltRepeater boltRepeater)
+                    {
+                        var projectileSpeed = boltRepeater.WeaponStats.Config.ProjectileSpeed;
+                    }
+                }
             }
         }
 
@@ -72,5 +106,14 @@ namespace GameSystems
             }
         }
     }
+}
+
+[Serializable]
+public struct WeaponAimData
+{
+    public Transform ShootPoint;
+    public float ProjectileSpeed;
+    public float MaxDistance;
+    public Transform AimPoint;
 }
 

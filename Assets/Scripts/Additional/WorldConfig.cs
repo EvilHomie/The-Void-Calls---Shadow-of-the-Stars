@@ -16,6 +16,7 @@ public static class WorldConfig
     public const float ClusterAsteroidLinearDamping = 0.2f;
     public const float DriftingAsteroidAngularDamping = 0;
     public const float DriftingAsteroidLinearDamping = 0;
+    public const int MaxMainWeaponSlotsCount = 5;
 
     public static readonly Dictionary<AsteroidType, float> AsteroidMassModByType = new() // доп модификатор массы в зависимости от типа
     {

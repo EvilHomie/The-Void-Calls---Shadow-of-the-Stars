@@ -36,7 +36,7 @@ namespace Weapons
             var boltSelfVelocity = direction * projectileSpeed;
 
             var boltVelocity = shipVelocity + boltSelfVelocity;
-            float timeToAimPos = (aimData.AimPosition - (Vector2)spawnPos).magnitude / projectileSpeed;
+            float timeToAimPos = (aimData.AimPosition - (Vector2)spawnPos).magnitude * cached.InvProjectileSpeed;
 
             var hitTime = coreTime + timeToAimPos;
             var destroyTime = coreTime + cached.ProjectileLifeTime;

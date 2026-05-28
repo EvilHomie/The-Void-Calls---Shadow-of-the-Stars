@@ -8,7 +8,7 @@ namespace GameCamera
 {
     public class MouseCursor : MonoBehaviour , ICorePreUpdateTickObserver
     {
-        [SerializeField] CursorConfig CoreGamePlayConfig;        
+        [SerializeField] CursorConfig CursorConfig;        
         
         public Vector2 ScreenPostition;
         public Vector2 WorldPostition;
@@ -21,7 +21,7 @@ namespace GameCamera
             _camera = camera;
             _transform = transform;
             gameFlowSystem.AddTickObserver(this);
-            Cursor.SetCursor(CoreGamePlayConfig.CursorTexture, CoreGamePlayConfig.CursorHotspot, CursorMode.Auto);
+            Cursor.SetCursor(CursorConfig.CursorTexture, CursorConfig.CursorHotspot, CursorMode.Auto);
         }
 
         public void CorePreUpdateTick()
