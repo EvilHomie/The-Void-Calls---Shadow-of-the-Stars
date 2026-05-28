@@ -170,29 +170,27 @@ namespace Helpers
 
         public static void UpdateWeaponStats(WeaponBase weaponBase)
         {
+            ref var baseStats = ref weaponBase.BaseStats;
+
             if (weaponBase is BoltRepeater boltRepeater)
             {
-                ref var weaponStats = ref boltRepeater.WeaponStats;
-                weaponStats.Cached.ShootDelay = 1f / weaponStats.Config.FireRate;
-                var invProjectileSpeed = 1f / weaponStats.Config.ProjectileSpeed;
-                weaponStats.Cached.InvProjectileSpeed = invProjectileSpeed;
-                weaponStats.Cached.ProjectileLifeTime = boltRepeater.AimStats.MaxDistance * invProjectileSpeed;
+                ref var weaponData = ref boltRepeater.Data;                
+                weaponData.ShootDelay = 1f / weaponData.FireRate;
+                var invProjectileSpeed = 1f / weaponData.ProjectileSpeed;
+                weaponData.InvProjectileSpeed = invProjectileSpeed;
+                weaponData.ProjectileLifeTime = baseStats.MaxDistance * invProjectileSpeed;
             }
             else if ((weaponBase is MiningDrill miningDrill))
             {
-                ref var weaponStats = ref miningDrill.WeaponStats;
-                weaponStats.Cached.HitDelay = 1f / weaponStats.Config.HitRate;
-                weaponStats.Cached.NoHitTargetPoint = Vector2.up * weaponBase.AimStats.MaxDistance;
+                ref var weaponData = ref miningDrill.Data;
+                weaponData.HitDelay = 1f / weaponData.HitRate;
+                weaponData.NoHitTargetPoint = Vector2.up * baseStats.MaxDistance;
             }
 
-
-            var baseDamage = weaponBase.BaseDamage;
-            var multipliers = weaponBase.DamageMultipliers;
-
-            ref var damage = ref weaponBase.Damage;
-            damage.Energy = multipliers.Energy * baseDamage.Energy;
-            damage.Kinetic = multipliers.Kinetic * baseDamage.Kinetic;
-            damage.Asteroid = multipliers.Asteroid * (damage.Energy + damage.Kinetic);
+            ref var damage = ref weaponBase.CurrentDamageData;
+            damage.Energy = baseStats.EnergyDamageMultipliers * baseStats.BaseDamageEnergy;
+            damage.Kinetic = baseStats.KineticDamageMultipliers * baseStats.BaseDamageKinetic;
+            damage.Asteroid = baseStats.AsteroidDamageMultipliers * (damage.Energy + damage.Kinetic);
         }
 
         public static void RegisterShip(ShipInstance shipInstance, ShipRegistry shipRegistry, bool asPlayer)

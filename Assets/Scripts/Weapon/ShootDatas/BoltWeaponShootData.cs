@@ -13,9 +13,9 @@ namespace Weapons
         public readonly Vector2 Velocity;
         public readonly Vector2 Direction;
         public readonly LayerMask HitLayers;
-        public readonly DamageData DamageData;
+        public readonly CurrentDamageData DamageData;
 
-        public BoltWeaponShootData(uint poolId, HashSet<Collider2D> ignoredColliders, float destroyTime, float hitTime, Vector3 firePointPosition, Vector2 velocity, Vector2 direction, LayerMask hitLayers, DamageData damageData)
+        public BoltWeaponShootData(uint poolId, HashSet<Collider2D> ignoredColliders, float destroyTime, float hitTime, Vector3 firePointPosition, Vector2 velocity, Vector2 direction, LayerMask hitLayers, CurrentDamageData damageData)
         {
             IgnoredColliders = ignoredColliders;
             HitLayers = hitLayers;

@@ -85,7 +85,7 @@ namespace GameSystems
 
                     if (weapon is BoltRepeater boltRepeater)
                     {
-                        var projectileSpeed = boltRepeater.WeaponStats.Config.ProjectileSpeed;
+                        var projectileSpeed = boltRepeater.Data.ProjectileSpeed;
                     }
                 }
             }

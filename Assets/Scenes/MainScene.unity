@@ -29511,7 +29511,6 @@ GameObject:
   - component: {fileID: 2650323218396151681}
   - component: {fileID: 8239755973947572945}
   - component: {fileID: 2263259751575964407}
-  - component: {fileID: 6054430268938156381}
   - component: {fileID: 1725231478009798267}
   m_Layer: 10
   m_Name: M_Ship_Corvette_1
@@ -34737,7 +34736,7 @@ PrefabInstance:
     - target: {fileID: 4834252222614990839, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: targetRb
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8239755973947572945}
     - target: {fileID: 4834252222614990839, guid: d0326aa474b4af743a546307d6a8c775, type: 3}
       propertyPath: LeadMarkerTransform
       value: 
@@ -35964,40 +35963,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49788d04f724094a852ecb1e5ff207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+    BaseDamageEnergy: 0
+    BaseDamageKinetic: 0
+    EnergyDamageMultipliers: 0
+    KineticDamageMultipliers: 0
+    AsteroidDamageMultipliers: 0
+  CurrentDamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
   <Size>k__BackingField: 0
+  <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_MiningDrill_Mk1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 6144
   <Transform>k__BackingField: {fileID: 5608015294395564607}
-  <BodySprite>k__BackingField: {fileID: 9009802779365123}
+  <ShootPoint>k__BackingField: {fileID: 0}
+  Data:
+    HitRate: 0
+    NextHitTime: 0
+    HitDelay: 0
+    NoHitTargetPoint: {x: 0, y: 0}
   <BeamLineLR>k__BackingField: {fileID: 0}
-  <BeamLineTransform>k__BackingField: {fileID: 0}
   <ShootSpotPS>k__BackingField: {fileID: 0}
-  WeaponStats:
-    BaseStats:
-      AimStats:
-        MaxDistance: 3
-        MaxRotateAngle: 25
-        RotateSpeed: 45
-      BaseDamage:
-        Energy: 1
-        Kinetic: 1
-      DamageMultipliers:
-        Energy: 0.5
-        Kinetic: 0.5
-        Asteroid: 4
-    Config:
-      HitRate: 10
-    Runtime:
-      NextHitTime: 0
-    Cached:
-      HitDelay: 0
-      NoHitTargetPoint: {x: 0, y: 0}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
 --- !u!4 &2650323218396151681
 Transform:
   m_ObjectHideFlags: 0
@@ -36143,43 +36136,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+    BaseDamageEnergy: 0
+    BaseDamageKinetic: 0
+    EnergyDamageMultipliers: 0
+    KineticDamageMultipliers: 0
+    AsteroidDamageMultipliers: 0
+  CurrentDamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
   <Size>k__BackingField: 0
+  <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
   <Transform>k__BackingField: {fileID: 8579177336568868412}
-  <BodySprite>k__BackingField: {fileID: 5050456178075481365}
+  <ShootPoint>k__BackingField: {fileID: 4096293797574829357}
+  Data:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+    NextShootTime: 0
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 4037891060208201413}
-  <ShootPoint>k__BackingField: {fileID: 4096293797574829357}
-  WeaponStats:
-    BaseStats:
-      AimStats:
-        MaxDistance: 10
-        MaxRotateAngle: 15
-        RotateSpeed: 60
-      BaseDamage:
-        Energy: 1
-        Kinetic: 1
-      DamageMultipliers:
-        Energy: 3
-        Kinetic: 3
-        Asteroid: 0.2
-    Config:
-      FireRate: 7
-      SpreadAngle: 1
-      ProjectileSpeed: 5
-    Runtime:
-      NextShootTime: 0
-    Cached:
-      ShootDelay: 0
-      InvProjectileSpeed: 0
-      ProjectileLifeTime: 0
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
 --- !u!4 &2707935566826505324
 Transform:
   m_ObjectHideFlags: 0
@@ -57600,30 +57587,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!114 &6054430268938156381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 692353736489868773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c33a3d0d2d612784386e0986c090d44c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  targetRb: {fileID: 0}
-  playerRb: {fileID: 8239755973947572945}
-  weapons:
-  - ShootPoint: {fileID: 1445230320672182992}
-    ProjectileSpeed: 15
-    MaxDistance: 10
-    AimPoint: {fileID: 1771269189}
-  - ShootPoint: {fileID: 1987454363350880619}
-    ProjectileSpeed: 15
-    MaxDistance: 10
-    AimPoint: {fileID: 427629216}
-  LeadMarkerTransform: {fileID: 1021032003}
 --- !u!50 &6097978417341986021
 Rigidbody2D:
   serializedVersion: 5
@@ -62782,40 +62745,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49788d04f724094a852ecb1e5ff207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+    BaseDamageEnergy: 0
+    BaseDamageKinetic: 0
+    EnergyDamageMultipliers: 0
+    KineticDamageMultipliers: 0
+    AsteroidDamageMultipliers: 0
+  CurrentDamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
   <Size>k__BackingField: 0
+  <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_MiningDrill_Mk1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 6144
   <Transform>k__BackingField: {fileID: 3530979470805890646}
-  <BodySprite>k__BackingField: {fileID: 9003576855061216106}
+  <ShootPoint>k__BackingField: {fileID: 0}
+  Data:
+    HitRate: 0
+    NextHitTime: 0
+    HitDelay: 0
+    NoHitTargetPoint: {x: 0, y: 0}
   <BeamLineLR>k__BackingField: {fileID: 3450847063860450840}
-  <BeamLineTransform>k__BackingField: {fileID: 2288202762215306691}
   <ShootSpotPS>k__BackingField: {fileID: 5627989154346405971}
-  WeaponStats:
-    BaseStats:
-      AimStats:
-        MaxDistance: 3
-        MaxRotateAngle: 25
-        RotateSpeed: 45
-      BaseDamage:
-        Energy: 1
-        Kinetic: 1
-      DamageMultipliers:
-        Energy: 0.5
-        Kinetic: 0.5
-        Asteroid: 4
-    Config:
-      HitRate: 10
-    Runtime:
-      NextHitTime: 0
-    Cached:
-      HitDelay: 0
-      NoHitTargetPoint: {x: 0, y: 0}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
 --- !u!1 &6483344738947697867
 GameObject:
   m_ObjectHideFlags: 0
@@ -62921,43 +62878,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+    BaseDamageEnergy: 0
+    BaseDamageKinetic: 0
+    EnergyDamageMultipliers: 0
+    KineticDamageMultipliers: 0
+    AsteroidDamageMultipliers: 0
+  CurrentDamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
   <Size>k__BackingField: 0
+  <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
   <Transform>k__BackingField: {fileID: 677628287182309316}
-  <BodySprite>k__BackingField: {fileID: 4070941946390732013}
+  <ShootPoint>k__BackingField: {fileID: 5093785044105006293}
+  Data:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+    NextShootTime: 0
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 5071422090283419453}
-  <ShootPoint>k__BackingField: {fileID: 5093785044105006293}
-  WeaponStats:
-    BaseStats:
-      AimStats:
-        MaxDistance: 10
-        MaxRotateAngle: 15
-        RotateSpeed: 60
-      BaseDamage:
-        Energy: 1
-        Kinetic: 1
-      DamageMultipliers:
-        Energy: 3
-        Kinetic: 3
-        Asteroid: 0.2
-    Config:
-      FireRate: 7
-      SpreadAngle: 1
-      ProjectileSpeed: 5
-    Runtime:
-      NextShootTime: 0
-    Cached:
-      ShootDelay: 0
-      InvProjectileSpeed: 0
-      ProjectileLifeTime: 0
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
 --- !u!1 &6626711189091592387
 GameObject:
   m_ObjectHideFlags: 0
@@ -77903,43 +77854,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+    BaseDamageEnergy: 0
+    BaseDamageKinetic: 0
+    EnergyDamageMultipliers: 0
+    KineticDamageMultipliers: 0
+    AsteroidDamageMultipliers: 0
+  CurrentDamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
   <Size>k__BackingField: 0
+  <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
   <Transform>k__BackingField: {fileID: 2501793417437308540}
-  <BodySprite>k__BackingField: {fileID: 1414597215990299989}
+  <ShootPoint>k__BackingField: {fileID: 7885677670251588973}
+  Data:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+    NextShootTime: 0
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 7907761330447804037}
-  <ShootPoint>k__BackingField: {fileID: 7885677670251588973}
-  WeaponStats:
-    BaseStats:
-      AimStats:
-        MaxDistance: 10
-        MaxRotateAngle: 25
-        RotateSpeed: 60
-      BaseDamage:
-        Energy: 1
-        Kinetic: 1
-      DamageMultipliers:
-        Energy: 3
-        Kinetic: 3
-        Asteroid: 0.2
-    Config:
-      FireRate: 7
-      SpreadAngle: 1
-      ProjectileSpeed: 15
-    Runtime:
-      NextShootTime: 0
-    Cached:
-      ShootDelay: 0
-      InvProjectileSpeed: 0
-      ProjectileLifeTime: 0
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
 --- !u!212 &8163834894295238616
 SpriteRenderer:
   serializedVersion: 2
@@ -83345,43 +83290,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BaseStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+    BaseDamageEnergy: 0
+    BaseDamageKinetic: 0
+    EnergyDamageMultipliers: 0
+    KineticDamageMultipliers: 0
+    AsteroidDamageMultipliers: 0
+  CurrentDamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
   <Size>k__BackingField: 0
+  <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
   <Transform>k__BackingField: {fileID: 3252304528713491911}
-  <BodySprite>k__BackingField: {fileID: 2034235922329239278}
+  <ShootPoint>k__BackingField: {fileID: 7130650016180154070}
+  Data:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+    NextShootTime: 0
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 7071959211063059774}
-  <ShootPoint>k__BackingField: {fileID: 7130650016180154070}
-  WeaponStats:
-    BaseStats:
-      AimStats:
-        MaxDistance: 10
-        MaxRotateAngle: 25
-        RotateSpeed: 60
-      BaseDamage:
-        Energy: 1
-        Kinetic: 1
-      DamageMultipliers:
-        Energy: 3
-        Kinetic: 3
-        Asteroid: 0.2
-    Config:
-      FireRate: 7
-      SpreadAngle: 1
-      ProjectileSpeed: 15
-    Runtime:
-      NextShootTime: 0
-    Cached:
-      ShootDelay: 0
-      InvProjectileSpeed: 0
-      ProjectileLifeTime: 0
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
 --- !u!4 &9203485056013651863
 Transform:
   m_ObjectHideFlags: 0

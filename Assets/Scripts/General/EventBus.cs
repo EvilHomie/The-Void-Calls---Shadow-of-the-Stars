@@ -11,7 +11,7 @@ namespace GameSystems
         public static Action<WeaponBase, bool> WeaponChangeAttackStateAction;
 
         // делегаты для лучего оружия (без промежуточных элементов по типу снаряда). Хит регистрируется сразу в оружии.
-        public delegate void BeamHitDelegate(in DamageData damageData , DefenseLayerBase layer, Vector2 position);
+        public delegate void BeamHitDelegate(in CurrentDamageData damageData , DefenseLayerBase layer, Vector2 position);
         public static BeamHitDelegate BeamHitAction;
 
 
