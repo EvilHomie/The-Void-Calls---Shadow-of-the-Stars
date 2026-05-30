@@ -3,15 +3,18 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeater : WeaponBase, IShipVelocityAware
+    public class BoltRepeater : WeaponBase, IProjectileWeapon
     {
-        public BoltWeaponData Data;
+        [HideInInspector] public BoltWeaponRuntimeData RuntimeData;
+
+        [field: SerializeField] public float FireRate { get; private set; }
+        [field: SerializeField] public float SpreadAngle { get; private set; }
+        [field: SerializeField] public float ProjectileSpeed { get; private set; }
 
         [field: SerializeField] PoolReference projectilePool;
-        [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }        
+        [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         public Rigidbody2D ShipRB { get; private set; }
         public uint PoolId { get; private set; }
-
         public void SetShipRigidbody(Rigidbody2D rb)
         {
             ShipRB = rb;
@@ -20,15 +23,11 @@ namespace Weapons
     }
 
     [Serializable]
-    public struct BoltWeaponData
+    public struct BoltWeaponRuntimeData
     {
-        [Header("CONFIG")]
-        public float FireRate;
-        public float SpreadAngle;
-        public float ProjectileSpeed;
-        [Header("RUNTIMEDATA")]
         public float NextShootTime;
         public float ShootDelay;
+        public float ProjectileSpeed;
         public float InvProjectileSpeed;
         public float ProjectileLifeTime;
     }

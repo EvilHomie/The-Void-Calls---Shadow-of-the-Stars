@@ -6,8 +6,7 @@ namespace Weapons
 {
     public class MiningDrillBehaviour : IWeaponBehaviour<MiningDrill>
     {
-        private static readonly RaycastHit2D[] _beamHits = new RaycastHit2D[16];
-        private static readonly Collider2D[] _overlapHits = new Collider2D[16];
+        private Vector2 _vector2Up = Vector2.up;
         public void HandleStartShoot(MiningDrill weapon)
         {
             weapon.BeamLineLR.enabled = true;
@@ -23,95 +22,33 @@ namespace Weapons
 
         public void ProcessShooting(MiningDrill weapon)
         {
-            //ref var aimStats = ref weapon.AimStats;
+            ref var aimStats = ref weapon.AimStats;
+            ref var data = ref weapon.RuntimeData;
+            ref var shootPointData = ref weapon.ShootPointData;
+            var aimData = weapon.AimData;
 
-            //var beamTransform = weapon.BeamLineTransform;
-            //var startPosition = beamTransform.position;
-            //var direction = beamTransform.up;
+            var distanceToAimPosition = Vector2.Distance(aimData.AimPosition, shootPointData.Position);
+            var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
+            var localHitPos = _vector2Up * aimDistance;
+            weapon.BeamLineLR.SetPosition(1, localHitPos);
 
-            //int ignoredCount = 0;
+            if (GameFlowSystem.CoreTime < data.NextHitTime) return;
 
-            //int overlapCount = Physics2D.OverlapPointNonAlloc(startPosition, _overlapHits);
+            Vector2 worldHitPos = weapon.ShootPoint.TransformPoint(localHitPos);
+            var hit = Physics2D.OverlapPoint(worldHitPos, weapon.HitLayers);
 
-            //for (int i = 0; i < overlapCount; i++)
-            //{
-            //    var collider = _overlapHits[i];
+            if (hit == null || weapon.IgnoredColliders.Contains(hit)) return;
+            
+            var hitDelay = data.HitDelay;
+            data.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
 
-            //    if (!collider.TryGetComponent(out DefenseLayerBase layer)) continue;
+            var damage = weapon.DamageData;
+            damage.Energy *= hitDelay;
+            damage.Kinetic *= hitDelay;
+            damage.Asteroid *= hitDelay;
 
-            //    if (layer.OwnerId == weapon.OwnerId || layer.LayerType == DefenseLayerType.Shield)
-            //    {
-            //        _overlapHits[ignoredCount] = collider;
-            //        ignoredCount++;
-            //    }
-            //}
-
-            //Vector2 endPosition = startPosition + direction * aimStats.MaxDistance;
-            //int hitCount = Physics2D.LinecastNonAlloc(startPosition, endPosition, _beamHits, weapon.HitLayers);
-
-            //Collider2D bestCollider = null;
-            //Vector2 bestHitPos = weapon.WeaponStats.Cached.NoHitTargetPoint;
-            //int bestPriority = int.MaxValue;
-
-            //for (int i = 0; i < hitCount; i++)
-            //{
-            //    var hit = _beamHits[i];
-            //    var collider = hit.collider;
-            //    bool ignored = false;
-
-            //    for (int j = 0; j < ignoredCount; j++)
-            //    {
-            //        if (_overlapHits[j] == collider)
-            //        {
-            //            ignored = true;
-            //            break;
-            //        }
-            //    }
-
-            //    if (ignored) continue;
-
-            //    int priority;
-            //    int layer = collider.gameObject.layer;
-
-            //    if (layer == LayersId.ShieldLayer) priority = 0;
-            //    else if (layer == LayersId.ArmorLayer) priority = 1;
-            //    else priority = 2;
-
-            //    if (priority < bestPriority)
-            //    {
-            //        bestPriority = priority;
-            //        bestCollider = hit.collider;
-            //        bestHitPos = hit.point;
-            //    }
-            //}
-
-            //if (bestCollider == null)
-            //{
-            //    weapon.BeamLineLR.SetPosition(1, bestHitPos);
-            //    return;
-            //}
-
-            //bestCollider.TryGetComponent(out DefenseLayerBase hitLayer);
-
-            //ref var runTime = ref weapon.WeaponStats.Runtime;
-
-            //if (runTime.NextHitTime < GameFlowSystem.CoreTime)
-            //{
-            //    var hitDelay = weapon.WeaponStats.Cached.HitDelay;
-
-            //    runTime.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
-
-            //    var damage = weapon.Damage;
-
-            //    damage.Energy *= hitDelay;
-            //    damage.Kinetic *= hitDelay;
-            //    damage.Asteroid *= hitDelay;
-
-            //    EventBus.BeamHitAction?.Invoke(damage, hitLayer, bestHitPos);
-            //}
-
-            //Vector2 localHitPos = beamTransform.InverseTransformPoint(bestHitPos);
-            //weapon.BeamLineLR.SetPosition(1, localHitPos);
+            hit.TryGetComponent(out DefenseLayerBase defenceLayer);
+            EventBus.BeamHitAction?.Invoke(damage, defenceLayer, worldHitPos);
         }
     }
 }

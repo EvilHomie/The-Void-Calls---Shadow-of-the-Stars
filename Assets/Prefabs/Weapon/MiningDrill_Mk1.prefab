@@ -5034,29 +5034,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49788d04f724094a852ecb1e5ff207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseStats:
-    MaxDistance: 10
-    MaxRotateAngle: 25
-    RotateSpeed: 45
-    BaseDamageEnergy: 10
-    BaseDamageKinetic: 5
-    EnergyDamageMultipliers: 2
-    KineticDamageMultipliers: 1
-    AsteroidDamageMultipliers: 2
-  CurrentDamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_MiningDrill_Mk1
   <HitLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 6144
+    m_Bits: 1073757312
   <Transform>k__BackingField: {fileID: 8000789201367927090}
   <ShootPoint>k__BackingField: {fileID: 9166281318804876076}
-  Data:
-    HitRate: 30
+  DamageData:
+    Energy: 0
+    Kinetic: 0
+    Asteroid: 0
+  ShootPointData:
+    Position: {x: 0, y: 0}
+    Direction: {x: 0, y: 0}
+    ZDepth: 0
+  BaseStats:
+    DamageEnergy: 2
+    DamageKinetic: 1
+    DamageMultipliersEnergy: 4
+    DamageMultipliersKinetic: 2
+    DamageMultipliersAsteroid: 2
+  AimStats:
+    MaxDistance: 10
+    MaxRotateAngle: 45
+    RotateSpeed: 20
+  RuntimeData:
     NextHitTime: 0
     HitDelay: 0
     NoHitTargetPoint: {x: 0, y: 0}

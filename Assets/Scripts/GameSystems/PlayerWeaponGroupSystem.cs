@@ -4,7 +4,7 @@ using GameSystems;
 using Helpers;
 using Registries;
 
-public class PlayerWeaponSystem : GameSystemBase
+public class PlayerWeaponGroupSystem : GameSystemBase
 {
     private IPlayerInput _playerInput;
     private ShipRegistry _shipRegistry;
@@ -39,6 +39,7 @@ public class PlayerWeaponSystem : GameSystemBase
         if (!playerShip.IsAttacking)
         {
             playerShip.ActiveWeaponGroup = newActiveGroup;
+            EventBus.PlayerSwitchWeaponGroupAction?.Invoke();
             return;
         }
 
@@ -48,7 +49,7 @@ public class PlayerWeaponSystem : GameSystemBase
         foreach (var slot in playerShip.WeaponSlots)
         {
             var weapon = slot.Weapon;
-            if (weapon == null) continue;
+            //if (weapon == null) continue;
 
             bool isInNewGroup = slot.WeaponGroup.ContainsAny(newActiveGroup);
             bool isInOldGroup = slot.WeaponGroup.ContainsAny(lastActiveGroup);
@@ -62,6 +63,8 @@ public class PlayerWeaponSystem : GameSystemBase
                 EventBus.WeaponChangeAttackStateAction?.Invoke(weapon, false);
             }
         }
+
+        EventBus.PlayerSwitchWeaponGroupAction?.Invoke();
     }
 
     private void OnPlayerChangeAttackState(bool state)
@@ -71,7 +74,7 @@ public class PlayerWeaponSystem : GameSystemBase
 
         foreach (var slot in playerShip.WeaponSlots)
         {
-            if (slot.Weapon == null) continue;
+            //if (slot.Weapon == null) continue;
 
             bool isInGroup = slot.WeaponGroup.ContainsAny(playerShip.ActiveWeaponGroup);
 

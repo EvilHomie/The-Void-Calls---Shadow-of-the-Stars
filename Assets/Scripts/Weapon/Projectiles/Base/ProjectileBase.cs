@@ -10,7 +10,7 @@ namespace Projectiles
         public float DestroyTime;
         public float HitTime;
         public LayerMask HitLayers;
-        public CurrentDamageData DamageData;
+        public DamageData DamageData;
         public HashSet<Collider2D> IgnoredColliders = new();
 
         public abstract ProjectileType ProjectileType { get; }

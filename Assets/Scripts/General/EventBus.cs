@@ -1,5 +1,6 @@
 using DefenseLayers;
 using Projectiles;
+using Ships;
 using System;
 using UnityEngine;
 using Weapons;
@@ -11,7 +12,7 @@ namespace GameSystems
         public static Action<WeaponBase, bool> WeaponChangeAttackStateAction;
 
         // делегаты для лучего оружия (без промежуточных элементов по типу снаряда). Хит регистрируется сразу в оружии.
-        public delegate void BeamHitDelegate(in CurrentDamageData damageData , DefenseLayerBase layer, Vector2 position);
+        public delegate void BeamHitDelegate(in DamageData damageData , DefenseLayerBase layer, Vector2 position);
         public static BeamHitDelegate BeamHitAction;
 
 
@@ -26,6 +27,9 @@ namespace GameSystems
         public static Action<DefenseLayerBase, Vector2> DefenseLayerCollisionAction;
 
         public static Action<Collider2D, Transform, bool> OnShieldCross;
+
+        public static Action PlayerSwitchWeaponGroupAction;
+        public static Action<ShipInstance, Rigidbody2D> ChangeTargetAction;
     }
 }
 

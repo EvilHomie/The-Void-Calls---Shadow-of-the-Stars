@@ -84,7 +84,7 @@ namespace Helpers
 
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
-                defenseLayer.ResistanceMultipliers = resistanceMultipliers;                
+                defenseLayer.ResistanceMultipliers = resistanceMultipliers;
 
                 if (defenseLayer.LayerType == DefenseLayerType.Hull)
                 {
@@ -161,9 +161,9 @@ namespace Helpers
                 UpdateWeaponStats(weapon);
                 weapon.Init(shipInstance.AimData);
 
-                if (weapon is IShipVelocityAware aware)
+                if (weapon is IProjectileWeapon projectileWeapon)
                 {
-                    aware.SetShipRigidbody(shipRb);
+                    projectileWeapon.SetShipRigidbody(shipRb);
                 }
             }
         }
@@ -171,26 +171,28 @@ namespace Helpers
         public static void UpdateWeaponStats(WeaponBase weaponBase)
         {
             ref var baseStats = ref weaponBase.BaseStats;
+            ref var aimStats = ref weaponBase.AimStats;
 
             if (weaponBase is BoltRepeater boltRepeater)
             {
-                ref var weaponData = ref boltRepeater.Data;                
-                weaponData.ShootDelay = 1f / weaponData.FireRate;
-                var invProjectileSpeed = 1f / weaponData.ProjectileSpeed;
+                ref var weaponData = ref boltRepeater.RuntimeData;
+                weaponData.ShootDelay = 1f / boltRepeater.FireRate;
+                weaponData.ProjectileSpeed = boltRepeater.ProjectileSpeed;
+                var invProjectileSpeed = 1f / boltRepeater.ProjectileSpeed;
                 weaponData.InvProjectileSpeed = invProjectileSpeed;
-                weaponData.ProjectileLifeTime = baseStats.MaxDistance * invProjectileSpeed;
+                weaponData.ProjectileLifeTime = aimStats.MaxDistance * invProjectileSpeed;
             }
-            else if ((weaponBase is MiningDrill miningDrill))
+            else if (weaponBase is MiningDrill miningDrill)
             {
-                ref var weaponData = ref miningDrill.Data;
-                weaponData.HitDelay = 1f / weaponData.HitRate;
-                weaponData.NoHitTargetPoint = Vector2.up * baseStats.MaxDistance;
+                ref var weaponData = ref miningDrill.RuntimeData;
+                weaponData.HitDelay = 1f / WorldConfig.ConstantBeamHitRate;
+                weaponData.NoHitTargetPoint = Vector2.up * aimStats.MaxDistance;
             }
 
-            ref var damage = ref weaponBase.CurrentDamageData;
-            damage.Energy = baseStats.EnergyDamageMultipliers * baseStats.BaseDamageEnergy;
-            damage.Kinetic = baseStats.KineticDamageMultipliers * baseStats.BaseDamageKinetic;
-            damage.Asteroid = baseStats.AsteroidDamageMultipliers * (damage.Energy + damage.Kinetic);
+            ref var damage = ref weaponBase.DamageData;
+            damage.Energy = baseStats.DamageMultipliersEnergy * baseStats.DamageEnergy;
+            damage.Kinetic = baseStats.DamageMultipliersKinetic * baseStats.DamageKinetic;
+            damage.Asteroid = baseStats.DamageMultipliersAsteroid * (damage.Energy + damage.Kinetic);
         }
 
         public static void RegisterShip(ShipInstance shipInstance, ShipRegistry shipRegistry, bool asPlayer)
@@ -209,9 +211,9 @@ namespace Helpers
     public static class EntityIdGenerator
     {
         private static uint _nextId = 1;
-        
+
         public static uint Generate()
-        {            
+        {
             return _nextId++;
         }
     }

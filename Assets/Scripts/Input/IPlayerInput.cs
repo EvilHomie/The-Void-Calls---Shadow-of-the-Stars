@@ -11,6 +11,6 @@ namespace GameInput
         public Action ToggleDamperAction { get; set; }
         public Action DisableEngineAction { get; set; }
         public Action<float> ChangeZoomAction { get; set; }
-        public Action<WeaponGroup> SwitchWeaponGroupAction { get; set; }
+        public Action<WeaponGroup> SwitchWeaponGroupAction { get; set; }        
     }
 }

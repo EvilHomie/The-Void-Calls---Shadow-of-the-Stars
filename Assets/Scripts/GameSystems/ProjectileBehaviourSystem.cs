@@ -54,8 +54,8 @@ namespace GameSystems
         private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
             var projectile = _projectileRegistry.GetBolt(boltShootData.ProjectilePoolId);
-            projectile.Position = boltShootData.FirePointPosition;
-            projectile.Transform.position = boltShootData.FirePointPosition;
+            projectile.Position = boltShootData.SpawnPosition;
+            projectile.Transform.position = boltShootData.SpawnPosition;
             projectile.Transform.up = boltShootData.Direction;
             projectile.Velocity = boltShootData.Velocity;
             projectile.DestroyTime = boltShootData.DestroyTime;

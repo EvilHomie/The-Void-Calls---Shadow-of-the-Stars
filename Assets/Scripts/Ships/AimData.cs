@@ -8,5 +8,6 @@ namespace Ships
     {
         public Rigidbody2D TargetRigidBody;
         public Vector2 AimPosition;
+        public float FastestProjectileSpeed;
     }
 }

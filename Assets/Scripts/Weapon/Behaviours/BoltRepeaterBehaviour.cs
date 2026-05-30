@@ -1,5 +1,6 @@
 ﻿using GameSystems;
 using Helpers;
+using TMPro;
 using UnityEngine;
 
 namespace Weapons
@@ -16,27 +17,35 @@ namespace Weapons
 
         public void ProcessShooting(BoltRepeater weapon)
         {
-            ref var data = ref weapon.Data;
+            ref var data = ref weapon.RuntimeData;
+            ref var shootPointData = ref weapon.ShootPointData;
             var coreTime = GameFlowSystem.CoreTime;
 
-            if (coreTime <= data.NextShootTime)
-            {
-                return;
-            }
+            if (coreTime <= data.NextShootTime) return;
+
             var aimData = weapon.AimData;
 
-            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(weapon.Transform.up, data.SpreadAngle);
-            var spawnPos = weapon.ShootPoint.position;
+            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, weapon.SpreadAngle);
             var shipVelocity = weapon.ShipRB.linearVelocity;
             var boltSelfVelocity = direction * data.ProjectileSpeed;
 
             var boltVelocity = shipVelocity + boltSelfVelocity;
-            float timeToAimPos = (aimData.AimPosition - (Vector2)spawnPos).magnitude * data.InvProjectileSpeed;
+            var distance = Vector2.Distance(aimData.AimPosition, shootPointData.Position);
+            var timeToAimPos = distance * data.InvProjectileSpeed;
 
             var hitTime = coreTime + timeToAimPos;
             var destroyTime = coreTime + data.ProjectileLifeTime;
 
-            var shootData = new BoltWeaponShootData(weapon.PoolId, weapon.IgnoredColliders, destroyTime, hitTime, spawnPos, boltVelocity, direction, weapon.HitLayers, weapon.CurrentDamageData);
+            var shootData = new BoltWeaponShootData(
+                weapon.PoolId, weapon.IgnoredColliders,
+                destroyTime,
+                hitTime,
+                shootPointData.Position,
+                shootPointData.ZDepth,
+                boltVelocity,
+                direction,
+                weapon.HitLayers,
+                weapon.DamageData);
 
             weapon.ShootSpotPS.Emit(1);
             data.NextShootTime = GameFlowSystem.CoreTime + data.ShootDelay;

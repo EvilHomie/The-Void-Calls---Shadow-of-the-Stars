@@ -6,64 +6,41 @@ namespace Helpers
 {
     public class WeaponSystemHelper
     {
-        public static void AimAtTarget(WeaponBase weapon, float dTime, in Vector3 targetPos)
-        {
-            ref var baseStats = ref weapon.BaseStats;
-            Vector2 dir = targetPos - weapon.Transform.position;
-            float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
-
-            float newAngle = Mathf.MoveTowardsAngle(
-                weapon.Transform.eulerAngles.z,
-                targetAngle,
-                baseStats.RotateSpeed * dTime
-            );
-
-            weapon.Transform.rotation = Quaternion.Euler(0, 0, newAngle);
-            float localZ = Mathf.DeltaAngle(0, weapon.Transform.localEulerAngles.z);
-            var maxRotateAngle = baseStats.MaxRotateAngle;
-
-            if (Mathf.Abs(localZ) > maxRotateAngle)
-            {
-                float clamped = Mathf.Clamp(localZ, -maxRotateAngle, maxRotateAngle);
-                weapon.Transform.localRotation = Quaternion.Euler(0, 0, clamped);
-            }
-        }
-
         public static void AimAtTarget(ShipInstance shipInstance, float dTime)
         {
-            Vector2 targetPos = shipInstance.AimData.AimPosition;
+            Vector2 aimPos = shipInstance.AimData.AimPosition;
 
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                ref var baseStats = ref weapon.BaseStats;
-                var transform = weapon.Transform;
-                Vector2 weaponPosition = transform.position;
-                var maxRotateAngle = baseStats.MaxRotateAngle;
+                ref var aimStats = ref weapon.AimStats;
+                var weaponTransform = weapon.Transform;
+                Vector2 weaponPosition = weaponTransform.position;
+                Vector2 targetDir = aimPos - weaponPosition;
 
-                Vector2 targetDir = targetPos - weaponPosition;
-                float targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
+                var targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
+                var currentWorldAngle = Mathf.DeltaAngle(0f, weaponTransform.eulerAngles.z);
+                var worldAngle = Mathf.MoveTowardsAngle(currentWorldAngle, targetAngle, aimStats.RotateSpeed * dTime);
+                var parentAngle = weaponTransform.parent.eulerAngles.z;
+                var localAngle = Mathf.DeltaAngle(0f, worldAngle - parentAngle);
+                localAngle = Mathf.Clamp(localAngle, -aimStats.MaxRotateAngle, aimStats.MaxRotateAngle);
+                var finalWorldAngle = parentAngle + localAngle;
+                weaponTransform.rotation = Quaternion.Euler(0f, 0f, finalWorldAngle);
 
-                float newAngle = Mathf.MoveTowardsAngle(transform.eulerAngles.z, targetAngle, baseStats.RotateSpeed * dTime);
-
-                transform.rotation = Quaternion.Euler(0, 0, newAngle);
-
-                float localZ = Mathf.DeltaAngle(0, transform.localEulerAngles.z);
-
-                if (Mathf.Abs(localZ) > maxRotateAngle)
-                {
-                    float clamped = Mathf.Clamp(localZ, -maxRotateAngle, maxRotateAngle);
-                    transform.localRotation = Quaternion.Euler(0, 0, clamped);
-                }
+                ref var shootPointData = ref weapon.ShootPointData;
+                shootPointData.Direction = weaponTransform.up;
+                shootPointData.Position = weapon.ShootPoint.position;
             }
         }
 
-        public static bool CanFire(WeaponBase weapon, LayerMask hitLayers)
-        {
-            ref var baseStats = ref weapon.BaseStats;
-            Ray ray = new(weapon.Transform.position, weapon.Transform.up);
-            return Physics.Raycast(ray, baseStats.MaxDistance, hitLayers);
-        }
+
+
+        //public static bool CanFire(WeaponBase weapon, LayerMask hitLayers)
+        //{
+        //    ref var aimStats = ref weapon.AimStats;
+        //    Ray ray = new(weapon.Transform.position, weapon.Transform.up);
+        //    return Physics.Raycast(ray, aimStats.MaxDistance, hitLayers);
+        //}
 
         public static Vector2 GetDirectionWithSpreadBrookTaylor(Vector2 baseDir, float spreadAngleDeg)
         {

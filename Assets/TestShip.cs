@@ -1,13 +1,25 @@
+using GameSystems;
 using Helpers;
 using Ships;
 using UnityEngine;
 
 public class TestShip : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    ShipInstance shipInstance;
+
+    Rigidbody2D lastTarget;
     void Start()
     {
-        var instance = GetComponent<ShipInstance>();
-        InitHelper.InitShip(instance);
+        shipInstance = GetComponent<ShipInstance>();
+        InitHelper.InitShip(shipInstance);
+    }
+
+    private void Update()
+    {
+        if (lastTarget != shipInstance.AimData.TargetRigidBody)
+        {
+            lastTarget = shipInstance.AimData.TargetRigidBody;
+            EventBus.ChangeTargetAction?.Invoke(shipInstance, lastTarget);
+        }
     }
 }
