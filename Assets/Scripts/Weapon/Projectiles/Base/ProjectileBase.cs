@@ -7,6 +7,7 @@ namespace Projectiles
 {
     public abstract class ProjectileBase : PoolObjectBase
     {
+        public SizeType Size;
         public float DestroyTime;
         public float HitTime;
         public LayerMask HitLayers;
@@ -14,5 +15,13 @@ namespace Projectiles
         public HashSet<Collider2D> IgnoredColliders = new();
 
         public abstract ProjectileType ProjectileType { get; }
+    }
+
+    public enum ProjectileType
+    {
+        Bolt,
+        StraightMissile,
+        HomingMissile,
+        Plasma
     }
 }

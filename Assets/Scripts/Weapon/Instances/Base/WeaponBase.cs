@@ -1,6 +1,7 @@
 using Ships;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 namespace Weapons
@@ -22,9 +23,10 @@ namespace Weapons
         public WeaponBaseStats BaseStats;
         public AimStats AimStats;
 
-        public void Init(AimData targetData)
+        public void Init(AimData targetData, SizeType size)
         {
             AimData = targetData;
+            Size = size;
             ShootPointData.ZDepth = ShootPoint.position.z;
         }
     }
@@ -61,5 +63,12 @@ namespace Weapons
        public Vector2 Position;
        public Vector2 Direction;
        public float ZDepth;
+    }
+
+    [Serializable]
+    public struct HitData
+    {
+        public Vector2 Position;
+        public SizeType Size;
     }
 }

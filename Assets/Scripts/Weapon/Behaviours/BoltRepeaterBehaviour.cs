@@ -37,7 +37,9 @@ namespace Weapons
             var destroyTime = coreTime + data.ProjectileLifeTime;
 
             var shootData = new BoltWeaponShootData(
-                weapon.PoolId, weapon.IgnoredColliders,
+                weapon.PoolId,
+                weapon.Size,
+                weapon.IgnoredColliders,
                 destroyTime,
                 hitTime,
                 shootPointData.Position,

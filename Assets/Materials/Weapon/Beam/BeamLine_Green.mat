@@ -73,7 +73,7 @@ Material:
     - _AnimSpeed: -2
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.25141838, g: 5.9921565, b: 0, a: 0}
-    - _NoiseTiling: {r: 0.31, g: -5.24, b: 0, a: 0}
+    - _Color: {r: 0.25141838, g: 5.9921565, b: 0, a: 1}
+    - _NoiseTiling: {r: -5.24, g: 0.31, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -1,7 +1,9 @@
 using DefenseLayers;
 using DI;
 using Registries;
+using System.Collections.Generic;
 using UnityEngine;
+using Weapons;
 
 namespace GameSystems
 {
@@ -19,15 +21,17 @@ namespace GameSystems
         private float _reversedEffectDuration;
 
 
-        uint _shieldHitPoolId;
-        uint _shieldCollisionPoolId;
-        uint _sparksPoolBlueId;
-        uint _sparksPoolYellowId;
-        uint _sparksPoolGreyId;
+        private uint _shieldHitPoolId;
+        private uint _shieldCollisionPoolId;
+        private uint _sparksPoolBlueId;
+        private uint _sparksPoolYellowId;
+        private uint _sparksPoolGreyId;
 
 
-
+        private float _deffShieldHitSize = 0.1f;
+        private Dictionary<SizeType, float> _sizeMap;
         private static readonly int EffectUVId = Shader.PropertyToID("_EffectUV");
+        private static readonly int HitSizeId = Shader.PropertyToID("_HitSize");
 
         [Inject]
         public void Construct(HitEffectRegistry hitEffectRegistry, ShieldsEffectRegistry shieldsEffectRegistry)
@@ -41,6 +45,14 @@ namespace GameSystems
             _sparksPoolBlueId = sparksPoolBlue.Id;
             _sparksPoolYellowId = sparksPoolYellow.Id;
             _sparksPoolGreyId = sparksPoolGrey.Id;
+
+            _sizeMap = new()
+            {
+                {SizeType.S, 1 },
+                {SizeType.M, 5 },
+                {SizeType.L, 25 },
+                {SizeType.XL, 125 }
+            };
         }
 
         protected override void Subscribe()
@@ -61,83 +73,83 @@ namespace GameSystems
             UpdateShieldEffects();
         }
 
-        private void OnDefenseLayerHitAction(DefenseLayerBase layerBase, Vector2 hitPosition)
+        private void OnDefenseLayerHitAction(DefenseLayerBase layerBase, HitData hitData)
         {
             switch (layerBase.LayerType)
             {
                 case DefenseLayerType.Shield:
-                    OnShieldHit(layerBase, hitPosition);
+                    OnShieldHit(layerBase, hitData);
                     break;
                 case DefenseLayerType.Armor:
-                    OnArmorDamaged(hitPosition);
+                    OnArmorDamaged(hitData);
                     break;
                 case DefenseLayerType.Hull:
-                    OnHullDamaged(hitPosition);
+                    OnHullDamaged(hitData);
                     break;
                 case DefenseLayerType.AsteroidHull:
-                    OnAsteroidHullDamaged(hitPosition);
+                    OnAsteroidHullDamaged(hitData);
                     break;
                 default:
                     break;
             }
         }
 
-        private void OnDefenseLayerCollisionAction(DefenseLayerBase layerBase, Vector2 hitPosition)
+        private void OnDefenseLayerCollisionAction(DefenseLayerBase layerBase, HitData hitData)
         {
             switch (layerBase.LayerType)
             {
                 case DefenseLayerType.Shield:
-                    OnShieldCollision(layerBase, hitPosition);
+                    OnShieldCollision(layerBase, hitData);
                     break;
                 case DefenseLayerType.Armor:
-                    OnArmorDamaged(hitPosition);
+                    OnArmorDamaged(hitData);
                     break;
                 case DefenseLayerType.Hull:
-                    OnHullDamaged(hitPosition);
+                    OnHullDamaged(hitData);
                     break;
                 case DefenseLayerType.AsteroidHull:
-                    OnAsteroidHullDamaged(hitPosition);
+                    OnAsteroidHullDamaged(hitData);
                     break;
                 default:
                     break;
             }
         }
 
-        private void OnHullDamaged(Vector2 hitPosition)
+        private void OnHullDamaged(HitData hitData)
         {
             var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
-            hitEffect.Transform.position = hitPosition;
+            hitEffect.Transform.position = hitData.Position;
             hitEffect.IsPlaying = true;
         }
-        private void OnArmorDamaged(Vector2 hitPosition)
+        private void OnArmorDamaged(HitData hitData)
         {
             var hitEffect = _hitEffectRegistry.Get(_sparksPoolYellowId);
-            hitEffect.Transform.position = hitPosition;
+            hitEffect.Transform.position = hitData.Position;
             hitEffect.IsPlaying = true;
         }
 
-        private void OnShieldHit(DefenseLayerBase layerBase, Vector2 hitPosition)
+        private void OnShieldHit(DefenseLayerBase layerBase, HitData hitData)
         {
             var effect = _hitEffectRegistry.Get(_sparksPoolBlueId);
-            effect.Transform.position = hitPosition;
+            effect.Transform.position = hitData.Position;
             effect.IsPlaying = true;
 
-            SetUpShieldEffect(layerBase, hitPosition, _shieldHitPoolId);
+            SetUpShieldEffect(layerBase, hitData, _shieldHitPoolId);
         }
 
-        private void OnShieldCollision(DefenseLayerBase layerBase, Vector2 hitPosition)
+        private void OnShieldCollision(DefenseLayerBase layerBase, HitData hitData)
         {
-            SetUpShieldEffect(layerBase, hitPosition, _shieldCollisionPoolId);
+            SetUpShieldEffect(layerBase, hitData, _shieldCollisionPoolId);
         }
 
-        private void OnAsteroidHullDamaged(Vector2 hitPosition)
+        private void OnAsteroidHullDamaged(HitData hitData)
         {
             var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
-            hitEffect.Transform.position = hitPosition;
+            hitEffect.Transform.position = hitData.Position;
             hitEffect.IsPlaying = true;
         }
 
-        private void SetUpShieldEffect(DefenseLayerBase shieldLayer, Vector2 worldHitPos, uint effectPoolId)
+        private void SetUpShieldEffect(DefenseLayerBase shieldLayer, HitData hitData, uint effectPoolId)
         {
             var effect = _shieldsEffectRegistry.Get(effectPoolId);
 
@@ -153,11 +165,15 @@ namespace GameSystems
             effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
             effectTransform.localScale = shieldTransform.lossyScale;
 
-            Vector2 local = shieldTransform.InverseTransformPoint(worldHitPos);
+            Vector2 local = shieldTransform.InverseTransformPoint(hitData.Position);
             local.x += 0.5f;
             local.y += 0.5f;
 
+
+            var sizeRelative = _sizeMap[hitData.Size] / _sizeMap[shieldLayer.Size];
+
             materialBlock.SetVector(EffectUVId, local);
+            materialBlock.SetFloat(HitSizeId, _deffShieldHitSize * sizeRelative);
             effect.SpriteRenderer.SetPropertyBlock(materialBlock);
         }
 

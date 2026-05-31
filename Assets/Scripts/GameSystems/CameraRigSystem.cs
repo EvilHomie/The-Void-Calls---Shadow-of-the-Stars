@@ -3,6 +3,7 @@ using GameInput;
 using Registries;
 using Ships;
 using System;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using MouseCursor = GameCamera.MouseCursor;
@@ -11,22 +12,20 @@ namespace GameSystems
 {
     public class CameraRigSystem : GameSystemBase, ICoreUpdateTickObserver
     {
-        [MinMaxRangeSlider(1f, 10f)]
-        [SerializeField] Vector2 _minMaxViewDistance;
         [SerializeField] CinemachineTargetGroup _cinemachineTargetGroup;
         [SerializeField] float _mouseCursorWeight = 0.8f;
         [SerializeField] CinemachineCamera _cinemachineCamera;
         [SerializeField] float _changeOrtSizeSpeed;
-        [SerializeField] float _changeOrtSizeStep;
 
-        public  Action<float> CameraOrtoSizeChanged { get; set; }
+        public Action<float> CameraOrtoSizeChanged { get; set; }
         private MouseCursor _mouseCursor;
         private ShipRegistry _shipRegistry;
 
         private IPlayerInput _input;
         private float _targetOrthographicSize;
-        private float _deffOrthographicSize = 3f;
         private float _currentOrthographicSize;
+        private Dictionary<SizeType, Vector2> _viewDistanceMap;
+        private Vector2 _currentViewDistance;
 
         [Inject]
         public void Construct(MouseCursor mouseCursor, IPlayerInput playerInput, ShipRegistry shipRegistry)
@@ -34,6 +33,14 @@ namespace GameSystems
             _shipRegistry = shipRegistry;
             _mouseCursor = mouseCursor;
             _input = playerInput;
+
+            _viewDistanceMap = new()
+            {
+                {SizeType.S, new (1,5) },
+                {SizeType.M, new (2,10) },
+                {SizeType.L, new (8,20) },
+                {SizeType.XL, new (1,30) }
+            };
         }
 
         private void Start()
@@ -60,17 +67,17 @@ namespace GameSystems
             {
                 _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, deltaTime * _changeOrtSizeSpeed);
                 _cinemachineCamera.Lens.OrthographicSize = _currentOrthographicSize;
-                float orthorelative = _currentOrthographicSize / _deffOrthographicSize;
-                CameraOrtoSizeChanged?.Invoke(orthorelative);
+                CameraOrtoSizeChanged?.Invoke(_currentOrthographicSize);
             }
         }
 
         private void Init(ShipInstance shipInstance)
         {
             UpdateTargetGroup(shipInstance);
-            _targetOrthographicSize = (_minMaxViewDistance.x + _minMaxViewDistance.y) / 2;
-            _deffOrthographicSize = _targetOrthographicSize;
+            _currentViewDistance = _viewDistanceMap[shipInstance.Size];
+            _targetOrthographicSize = (_currentViewDistance.x + _currentViewDistance.y) / 2;
             _currentOrthographicSize = _cinemachineCamera.Lens.OrthographicSize;
+            _changeOrtSizeSpeed = _currentViewDistance.y;
         }
 
         private void UpdateTargetGroup(ShipInstance shipInstance)
@@ -99,8 +106,8 @@ namespace GameSystems
 
         private void OnMouseScroll(float value)
         {
-            _targetOrthographicSize -= value * _changeOrtSizeStep;
-            _targetOrthographicSize = Mathf.Clamp(_targetOrthographicSize, _minMaxViewDistance.x, _minMaxViewDistance.y);
+            _targetOrthographicSize -= value;
+            _targetOrthographicSize = Mathf.Clamp(_targetOrthographicSize, _currentViewDistance.x, _currentViewDistance.y);
         }
     }
 }

@@ -159,7 +159,7 @@ namespace Helpers
                 var weapon = slot.Weapon;
                 weapon.IgnoredColliders = shipInstance.IgnoredColliders;
                 UpdateWeaponStats(weapon);
-                weapon.Init(shipInstance.AimData);
+                weapon.Init(shipInstance.AimData, shipInstance.Size);
 
                 if (weapon is IProjectileWeapon projectileWeapon)
                 {

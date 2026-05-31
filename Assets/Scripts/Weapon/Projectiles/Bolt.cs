@@ -6,8 +6,6 @@ namespace Projectiles
     {
         public override ProjectileType ProjectileType => ProjectileType.Bolt;
 
-        [field: SerializeField] public float TipOffset { get; private set; }
-
         public Vector3 Position;
         public Vector3 Velocity;
         public bool IsMissed;

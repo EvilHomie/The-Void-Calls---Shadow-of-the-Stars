@@ -1,14 +1,13 @@
 using DefenseLayers;
 using Projectiles;
 using System.Collections.Generic;
-using UnityEngine;
 using Weapons;
 
 namespace GameSystems
 {
     public class DamageSystem : GameSystemBase
     {
-        public delegate void DamageAction(DefenseLayerBase defenseLayer, in DamageData damageData);
+        public delegate void DamageAction(DefenseLayerBase defenseLayer, DamageData damageData);
 
         private readonly Dictionary<DefenseLayerType, DamageAction> _damageStrategies = new();
 
@@ -34,27 +33,27 @@ namespace GameSystems
             EventBus.BeamHitAction -= OnBeamHit;
         }
 
-        private void OnBeamHit(in DamageData damageData, DefenseLayerBase layer, Vector2 position)
+        private void OnBeamHit(DamageData damageData, DefenseLayerBase layer, HitData hitData)
         {
             var layerType = layer.LayerType;
             _damageStrategies[layerType].Invoke(layer, damageData);
 
-            EventBus.DefenseLayerHitAction?.Invoke(layer, position);
+            EventBus.DefenseLayerHitAction?.Invoke(layer, hitData);
         }
 
-        private void OnProjectileHit(Bolt bolt, DefenseLayerBase layer, Vector2 position)
+        private void OnProjectileHit(Bolt bolt, DefenseLayerBase layer, HitData hitData)
         {
             var layerType = layer.LayerType;
             _damageStrategies[layerType].Invoke(layer, bolt.DamageData);
 
-            EventBus.DefenseLayerHitAction?.Invoke(layer, position);
+            EventBus.DefenseLayerHitAction?.Invoke(layer, hitData);
         }
 
 
-        private void ApplyShieldDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
+        private void ApplyShieldDamage(DefenseLayerBase defenseLayer, DamageData damageData)
         {
             var damageMultiplier = defenseLayer.ResistanceMultipliers.Energy;
-            defenseLayer.CurrentHealthPoints -= damageData.Energy * damageMultiplier;            
+            defenseLayer.CurrentHealthPoints -= damageData.Energy * damageMultiplier;
 
             if (defenseLayer.CurrentHealthPoints <= 0)
             {
@@ -63,7 +62,7 @@ namespace GameSystems
             }
         }
 
-        private void ApplyArmorDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
+        private void ApplyArmorDamage(DefenseLayerBase defenseLayer, DamageData damageData)
         {
             var damageMultiplier = defenseLayer.ResistanceMultipliers.Kinetic;
             defenseLayer.CurrentHealthPoints -= damageData.Kinetic * damageMultiplier;
@@ -74,7 +73,7 @@ namespace GameSystems
                 defenseLayer.Collider.enabled = false;
             }
         }
-        private void ApplyHullDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
+        private void ApplyHullDamage(DefenseLayerBase defenseLayer, DamageData damageData)
         {
             var energyMultiplier = defenseLayer.ResistanceMultipliers.Energy;
             var energyDamage = damageData.Energy * energyMultiplier;
@@ -88,7 +87,7 @@ namespace GameSystems
             }
         }
 
-        private void ApplyAsteroidHullDamage(DefenseLayerBase defenseLayer, in DamageData damageData)
+        private void ApplyAsteroidHullDamage(DefenseLayerBase defenseLayer, DamageData damageData)
         {
             defenseLayer.CurrentHealthPoints -= damageData.Asteroid;
 

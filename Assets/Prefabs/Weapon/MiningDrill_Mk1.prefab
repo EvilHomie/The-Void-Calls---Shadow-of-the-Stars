@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2029518069449415104}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.1119, z: 0}
+  m_LocalPosition: {x: -0, y: 0.1113, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -108,7 +108,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -288,7 +288,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.2
-      minScalar: 0.15
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4803,7 +4803,7 @@ ParticleSystemRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 25
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -4862,7 +4862,7 @@ Transform:
   m_GameObject: {fileID: 2184953884915563217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.1135, z: 0}
+  m_LocalPosition: {x: -0, y: 0.324, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4876,7 +4876,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2184953884915563217}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4915,10 +4915,10 @@ LineRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 25
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0.1113, z: 0}
   - {x: 0, y: 1, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -4931,16 +4931,16 @@ LineRenderer:
         value: 1
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1
-        value: 0.4825175
-        inSlope: -0.52753925
+        time: 0.94433594
+        value: 1
+        inSlope: -0
         outSlope: -0.52753925
-        tangentMode: 0
+        tangentMode: 69
         weightedMode: 0
         inWeight: 0.1237219
         outWeight: 0.33333334
@@ -4984,7 +4984,7 @@ LineRenderer:
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
-  m_UseWorldSpace: 0
+  m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
 --- !u!1 &5415149461915584563

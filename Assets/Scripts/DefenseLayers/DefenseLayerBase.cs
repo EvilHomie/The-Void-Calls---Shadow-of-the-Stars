@@ -6,6 +6,7 @@ namespace DefenseLayers
     [RequireComponent(typeof(Collider2D))]
     public abstract class DefenseLayerBase : MonoBehaviour
     {
+        [field: SerializeField] public SizeType Size { get; private set; }
         public abstract DefenseLayerType LayerType { get; }
         public Collider2D Collider { get; private set; }
         public Transform Transform { get; private set; }
