@@ -222,7 +222,13 @@ namespace GameSystems
 
             // Расчет времени перехвата
             var projectileToTargetSpeed = Vector2.Dot(projectileVelocity, toTarget);
-            projectileToTargetSpeed = Mathf.Min(0.001f, projectileToTargetSpeed);
+
+            if (projectileToTargetSpeed <= 0.001f) // Если снаряд не может достигнуть цели.
+            {
+                leadMarkerPos = targetPosition;
+                return false;
+            }
+
             var timeToReach = distanceToTarget / projectileToTargetSpeed;
 
             // Скорость цели относительно снаряда

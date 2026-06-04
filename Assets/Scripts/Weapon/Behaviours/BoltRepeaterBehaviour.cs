@@ -37,7 +37,7 @@ namespace Weapons
 
             var toAim = (aimPos - spawnPos).normalized;
             var toAimSpeed = Vector2.Dot(boltTotalVelocity, toAim);
-            toAimSpeed = Mathf.Min(0.001f, toAimSpeed);
+            toAimSpeed = Mathf.Max(0.001f, toAimSpeed);
             var timeToAimPos = distanceToAimPos / toAimSpeed;
 
             var hitTime = coreTime + timeToAimPos;
