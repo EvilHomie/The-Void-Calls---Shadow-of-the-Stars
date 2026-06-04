@@ -4,6 +4,7 @@ using Projectiles;
 using Registries;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Weapons;
 
 namespace GameSystems
@@ -50,6 +51,7 @@ namespace GameSystems
             {
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
+                    TryProjectileHit(projectile);
                     _projectileRegistry.RequestRemoveActiveProjectile(projectile);
                     continue;
                 }
@@ -90,27 +92,33 @@ namespace GameSystems
                 return;
             }
 
-            var hit = Physics2D.OverlapPoint(currentPosition, bolt.HitLayers);
-
-            if (hit == null || bolt.IgnoredColliders.Contains(hit))
+            if (!TryProjectileHit(bolt))
             {
                 bolt.IsMissed = true;
                 var nextPos = currentPosition + bolt.Velocity * deltaTime;
                 bolt.Position = nextPos;
                 bolt.Transform.position = nextPos;
-                return;
             }
+        }
+
+        private bool TryProjectileHit(ProjectileBase projectile)
+        {
+            var currentPosition = projectile.Position;
+            var hit = Physics2D.OverlapPoint(currentPosition, projectile.HitLayers);
+
+            if (hit == null || projectile.IgnoredColliders.Contains(hit)) return false;
 
             hit.TryGetComponent(out DefenseLayerBase defenceLayer);
 
             var hitData = new HitData
             {
                 Position = currentPosition,
-                Size = bolt.Size
+                Size = projectile.Size
             };
 
-            EventBus.BoltHitAction?.Invoke(bolt, defenceLayer, hitData);
-            _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+            EventBus.HitAction?.Invoke(projectile.DamageData, defenceLayer, hitData);
+            _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+            return true;
         }
 
         private void ProcessStraightMissile(StraightMissile straightMissile)

@@ -22,29 +22,19 @@ namespace GameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.BoltHitAction += OnProjectileHit;
-            EventBus.BeamHitAction += OnBeamHit;
+            EventBus.HitAction += OnHit;
         }
 
         protected override void Unsubscribe()
         {
             base.Unsubscribe();
-            EventBus.BoltHitAction -= OnProjectileHit;
-            EventBus.BeamHitAction -= OnBeamHit;
-        }
+            EventBus.HitAction -= OnHit;
+        }       
 
-        private void OnBeamHit(DamageData damageData, DefenseLayerBase layer, HitData hitData)
+        private void OnHit(DamageData damageData, DefenseLayerBase layer, HitData hitData)
         {
             var layerType = layer.LayerType;
             _damageStrategies[layerType].Invoke(layer, damageData);
-
-            EventBus.DefenseLayerHitAction?.Invoke(layer, hitData);
-        }
-
-        private void OnProjectileHit(Bolt bolt, DefenseLayerBase layer, HitData hitData)
-        {
-            var layerType = layer.LayerType;
-            _damageStrategies[layerType].Invoke(layer, bolt.DamageData);
 
             EventBus.DefenseLayerHitAction?.Invoke(layer, hitData);
         }
