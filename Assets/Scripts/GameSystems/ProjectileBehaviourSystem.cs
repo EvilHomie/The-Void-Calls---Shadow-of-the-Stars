@@ -58,7 +58,7 @@ namespace GameSystems
 
                 if (projectile is Bolt bolt)
                 {
-                    MoveBolts(bolt, deltaTime);
+                    ProcceedBoltBehaviour(bolt, deltaTime);
                 }
             }
         }
@@ -80,25 +80,27 @@ namespace GameSystems
             projectile.Size = boltShootData.Size;
         }
 
-        private void MoveBolts(Bolt bolt, float deltaTime)
+        private void ProcceedBoltBehaviour(Bolt bolt, float deltaTime)
         {
-            var currentPosition = bolt.Position;
-
             if (bolt.IsMissed || GameFlowSystem.CoreTime < bolt.HitTime)
             {
-                var nextPos = currentPosition + bolt.Velocity * deltaTime;
-                bolt.Position = nextPos;
-                bolt.Transform.position = nextPos;
+                MoveBolt(bolt, deltaTime);
                 return;
             }
 
             if (!TryProjectileHit(bolt))
             {
                 bolt.IsMissed = true;
-                var nextPos = currentPosition + bolt.Velocity * deltaTime;
-                bolt.Position = nextPos;
-                bolt.Transform.position = nextPos;
+                MoveBolt(bolt, deltaTime);
             }
+        }
+
+        private void MoveBolt(Bolt bolt, float deltaTime)
+        {
+            var currentPosition = bolt.Position;
+            var nextPos = currentPosition + bolt.Velocity * deltaTime;
+            bolt.Position = nextPos;
+            bolt.Transform.position = nextPos;
         }
 
         private bool TryProjectileHit(ProjectileBase projectile)
@@ -121,12 +123,12 @@ namespace GameSystems
             return true;
         }
 
-        private void ProcessStraightMissile(StraightMissile straightMissile)
+        private void ProcessStraightMissileBehaviour(StraightMissile straightMissile)
         {
 
         }
 
-        private void ProcessHomingMissile(HomingMissile homingMissile)
+        private void ProcessHomingMissileBehaviourv(HomingMissile homingMissile)
         {
 
         }
