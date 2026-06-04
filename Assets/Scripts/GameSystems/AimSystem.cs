@@ -5,6 +5,7 @@ using Registries;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Weapons;
 
 namespace GameSystems
@@ -110,7 +111,7 @@ namespace GameSystems
             }
 
             if (aimData.FastestProjectileSpeed != 0)
-            {                
+            {
                 _leadMarker.gameObject.SetActive(true);
                 _leadMarkerIsActive = true;
             }
@@ -155,32 +156,32 @@ namespace GameSystems
 
         private void ShowTargetLeadMarker(AimData aimData, ShipInstance shipInstance)
         {
+            bool showLeadMarker;
             if (aimData.TargetRigidBody == null || aimData.FastestProjectileSpeed == 0)
             {
-                if (_leadMarkerIsActive)
-                {
-                    _leadMarker.gameObject.SetActive(false);
-                    _leadMarkerIsActive = false;
-                }
+                showLeadMarker = false;
             }
             else
             {
                 if (GetTargetLeadPosition(aimData, shipInstance, out Vector2 leadPosition))
                 {
                     _leadMarker.position = leadPosition;
-
-                    if (!_leadMarkerIsActive)
-                    {
-                        _leadMarker.gameObject.SetActive(true);
-                        _leadMarkerIsActive = true;
-                    }
+                    showLeadMarker = true;
+                }
+                else
+                {
+                    showLeadMarker = false;
                 }
             }
+
+            _leadMarker.gameObject.SetActive(showLeadMarker);
+            _leadMarkerIsActive = showLeadMarker;
         }
 
-        private bool GetTargetLeadPosition(AimData aimData, ShipInstance shipInstance, out Vector2 leadPosition)
+        private bool GetTargetLeadPosition(AimData aimData, ShipInstance shipInstance, out Vector2 leadMarkerPos)
         {
-            leadPosition = Vector2.zero;
+            leadMarkerPos = Vector2.zero;
+            var shooterAverageWeaponPos = Vector2.zero;
             int activeWeaponsCount = 0;
 
             for (int i = 0; i < shipInstance.WeaponSlots.Count; i++)
@@ -196,23 +197,44 @@ namespace GameSystems
                     {
                         activeWeaponsCount++;
                         ref var shootPointData = ref weapon.ShootPointData;
-                        leadPosition += shootPointData.Position;
+                        shooterAverageWeaponPos += shootPointData.Position;
                     }
                 }
             }
 
             if (activeWeaponsCount == 0) return false;
 
-            leadPosition /= activeWeaponsCount;
+            shooterAverageWeaponPos /= activeWeaponsCount;
 
-            var shipVelocity = shipInstance.Rigidbody.linearVelocity;
-            var targetVelocity = aimData.TargetRigidBody.linearVelocity;
-            var targetPosition = aimData.TargetRigidBody.position;
 
-            var distance = Vector2.Distance(targetPosition, leadPosition);
-            var timeToReach = distance / aimData.FastestProjectileSpeed;
-            var targetRelativeVelocity = targetVelocity - shipVelocity;
-            leadPosition = targetPosition + targetRelativeVelocity * timeToReach;
+            var targetRB = aimData.TargetRigidBody;
+            var shooterRB = shipInstance.Rigidbody;
+
+            var shooterVelocity = shooterRB.linearVelocity;
+            var targetVelocity = targetRB.linearVelocity;
+            var targetPosition = targetRB.position;
+
+            var toTarget = (targetPosition - shooterAverageWeaponPos).normalized;
+            var distanceToTarget = Vector2.Distance(targetPosition, shooterAverageWeaponPos);
+
+            // Полная скорость снаряда после выстрела
+            var projectileVelocity = shooterVelocity + toTarget * aimData.FastestProjectileSpeed;
+
+            // Расчет времени перехвата
+            var projectileToTargetSpeed = Vector2.Dot(projectileVelocity, toTarget);
+            projectileToTargetSpeed = Mathf.Min(0.001f, projectileToTargetSpeed);
+            var timeToReach = distanceToTarget / projectileToTargetSpeed;
+
+            // Скорость цели относительно снаряда
+            var relativeVelocity = targetVelocity - projectileVelocity;
+
+            // Боковая составляющая относительно линии выстрела
+            var tangentialVelocity = relativeVelocity - Vector2.Dot(relativeVelocity, toTarget) * toTarget;
+
+            // Продольная составляющая цели
+            var targetRadialVelocity = Vector2.Dot(targetVelocity, toTarget) * toTarget;
+
+            leadMarkerPos = targetPosition + (tangentialVelocity + targetRadialVelocity) * timeToReach;
 
             return true;
         }

@@ -6,6 +6,7 @@ public class EnemyMovementTest : MonoBehaviour
     [SerializeField] private float moveForce = 20f;
     [SerializeField] private float turnTorque = 10f;
     [SerializeField] private float maxSpeed = 10f;
+    [SerializeField] private float timer = 10f;
 
     private Rigidbody2D _rb;
 
@@ -33,11 +34,11 @@ public class EnemyMovementTest : MonoBehaviour
         Debug.LogError(_state);
         _timer += Time.fixedDeltaTime;
 
-        // Каждые 15 секунд меняем режим
-        if (_timer >= 15f)
+        if (_timer >= timer)
         {
             _timer = 0f;
             _state = (State)(((int)_state + 1) % 6);
+            _rb.angularVelocity = 0;
         }
 
         switch (_state)
@@ -62,7 +63,7 @@ public class EnemyMovementTest : MonoBehaviour
                 Circle(1f);
                 break;
 
-            case State.CircleLeft:
+            case State.CircleLeft:                
                 Circle(-1f);
                 break;
         }
@@ -81,7 +82,7 @@ public class EnemyMovementTest : MonoBehaviour
     private void Circle(float turnDirection)
     {
         // Тяга вперед
-        _rb.AddForce(transform.up * moveForce);
+        _rb.AddForce(2 * moveForce * transform.up);
 
         // Поворот корпуса
         _rb.AddTorque(-turnDirection * turnTorque);

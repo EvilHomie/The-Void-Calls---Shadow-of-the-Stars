@@ -18,20 +18,27 @@ namespace Weapons
         public void ProcessShooting(BoltRepeater weapon)
         {
             ref var data = ref weapon.RuntimeData;
-            ref var shootPointData = ref weapon.ShootPointData;
             var coreTime = GameFlowSystem.CoreTime;
 
             if (coreTime <= data.NextShootTime) return;
 
             var aimData = weapon.AimData;
 
-            var direction = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, weapon.SpreadAngle);
-            var shipVelocity = weapon.ShipRB.linearVelocity;
-            var boltSelfVelocity = direction * data.ProjectileSpeed;
+            ref var shootPointData = ref weapon.ShootPointData;
+            ref var spawnPos = ref shootPointData.Position;
+            ref var aimPos = ref aimData.AimPosition;
+            var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
 
-            var boltVelocity = shipVelocity + boltSelfVelocity;
-            var distance = Vector2.Distance(aimData.AimPosition, shootPointData.Position);
-            var timeToAimPos = distance * data.InvProjectileSpeed;
+            var shootDirection = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, weapon.SpreadAngle);
+            var boltSelfVelocity = shootDirection * data.ProjectileSpeed;
+
+            var shipVelocity = weapon.ShipRB.linearVelocity;
+            var boltTotalVelocity = shipVelocity + boltSelfVelocity;
+
+            var toAim = (aimPos - spawnPos).normalized;
+            var toAimSpeed = Vector2.Dot(boltTotalVelocity, toAim);
+            toAimSpeed = Mathf.Min(0.001f, toAimSpeed);
+            var timeToAimPos = distanceToAimPos / toAimSpeed;
 
             var hitTime = coreTime + timeToAimPos;
             var destroyTime = coreTime + data.ProjectileLifeTime;
@@ -42,10 +49,10 @@ namespace Weapons
                 weapon.IgnoredColliders,
                 destroyTime,
                 hitTime,
-                shootPointData.Position,
+                spawnPos,
                 shootPointData.ZDepth,
-                boltVelocity,
-                direction,
+                boltTotalVelocity,
+                shootDirection,
                 weapon.HitLayers,
                 weapon.DamageData);
 

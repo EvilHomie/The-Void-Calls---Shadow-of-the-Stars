@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace DefenseLayers
 {
-    [RequireComponent(typeof(Collider2D))]
     public abstract class DefenseLayerBase : MonoBehaviour
     {
         [field: SerializeField] public SizeType Size { get; private set; }
