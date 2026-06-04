@@ -29,8 +29,10 @@ namespace Weapons
             var distanceToAimPosition = Vector2.Distance(aimData.AimPosition, shootPointData.Position);
             var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
 
-            var worldHitPos = shootPointData.Position + shootPointData.Direction * aimDistance;
-            weapon.BeamLineLR.SetPosition(0, shootPointData.Position);
+            Vector3 spawnLinePos = shootPointData.Position;
+            spawnLinePos.z = shootPointData.ZDepth;
+            Vector3 worldHitPos = spawnLinePos + (Vector3)shootPointData.Direction * aimDistance;
+            weapon.BeamLineLR.SetPosition(0, spawnLinePos);
             weapon.BeamLineLR.SetPosition(1, worldHitPos);
 
             if (GameFlowSystem.CoreTime < data.NextHitTime) return;
@@ -54,7 +56,7 @@ namespace Weapons
             };
 
             hit.TryGetComponent(out DefenseLayerBase defenceLayer);
-            EventBus.BeamHitAction?.Invoke(damage, defenceLayer, hitData);
+            EventBus.HitAction?.Invoke(damage, defenceLayer, hitData);
         }
     }
 }

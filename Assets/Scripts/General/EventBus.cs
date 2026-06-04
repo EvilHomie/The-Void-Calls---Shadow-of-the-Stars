@@ -1,5 +1,4 @@
 using DefenseLayers;
-using Projectiles;
 using Ships;
 using System;
 using UnityEngine;
@@ -11,17 +10,11 @@ namespace GameSystems
     {
         public static Action<WeaponBase, bool> WeaponChangeAttackStateAction;
 
-        // делегаты для лучего оружия (без промежуточных элементов по типу снаряда). Хит регистрируется сразу в оружии.
-        public delegate void BeamHitDelegate(DamageData damageData, DefenseLayerBase layer, HitData hitData);
-        public static BeamHitDelegate BeamHitAction;
+        public delegate void HitDelegate(DamageData damageData, DefenseLayerBase layer, HitData hitData);
+        public static HitDelegate HitAction;
 
-
-        // делегаты для оружия со снарядами Bolt
         public delegate void BoltWeaponShootDelegate(in BoltWeaponShootData data);
         public static BoltWeaponShootDelegate BoltWeaponShootAction;
-
-        public delegate void BoltHitDelegate(Bolt bolt, DefenseLayerBase layer, HitData hitData);
-        public static BoltHitDelegate BoltHitAction;
 
         public static Action<DefenseLayerBase, HitData> DefenseLayerHitAction;
         public static Action<DefenseLayerBase, HitData> DefenseLayerCollisionAction;

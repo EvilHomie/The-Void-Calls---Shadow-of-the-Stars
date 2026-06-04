@@ -18,7 +18,7 @@ namespace GameSystems
         private HitEffectRegistry _hitEffectRegistry;
 
         private readonly float _collisionEffectDuration = 0.2f;
-        private float _reversedEffectDuration;
+        private float _collisionEffectDurationReversed;
 
 
         private uint _shieldHitPoolId;
@@ -30,6 +30,7 @@ namespace GameSystems
 
         private float _deffShieldHitSize = 0.1f;
         private Dictionary<SizeType, float> _sizeMap;
+        private Vector3 _vector3One = Vector3.one;
         private static readonly int EffectUVId = Shader.PropertyToID("_EffectUV");
         private static readonly int HitSizeId = Shader.PropertyToID("_HitSize");
 
@@ -38,7 +39,7 @@ namespace GameSystems
         {
             _hitEffectRegistry = hitEffectRegistry;
             _shieldsEffectRegistry = shieldsEffectRegistry;
-            _reversedEffectDuration = 1 / _collisionEffectDuration;
+            _collisionEffectDurationReversed = 1 / _collisionEffectDuration;
 
             _shieldHitPoolId = _shieldHitPoolEffect.Id;
             _shieldCollisionPoolId = _shieldCollisionPoolEffect.Id;
@@ -50,7 +51,7 @@ namespace GameSystems
             {
                 {SizeType.S, 1 },
                 {SizeType.M, 5 },
-                {SizeType.L, 25 },
+                {SizeType.L, 15 },
                 {SizeType.XL, 125 }
             };
         }
@@ -132,6 +133,7 @@ namespace GameSystems
         {
             var effect = _hitEffectRegistry.Get(_sparksPoolBlueId);
             effect.Transform.position = hitData.Position;
+            effect.Transform.localScale = _vector3One * _sizeMap[hitData.Size];
             effect.IsPlaying = true;
 
             SetUpShieldEffect(layerBase, hitData, _shieldHitPoolId);
@@ -193,7 +195,7 @@ namespace GameSystems
                 var effectTransform = effect.Transform;
                 effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
                 effectTransform.localScale = shieldTransform.lossyScale;
-                effect.Color.a = effect.RemainingLifetime * _reversedEffectDuration;
+                effect.Color.a = effect.RemainingLifetime * _collisionEffectDurationReversed;
                 effect.SpriteRenderer.color = effect.Color;
             }
         }

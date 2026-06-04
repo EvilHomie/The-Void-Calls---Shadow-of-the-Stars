@@ -15,6 +15,10 @@ namespace Projectiles
         public HashSet<Collider2D> IgnoredColliders = new();
 
         public abstract ProjectileType ProjectileType { get; }
+
+        public Vector3 Position;
+        public Vector3 Velocity;
+        public bool IsMissed;
     }
 
     public enum ProjectileType
