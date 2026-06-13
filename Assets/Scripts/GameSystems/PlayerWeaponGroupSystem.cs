@@ -36,35 +36,40 @@ public class PlayerWeaponGroupSystem : GameSystemBase
 
         if (playerShip.ActiveWeaponGroup == newActiveGroup) return;
 
-        if (!playerShip.IsAttacking)
-        {
-            playerShip.ActiveWeaponGroup = newActiveGroup;
-            EventBus.PlayerSwitchWeaponGroupAction?.Invoke();
-            return;
-        }
-
         var lastActiveGroup = playerShip.ActiveWeaponGroup;
         playerShip.ActiveWeaponGroup = newActiveGroup;
+
+        if (!playerShip.IsAttacking)
+        {
+            foreach (var slot in playerShip.WeaponSlots)
+            {
+                bool isInNewGroup = slot.WeaponGroup.ContainsAny(newActiveGroup);
+                slot.IsInActiveGroup = isInNewGroup;
+            }
+
+            EventBus.PlayerSwitchWeaponsGroupAction?.Invoke();
+            return;
+        }
 
         foreach (var slot in playerShip.WeaponSlots)
         {
             var weapon = slot.Weapon;
-            //if (weapon == null) continue;
-
             bool isInNewGroup = slot.WeaponGroup.ContainsAny(newActiveGroup);
             bool isInOldGroup = slot.WeaponGroup.ContainsAny(lastActiveGroup);
 
             if (isInNewGroup && !isInOldGroup)
             {
+                slot.IsInActiveGroup = true;
                 EventBus.WeaponChangeAttackStateAction?.Invoke(weapon, true);
             }
             else if (isInOldGroup && !isInNewGroup)
             {
+                slot.IsInActiveGroup = false;
                 EventBus.WeaponChangeAttackStateAction?.Invoke(weapon, false);
             }
         }
 
-        EventBus.PlayerSwitchWeaponGroupAction?.Invoke();
+        EventBus.PlayerSwitchWeaponsGroupAction?.Invoke();
     }
 
     private void OnPlayerChangeAttackState(bool state)
@@ -74,8 +79,6 @@ public class PlayerWeaponGroupSystem : GameSystemBase
 
         foreach (var slot in playerShip.WeaponSlots)
         {
-            //if (slot.Weapon == null) continue;
-
             bool isInGroup = slot.WeaponGroup.ContainsAny(playerShip.ActiveWeaponGroup);
 
             if (!isInGroup) continue;

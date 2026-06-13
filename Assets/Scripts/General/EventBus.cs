@@ -21,7 +21,7 @@ namespace GameSystems
 
         public static Action<Collider2D, Transform, bool> OnShieldCross;
 
-        public static Action PlayerSwitchWeaponGroupAction;
+        public static Action PlayerSwitchWeaponsGroupAction;
         public static Action<ShipInstance, Rigidbody2D> ChangeTargetAction;
     }
 }

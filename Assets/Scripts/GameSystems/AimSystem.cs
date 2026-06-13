@@ -20,7 +20,7 @@ namespace GameSystems
         [SerializeField] Transform weaponAimMarkerPrefab;
 
         private Transform _leadMarker;
-        private bool _leadMarkerIsActive;
+        private bool _showLeadMarker;
         private List<Transform> _weaponsAimMarkers;
 
 
@@ -52,7 +52,7 @@ namespace GameSystems
         {
             base.Subscribe();
             _gameFlowSystem.GameStateChanged += OnGameStateChanged;
-            EventBus.PlayerSwitchWeaponGroupAction += OnPlayerSwitchWeaponGroup;
+            EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
             EventBus.ChangeTargetAction += OnChangeTarget;
         }
 
@@ -60,14 +60,14 @@ namespace GameSystems
         {
             base.Unsubscribe();
             _gameFlowSystem.GameStateChanged -= OnGameStateChanged;
-            EventBus.PlayerSwitchWeaponGroupAction -= OnPlayerSwitchWeaponGroup;
+            EventBus.PlayerSwitchWeaponsGroupAction -= OnPlayerSwitchWeaponGroup;
             EventBus.ChangeTargetAction -= OnChangeTarget;
         }
 
         private void OnGameStateChanged(GameState state)
         {
-            if (state != GameState.CoreGameplay) DisableMarkers();
-            else EnableActiveWeaponsMarkers();
+            if (state != GameState.CoreGameplay) DisablePlayerAimMarkers();
+            else ActivatePlayerAimMarkers();
         }
 
         private void OnChangeTarget(ShipInstance instance, Rigidbody2D targetRB)
@@ -76,52 +76,59 @@ namespace GameSystems
             aimData.TargetRigidBody = targetRB;
         }
 
-        private void DisableMarkers()
+        private void OnPlayerSwitchWeaponGroup()
+        {
+            DisablePlayerAimMarkers();
+            ActivatePlayerAimMarkers();
+        }
+
+        private void DisablePlayerAimMarkers()
         {
             foreach (var marker in _weaponsAimMarkers) marker.gameObject.SetActive(false);
             _leadMarker.gameObject.SetActive(false);
         }
 
-        private void EnableActiveWeaponsMarkers()
+        private void ActivatePlayerAimMarkers()
         {
             var playerShip = _shipRegistry.PlayerShip;
             var aimData = playerShip.AimData;
-            aimData.FastestProjectileSpeed = 0;
 
-            for (int i = 0; i < playerShip.WeaponSlots.Count; i++)
+            ActiveMainWeaponsMarkers(playerShip.WeaponSlots, aimData);
+
+            if (aimData.FastestBoltSpeed == 0 || aimData.TargetRigidBody == null) return;
+
+            _leadMarker.gameObject.SetActive(true);
+            _showLeadMarker = true;
+        }
+
+        private void ActiveMainWeaponsMarkers(List<WeaponSlot> weaponSlots, AimData aimData)
+        {
+            var fastestProjectileSpeed = 0f;
+
+            for (int i = 0; i < weaponSlots.Count; i++)
             {
-                var weaponSlot = playerShip.WeaponSlots[i];
+                var weaponSlot = weaponSlots[i];
+
+                if (!weaponSlot.IsInActiveGroup) continue;
+
+                var aimMarker = _weaponsAimMarkers[i];
+                aimMarker.gameObject.SetActive(true);
+
                 var weapon = weaponSlot.Weapon;
 
-                bool isInActiveGroup = weaponSlot.WeaponGroup.ContainsAny(playerShip.ActiveWeaponGroup);
+                if (weapon is not IBoltWeapon boltWeapon) continue;
 
-                if (isInActiveGroup)
+                if (fastestProjectileSpeed < boltWeapon.ProjectileSpeed)
                 {
-                    var aimMarker = _weaponsAimMarkers[i];
-                    aimMarker.gameObject.SetActive(true);
-                }
-
-                if (weapon is IProjectileWeapon projectileWeapon)
-                {
-                    if (isInActiveGroup && aimData.FastestProjectileSpeed < projectileWeapon.ProjectileSpeed)
-                    {
-                        aimData.FastestProjectileSpeed = projectileWeapon.ProjectileSpeed;
-                    }
+                    fastestProjectileSpeed = boltWeapon.ProjectileSpeed;
+                    aimData.FastetsBoltWeapon = weapon;
                 }
             }
 
-            if (aimData.FastestProjectileSpeed != 0)
-            {
-                _leadMarker.gameObject.SetActive(true);
-                _leadMarkerIsActive = true;
-            }
+            aimData.FastestBoltSpeed = fastestProjectileSpeed;
         }
 
-        private void OnPlayerSwitchWeaponGroup()
-        {
-            DisableMarkers();
-            EnableActiveWeaponsMarkers();
-        }
+
 
         public void CorePreUpdateTick()
         {
@@ -129,8 +136,12 @@ namespace GameSystems
             var playerAimData = playerShip.AimData;
             playerAimData.AimPosition = _mouseCursor.WorldPostition;
 
-            ShowWeaponsAimMarkers(playerAimData, playerShip.WeaponSlots);
-            ShowTargetLeadMarker(playerAimData, playerShip);
+            UpdatePlayerMainWeaponsAimMarkers(playerAimData, playerShip.WeaponSlots);
+
+            if (_showLeadMarker)
+            {
+                _leadMarker.position = GetTargetLeadPosition(playerShip);
+            }
 
             foreach (var ship in _shipRegistry.ShipsInFight)
             {
@@ -141,7 +152,7 @@ namespace GameSystems
             }
         }
 
-        private void ShowWeaponsAimMarkers(AimData aimData, List<WeaponSlot> weaponSlots)
+        private void UpdatePlayerMainWeaponsAimMarkers(AimData aimData, List<WeaponSlot> weaponSlots)
         {
             for (int i = 0; i < weaponSlots.Count; i++)
             {
@@ -154,59 +165,39 @@ namespace GameSystems
             }
         }
 
-        private void ShowTargetLeadMarker(AimData aimData, ShipInstance shipInstance)
+        private Vector2 GetTargetLeadPosition(ShipInstance shipInstance)
         {
-            bool showLeadMarker;
-            if (aimData.TargetRigidBody == null || aimData.FastestProjectileSpeed == 0)
-            {
-                showLeadMarker = false;
-            }
-            else
-            {
-                if (GetTargetLeadPosition(aimData, shipInstance, out Vector2 leadPosition))
-                {
-                    _leadMarker.position = leadPosition;
-                    showLeadMarker = true;
-                }
-                else
-                {
-                    showLeadMarker = false;
-                }
-            }
+            //var weaponShooterPos = Vector2.zero;
+            //int activeWeaponsCount = 0;
 
-            _leadMarker.gameObject.SetActive(showLeadMarker);
-            _leadMarkerIsActive = showLeadMarker;
-        }
+            //for (int i = 0; i < shipInstance.WeaponSlots.Count; i++)
+            //{
+            //    var weaponSlot = shipInstance.WeaponSlots[i];
 
-        private bool GetTargetLeadPosition(AimData aimData, ShipInstance shipInstance, out Vector2 leadMarkerPos)
-        {
-            leadMarkerPos = Vector2.zero;
-            var shooterAverageWeaponPos = Vector2.zero;
-            int activeWeaponsCount = 0;
+            //    if (!weaponSlot.IsInActiveGroup) continue;
 
-            for (int i = 0; i < shipInstance.WeaponSlots.Count; i++)
-            {
-                var weaponSlot = shipInstance.WeaponSlots[i];
-                var weapon = weaponSlot.Weapon;
+            //    var weapon = weaponSlot.Weapon;
 
-                if (weapon.WeaponType == WeaponType.BoltRepeater)
-                {
-                    bool isInActiveGroup = weaponSlot.WeaponGroup.ContainsAny(shipInstance.ActiveWeaponGroup);
+            //    if (weapon.WeaponType == WeaponType.BoltRepeater)
+            //    {
+            //        bool isInActiveGroup = weaponSlot.WeaponGroup.ContainsAny(shipInstance.ActiveWeaponGroup);
 
-                    if (isInActiveGroup)
-                    {
-                        activeWeaponsCount++;
-                        ref var shootPointData = ref weapon.ShootPointData;
-                        shooterAverageWeaponPos += shootPointData.Position;
-                    }
-                }
-            }
+            //        if (isInActiveGroup)
+            //        {
+            //            activeWeaponsCount++;
+            //            ref var shootPointData = ref weapon.ShootPointData;
+            //            shooterPos += shootPointData.Position;
+            //        }
+            //    }
+            //}
 
-            if (activeWeaponsCount == 0) return false;
+            //if (activeWeaponsCount == 0) return false;
 
-            shooterAverageWeaponPos /= activeWeaponsCount;
+            //shooterPos /= activeWeaponsCount;
 
+            var aimData = shipInstance.AimData;
 
+            var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointData.Position;
             var targetRB = aimData.TargetRigidBody;
             var shooterRB = shipInstance.Rigidbody;
 
@@ -214,35 +205,27 @@ namespace GameSystems
             var targetVelocity = targetRB.linearVelocity;
             var targetPosition = targetRB.position;
 
-            var toTarget = (targetPosition - shooterAverageWeaponPos).normalized;
-            var distanceToTarget = Vector2.Distance(targetPosition, shooterAverageWeaponPos);
+            var toTarget = (targetPosition - weaponShooterPos).normalized;
+            var distanceToTarget = Vector2.Distance(targetPosition, weaponShooterPos);
 
             // Полная скорость снаряда после выстрела
-            var projectileVelocity = shooterVelocity + toTarget * aimData.FastestProjectileSpeed;
-
+            var projectileVelocity = shooterVelocity + toTarget * aimData.FastestBoltSpeed;
             // Расчет времени перехвата
             var projectileToTargetSpeed = Vector2.Dot(projectileVelocity, toTarget);
 
             if (projectileToTargetSpeed <= 0.001f) // Если снаряд не может достигнуть цели.
             {
-                leadMarkerPos = targetPosition;
-                return false;
+                return targetPosition;
             }
 
             var timeToReach = distanceToTarget / projectileToTargetSpeed;
-
             // Скорость цели относительно снаряда
             var relativeVelocity = targetVelocity - projectileVelocity;
-
             // Боковая составляющая относительно линии выстрела
             var tangentialVelocity = relativeVelocity - Vector2.Dot(relativeVelocity, toTarget) * toTarget;
-
             // Продольная составляющая цели
             var targetRadialVelocity = Vector2.Dot(targetVelocity, toTarget) * toTarget;
-
-            leadMarkerPos = targetPosition + (tangentialVelocity + targetRadialVelocity) * timeToReach;
-
-            return true;
+            return targetPosition + (tangentialVelocity + targetRadialVelocity) * timeToReach;
         }
     }
 }

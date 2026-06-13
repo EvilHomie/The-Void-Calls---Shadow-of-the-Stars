@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeater : WeaponBase, IProjectileWeapon
+    public class BoltRepeater : WeaponBase, IBoltWeapon
     {
         [HideInInspector] public BoltWeaponRuntimeData RuntimeData;
 

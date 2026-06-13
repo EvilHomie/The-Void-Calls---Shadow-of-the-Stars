@@ -8,6 +8,7 @@ namespace Ships
     {
         public WeaponGroup WeaponGroup;
         public WeaponMountType WeaponMountType;
+        public bool IsInActiveGroup;
         [field: SerializeField] public WeaponBase Weapon { get; set; }
     }
 }

@@ -19,11 +19,19 @@ namespace GameSystems
         public void Construct(ProjectileRegistry shipRegistry)
         {
             _projectileRegistry = shipRegistry;
+            //_projectileSizeMap = new()
+            //{
+            //    {SizeType.S, 1 },
+            //    {SizeType.M, 5 },
+            //    {SizeType.L, 25 },
+            //    {SizeType.XL, 125 }
+            //};
+
             _projectileSizeMap = new()
             {
                 {SizeType.S, 1 },
-                {SizeType.M, 5 },
-                {SizeType.L, 25 },
+                {SizeType.M, 2 },
+                {SizeType.L, 6 },
                 {SizeType.XL, 125 }
             };
         }

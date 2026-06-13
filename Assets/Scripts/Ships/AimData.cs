@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Weapons;
 
 namespace Ships
 {
@@ -8,6 +9,7 @@ namespace Ships
     {
         public Rigidbody2D TargetRigidBody;
         public Vector2 AimPosition;
-        public float FastestProjectileSpeed;
+        public WeaponBase FastetsBoltWeapon;
+        public float FastestBoltSpeed;
     }
 }

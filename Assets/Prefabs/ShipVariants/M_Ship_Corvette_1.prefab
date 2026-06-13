@@ -96,7 +96,8 @@ MonoBehaviour:
   AimData:
     TargetRigidBody: {fileID: 0}
     AimPosition: {x: 0, y: 0}
-    FastestProjectileSpeed: 0
+    FastetsBoltWeapon: {fileID: 0}
+    FastestBoltSpeed: 0
   MovementStats:
     DirectMaxSpeed: 0
     DirectAcceleration: 0
@@ -165,6 +166,7 @@ MonoBehaviour:
   moveForce: 2
   turnTorque: 2
   maxSpeed: 2
+  timer: 10
 --- !u!1 &1050869591912567601
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponGroup: 10
   WeaponMountType: 0
+  IsInActiveGroup: 0
   <Weapon>k__BackingField: {fileID: 1102469918935953303}
 --- !u!1 &1248904297662988132
 GameObject:
@@ -346,6 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcad1feff17708448babc9585f59646d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
+  <Size>k__BackingField: 0
   CurrentHealthPoints: 0
   ResistanceMultipliers:
     Energy: 0
@@ -563,6 +567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98fe6211522fec42804d9979e403b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ArmorLayer
+  <Size>k__BackingField: 0
   CurrentHealthPoints: 0
   ResistanceMultipliers:
     Energy: 0
@@ -705,6 +710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponGroup: 9
   WeaponMountType: 0
+  IsInActiveGroup: 0
   <Weapon>k__BackingField: {fileID: 4416055045807026853}
 --- !u!1 &5496782419825498569
 GameObject:
@@ -821,6 +827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponGroup: 4
   WeaponMountType: 0
+  IsInActiveGroup: 0
   <Weapon>k__BackingField: {fileID: 9061311302364339841}
 --- !u!1 &7423294185772194371
 GameObject:
@@ -1117,6 +1124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8fb4bf730f45d4b96ab2b129b1a1e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullLayer
+  <Size>k__BackingField: 0
   CurrentHealthPoints: 0
   ResistanceMultipliers:
     Energy: 0

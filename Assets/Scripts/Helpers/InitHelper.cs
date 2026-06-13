@@ -161,7 +161,7 @@ namespace Helpers
                 UpdateWeaponStats(weapon);
                 weapon.Init(shipInstance.AimData, shipInstance.Size);
 
-                if (weapon is IProjectileWeapon projectileWeapon)
+                if (weapon is IBoltWeapon projectileWeapon)
                 {
                     projectileWeapon.SetShipRigidbody(shipRb);
                 }

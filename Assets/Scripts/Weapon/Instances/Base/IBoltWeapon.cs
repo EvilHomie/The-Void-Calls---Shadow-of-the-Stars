@@ -2,7 +2,7 @@
 
 namespace Weapons
 {
-    public interface IProjectileWeapon
+    public interface IBoltWeapon
     {
         public float FireRate { get; }
         public float SpreadAngle { get; }
