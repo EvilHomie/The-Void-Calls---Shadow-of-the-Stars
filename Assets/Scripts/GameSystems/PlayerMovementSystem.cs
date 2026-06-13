@@ -259,7 +259,7 @@ namespace GameSystems
             }
 
             movementRuntimeData.MainEnginePower = boostersIsActive ? 1 : directThrottle;
-            movementRuntimeData.ThrustersPower = strafeThrottle;
+            movementRuntimeData.StrafePower = strafeThrottle;
             linearVelocity = right * sideVel + forward * forwardVel;
         }
 

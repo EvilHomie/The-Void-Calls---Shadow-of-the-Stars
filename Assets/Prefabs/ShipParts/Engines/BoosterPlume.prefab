@@ -4941,4 +4941,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e49a0ff3c72a144a15b4c98050d1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoostersPlume
-  boosterParticles: {fileID: 3460408655176841242}
+  <SpriteRenderer>k__BackingField: {fileID: 4253393873110616060}
+  <BoosterParticles>k__BackingField: {fileID: 3460408655176841242}

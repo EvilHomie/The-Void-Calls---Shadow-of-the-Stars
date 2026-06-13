@@ -9,7 +9,7 @@ namespace Ships
         public float MainEnginePower;
 
         public float StrafeThrottle;
-        public float ThrustersPower;
+        public float StrafePower;
 
         public float RotatePower;
 

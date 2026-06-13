@@ -104,8 +104,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 392fd3a68fa6d984381aac4989d9bbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainEnginePlume
-  forwardParticles: {fileID: 6563141370412789943}
-  reverseParticles: {fileID: 1613481560966179118}
+  <SpriteRenderer>k__BackingField: {fileID: 3260503512806078383}
+  <ForwardParticles>k__BackingField: {fileID: 6563141370412789943}
+  <ReverseParticles>k__BackingField: {fileID: 1613481560966179118}
 --- !u!1 &5904006120509081286
 GameObject:
   m_ObjectHideFlags: 0

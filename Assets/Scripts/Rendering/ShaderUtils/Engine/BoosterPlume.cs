@@ -1,45 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class BoosterPlume : MonoBehaviour
+public class BoosterPlume : PlumeBase
 {
-    [SerializeField] ParticleSystem boosterParticles;
-    private SpriteRenderer _spriteRenderer;
-    private MaterialPropertyBlock _matBlock;
-    private static readonly int _powerValueID = Shader.PropertyToID("_PowerValue");
-
-    private float _lastPowerValue = -100;
-
-    private void Awake()
-    {
-        Init();
-    }
-
-    public void Init()
-    {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        _matBlock = new MaterialPropertyBlock();
-        //_spriteRenderer.sortingOrder = SpriteSortingOrders.Engine;
-        SetPowerValue(0);
-    }
-    public void SetPowerValue(float value)
-    {
-        if (_lastPowerValue == value)
-        {
-            return;
-        }
-
-        _lastPowerValue = value;
-        _matBlock.SetFloat(_powerValueID, value);
-        _spriteRenderer.SetPropertyBlock(_matBlock);
-
-        if (value == 0)
-        {
-            boosterParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        }
-        else
-        {
-            boosterParticles.Play();
-        }
-    }
+    [field: SerializeField] public ParticleSystem BoosterParticles {  get; private set; }
 }

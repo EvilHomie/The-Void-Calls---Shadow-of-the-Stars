@@ -104,3 +104,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b4e174a4be59a409815c10ebac6528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SideEnginePlume
+  <SpriteRenderer>k__BackingField: {fileID: 3544735299346170753}

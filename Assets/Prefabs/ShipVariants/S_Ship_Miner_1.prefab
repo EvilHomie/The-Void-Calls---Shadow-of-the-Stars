@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponGroup: 4
   WeaponMountType: 0
+  IsInActiveGroup: 0
   <Weapon>k__BackingField: {fileID: 5753759993797196858}
 --- !u!1 &902372979470769241
 GameObject:
@@ -210,7 +211,8 @@ MonoBehaviour:
   AimData:
     TargetRigidBody: {fileID: 0}
     AimPosition: {x: 0, y: 0}
-    FastestProjectileSpeed: 0
+    FastetsBoltWeapon: {fileID: 0}
+    FastestBoltSpeed: 0
   MovementStats:
     DirectMaxSpeed: 0
     DirectAcceleration: 0
@@ -311,6 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponGroup: 9
   WeaponMountType: 0
+  IsInActiveGroup: 0
   <Weapon>k__BackingField: {fileID: 7526879336668903538}
 --- !u!1 &3212050392638218659
 GameObject:
@@ -359,6 +362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponGroup: 10
   WeaponMountType: 0
+  IsInActiveGroup: 0
   <Weapon>k__BackingField: {fileID: 7489062351971220425}
 --- !u!1 &4672060545020029528
 GameObject:
@@ -865,10 +869,6 @@ PrefabInstance:
     - target: {fileID: 44309152101337039, guid: 0bcad56262bddda4bb5f607fb6539102, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.78
-      objectReference: {fileID: 0}
-    - target: {fileID: 44309152101337039, guid: 0bcad56262bddda4bb5f607fb6539102, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 44309152101337039, guid: 0bcad56262bddda4bb5f607fb6539102, type: 3}
       propertyPath: m_LocalPosition.x

@@ -14,6 +14,7 @@ namespace Helpers
             InitShipStats(shipInstance);
             InitDefenceLayers(shipInstance);
             InitWeapons(shipInstance);
+            InitEngines(shipInstance);
         }
 
         private static void InitShipStats(ShipInstance shipInstance)
@@ -100,7 +101,7 @@ namespace Helpers
                     defenseLayer.Init(2000);
                 }
 
-                shipInstance.IgnoredColliders.Add(defenseLayer.Collider);
+                shipInstance.OwnColliders.Add(defenseLayer.Collider);
             }
         }
 
@@ -157,7 +158,7 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                weapon.IgnoredColliders = shipInstance.IgnoredColliders;
+                weapon.IgnoredColliders = shipInstance.OwnColliders;
                 UpdateWeaponStats(weapon);
                 weapon.Init(shipInstance.AimData, shipInstance.Size);
 
@@ -166,6 +167,29 @@ namespace Helpers
                     projectileWeapon.SetShipRigidbody(shipRb);
                 }
             }
+        }
+
+        public static void InitEngines(ShipInstance shipInstance)
+        {
+            ref var view = ref shipInstance.View;
+            view.LastMainEnginePowerValue = -100f;
+            view.LastBoostersState = true;
+
+            var newThrustersPower = new ThrustersPower() // значения -100 сугубо для инициализации
+            {
+                FrontLeft = -100,
+                FrontRight = -100f,
+                BackLeft = -100f,
+                BackRight = -100f,
+            };
+            view.ThrustersPower = newThrustersPower;
+
+            foreach (var plume in view.MainEnginesPlumes) plume.Init();
+            foreach (var plume in view.BoostersPlumes) plume.Init();
+            foreach (var plume in view.ThrustersFL) plume.Init();
+            foreach (var plume in view.ThrustersFR) plume.Init();
+            foreach (var plume in view.ThrustersBL) plume.Init();
+            foreach (var plume in view.ThrustersBR) plume.Init();
         }
 
         public static void UpdateWeaponStats(WeaponBase weaponBase)
