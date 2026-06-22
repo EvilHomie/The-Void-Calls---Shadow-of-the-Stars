@@ -1,4 +1,5 @@
 using DI;
+using Environment;
 using GameCamera;
 using Helpers;
 using Registries;
@@ -12,12 +13,17 @@ namespace GameSystems
 {
     public class AimSystem : GameSystemBase, ICorePreUpdateTickObserver
     {
+        private Vector3 _deffWeaponMarkerScale = Vector3.one * 0.03f;
+        private Vector3 _deffLeadMarkerScale = Vector3.one * 0.075f;
+
         private ShipRegistry _shipRegistry;
         private MouseCursor _mouseCursor;
         private GameFlowSystem _gameFlowSystem;
+        private CameraRigSystem _cameraRigSystem;
 
         [SerializeField] Transform leadMarkerPrefab;
         [SerializeField] Transform weaponAimMarkerPrefab;
+        [SerializeField] Transform markerConteiner;
 
         private Transform _leadMarker;
         private bool _showLeadMarker;
@@ -25,11 +31,12 @@ namespace GameSystems
 
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, MouseCursor mouseCursor, GameFlowSystem gameFlowSystem)
+        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursor mouseCursor, GameFlowSystem gameFlowSystem)
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;
             _gameFlowSystem = gameFlowSystem;
+            _cameraRigSystem = cameraRig;
         }
 
         protected override void AwakeInit()
@@ -39,12 +46,12 @@ namespace GameSystems
 
             for (int i = 0; i < WorldConfig.MaxMainWeaponSlotsCount; i++)
             {
-                var weaponMarker = Instantiate(weaponAimMarkerPrefab, transform);
+                var weaponMarker = Instantiate(weaponAimMarkerPrefab, markerConteiner);
                 weaponMarker.gameObject.SetActive(false);
                 _weaponsAimMarkers.Add(weaponMarker);
             }
 
-            _leadMarker = Instantiate(leadMarkerPrefab, transform);
+            _leadMarker = Instantiate(leadMarkerPrefab, markerConteiner);
             _leadMarker.gameObject.SetActive(false);
         }
 
@@ -54,6 +61,7 @@ namespace GameSystems
             _gameFlowSystem.GameStateChanged += OnGameStateChanged;
             EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
             EventBus.ChangeTargetAction += OnChangeTarget;
+            _cameraRigSystem.CameraOrtoSizeChanged += UpdateMarkersSizes;
         }
 
         protected override void Unsubscribe()
@@ -62,12 +70,19 @@ namespace GameSystems
             _gameFlowSystem.GameStateChanged -= OnGameStateChanged;
             EventBus.PlayerSwitchWeaponsGroupAction -= OnPlayerSwitchWeaponGroup;
             EventBus.ChangeTargetAction -= OnChangeTarget;
+            _cameraRigSystem.CameraOrtoSizeChanged -= UpdateMarkersSizes;
+        }
+
+        private void UpdateMarkersSizes(float orthoSize)
+        {
+            foreach (var marker in _weaponsAimMarkers) marker.localScale = _deffWeaponMarkerScale * orthoSize;
+            _leadMarker.localScale = _deffLeadMarkerScale * orthoSize;
         }
 
         private void OnGameStateChanged(GameState state)
         {
-            if (state != GameState.CoreGameplay) DisablePlayerAimMarkers();
-            else ActivatePlayerAimMarkers();
+            if (state != GameState.CoreGameplay) DisableMarkers();
+            else EnableMarkers();
         }
 
         private void OnChangeTarget(ShipInstance instance, Rigidbody2D targetRB)
@@ -78,36 +93,25 @@ namespace GameSystems
 
         private void OnPlayerSwitchWeaponGroup()
         {
-            DisablePlayerAimMarkers();
-            ActivatePlayerAimMarkers();
+            DisableMarkers();
+            EnableMarkers();
         }
 
-        private void DisablePlayerAimMarkers()
+        private void DisableMarkers()
         {
             foreach (var marker in _weaponsAimMarkers) marker.gameObject.SetActive(false);
             _leadMarker.gameObject.SetActive(false);
         }
 
-        private void ActivatePlayerAimMarkers()
+        private void EnableMarkers()
         {
             var playerShip = _shipRegistry.PlayerShip;
             var aimData = playerShip.AimData;
-
-            ActiveMainWeaponsMarkers(playerShip.WeaponSlots, aimData);
-
-            if (aimData.FastestBoltSpeed == 0 || aimData.TargetRigidBody == null) return;
-
-            _leadMarker.gameObject.SetActive(true);
-            _showLeadMarker = true;
-        }
-
-        private void ActiveMainWeaponsMarkers(List<WeaponSlot> weaponSlots, AimData aimData)
-        {
             var fastestProjectileSpeed = 0f;
 
-            for (int i = 0; i < weaponSlots.Count; i++)
+            for (int i = 0; i < playerShip.WeaponSlots.Count; i++)
             {
-                var weaponSlot = weaponSlots[i];
+                var weaponSlot = playerShip.WeaponSlots[i];
 
                 if (!weaponSlot.IsInActiveGroup) continue;
 
@@ -118,7 +122,7 @@ namespace GameSystems
 
                 if (weapon is not IBoltWeapon boltWeapon) continue;
 
-                if (fastestProjectileSpeed < boltWeapon.ProjectileSpeed)
+                if (fastestProjectileSpeed > boltWeapon.ProjectileSpeed)
                 {
                     fastestProjectileSpeed = boltWeapon.ProjectileSpeed;
                     aimData.FastetsBoltWeapon = weapon;
@@ -126,22 +130,21 @@ namespace GameSystems
             }
 
             aimData.FastestBoltSpeed = fastestProjectileSpeed;
+
+            if (fastestProjectileSpeed == 0 || aimData.TargetRigidBody == null) return;
+
+            _leadMarker.gameObject.SetActive(true);
+            _showLeadMarker = true;
         }
-
-
 
         public void CorePreUpdateTick()
         {
             var playerShip = _shipRegistry.PlayerShip;
-            var playerAimData = playerShip.AimData;
-            playerAimData.AimPosition = _mouseCursor.WorldPostition;
+            
 
-            UpdatePlayerMainWeaponsAimMarkers(playerAimData, playerShip.WeaponSlots);
+            UpdateMarkersPosition(playerShip);
 
-            if (_showLeadMarker)
-            {
-                _leadMarker.position = GetTargetLeadPosition(playerShip);
-            }
+           
 
             foreach (var ship in _shipRegistry.ShipsInFight)
             {
@@ -152,56 +155,40 @@ namespace GameSystems
             }
         }
 
-        private void UpdatePlayerMainWeaponsAimMarkers(AimData aimData, List<WeaponSlot> weaponSlots)
+        private void UpdateMarkersPosition(ShipInstance shipInstance)
         {
-            for (int i = 0; i < weaponSlots.Count; i++)
+            var aimData = shipInstance.AimData;
+            aimData.AimPosition = _mouseCursor.WorldPostition;
+
+            for (int i = 0; i < shipInstance.WeaponSlots.Count; i++)
             {
-                var weapon = weaponSlots[i].Weapon;
-                ref var shootPointData = ref weapon.ShootPointData;
-                ref var aimStats = ref weapon.AimStats;
-                var distanceToAimPosition = Vector2.Distance(aimData.AimPosition, shootPointData.Position);
+                var weaponSlot = shipInstance.WeaponSlots[i];
+
+                if (!weaponSlot.IsInActiveGroup) continue;
+
+                var weapon = weaponSlot.Weapon;
+                var shootPointData = weapon.ShootPointData;
+                var shootPosition = shootPointData.Position;
+                var direction = shootPointData.Direction;
+                var aimStats = weapon.AimStats;
+
+                var distanceToAimPosition = Vector2.Distance(shipInstance.AimData.AimPosition, shootPosition);
                 var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
-                _weaponsAimMarkers[i].position = shootPointData.Position + shootPointData.Direction * aimDistance;
+                _weaponsAimMarkers[i].position = shootPosition + direction * aimDistance;
+            }
+
+            if (_showLeadMarker)
+            {
+                _leadMarker.position = GetTargetLeadPosition(aimData, shipInstance.Rigidbody);
             }
         }
 
-        private Vector2 GetTargetLeadPosition(ShipInstance shipInstance)
+        private Vector2 GetTargetLeadPosition(AimData aimData, Rigidbody2D ownRigidBody)
         {
-            //var weaponShooterPos = Vector2.zero;
-            //int activeWeaponsCount = 0;
-
-            //for (int i = 0; i < shipInstance.WeaponSlots.Count; i++)
-            //{
-            //    var weaponSlot = shipInstance.WeaponSlots[i];
-
-            //    if (!weaponSlot.IsInActiveGroup) continue;
-
-            //    var weapon = weaponSlot.Weapon;
-
-            //    if (weapon.WeaponType == WeaponType.BoltRepeater)
-            //    {
-            //        bool isInActiveGroup = weaponSlot.WeaponGroup.ContainsAny(shipInstance.ActiveWeaponGroup);
-
-            //        if (isInActiveGroup)
-            //        {
-            //            activeWeaponsCount++;
-            //            ref var shootPointData = ref weapon.ShootPointData;
-            //            shooterPos += shootPointData.Position;
-            //        }
-            //    }
-            //}
-
-            //if (activeWeaponsCount == 0) return false;
-
-            //shooterPos /= activeWeaponsCount;
-
-            var aimData = shipInstance.AimData;
-
             var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointData.Position;
             var targetRB = aimData.TargetRigidBody;
-            var shooterRB = shipInstance.Rigidbody;
 
-            var shooterVelocity = shooterRB.linearVelocity;
+            var shooterVelocity = ownRigidBody.linearVelocity;
             var targetVelocity = targetRB.linearVelocity;
             var targetPosition = targetRB.position;
 

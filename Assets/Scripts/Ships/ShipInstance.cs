@@ -21,7 +21,7 @@ namespace Ships
         public MovementRuntimeData MovementRuntimeData;
 
         public EquipData Equip;
-        public MovementView View;
+        public MovementView MovementView;
 
         public ResistanceStatsData ResistanceStats;
     }

@@ -164,14 +164,14 @@ namespace Helpers
 
                 if (weapon is IBoltWeapon projectileWeapon)
                 {
-                    projectileWeapon.SetShipRigidbody(shipRb);
+                    projectileWeapon.InitBoltWeapon(shipRb);
                 }
             }
         }
 
         public static void InitEngines(ShipInstance shipInstance)
         {
-            ref var view = ref shipInstance.View;
+            ref var view = ref shipInstance.MovementView;
             view.LastMainEnginePowerValue = -100f;
             view.LastBoostersState = true;
 

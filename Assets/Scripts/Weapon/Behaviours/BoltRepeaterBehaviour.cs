@@ -24,9 +24,9 @@ namespace Weapons
 
             var aimData = weapon.AimData;
 
-            ref var shootPointData = ref weapon.ShootPointData;
-            ref var spawnPos = ref shootPointData.Position;
-            ref var aimPos = ref aimData.AimPosition;
+            var shootPointData = weapon.ShootPointData;
+            var spawnPos = shootPointData.Position;
+            var aimPos = aimData.AimPosition;
             var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
 
             var shootDirection = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, weapon.SpreadAngle);
@@ -44,7 +44,7 @@ namespace Weapons
             var destroyTime = coreTime + data.ProjectileLifeTime;
 
             var shootData = new BoltWeaponShootData(
-                weapon.PoolId,
+                weapon.ProjectilePoolId,
                 weapon.Size,
                 weapon.IgnoredColliders,
                 destroyTime,

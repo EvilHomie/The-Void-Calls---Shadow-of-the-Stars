@@ -78,6 +78,7 @@ namespace GameSystems
             _targetOrthographicSize = (_currentViewDistance.x + _currentViewDistance.y) / 2;
             _currentOrthographicSize = _cinemachineCamera.Lens.OrthographicSize;
             _changeOrtSizeSpeed = _currentViewDistance.y;
+            CameraOrtoSizeChanged?.Invoke(_currentOrthographicSize);
         }
 
         private void UpdateTargetGroup(ShipInstance shipInstance)

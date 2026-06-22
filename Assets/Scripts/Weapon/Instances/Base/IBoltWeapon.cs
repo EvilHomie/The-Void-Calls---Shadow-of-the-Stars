@@ -8,6 +8,6 @@ namespace Weapons
         public float SpreadAngle { get; }
         public float ProjectileSpeed { get; }
         public Rigidbody2D ShipRB { get; }
-        void SetShipRigidbody(Rigidbody2D rb);
+        void InitBoltWeapon(Rigidbody2D rb);
     }
 }

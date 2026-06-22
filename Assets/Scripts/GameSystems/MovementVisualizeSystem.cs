@@ -27,7 +27,7 @@ namespace GameSystems
         {
             var playerShip = _shipRegistry.PlayerShip;
             ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            ref var view = ref playerShip.View;
+            ref var view = ref playerShip.MovementView;
             VisualizeMainEngine(movementRuntimeData, ref view);
             VisualizeThrusters(movementRuntimeData, ref view);
             VisualizeBoosters(movementRuntimeData, ref view);

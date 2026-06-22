@@ -6,7 +6,7 @@ namespace GameSystems
 {
     public class EnvironmentSystem : GameSystemBase, ICoreUpdateTickObserver
     {
-        private Vector3 _deffScarryCanvasScale;
+        private Vector3 _deffScarryCanvasScale = Vector3.one * 0.5f;
         private CameraRigSystem _cameraRigSystem;
         private StarryCanvasView _starryCanvasView;
         private Camera _camera;
@@ -20,7 +20,6 @@ namespace GameSystems
             _camera = camera;
             _starryCanvasView = starryCanvasView;
             _cameraRigSystem = cameraRig;
-            _deffScarryCanvasScale = new(0.5f, 0.5f, 0.5f);
         }
 
         protected override void AwakeInit()
@@ -46,9 +45,9 @@ namespace GameSystems
             base.Unsubscribe();
             _cameraRigSystem.CameraOrtoSizeChanged -= OnChangedCameraOrtoSize;
         }
-        private void OnChangedCameraOrtoSize(float relativeValue)
+        private void OnChangedCameraOrtoSize(float orthoSize)
         {
-            _starryCanvasView.Transform.localScale = _deffScarryCanvasScale * relativeValue;
+            _starryCanvasView.Transform.localScale = _deffScarryCanvasScale * orthoSize;
         }
 
         public void Init(StarryCanvasLayer layer)

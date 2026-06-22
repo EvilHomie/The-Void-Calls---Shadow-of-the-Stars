@@ -14,11 +14,11 @@ namespace Weapons
         [field: SerializeField] PoolReference projectilePool;
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         public Rigidbody2D ShipRB { get; private set; }
-        public uint PoolId { get; private set; }
-        public void SetShipRigidbody(Rigidbody2D rb)
+        public uint ProjectilePoolId { get; private set; }
+        public void InitBoltWeapon(Rigidbody2D rb)
         {
             ShipRB = rb;
-            PoolId = projectilePool.Id;
+            ProjectilePoolId = projectilePool.Id;
         }
     }
 

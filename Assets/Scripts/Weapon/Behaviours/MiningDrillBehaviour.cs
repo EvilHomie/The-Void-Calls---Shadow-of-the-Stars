@@ -26,11 +26,11 @@ namespace Weapons
             ref var shootPointData = ref weapon.ShootPointData;
             var aimData = weapon.AimData;
 
-            var distanceToAimPosition = Vector2.Distance(aimData.AimPosition, shootPointData.Position);
-            var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
-
             Vector3 spawnLinePos = shootPointData.Position;
             spawnLinePos.z = shootPointData.ZDepth;
+            var distanceToAimPosition = Vector2.Distance(aimData.AimPosition, spawnLinePos);
+            var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
+
             Vector3 worldHitPos = spawnLinePos + (Vector3)shootPointData.Direction * aimDistance;
             weapon.BeamLineLR.SetPosition(0, spawnLinePos);
             weapon.BeamLineLR.SetPosition(1, worldHitPos);
