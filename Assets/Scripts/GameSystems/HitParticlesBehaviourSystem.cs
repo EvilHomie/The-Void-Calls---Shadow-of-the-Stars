@@ -1,7 +1,7 @@
 using DI;
 using Registries;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class HitParticlesBehaviourSystem : GameSystemBase, ICoreUpdateTickObserver
     {

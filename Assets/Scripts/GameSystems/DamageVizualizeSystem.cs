@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Weapons;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class DamageVizualizeSystem : GameSystemBase, ICoreUpdateTickObserver
     {

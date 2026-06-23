@@ -2,7 +2,7 @@ using DI;
 using Registries;
 using UnityEngine;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class ShieldRepulsionSystem : GameSystemBase, ICoreFixedUpdateTickObserver
     {

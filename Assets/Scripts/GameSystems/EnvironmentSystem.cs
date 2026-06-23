@@ -2,9 +2,9 @@ using DI;
 using Environment;
 using UnityEngine;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
-    public class EnvironmentSystem : GameSystemBase, ICoreUpdateTickObserver
+    public class EnvironmentSystem : MonoBehaviour
     {
         private Vector3 _deffScarryCanvasScale = Vector3.one * 0.5f;
         private CameraRigSystem _cameraRigSystem;
@@ -13,38 +13,21 @@ namespace GameSystems
 
         private Vector2 _lastCameraPos;
 
-
         [Inject]
         public void Construct(Camera camera, CameraRigSystem cameraRig, StarryCanvasView starryCanvasView)
         {
             _camera = camera;
             _starryCanvasView = starryCanvasView;
             _cameraRigSystem = cameraRig;
+            _cameraRigSystem.CameraOrtoSizeChanged += OnChangedCameraOrtoSize;
+            Init(_starryCanvasView.Layer);
         }
 
-        protected override void AwakeInit()
-        {
-            foreach (var layer in _starryCanvasView.Layers)
-            {
-                Init(layer);
-            }
-        }
-        public void CoreUpdateTick(float deltaTime)
+        public void Execute(float deltaTime)
         {
             UpdateStarView(deltaTime);
         }
 
-        protected override void Subscribe()
-        {
-            base.Subscribe();
-            _cameraRigSystem.CameraOrtoSizeChanged += OnChangedCameraOrtoSize;
-        }
-
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            _cameraRigSystem.CameraOrtoSizeChanged -= OnChangedCameraOrtoSize;
-        }
         private void OnChangedCameraOrtoSize(float orthoSize)
         {
             _starryCanvasView.Transform.localScale = _deffScarryCanvasScale * orthoSize;
@@ -62,7 +45,6 @@ namespace GameSystems
             layer.LastOffset = randomOffset;
             layer.PropertyBlock.SetVector(StarryCanvasLayer.OffsetID, randomOffset);
             layer.Renderer.SetPropertyBlock(layer.PropertyBlock);
-            //layer.Renderer.sortingOrder = SpriteSortingOrders.StarryCanvas;
         }
 
         private void UpdateStarView(float dTime)
@@ -71,13 +53,10 @@ namespace GameSystems
             var deltaPos = position - _lastCameraPos;
             _lastCameraPos = position;
 
-            foreach (var layer in _starryCanvasView.Layers)
-            {
-                layer.LastOffset += dTime * layer.SpeedMod * deltaPos;
-                layer.PropertyBlock.SetVector(StarryCanvasLayer.OffsetID, layer.LastOffset);
-
-                layer.Renderer.SetPropertyBlock(layer.PropertyBlock);
-            }
+            var starryCanvasLayer = _starryCanvasView.Layer;
+            starryCanvasLayer.LastOffset += dTime * starryCanvasLayer.SpeedMod * deltaPos;
+            starryCanvasLayer.PropertyBlock.SetVector(StarryCanvasLayer.OffsetID, starryCanvasLayer.LastOffset);
+            starryCanvasLayer.Renderer.SetPropertyBlock(starryCanvasLayer.PropertyBlock);
         }
     }
 }

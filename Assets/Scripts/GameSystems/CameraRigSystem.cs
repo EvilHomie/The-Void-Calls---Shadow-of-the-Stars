@@ -1,38 +1,38 @@
 ﻿using DI;
-using GameInput;
-using Registries;
 using Ships;
 using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-using MouseCursor = GameCamera.MouseCursor;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
-    public class CameraRigSystem : GameSystemBase, ICoreUpdateTickObserver
-    {
-        [SerializeField] CinemachineTargetGroup _cinemachineTargetGroup;
-        [SerializeField] float _mouseCursorWeight = 0.8f;
-        [SerializeField] CinemachineCamera _cinemachineCamera;
+    public class CameraRigSystem : GameSystemBase
+    {        
+        [SerializeField] float _mouseCursorWeight;
         [SerializeField] float _changeOrtSizeSpeed;
 
         public Action<float> CameraOrtoSizeChanged { get; set; }
-        private MouseCursor _mouseCursor;
-        private ShipRegistry _shipRegistry;
-
-        private IPlayerInput _input;
+        private MouseCursorSystem _mouseCursorSystem;
+        CinemachineTargetGroup _cinemachineTargetGroup;
+        CinemachineCamera _cinemachineCamera;
+        private PlayerIntentData _playerIntentData;
         private float _targetOrthographicSize;
         private float _currentOrthographicSize;
         private Dictionary<SizeType, Vector2> _viewDistanceMap;
         private Vector2 _currentViewDistance;
 
         [Inject]
-        public void Construct(MouseCursor mouseCursor, IPlayerInput playerInput, ShipRegistry shipRegistry)
+        public void Construct(
+            MouseCursorSystem mouseCursorSystem,
+            PlayerIntentData  playerIntentData,
+            CinemachineCamera cinemachineCamera,
+            CinemachineTargetGroup cinemachineTargetGroup)
         {
-            _shipRegistry = shipRegistry;
-            _mouseCursor = mouseCursor;
-            _input = playerInput;
+            _mouseCursorSystem = mouseCursorSystem;
+            _playerIntentData = playerIntentData;
+            _cinemachineTargetGroup = cinemachineTargetGroup;
+            _cinemachineCamera = cinemachineCamera;
 
             _viewDistanceMap = new()
             {
@@ -41,28 +41,17 @@ namespace GameSystems
                 {SizeType.L, new (8,20) },
                 {SizeType.XL, new (1,30) }
             };
+            EventBus.PlayerShipSpawned += Init;
         }
 
-        private void Start()
+        public void Execute(float deltaTime)
         {
-            var playerShip = _shipRegistry.PlayerShip;
-            Init(playerShip);
-        }
+            if (_playerIntentData.ChangeZoom != 0)
+            {
+                OnMouseScroll(_playerIntentData.ChangeZoom);
+            }
 
-        protected override void Subscribe()
-        {
-            base.Subscribe();
-            _input.ChangeZoomAction += OnMouseScroll;
-        }
 
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            _input.ChangeZoomAction -= OnMouseScroll;
-        }
-
-        public void CoreUpdateTick(float deltaTime)
-        {
             if (_currentOrthographicSize != _targetOrthographicSize)
             {
                 _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, deltaTime * _changeOrtSizeSpeed);
@@ -96,7 +85,7 @@ namespace GameSystems
 
             var cursorTarget = new CinemachineTargetGroup.Target()
             {
-                Object = _mouseCursor.transform,
+                Object = _mouseCursorSystem.CursorTransform,
                 Weight = _mouseCursorWeight,
                 Radius = 1,
             };

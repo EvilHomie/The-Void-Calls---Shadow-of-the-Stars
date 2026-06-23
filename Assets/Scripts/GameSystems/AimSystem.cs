@@ -1,15 +1,11 @@
 using DI;
-using Environment;
-using GameCamera;
-using Helpers;
 using Registries;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Weapons;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class AimSystem : GameSystemBase, ICorePreUpdateTickObserver
     {
@@ -17,7 +13,7 @@ namespace GameSystems
         private Vector3 _deffLeadMarkerScale = Vector3.one * 0.075f;
 
         private ShipRegistry _shipRegistry;
-        private MouseCursor _mouseCursor;
+        private MouseCursorSystem _mouseCursor;
         private GameFlowSystem _gameFlowSystem;
         private CameraRigSystem _cameraRigSystem;
 
@@ -31,7 +27,7 @@ namespace GameSystems
 
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursor mouseCursor, GameFlowSystem gameFlowSystem)
+        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursorSystem mouseCursor, GameFlowSystem gameFlowSystem)
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;

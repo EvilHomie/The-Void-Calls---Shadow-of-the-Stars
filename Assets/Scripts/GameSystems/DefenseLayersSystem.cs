@@ -1,16 +1,15 @@
 using DI;
-using GameCamera;
 using Registries;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class DefenseLayersSystem : GameSystemBase, ICorePreUpdateTickObserver
     {
         private ShipRegistry _shipRegistry;
-        private MouseCursor _mouseCursor;
+        private MouseCursorSystem _mouseCursor;
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, MouseCursor mouseCursor)
+        public void Construct(ShipRegistry shipRegistry, MouseCursorSystem mouseCursor)
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;

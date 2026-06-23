@@ -4,7 +4,7 @@ using Ships;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class MovementVisualizeSystem : GameSystemBase, ICorePreUpdateTickObserver
     {

@@ -4,9 +4,9 @@ using Registries;
 using UnityEngine;
 using Weapons;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
-    public class WeaponAttackSystem : GameSystemBase, ICoreUpdateTickObserver
+    public class WeaponBehaviourSystem : MonoBehaviour
     {
         private WeaponsBehaviour _weaponsBehaviour;
         private WeaponRegistry _weaponRegistry;
@@ -18,27 +18,14 @@ namespace GameSystems
             _weaponRegistry = weaponRegistry;
             _shipRegistry = shipRegistry;
             _weaponsBehaviour = new WeaponsBehaviour();
+            EventBus.WeaponChangeAttackStateAction += OnWeaponChangeAttackStateAction;
         }
 
-        public void CoreUpdateTick(float deltaTime)
+        public void Execute(float deltaTime)
         {
             Aim(deltaTime);
             ProceedShooting();
         }
-
-        protected override void Subscribe()
-        {
-            base.Subscribe();
-            EventBus.WeaponChangeAttackStateAction += OnWeaponChangeAttackStateAction;
-        }
-
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            EventBus.WeaponChangeAttackStateAction -= OnWeaponChangeAttackStateAction;
-        }
-
-
         private void OnWeaponChangeAttackStateAction(WeaponBase weapon, bool state)
         {
             if (state)

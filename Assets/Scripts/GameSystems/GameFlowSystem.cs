@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class GameFlowSystem : GameSystemBase
     {
         public static float CoreTime { get; private set; }
-        public static float CoreDeltaTimeTick { get; private set; }
+        public static float CoreTickDeltaTime { get; private set; }
 
         public Action<GameState> GameStateChanged { get; set; }
 
@@ -15,6 +15,8 @@ namespace GameSystems
         private readonly List<ICoreUpdateTickObserver> _coreUpdateTickObservers = new();
         private readonly List<ICoreLateUpdateTickObserver> _coreLateUpdateTickObservers = new();
         private readonly List<ICoreFixedUpdateTickObserver> _coreFixedUpdateTickObservers = new();
+        private readonly List<ICorePreFixedUpdateTickObserver> _corePreFixedUpdateTickObservers = new();
+        private readonly List<ICorePostLateUpdateTickObserver> _corePostLateUpdateTickObserver = new();
         private GameState _currentGameState = GameState.None;
         private float _gameSpeed = 1;
 
@@ -31,14 +33,18 @@ namespace GameSystems
             if (observer is ICoreUpdateTickObserver updateTickObserver) _coreUpdateTickObservers.Add(updateTickObserver);
             if (observer is ICoreLateUpdateTickObserver lateUpdateTickObserver) _coreLateUpdateTickObservers.Add(lateUpdateTickObserver);
             if (observer is ICoreFixedUpdateTickObserver fixedUpdateTickObserver) _coreFixedUpdateTickObservers.Add(fixedUpdateTickObserver);
+            if (observer is ICorePreFixedUpdateTickObserver  corePreFixedUpdateTickObserver) _corePreFixedUpdateTickObservers.Add(corePreFixedUpdateTickObserver);
+            if (observer is ICorePostLateUpdateTickObserver  corePostLateUpdateTickObserver) _corePostLateUpdateTickObserver.Add(corePostLateUpdateTickObserver);
         }
 
-        public void RemoveTickObserver(ITickObserver tickObserver)
+        public void RemoveTickObserver(ITickObserver observer)
         {
-            if (tickObserver is ICorePreUpdateTickObserver preUpdateTickObserver) _corePreUpdateTickObservers.Remove(preUpdateTickObserver);
-            if (tickObserver is ICoreUpdateTickObserver updateTickObserver) _coreUpdateTickObservers.Remove(updateTickObserver);
-            if (tickObserver is ICoreLateUpdateTickObserver lateUpdateTickObserver) _coreLateUpdateTickObservers.Remove(lateUpdateTickObserver);
-            if (tickObserver is ICoreFixedUpdateTickObserver fixedUpdateTickObserver) _coreFixedUpdateTickObservers.Remove(fixedUpdateTickObserver);
+            if (observer is ICorePreUpdateTickObserver preUpdateTickObserver) _corePreUpdateTickObservers.Remove(preUpdateTickObserver);
+            if (observer is ICoreUpdateTickObserver updateTickObserver) _coreUpdateTickObservers.Remove(updateTickObserver);
+            if (observer is ICoreLateUpdateTickObserver lateUpdateTickObserver) _coreLateUpdateTickObservers.Remove(lateUpdateTickObserver);
+            if (observer is ICoreFixedUpdateTickObserver fixedUpdateTickObserver) _coreFixedUpdateTickObservers.Remove(fixedUpdateTickObserver);
+            if (observer is ICorePreFixedUpdateTickObserver corePreFixedUpdateTickObserver) _corePreFixedUpdateTickObservers.Remove(corePreFixedUpdateTickObserver);
+            if (observer is ICorePostLateUpdateTickObserver corePostLateUpdateTickObserver) _corePostLateUpdateTickObserver.Remove(corePostLateUpdateTickObserver);
         }
 
         public void ChangeGameState(GameState newState)
@@ -59,7 +65,7 @@ namespace GameSystems
             {
                 var coreDeltaTimeTick = Time.unscaledDeltaTime * _gameSpeed;
                 CoreTime += coreDeltaTimeTick;
-                CoreDeltaTimeTick = coreDeltaTimeTick;
+                CoreTickDeltaTime = coreDeltaTimeTick;
                 foreach (var observer in _corePreUpdateTickObservers) observer.CorePreUpdateTick();
                 foreach (var observer in _coreUpdateTickObservers) observer.CoreUpdateTick(coreDeltaTimeTick);
             }            
@@ -71,6 +77,7 @@ namespace GameSystems
             {
                 var coreFixedDTTick = Time.fixedUnscaledDeltaTime * _gameSpeed;
 
+                foreach (var observer in _corePreFixedUpdateTickObservers) observer.CorePreFixedUpdateTick(coreFixedDTTick);
                 foreach (var observer in _coreFixedUpdateTickObservers) observer.CoreFixedUpdateTick(coreFixedDTTick);
             }  
         }
@@ -80,6 +87,7 @@ namespace GameSystems
             if (_currentGameState == GameState.CoreGameplay)
             {
                 foreach (var observer in _coreLateUpdateTickObservers) observer.CoreLateUpdateTick();
+                foreach (var observer in _corePostLateUpdateTickObserver) observer.CorePostLateUpdateTick(CoreTickDeltaTime);
             }
         }
     }
@@ -104,6 +112,14 @@ public interface ICoreUpdateTickObserver : ITickObserver
 public interface ICoreLateUpdateTickObserver : ITickObserver
 {
     public void CoreLateUpdateTick();
+}
+public interface ICorePostLateUpdateTickObserver : ITickObserver
+{
+    public void CorePostLateUpdateTick(float deltaTime);
+}
+public interface ICorePreFixedUpdateTickObserver : ITickObserver
+{
+    public void CorePreFixedUpdateTick(float fixedDT);
 }
 public interface ICoreFixedUpdateTickObserver : ITickObserver
 {

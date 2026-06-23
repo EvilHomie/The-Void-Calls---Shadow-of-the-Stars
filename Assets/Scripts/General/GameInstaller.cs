@@ -1,11 +1,9 @@
+using CoreGameSystems;
 using Environment;
-using GameCamera;
-using GameInput;
 using GamePools;
-using GameSystems;
 using Registries;
 using Ships;
-using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace DI
@@ -14,7 +12,7 @@ namespace DI
     {
         [SerializeField] ShipInstance playerShip;
         [SerializeField] Camera mainCamera;
-        [SerializeField] MouseCursor mouseCursor;
+        [SerializeField] MouseCursorSystem mouseCursorSystem;
         [SerializeField] GameFlowSystem gameFlowSystem;
         [SerializeField] ShipRegistry shipRegistry;
         [SerializeField] WeaponRegistry weaponRegistry;
@@ -26,6 +24,14 @@ namespace DI
         [SerializeField] ProjectilesPool projectilesPool;
         [SerializeField] ShieldsEffectRegistry shieldsEffectRegistry;
         [SerializeField] ShieldEffectsPool shieldEffectsPool;
+        [SerializeField] PlayerControlSystem playerControlSystem;
+        [SerializeField] PlayerMovementSystem playerMovementSystem;
+        [SerializeField] PlayerWeaponControlSystem playerWeaponControlSystem;
+        [SerializeField] WeaponBehaviourSystem weaponBehaviourSystem;
+        [SerializeField] EnvironmentSystem environmentSystem;
+        [SerializeField] PlayerIntentData playerIntentData;
+        [SerializeField] CinemachineTargetGroup  cinemachineTargetGroup;
+        [SerializeField] CinemachineCamera cinemachineCamera;
 
 
         protected override void InstallBindings()
@@ -38,6 +44,14 @@ namespace DI
             Container.Bind<HitEffectRegistry>().FromInstance(hitParticleRegistry).AsSingleton();
             Container.Bind<ShieldEffectsPool>().FromInstance(shieldEffectsPool).AsSingleton();
             Container.Bind<ShieldsEffectRegistry>().FromInstance(shieldsEffectRegistry).AsSingleton();
+            Container.Bind<PlayerControlSystem>().FromInstance(playerControlSystem).AsSingleton();
+            Container.Bind<PlayerMovementSystem>().FromInstance(playerMovementSystem).AsSingleton();
+            Container.Bind<PlayerWeaponControlSystem>().FromInstance(playerWeaponControlSystem).AsSingleton();
+            Container.Bind<WeaponBehaviourSystem>().FromInstance(weaponBehaviourSystem).AsSingleton();
+            Container.Bind<EnvironmentSystem>().FromInstance(environmentSystem).AsSingleton();
+            Container.Bind<PlayerIntentData>().FromInstance(playerIntentData).AsSingleton();
+            Container.Bind<CinemachineTargetGroup>().FromInstance(cinemachineTargetGroup).AsSingleton();
+            Container.Bind<CinemachineCamera>().FromInstance(cinemachineCamera).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();
@@ -47,7 +61,7 @@ namespace DI
 
             Container.Bind<Camera>().FromInstance(mainCamera).AsSingleton();
             Container.Bind<CameraRigSystem>().FromInstance(cameraRigSystem).AsSingleton();
-            Container.Bind<MouseCursor>().FromInstance(mouseCursor).AsSingleton();
+            Container.Bind<MouseCursorSystem>().FromInstance(mouseCursorSystem).AsSingleton();
 
 
 

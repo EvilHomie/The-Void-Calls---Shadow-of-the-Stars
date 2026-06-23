@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using Weapons;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class EventBus : MonoBehaviour
     {
@@ -23,6 +23,8 @@ namespace GameSystems
 
         public static Action PlayerSwitchWeaponsGroupAction;
         public static Action<ShipInstance, Rigidbody2D> ChangeTargetAction;
+
+        public static Action<ShipInstance> PlayerShipSpawned;
     }
 }
 

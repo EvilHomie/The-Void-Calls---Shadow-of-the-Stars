@@ -1,13 +1,11 @@
 ﻿using DI;
-using GameInput;
 using Registries;
 using Ships;
 using UnityEngine;
-using MouseCursor = GameCamera.MouseCursor;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
-    public class PlayerMovementSystem : GameSystemBase, ICoreFixedUpdateTickObserver
+    public class PlayerMovementSystem : MonoBehaviour/*, ICoreFixedUpdateTickObserver*/
     {
         private const float EPS = 0.001f;
         private const float _minAcceleration = 0.005f; // 0.03f минимальный коэффициент (чтобы не было "залипания") при модификации ускорения
@@ -16,64 +14,74 @@ namespace GameSystems
         private const float _damperMaxFactor = 5f; // усиление гасителей при макс скорости (будто выше сопротивление)
         private const float _damperMinFactor = 0.5f; // сила гасителей при минимальной скорости (чтобы не залипало)
         private const float _rotateSlowAngle = 20f;
-        private const float _minMouseDistanceSQR = 0.1f;
         private const float _minBoostersPowerForEnableMod = 0.2f;
         private const float _throttleZeroDelay = 0.3f;
 
         private float _smoothZoneMod; // 1/ _smoothZoneTime. сугубо чтобы уйти от деления в логике
         private float _throttleZeroDelayTimer; // текущий таймер остановки на нуле
 
-
-        private IPlayerInput _input;
-        private Vector2 _inputValue;
-        private MouseCursor _mouseCursor;
         private ShipRegistry _shipRegystry;
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, MouseCursor mouseCursor, ShipRegistry shipRegystry)
+        public void Construct(ShipRegistry shipRegystry)
         {
             _shipRegystry = shipRegystry;
-            _input = playerInput;
-            _mouseCursor = mouseCursor;
             _smoothZoneMod = 1f / _smoothZoneTime;
         }
 
-        protected override void Subscribe()
-        {
-            base.Subscribe();
-            _input.MoveInputAction += OnMoveInputAction;
-            _input.ToggleDamperAction += OnToggleDamper;
-            _input.DisableEngineAction += DisableEngine;
-            _input.ChangeBoostersState += OnToogleBoosters;
-        }
-
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            _input.MoveInputAction -= OnMoveInputAction;
-            _input.ToggleDamperAction -= OnToggleDamper;
-            _input.DisableEngineAction -= DisableEngine;
-            _input.ChangeBoostersState -= OnToogleBoosters;
-        }
-
-        public void CoreFixedUpdateTick(float fixedDT)
-        {
-            Simulate(fixedDT);
-        }
-
-        private void OnMoveInputAction(Vector2 input)
-        {
-            _inputValue.x = input.x;
-            _inputValue.y = input.y;
-        }
-
-        private void OnToggleDamper()
+        public void Execute(float fixedDT)
         {
             var playerShip = _shipRegystry.PlayerShip;
-            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            movementRuntimeData.InertiaDampingIsActive = !movementRuntimeData.InertiaDampingIsActive;
+            var aimPos = playerShip.AimData.AimPosition;
 
-            if (movementRuntimeData.InertiaDampingIsActive)
+            var rb = playerShip.Rigidbody;
+            var rotation = rb.rotation;
+            var angularVelocity = rb.angularVelocity;
+            var linearVelocity = rb.linearVelocity;
+            var shipPos = rb.position;
+
+            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
+            ref var movementStats = ref playerShip.MovementStats;
+            ref readonly var intentData = ref playerShip.IntentData;
+
+            var rad = rotation * Mathf.Deg2Rad;
+            var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
+            var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+            var directionToTarget = aimPos - shipPos;
+            var targetInsideShip = playerShip.HullCollider.OverlapPoint(aimPos);
+
+            if (intentData.DamperEnabled != movementRuntimeData.InertiaDampingIsActive)
+            {
+                OnToggleDamper(ref movementRuntimeData, intentData.DamperEnabled);
+            }
+
+            var moveDirection = intentData.MoveDirection;
+
+            if (intentData.ResetThrottle)
+            {
+                moveDirection.y = 0;
+                movementRuntimeData.DirectThrottle = 0;
+            }
+
+            if (intentData.BoostersIsActive != movementRuntimeData.BoostersIsActive)
+            {
+                OnToogleBoosters(intentData.BoostersIsActive);
+            }
+
+            UpdateBoostersPower(fixedDT, movementStats, ref movementRuntimeData);
+            HandleInput(fixedDT, ref movementRuntimeData, moveDirection);
+            HandleRotation(fixedDT, ref angularVelocity, targetInsideShip, directionToTarget, shipForward, movementStats, ref movementRuntimeData);
+            HandleMovement(fixedDT, ref linearVelocity, ref movementRuntimeData, movementStats, shipForward, shipRight);
+
+            rb.angularVelocity = angularVelocity;
+            rb.linearVelocity = linearVelocity;
+        }
+
+        private void OnToggleDamper(ref MovementRuntimeData movementRuntimeData, bool newState)
+        {
+            movementRuntimeData.InertiaDampingIsActive = newState;
+
+            if (newState)
             {
                 movementRuntimeData.DirectThrottle = movementRuntimeData.LastDampingThrottle;
             }
@@ -103,48 +111,19 @@ namespace GameSystems
             movementRuntimeData.BoostersIsActive = state;
         }
 
-        private void Simulate(float fixedDT)
+        private void HandleInput(float fixedDT, ref MovementRuntimeData movementRuntimeData, in Vector2 moveDirection)
         {
-            var playerShip = _shipRegystry.PlayerShip;
-            var mousePos = _mouseCursor.WorldPostition;
-
-            var rb = playerShip.Rigidbody;
-            var rotation = rb.rotation;
-            var angularVelocity = rb.angularVelocity;
-            var linearVelocity = rb.linearVelocity;
-            var shipPos = rb.position;
-
-            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            ref var movementStats = ref playerShip.MovementStats;
-
-            var rad = rotation * Mathf.Deg2Rad;
-            var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
-            var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
-            var directionToTarget = mousePos - shipPos;
-            var targetInsideShip = playerShip.HullCollider.OverlapPoint(mousePos);
-
-            UpdateBoostersPower(fixedDT, movementStats, ref movementRuntimeData);
-            HandleInput(fixedDT, ref movementRuntimeData);
-            HandleRotation(fixedDT, ref angularVelocity, targetInsideShip, directionToTarget, shipForward, movementStats, ref movementRuntimeData);
-            HandleMovement(fixedDT, ref linearVelocity, ref movementRuntimeData, movementStats, shipForward, shipRight);
-
-            rb.angularVelocity = angularVelocity;
-            rb.linearVelocity = linearVelocity;
-        }
-
-        private void HandleInput(float fixedDT, ref MovementRuntimeData movementRuntimeData)
-        {
-            movementRuntimeData.StrafeThrottle = _inputValue.x; // боковое движение ровно инпуту
+            movementRuntimeData.StrafeThrottle = moveDirection.x; // боковое движение ровно инпуту
 
             if (movementRuntimeData.BoostersIsActive) return;
 
             if (!movementRuntimeData.InertiaDampingIsActive) // если гаситель выключен то дросель всегда равен инпуту (будто отстреливает в ноль если нет инпута)
             {
-                movementRuntimeData.DirectThrottle = Mathf.MoveTowards(movementRuntimeData.DirectThrottle, _inputValue.y, _noDumpingThrottleMod * fixedDT);
+                movementRuntimeData.DirectThrottle = Mathf.MoveTowards(movementRuntimeData.DirectThrottle, moveDirection.y, _noDumpingThrottleMod * fixedDT);
                 return;
             }
 
-            if (_inputValue.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
+            if (moveDirection.y == 0) // если нет инпута на изменение дросселя то сбросс таймера остановки на нуле
             {
                 _throttleZeroDelayTimer = 0;
                 return;
@@ -157,7 +136,7 @@ namespace GameSystems
             }
 
             var prevThrottle = movementRuntimeData.DirectThrottle;
-            var newThrottle = prevThrottle + _inputValue.y * fixedDT;
+            var newThrottle = prevThrottle + moveDirection.y * fixedDT;
 
             if ((prevThrottle < 0f && newThrottle >= 0f) || (prevThrottle > 0f && newThrottle <= 0f))
             {
@@ -188,13 +167,6 @@ namespace GameSystems
 
             boostersPower = Mathf.Clamp(boostersPower, 0, movementStats.BoostersMaxPower);
             movementRuntimeData.BoostersPower = boostersPower;
-        }
-
-        private void DisableEngine()
-        {
-            var playerShip = _shipRegystry.PlayerShip;
-            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            movementRuntimeData.DirectThrottle = 0;
         }
 
         private void HandleRotation(float fixedDT, ref float angularVelocity, bool targetInsideShip, Vector2 direction, Vector2 shipForward, in MovementStats movementStats, ref MovementRuntimeData movementRuntimeData)

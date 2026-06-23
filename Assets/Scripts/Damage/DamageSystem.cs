@@ -3,7 +3,7 @@ using Projectiles;
 using System.Collections.Generic;
 using Weapons;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class DamageSystem : GameSystemBase
     {

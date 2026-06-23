@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Weapons;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class ProjectileBehaviourSystem : GameSystemBase, ICoreUpdateTickObserver
     {

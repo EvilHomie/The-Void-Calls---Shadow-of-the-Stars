@@ -1,5 +1,5 @@
 using DI;
-using GameSystems;
+using CoreGameSystems;
 using UnityEngine;
 
 public abstract class GameSystemBase : MonoBehaviour, ITickObserver

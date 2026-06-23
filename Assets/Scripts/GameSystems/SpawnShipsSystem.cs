@@ -3,7 +3,7 @@ using Helpers;
 using Registries;
 using Ships;
 
-namespace GameSystems
+namespace CoreGameSystems
 {
     public class SpawnShipsSystem : GameSystemBase
     {
@@ -21,10 +21,11 @@ namespace GameSystems
             _gameFlowSystem = gameFlowSystem;
         }
 
-        private void Start()
+        private void Start() // временный метод для запуска кор логики
         {
             InitHelper.InitShip(_playerShip);
             InitHelper.RegisterShip(_playerShip, _shipRegistry, asPlayer: true);
+            EventBus.PlayerShipSpawned?.Invoke(_playerShip);
             _gameFlowSystem.ChangeGameState(GameState.CoreGameplay);
         }
     }

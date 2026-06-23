@@ -24,6 +24,8 @@ namespace Ships
         public MovementView MovementView;
 
         public ResistanceStatsData ResistanceStats;
+
+        public ShipIntentData IntentData;
     }
 }
 
@@ -46,4 +48,28 @@ public enum CollisionType
     MShield,
     LShield,
     XlShield
+}
+
+[Serializable]
+public struct ShipIntentData
+{
+    // Относится к движению (обрабатывается в физическом тике)
+    public Vector2 MoveDirection;
+    public bool DamperEnabled;
+    public bool ResetThrottle;
+    public bool BoostersIsActive;
+
+    // Вне физического тика
+    public ChangeSignal AttackChangeSignal;
+    public WeaponGroup ChangeWeaponGroup;
+    public float ChangeZoom;
+
+}
+
+[Serializable]
+public enum ChangeSignal
+{
+    None,
+    Performed,
+    Canceled
 }

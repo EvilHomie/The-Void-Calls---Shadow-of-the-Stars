@@ -1,33 +1,33 @@
+using CoreGameSystems;
 using DI;
-using GameInput;
-using GameSystems;
 using Helpers;
 using Registries;
+using UnityEngine;
 
-public class PlayerWeaponGroupSystem : GameSystemBase
+public class PlayerWeaponControlSystem : MonoBehaviour
 {
-    private IPlayerInput _playerInput;
     private ShipRegistry _shipRegistry;
 
     [Inject]
-    public void Construct(IPlayerInput playerInput, ShipRegistry shipRegistry)
+    public void Construct(ShipRegistry shipRegistry)
     {
-        _playerInput = playerInput;
         _shipRegistry = shipRegistry;
     }
 
-    protected override void Subscribe()
+    public void Execute()
     {
-        base.Subscribe();
-        _playerInput.ChangeAttackState += OnPlayerChangeAttackState;
-        _playerInput.SwitchWeaponGroupAction += OnSwitchWeaponGroupAction;
-    }
+        var playerShip = _shipRegistry.PlayerShip;
+        ref readonly var intentData = ref playerShip.IntentData;
 
-    protected override void Unsubscribe()
-    {
-        base.Unsubscribe();
-        _playerInput.ChangeAttackState -= OnPlayerChangeAttackState;
-        _playerInput.SwitchWeaponGroupAction -= OnSwitchWeaponGroupAction;
+        if (intentData.AttackChangeSignal != ChangeSignal.None)
+        {
+            OnPlayerChangeAttackState(intentData.AttackChangeSignal);
+        }
+
+        if (intentData.ChangeWeaponGroup != playerShip.ActiveWeaponGroup)
+        {
+            OnSwitchWeaponGroupAction(intentData.ChangeWeaponGroup);
+        }
     }
 
     private void OnSwitchWeaponGroupAction(WeaponGroup newActiveGroup)
@@ -72,10 +72,12 @@ public class PlayerWeaponGroupSystem : GameSystemBase
         EventBus.PlayerSwitchWeaponsGroupAction?.Invoke();
     }
 
-    private void OnPlayerChangeAttackState(bool state)
+    private void OnPlayerChangeAttackState(ChangeSignal signal)
     {
         var playerShip = _shipRegistry.PlayerShip;
-        playerShip.IsAttacking = state;
+
+        var isAttack = signal == ChangeSignal.Performed;
+        playerShip.IsAttacking = isAttack;
 
         foreach (var slot in playerShip.WeaponSlots)
         {
@@ -83,7 +85,7 @@ public class PlayerWeaponGroupSystem : GameSystemBase
 
             if (!isInGroup) continue;
 
-            EventBus.WeaponChangeAttackStateAction?.Invoke(slot.Weapon, state);
+            EventBus.WeaponChangeAttackStateAction?.Invoke(slot.Weapon, isAttack);
         }
     }
 }
