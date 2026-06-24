@@ -1,5 +1,4 @@
 using DefenseLayers;
-using Projectiles;
 using System.Collections.Generic;
 using Weapons;
 
@@ -7,7 +6,7 @@ namespace CoreGameSystems
 {
     public class DamageSystem : GameSystemBase
     {
-        public delegate void DamageAction(DefenseLayerBase defenseLayer, DamageData damageData);
+        public delegate void DamageAction(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData);
 
         private readonly Dictionary<DefenseLayerType, DamageAction> _damageStrategies = new();
 
@@ -31,7 +30,7 @@ namespace CoreGameSystems
             EventBus.HitAction -= OnHit;
         }       
 
-        private void OnHit(DamageData damageData, DefenseLayerBase layer, HitData hitData)
+        private void OnHit(WeaponRuntimeDamage damageData, DefenseLayerBase layer, HitData hitData)
         {
             var layerType = layer.LayerType;
             _damageStrategies[layerType].Invoke(layer, damageData);
@@ -40,10 +39,9 @@ namespace CoreGameSystems
         }
 
 
-        private void ApplyShieldDamage(DefenseLayerBase defenseLayer, DamageData damageData)
+        private void ApplyShieldDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
         {
-            var damageMultiplier = defenseLayer.ResistanceMultipliers.Energy;
-            defenseLayer.CurrentHealthPoints -= damageData.Energy * damageMultiplier;
+            defenseLayer.CurrentHealthPoints -= damageData.DamageShield;
 
             if (defenseLayer.CurrentHealthPoints <= 0)
             {
@@ -52,10 +50,9 @@ namespace CoreGameSystems
             }
         }
 
-        private void ApplyArmorDamage(DefenseLayerBase defenseLayer, DamageData damageData)
+        private void ApplyArmorDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
         {
-            var damageMultiplier = defenseLayer.ResistanceMultipliers.Kinetic;
-            defenseLayer.CurrentHealthPoints -= damageData.Kinetic * damageMultiplier;
+            defenseLayer.CurrentHealthPoints -= damageData.DamageArmor;
 
             if (defenseLayer.CurrentHealthPoints <= 0)
             {
@@ -63,13 +60,9 @@ namespace CoreGameSystems
                 defenseLayer.Collider.enabled = false;
             }
         }
-        private void ApplyHullDamage(DefenseLayerBase defenseLayer, DamageData damageData)
+        private void ApplyHullDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
         {
-            var energyMultiplier = defenseLayer.ResistanceMultipliers.Energy;
-            var energyDamage = damageData.Energy * energyMultiplier;
-            var kineticMultiplier = defenseLayer.ResistanceMultipliers.Kinetic;
-            var kineticDamage = damageData.Kinetic * kineticMultiplier;
-            defenseLayer.CurrentHealthPoints -= energyDamage + kineticDamage;
+            defenseLayer.CurrentHealthPoints -= damageData.DamageHull;
 
             if (defenseLayer.CurrentHealthPoints <= 0)
             {
@@ -77,9 +70,9 @@ namespace CoreGameSystems
             }
         }
 
-        private void ApplyAsteroidHullDamage(DefenseLayerBase defenseLayer, DamageData damageData)
+        private void ApplyAsteroidHullDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
         {
-            defenseLayer.CurrentHealthPoints -= damageData.Asteroid;
+            defenseLayer.CurrentHealthPoints -= damageData.DamageAsteroid;
 
             if (defenseLayer.CurrentHealthPoints <= 0)
             {

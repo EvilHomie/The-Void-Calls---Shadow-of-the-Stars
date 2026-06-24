@@ -70,23 +70,8 @@ namespace Helpers
 
         private static void InitDefenceLayers(ShipInstance shipInstance)
         {
-            //shipInstance.BodySprite.sortingOrder = SpriteSortingOrders.Ship;
-
-            var resistanceStats = shipInstance.ResistanceStats;
-            var maxResistance = WorldConfig.MaxResistance;
-            var energyResistance = Mathf.Clamp(resistanceStats.Energy, 0f, maxResistance);
-            var kineticResistance = Mathf.Clamp(resistanceStats.Kinetic, 0f, maxResistance);
-
-            var resistanceMultipliers = new ResistanceMultipliers
-            {
-                Energy = 1 - energyResistance,
-                Kinetic = 1 - kineticResistance
-            };
-
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
-                defenseLayer.ResistanceMultipliers = resistanceMultipliers;
-
                 if (defenseLayer.LayerType == DefenseLayerType.Hull)
                 {
                     var hp = shipInstance.Equip.Chassis.Hull;
@@ -127,10 +112,6 @@ namespace Helpers
             var mass = massMod * baseMass;
             rigidBody.mass = mass;
 
-            ref var resistanceMultipliers = ref asteroid.AsteroidHullLayer.ResistanceMultipliers;
-            resistanceMultipliers.Energy = 1;
-            resistanceMultipliers.Kinetic = 1;
-
             var hp = mass * WorldConfig.AsteroidTonHP;
             asteroid.AsteroidHullLayer.Init(hp);
         }
@@ -158,13 +139,17 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                weapon.IgnoredColliders = shipInstance.OwnColliders;
                 UpdateWeaponStats(weapon);
-                weapon.Init(shipInstance.AimData, shipInstance.Size);
+                weapon.InitBase(shipInstance.AimData, shipInstance.Size, shipInstance.OwnColliders);
 
-                if (weapon is IBoltWeapon projectileWeapon)
+                if (weapon.Collider != null)
                 {
-                    projectileWeapon.InitBoltWeapon(shipRb);
+                    shipInstance.OwnColliders.Add(weapon.Collider);
+                }
+
+                if (weapon is IRigidBodyDependentWeapon dependentWeapon)
+                {
+                    dependentWeapon.Init(shipRb);
                 }
             }
         }
@@ -194,29 +179,29 @@ namespace Helpers
 
         public static void UpdateWeaponStats(WeaponBase weaponBase)
         {
-            ref var baseStats = ref weaponBase.BaseStats;
-            ref var aimStats = ref weaponBase.AimStats;
+            var baseAimStats = weaponBase.BaseAimStats;
+            weaponBase.RuntimeAimStats = baseAimStats;
+            var baseDamage = weaponBase.BaseDamage;
+            ref var runtimeDamage = ref weaponBase.RuntimeDamage;
+            runtimeDamage.DamageArmor = baseDamage.DamageKinetic;
+            runtimeDamage.DamageShield = baseDamage.DamageEnergy;
+            runtimeDamage.DamageHull = baseDamage.DamageKinetic + baseDamage.DamageEnergy;
+            runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull * baseDamage.AsteroidMultiplier;
 
-            if (weaponBase is BoltRepeater boltRepeater)
+            if (weaponBase is BoltWeapon boltRepeater)
             {
-                ref var weaponData = ref boltRepeater.RuntimeData;
-                weaponData.ShootDelay = 1f / boltRepeater.FireRate;
-                weaponData.ProjectileSpeed = boltRepeater.ProjectileSpeed;
-                var invProjectileSpeed = 1f / boltRepeater.ProjectileSpeed;
-                weaponData.InvProjectileSpeed = invProjectileSpeed;
-                weaponData.ProjectileLifeTime = aimStats.MaxDistance * invProjectileSpeed;
+                var baseFireStats = boltRepeater.BaseFireStats;
+                boltRepeater.RuntimeFireStats = baseFireStats;
+                ref var logicStats = ref boltRepeater.LogicStats;
+                logicStats.ShootDelay = 1f / baseFireStats.FireRate;
+                var invProjectileSpeed = 1f / baseFireStats.ProjectileSpeed;
+                logicStats.InvProjectileSpeed = invProjectileSpeed;
+                logicStats.ProjectileLifeTime = baseAimStats.MaxDistance * invProjectileSpeed;
             }
-            else if (weaponBase is MiningDrill miningDrill)
+            else if (weaponBase is ConstantBeamWeapon miningDrill)
             {
-                ref var weaponData = ref miningDrill.RuntimeData;
-                weaponData.HitDelay = 1f / WorldConfig.ConstantBeamHitRate;
-                weaponData.NoHitTargetPoint = Vector2.up * aimStats.MaxDistance;
+                miningDrill.HitDelay = 1f / WorldConfig.ConstantBeamHitRate;
             }
-
-            ref var damage = ref weaponBase.DamageData;
-            damage.Energy = baseStats.DamageMultipliersEnergy * baseStats.DamageEnergy;
-            damage.Kinetic = baseStats.DamageMultipliersKinetic * baseStats.DamageKinetic;
-            damage.Asteroid = baseStats.DamageMultipliersAsteroid * (damage.Energy + damage.Kinetic);
         }
 
         public static void RegisterShip(ShipInstance shipInstance, ShipRegistry shipRegistry, bool asPlayer)

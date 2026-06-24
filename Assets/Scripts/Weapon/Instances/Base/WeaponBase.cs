@@ -1,46 +1,57 @@
 using Ships;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
 namespace Weapons
 {
     public abstract class WeaponBase : MonoBehaviour, IShipModule
     {
-        
         [field: SerializeField] public SizeType Size { get; private set; }
         [field: SerializeField] public WeaponType WeaponType { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public LayerMask HitLayers { get; private set; }
-        [field: SerializeField] public Transform Transform { get; private set; }
-        [field: SerializeField] public Transform ShootPoint { get; private set; }
+        [field: SerializeField] public Transform WeaponTransform { get; private set; }
+        [field: SerializeField] public Transform ShootPointTransform { get; private set; }
+        [field: SerializeField] public Collider2D Collider { get; private set; }
         public AimData AimData { get; private set; }
-        public HashSet<Collider2D> IgnoredColliders;
+        public HashSet<Collider2D> IgnoredColliders { get; private set; }
 
-        public DamageData DamageData;
-        public ShootPointData ShootPointData;
-        public WeaponBaseStats BaseStats;
-        public AimStats AimStats;
+        public ShootPointTransformData ShootPointTransformData;
+        public WeaponBaseDamage BaseDamage;
+        public WeaponRuntimeDamage RuntimeDamage;
+        public WeaponAimStats BaseAimStats;
+        public WeaponAimStats RuntimeAimStats;
 
-        public void Init(AimData targetData, SizeType size)
+
+        public void InitBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders)
         {
             AimData = targetData;
             Size = size;
-            ShootPointData.ZDepth = ShootPoint.position.z;
+            ShootPointTransformData.ZDepth = ShootPointTransform.position.z;
+            IgnoredColliders = ignoredColliders;
         }
     }
 
     [Serializable]
-    public struct DamageData
+    public struct WeaponBaseDamage
     {
-        public float Energy;
-        public float Kinetic;
-        public float Asteroid;
+        public float DamageEnergy;
+        public float DamageKinetic;
+        public float AsteroidMultiplier;
     }
 
     [Serializable]
-    public struct AimStats
+    public struct WeaponRuntimeDamage
+    {
+        public float DamageShield;
+        public float DamageArmor;
+        public float DamageHull;
+        public float DamageAsteroid;
+    }
+
+    [Serializable]
+    public struct WeaponAimStats
     {
         public float MaxDistance;
         public float MaxRotateAngle;
@@ -48,21 +59,11 @@ namespace Weapons
     }
 
     [Serializable]
-    public struct WeaponBaseStats
+    public struct ShootPointTransformData
     {
-        public float DamageEnergy;
-        public float DamageKinetic;
-        public float DamageMultipliersEnergy;
-        public float DamageMultipliersKinetic;
-        public float DamageMultipliersAsteroid;
-    }
-
-    [Serializable]
-    public struct ShootPointData
-    {
-       public Vector2 Position;
-       public Vector2 Direction;
-       public float ZDepth;
+        public Vector2 Position;
+        public Vector2 Direction;
+        public float ZDepth;
     }
 
     [Serializable]

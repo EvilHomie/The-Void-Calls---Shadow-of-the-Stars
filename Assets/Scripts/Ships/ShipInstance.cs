@@ -23,31 +23,8 @@ namespace Ships
         public EquipData Equip;
         public MovementView MovementView;
 
-        public ResistanceStatsData ResistanceStats;
-
         public ShipIntentData IntentData;
     }
-}
-
-[Serializable]
-public struct ResistanceStatsData
-{
-    public float Energy;
-    public float Kinetic;
-}
-
-[Serializable]
-public enum CollisionType
-{
-    Asteroid,
-    S,
-    M,
-    L,
-    Xl,
-    SShield,
-    MShield,
-    LShield,
-    XlShield
 }
 
 [Serializable]

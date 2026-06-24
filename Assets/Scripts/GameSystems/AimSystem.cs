@@ -116,11 +116,13 @@ namespace CoreGameSystems
 
                 var weapon = weaponSlot.Weapon;
 
-                if (weapon is not IBoltWeapon boltWeapon) continue;
+                if (weapon is not BoltWeapon boltWeapon) continue;
 
-                if (fastestProjectileSpeed > boltWeapon.ProjectileSpeed)
+                var projectileSpeed = boltWeapon.RuntimeFireStats.ProjectileSpeed;
+
+                if (fastestProjectileSpeed < projectileSpeed)
                 {
-                    fastestProjectileSpeed = boltWeapon.ProjectileSpeed;
+                    fastestProjectileSpeed = projectileSpeed;
                     aimData.FastetsBoltWeapon = weapon;
                 }
             }
@@ -133,7 +135,7 @@ namespace CoreGameSystems
             _showLeadMarker = true;
         }
 
-       
+
 
         private void UpdateMarkersPosition(ShipInstance shipInstance)
         {
@@ -147,10 +149,10 @@ namespace CoreGameSystems
                 if (!weaponSlot.IsInActiveGroup) continue;
 
                 var weapon = weaponSlot.Weapon;
-                var shootPointData = weapon.ShootPointData;
+                var shootPointData = weapon.ShootPointTransformData;
                 var shootPosition = shootPointData.Position;
                 var direction = shootPointData.Direction;
-                var aimStats = weapon.AimStats;
+                var aimStats = weapon.RuntimeAimStats;
 
                 var distanceToAimPosition = Vector2.Distance(shipInstance.AimData.AimPosition, shootPosition);
                 var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
@@ -165,7 +167,7 @@ namespace CoreGameSystems
 
         private Vector2 GetTargetLeadPosition(AimData aimData, Rigidbody2D ownRigidBody)
         {
-            var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointData.Position;
+            var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointTransformData.Position;
             var targetRB = aimData.TargetRigidBody;
 
             var shooterVelocity = ownRigidBody.linearVelocity;

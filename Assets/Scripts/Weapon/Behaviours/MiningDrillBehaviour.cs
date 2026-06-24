@@ -4,50 +4,51 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class MiningDrillBehaviour : IWeaponBehaviour<MiningDrill>
+    public class MiningDrillBehaviour : IWeaponBehaviour<ConstantBeamWeapon>
     {
-        public void HandleStartShoot(MiningDrill weapon)
+        public void HandleStartShoot(ConstantBeamWeapon weapon)
         {
             weapon.BeamLineLR.enabled = true;
             weapon.ShootSpotPS.Play();
             ProcessShooting(weapon);
         }
 
-        public void HandleCancelShoot(MiningDrill weapon)
+        public void HandleCancelShoot(ConstantBeamWeapon weapon)
         {
             weapon.BeamLineLR.enabled = false;
             weapon.ShootSpotPS.Stop();
         }
 
-        public void ProcessShooting(MiningDrill weapon)
+        public void ProcessShooting(ConstantBeamWeapon weapon)
         {
-            ref var aimStats = ref weapon.AimStats;
-            ref var data = ref weapon.RuntimeData;
-            ref var shootPointData = ref weapon.ShootPointData;
-            var aimData = weapon.AimData;
+            ref readonly var aimStats = ref weapon.RuntimeAimStats;
+            var nextHitTime = weapon.NextHitTime;
+            ref readonly var shootPointData = ref weapon.ShootPointTransformData;
+            var aimPosition = weapon.AimData.AimPosition;
 
             Vector3 spawnLinePos = shootPointData.Position;
             spawnLinePos.z = shootPointData.ZDepth;
-            var distanceToAimPosition = Vector2.Distance(aimData.AimPosition, spawnLinePos);
+            var distanceToAimPosition = Vector2.Distance(aimPosition, spawnLinePos);
             var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
 
             Vector3 worldHitPos = spawnLinePos + (Vector3)shootPointData.Direction * aimDistance;
             weapon.BeamLineLR.SetPosition(0, spawnLinePos);
             weapon.BeamLineLR.SetPosition(1, worldHitPos);
 
-            if (GameFlowSystem.CoreTime < data.NextHitTime) return;
+            if (GameFlowSystem.CoreTime < nextHitTime) return;
 
             var hit = Physics2D.OverlapPoint(worldHitPos, weapon.HitLayers);
 
             if (hit == null || weapon.IgnoredColliders.Contains(hit)) return;
 
-            var hitDelay = data.HitDelay;
-            data.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
+            var hitDelay = weapon.HitDelay;
+            weapon.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
 
-            var damage = weapon.DamageData;
-            damage.Energy *= hitDelay;
-            damage.Kinetic *= hitDelay;
-            damage.Asteroid *= hitDelay;
+            var damage = weapon.RuntimeDamage;
+            damage.DamageHull *= hitDelay;
+            damage.DamageArmor *= hitDelay;
+            damage.DamageShield *= hitDelay;
+            damage.DamageAsteroid *= hitDelay;
 
             var hitData = new HitData
             {

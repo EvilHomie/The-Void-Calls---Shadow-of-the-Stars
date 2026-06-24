@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1993834376407665666}
   m_Layer: 10
-  m_Name: ShootSpot
+  m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5126,34 +5126,42 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
-  <Transform>k__BackingField: {fileID: 11203282507777302}
-  <ShootPoint>k__BackingField: {fileID: 1993834376407665666}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 11203282507777302}
+  <ShootPointTransform>k__BackingField: {fileID: 1993834376407665666}
+  <Collider>k__BackingField: {fileID: 4118397664315645279}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
-    DamageEnergy: 1
-    DamageKinetic: 2
-    DamageMultipliersEnergy: 2
-    DamageMultipliersKinetic: 4
-    DamageMultipliersAsteroid: 0.5
-  AimStats:
+  BaseDamage:
+    DamageEnergy: 5
+    DamageKinetic: 10
+    AsteroidMultiplier: 0.5
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
     MaxDistance: 10
-    MaxRotateAngle: 25
-    RotateSpeed: 90
-  RuntimeData:
-    NextShootTime: 0
-    ShootDelay: 0
-    ProjectileSpeed: 0
-    InvProjectileSpeed: 0
-    ProjectileLifeTime: 0
-  <FireRate>k__BackingField: 7
-  <SpreadAngle>k__BackingField: 1
-  <ProjectileSpeed>k__BackingField: 10
+    MaxRotateAngle: 15
+    RotateSpeed: 45
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 3926388394405067671}
+  BaseFireStats:
+    FireRate: 7
+    SpreadAngle: 1
+    ProjectileSpeed: 14
+  RuntimeFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  NextShootTime: 0
+  LogicStats:
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0

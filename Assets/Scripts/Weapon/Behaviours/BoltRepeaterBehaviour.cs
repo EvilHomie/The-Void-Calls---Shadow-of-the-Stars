@@ -1,36 +1,41 @@
 ﻿using CoreGameSystems;
 using Helpers;
-using TMPro;
 using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeaterBehaviour : IWeaponBehaviour<BoltRepeater>
+    public class BoltRepeaterBehaviour : IWeaponBehaviour<BoltWeapon>
     {
-        public void HandleStartShoot(BoltRepeater weapon)
+        public void HandleStartShoot(BoltWeapon weapon)
         {
             ProcessShooting(weapon);
         }
-        public void HandleCancelShoot(BoltRepeater weapon)
+        public void HandleCancelShoot(BoltWeapon weapon)
         {
         }
 
-        public void ProcessShooting(BoltRepeater weapon)
+        public void ProcessShooting(BoltWeapon weapon)
         {
-            ref var data = ref weapon.RuntimeData;
+            var nextShootTime = weapon.NextShootTime;
             var coreTime = GameFlowSystem.CoreTime;
 
-            if (coreTime <= data.NextShootTime) return;
+            if (coreTime <= nextShootTime)
+            {
+                return;
+            }
+
+            ref readonly var fireStats = ref weapon.RuntimeFireStats;
+            ref readonly var logicStats = ref weapon.LogicStats;
 
             var aimData = weapon.AimData;
 
-            var shootPointData = weapon.ShootPointData;
+            var shootPointData = weapon.ShootPointTransformData;
             var spawnPos = shootPointData.Position;
             var aimPos = aimData.AimPosition;
             var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
 
-            var shootDirection = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, weapon.SpreadAngle);
-            var boltSelfVelocity = shootDirection * data.ProjectileSpeed;
+            var shootDirection = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, fireStats.SpreadAngle);
+            var boltSelfVelocity = shootDirection * fireStats.ProjectileSpeed;
 
             var shipVelocity = weapon.ShipRB.linearVelocity;
             var boltTotalVelocity = shipVelocity + boltSelfVelocity;
@@ -41,7 +46,7 @@ namespace Weapons
             var timeToAimPos = distanceToAimPos / toAimSpeed;
 
             var hitTime = coreTime + timeToAimPos;
-            var destroyTime = coreTime + data.ProjectileLifeTime;
+            var destroyTime = coreTime + logicStats.ProjectileLifeTime;
 
             var shootData = new BoltWeaponShootData(
                 weapon.ProjectilePoolId,
@@ -54,10 +59,10 @@ namespace Weapons
                 boltTotalVelocity,
                 shootDirection,
                 weapon.HitLayers,
-                weapon.DamageData);
+                weapon.RuntimeDamage);
 
             weapon.ShootSpotPS.Emit(1);
-            data.NextShootTime = GameFlowSystem.CoreTime + data.ShootDelay;
+            weapon.NextShootTime = GameFlowSystem.CoreTime + logicStats.ShootDelay;
 
             EventBus.BoltWeaponShootAction?.Invoke(in shootData);
         }

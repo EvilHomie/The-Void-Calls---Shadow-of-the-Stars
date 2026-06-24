@@ -1,6 +1,5 @@
 using Ships;
 using UnityEngine;
-using Weapons;
 
 namespace Helpers
 {
@@ -13,8 +12,8 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                ref var aimStats = ref weapon.AimStats;
-                var weaponTransform = weapon.Transform;
+                ref readonly var aimStats = ref weapon.RuntimeAimStats;
+                var weaponTransform = weapon.WeaponTransform;
                 Vector2 weaponPosition = weaponTransform.position;
                 Vector2 targetDir = aimPos - weaponPosition;
 
@@ -27,9 +26,9 @@ namespace Helpers
                 var finalWorldAngle = parentAngle + localAngle;
                 weaponTransform.rotation = Quaternion.Euler(0f, 0f, finalWorldAngle);
 
-                ref var shootPointData = ref weapon.ShootPointData;
+                ref var shootPointData = ref weapon.ShootPointTransformData;
                 shootPointData.Direction = weaponTransform.up;
-                shootPointData.Position = weapon.ShootPoint.position;
+                shootPointData.Position = weapon.ShootPointTransform.position;
             }
         }
 

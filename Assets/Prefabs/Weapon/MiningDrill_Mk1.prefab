@@ -204,32 +204,34 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
-  <Transform>k__BackingField: {fileID: 277715304110908122}
-  <ShootPoint>k__BackingField: {fileID: 5640150070507161033}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 277715304110908122}
+  <ShootPointTransform>k__BackingField: {fileID: 5640150070507161033}
+  <Collider>k__BackingField: {fileID: 3822096338377281754}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
-    DamageEnergy: 2
-    DamageKinetic: 1
-    DamageMultipliersEnergy: 4
-    DamageMultipliersKinetic: 2
-    DamageMultipliersAsteroid: 2
-  AimStats:
+  BaseDamage:
+    DamageEnergy: 10
+    DamageKinetic: 5
+    AsteroidMultiplier: 2
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
     MaxDistance: 10
-    MaxRotateAngle: 45
-    RotateSpeed: 20
-  RuntimeData:
-    NextHitTime: 0
-    HitDelay: 0
-    NoHitTargetPoint: {x: 0, y: 0}
+    MaxRotateAngle: 30
+    RotateSpeed: 60
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   <BeamLineLR>k__BackingField: {fileID: 5780516257231714530}
   <ShootSpotPS>k__BackingField: {fileID: 5758410437419035918}
+  NextHitTime: 0
+  HitDelay: 0
 --- !u!1 &7528368962327126728
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +473,7 @@ GameObject:
   - component: {fileID: 5758410437419035918}
   - component: {fileID: 8165730582877688925}
   m_Layer: 0
-  m_Name: ShootSpot
+  m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

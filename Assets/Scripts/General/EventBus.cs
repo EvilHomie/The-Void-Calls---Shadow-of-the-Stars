@@ -10,7 +10,7 @@ namespace CoreGameSystems
     {
         public static Action<WeaponBase, bool> WeaponChangeAttackStateAction;
 
-        public delegate void HitDelegate(DamageData damageData, DefenseLayerBase layer, HitData hitData);
+        public delegate void HitDelegate(WeaponRuntimeDamage damageData, DefenseLayerBase layer, HitData hitData);
         public static HitDelegate HitAction;
 
         public delegate void BoltWeaponShootDelegate(in BoltWeaponShootData data);

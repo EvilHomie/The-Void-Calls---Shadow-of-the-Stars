@@ -7,8 +7,6 @@ public static class WorldConfig
     public const float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
     public const float InertiaDampingForce = 50f; // значение торможения за еденицу drag у корабля. Будто пассивное торможение 
 
-    public const float MaxResistance = 0.9f;
-
     public const float AsteroidBaseMass = 10; // масса для астероидов в тоннах при scale = 1;
     public const float AsteroidTonHP = 10; // кол-во хп для одной тонны
 
