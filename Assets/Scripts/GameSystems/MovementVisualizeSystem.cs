@@ -2,11 +2,10 @@ using DI;
 using Registries;
 using Ships;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace CoreGameSystems
 {
-    public class MovementVisualizeSystem : GameSystemBase, ICorePreUpdateTickObserver
+    public class MovementVisualizeSystem : GameSystemBase
     {
         private static readonly int _plumePowerValueID = Shader.PropertyToID("_PowerValue");
 
@@ -18,16 +17,16 @@ namespace CoreGameSystems
             _shipRegistry = shipRegystry;
         }
 
-        public void CorePreUpdateTick()
-        {
-            VisualizePlayerShip();
-        }
-
-        private void VisualizePlayerShip()
+        public void Execute()
         {
             var playerShip = _shipRegistry.PlayerShip;
-            ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
-            ref var view = ref playerShip.MovementView;
+            VisualizeShipMovement(playerShip);
+        }
+
+        private void VisualizeShipMovement(ShipInstance shipInstance)
+        {
+            ref readonly var movementRuntimeData = ref shipInstance.MovementRuntimeData;
+            ref var view = ref shipInstance.MovementView;
             VisualizeMainEngine(movementRuntimeData, ref view);
             VisualizeThrusters(movementRuntimeData, ref view);
             VisualizeBoosters(movementRuntimeData, ref view);

@@ -7,7 +7,7 @@ using Weapons;
 
 namespace CoreGameSystems
 {
-    public class AimSystem : GameSystemBase, ICorePreUpdateTickObserver
+    public class AimSystem : MonoBehaviour
     {
         private Vector3 _deffWeaponMarkerScale = Vector3.one * 0.03f;
         private Vector3 _deffLeadMarkerScale = Vector3.one * 0.075f;
@@ -33,11 +33,15 @@ namespace CoreGameSystems
             _shipRegistry = shipRegistry;
             _gameFlowSystem = gameFlowSystem;
             _cameraRigSystem = cameraRig;
+            _cameraRigSystem.CameraOrtoSizeChanged += UpdateMarkersSizes;
+            _gameFlowSystem.GameStateChanged += OnGameStateChanged;
+            EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
+            EventBus.ChangeTargetAction += OnChangeTarget;
+            Init();
         }
 
-        protected override void AwakeInit()
+        private void Init()
         {
-            base.AwakeInit();
             _weaponsAimMarkers = new();
 
             for (int i = 0; i < WorldConfig.MaxMainWeaponSlotsCount; i++)
@@ -51,22 +55,18 @@ namespace CoreGameSystems
             _leadMarker.gameObject.SetActive(false);
         }
 
-        protected override void Subscribe()
+        public void Execute()
         {
-            base.Subscribe();
-            _gameFlowSystem.GameStateChanged += OnGameStateChanged;
-            EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
-            EventBus.ChangeTargetAction += OnChangeTarget;
-            _cameraRigSystem.CameraOrtoSizeChanged += UpdateMarkersSizes;
-        }
+            var playerShip = _shipRegistry.PlayerShip;
+            UpdateMarkersPosition(playerShip);
 
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            _gameFlowSystem.GameStateChanged -= OnGameStateChanged;
-            EventBus.PlayerSwitchWeaponsGroupAction -= OnPlayerSwitchWeaponGroup;
-            EventBus.ChangeTargetAction -= OnChangeTarget;
-            _cameraRigSystem.CameraOrtoSizeChanged -= UpdateMarkersSizes;
+            foreach (var ship in _shipRegistry.ShipsInFight)
+            {
+                // нужна будет логика по расчету точки прицеливания = упреждению как у игрока
+                //ref var shipAimData = ref ship.AimData; 
+                //var targetRigidBody = shipAimData.TargetRigidBody;
+                //shipAimData.AimPosition = targetRigidBody.position;
+            }
         }
 
         private void UpdateMarkersSizes(float orthoSize)
@@ -81,10 +81,10 @@ namespace CoreGameSystems
             else EnableMarkers();
         }
 
-        private void OnChangeTarget(ShipInstance instance, Rigidbody2D targetRB)
+        private void OnChangeTarget(ShipInstance instance, Rigidbody2D newTargetRB)
         {
             var aimData = instance.AimData;
-            aimData.TargetRigidBody = targetRB;
+            aimData.TargetRigidBody = newTargetRB;
         }
 
         private void OnPlayerSwitchWeaponGroup()
@@ -133,23 +133,7 @@ namespace CoreGameSystems
             _showLeadMarker = true;
         }
 
-        public void CorePreUpdateTick()
-        {
-            var playerShip = _shipRegistry.PlayerShip;
-            
-
-            UpdateMarkersPosition(playerShip);
-
-           
-
-            foreach (var ship in _shipRegistry.ShipsInFight)
-            {
-                // нужна будет логика по расчету точки прицеливания = упреждению как у игрока
-                //ref var shipAimData = ref ship.AimData; 
-                //var targetRigidBody = shipAimData.TargetRigidBody;
-                //shipAimData.AimPosition = targetRigidBody.position;
-            }
-        }
+       
 
         private void UpdateMarkersPosition(ShipInstance shipInstance)
         {

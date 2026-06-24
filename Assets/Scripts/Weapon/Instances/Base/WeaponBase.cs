@@ -18,8 +18,8 @@ namespace Weapons
         public AimData AimData { get; private set; }
         public HashSet<Collider2D> IgnoredColliders;
 
-        [HideInInspector] public DamageData DamageData;
-        [HideInInspector] public ShootPointData ShootPointData;
+        public DamageData DamageData;
+        public ShootPointData ShootPointData;
         public WeaponBaseStats BaseStats;
         public AimStats AimStats;
 

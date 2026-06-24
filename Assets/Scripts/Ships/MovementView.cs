@@ -8,9 +8,6 @@ namespace Ships
     {
         public float LastMainEnginePowerValue;
         public bool LastBoostersState;
-        //public float LastRotatePowerValue;
-        //public float LastStrafePowerValue;
-
         public ThrustersPower ThrustersPower;
 
         [field: SerializeField] public MainEnginePlume[] MainEnginesPlumes { get; private set; }

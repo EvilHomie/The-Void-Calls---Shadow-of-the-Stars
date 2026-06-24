@@ -30,8 +30,10 @@ namespace DI
         [SerializeField] WeaponBehaviourSystem weaponBehaviourSystem;
         [SerializeField] EnvironmentSystem environmentSystem;
         [SerializeField] PlayerIntentData playerIntentData;
-        [SerializeField] CinemachineTargetGroup  cinemachineTargetGroup;
+        [SerializeField] CinemachineTargetGroup cinemachineTargetGroup;
         [SerializeField] CinemachineCamera cinemachineCamera;
+        [SerializeField] MovementVisualizeSystem movementVisualizeSystem;
+        [SerializeField] AimSystem aimSystem;
 
 
         protected override void InstallBindings()
@@ -52,6 +54,8 @@ namespace DI
             Container.Bind<PlayerIntentData>().FromInstance(playerIntentData).AsSingleton();
             Container.Bind<CinemachineTargetGroup>().FromInstance(cinemachineTargetGroup).AsSingleton();
             Container.Bind<CinemachineCamera>().FromInstance(cinemachineCamera).AsSingleton();
+            Container.Bind<MovementVisualizeSystem>().FromInstance(movementVisualizeSystem).AsSingleton();
+            Container.Bind<AimSystem>().FromInstance(aimSystem).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();
