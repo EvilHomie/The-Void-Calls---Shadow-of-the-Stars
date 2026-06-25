@@ -65,11 +65,4 @@ namespace Weapons
         public Vector2 Direction;
         public float ZDepth;
     }
-
-    [Serializable]
-    public struct HitData
-    {
-        public Vector2 Position;
-        public SizeType Size;
-    }
 }

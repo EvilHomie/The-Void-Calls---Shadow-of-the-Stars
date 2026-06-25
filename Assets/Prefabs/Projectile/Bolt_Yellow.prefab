@@ -52,9 +52,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
   Position: {x: 0, y: 0, z: 0}
   Velocity: {x: 0, y: 0, z: 0}
   IsMissed: 0

@@ -2,8 +2,8 @@ using DefenseLayers;
 using DI;
 using Registries;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using Weapons;
 
 namespace CoreGameSystems
 {
@@ -59,77 +59,52 @@ namespace CoreGameSystems
         protected override void Subscribe()
         {
             base.Subscribe();
-            EventBus.DefenseLayerHitAction += OnDefenseLayerHitAction;
-            EventBus.DefenseLayerCollisionAction += OnDefenseLayerCollisionAction;
-        }
 
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            EventBus.DefenseLayerHitAction -= OnDefenseLayerHitAction;
-            EventBus.DefenseLayerCollisionAction -= OnDefenseLayerCollisionAction;
+            EventBus.ShieldDamagedAction += OnShieldHit;
+            EventBus.ArmorDamagedAction += OnArmorDamaged;
+            EventBus.HullDamagedAction += OnHullDamaged;
+            EventBus.AsteroidDamagedAction += OnAsteroidHullDamaged;
         }
         public void CoreUpdateTick(float deltaTime)
         {
             UpdateShieldEffects();
         }
 
-        private void OnDefenseLayerHitAction(DefenseLayerBase layerBase, HitData hitData)
-        {
-            switch (layerBase.LayerType)
-            {
-                case DefenseLayerType.Shield:
-                    OnShieldHit(layerBase, hitData);
-                    break;
-                case DefenseLayerType.Armor:
-                    OnArmorDamaged(hitData);
-                    break;
-                case DefenseLayerType.Hull:
-                    OnHullDamaged(hitData);
-                    break;
-                case DefenseLayerType.AsteroidHull:
-                    OnAsteroidHullDamaged(hitData);
-                    break;
-                default:
-                    break;
-            }
-        }
+        //private void OnDefenseLayerCollisionAction(DefenseLayerBase layerBase, HitData hitData)
+        //{
+        //    switch (layerBase.LayerType)
+        //    {
+        //        case DefenseLayerType.Shield:
+        //            OnShieldCollision(layerBase, hitData);
+        //            break;
+        //        case DefenseLayerType.Armor:
+        //            OnArmorDamaged(hitData);
+        //            break;
+        //        case DefenseLayerType.Hull:
+        //            OnHullDamaged(hitData);
+        //            break;
+        //        case DefenseLayerType.AsteroidHull:
+        //            OnAsteroidHullDamaged(hitData);
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
-        private void OnDefenseLayerCollisionAction(DefenseLayerBase layerBase, HitData hitData)
-        {
-            switch (layerBase.LayerType)
-            {
-                case DefenseLayerType.Shield:
-                    OnShieldCollision(layerBase, hitData);
-                    break;
-                case DefenseLayerType.Armor:
-                    OnArmorDamaged(hitData);
-                    break;
-                case DefenseLayerType.Hull:
-                    OnHullDamaged(hitData);
-                    break;
-                case DefenseLayerType.AsteroidHull:
-                    OnAsteroidHullDamaged(hitData);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void OnHullDamaged(HitData hitData)
+        private void OnHullDamaged(DefenseLayerBase layerBase, HitData hitData)
         {
             var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
             hitEffect.Transform.position = hitData.Position;
             hitEffect.IsPlaying = true;
         }
-        private void OnArmorDamaged(HitData hitData)
+        private void OnArmorDamaged(DefenseLayerBase layerBase, HitData hitData)
         {
             var hitEffect = _hitEffectRegistry.Get(_sparksPoolYellowId);
             hitEffect.Transform.position = hitData.Position;
             hitEffect.IsPlaying = true;
         }
 
-        private void OnShieldHit(DefenseLayerBase layerBase, HitData hitData)
+        private void OnShieldHit(ShieldDefenseLayer layerBase, HitData hitData)
         {
             var effect = _hitEffectRegistry.Get(_sparksPoolBlueId);
             effect.Transform.position = hitData.Position;
@@ -139,19 +114,19 @@ namespace CoreGameSystems
             SetUpShieldEffect(layerBase, hitData, _shieldHitPoolId);
         }
 
-        private void OnShieldCollision(DefenseLayerBase layerBase, HitData hitData)
+        private void OnShieldCollision(ShieldDefenseLayer layerBase, HitData hitData)
         {
             SetUpShieldEffect(layerBase, hitData, _shieldCollisionPoolId);
         }
 
-        private void OnAsteroidHullDamaged(HitData hitData)
+        private void OnAsteroidHullDamaged(DefenseLayerBase layerBase, HitData hitData)
         {
             var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
             hitEffect.Transform.position = hitData.Position;
             hitEffect.IsPlaying = true;
         }
 
-        private void SetUpShieldEffect(DefenseLayerBase shieldLayer, HitData hitData, uint effectPoolId)
+        private void SetUpShieldEffect(ShieldDefenseLayer shieldLayer, HitData hitData, uint effectPoolId)
         {
             var effect = _shieldsEffectRegistry.Get(effectPoolId);
 
@@ -161,8 +136,8 @@ namespace CoreGameSystems
             var effectTransform = effect.Transform;
             effect.RemainingLifetime = _collisionEffectDuration;
 
-            effect.Color.a = 1;
-            effect.SpriteRenderer.color = effect.Color;
+            effect.SpriteAlpha = 1;
+            effect.SpriteRenderer.color = effect.SpriteRenderer.color.WithAlpha(1);
 
             effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
             effectTransform.localScale = shieldTransform.lossyScale;
@@ -195,10 +170,10 @@ namespace CoreGameSystems
                 var effectTransform = effect.Transform;
                 effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
                 effectTransform.localScale = shieldTransform.lossyScale;
-                effect.Color.a = effect.RemainingLifetime * _collisionEffectDurationReversed;
-                effect.SpriteRenderer.color = effect.Color;
+                var newAlpha = effect.RemainingLifetime * _collisionEffectDurationReversed;
+                effect.SpriteAlpha = newAlpha;
+                effect.SpriteRenderer.color = effect.SpriteRenderer.color.WithAlpha(newAlpha);
             }
         }
     }
 }
-

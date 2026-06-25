@@ -203,7 +203,7 @@ MonoBehaviour:
   <Name>k__BackingField: S_MiningDrill_Mk1
   <HitLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 1073757312
+    m_Bits: 1207975040
   <WeaponTransform>k__BackingField: {fileID: 277715304110908122}
   <ShootPointTransform>k__BackingField: {fileID: 5640150070507161033}
   <Collider>k__BackingField: {fileID: 3822096338377281754}

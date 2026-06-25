@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeaterBehaviour : IWeaponBehaviour<BoltWeapon>
+    public class BoltRepeaterStrategy : IWeaponBehaviour<BoltWeapon>
     {
         public void HandleStartShoot(BoltWeapon weapon)
         {

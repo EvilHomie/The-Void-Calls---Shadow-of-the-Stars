@@ -4,62 +4,41 @@ using Projectiles;
 using Registries;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Weapons;
 
 namespace CoreGameSystems
 {
-    public class ProjectileBehaviourSystem : GameSystemBase, ICoreUpdateTickObserver
+    public class ProjectileBehaviourSystem : MonoBehaviour
     {
         private ProjectileRegistry _projectileRegistry;
+        private HitRegistrationSystem _hitRegistrationSystem;
         private Dictionary<SizeType, float> _projectileSizeMap;
         private Vector3 _deffProjectileSize = Vector3.one;
 
         [Inject]
-        public void Construct(ProjectileRegistry shipRegistry)
+        public void Construct(ProjectileRegistry shipRegistry, HitRegistrationSystem hitRegistrationSystem)
         {
             _projectileRegistry = shipRegistry;
-            //_projectileSizeMap = new()
-            //{
-            //    {SizeType.S, 1 },
-            //    {SizeType.M, 5 },
-            //    {SizeType.L, 25 },
-            //    {SizeType.XL, 125 }
-            //};
+            _hitRegistrationSystem = hitRegistrationSystem;
 
             _projectileSizeMap = new()
             {
                 {SizeType.S, 1 },
                 {SizeType.M, 2 },
                 {SizeType.L, 6 },
-                {SizeType.XL, 125 }
+                {SizeType.XL, 12 }
             };
-        }
 
-        public void CoreUpdateTick(float deltaTime)
-        {
-            OnGameTick(deltaTime);
-        }
-
-        protected override void Subscribe()
-        {
-            base.Subscribe();
             EventBus.BoltWeaponShootAction += SpawnBolt;
         }
 
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            EventBus.BoltWeaponShootAction -= SpawnBolt;
-        }
-
-        private void OnGameTick(float deltaTime)
+        public void Execute(float deltaTime)
         {
             foreach (var projectile in _projectileRegistry.ActiveProjectiles)
             {
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
-                    TryProjectileHit(projectile);
+                    CheckProjectileHit(projectile);
                     _projectileRegistry.RequestRemoveActiveProjectile(projectile);
                     continue;
                 }
@@ -96,7 +75,7 @@ namespace CoreGameSystems
                 return;
             }
 
-            if (!TryProjectileHit(bolt))
+            if (!CheckProjectileHit(bolt))
             {
                 bolt.IsMissed = true;
                 MoveBolt(bolt, deltaTime);
@@ -111,25 +90,19 @@ namespace CoreGameSystems
             bolt.Transform.position = nextPos;
         }
 
-        private bool TryProjectileHit(ProjectileBase projectile)
+        private bool CheckProjectileHit(ProjectileBase projectile)
         {
             var currentPosition = projectile.Position;
-            var hit = Physics2D.OverlapPoint(currentPosition, projectile.HitLayers);
+            var collider = Physics2D.OverlapPoint(currentPosition, projectile.HitLayers);
 
-            if (hit == null || projectile.IgnoredColliders.Contains(hit)) return false;
+            if (collider == null || projectile.IgnoredColliders.Contains(collider)) return false;
 
-            hit.TryGetComponent(out DefenseLayerBase defenceLayer);
-
-            var hitData = new HitData
-            {
-                Position = currentPosition,
-                Size = projectile.Size
-            };
-
-            EventBus.HitAction?.Invoke(projectile.DamageData, defenceLayer, hitData);
+            _hitRegistrationSystem.RegisterHit(collider, currentPosition, projectile.Size, projectile.DamageData);
             _projectileRegistry.RequestRemoveActiveProjectile(projectile);
             return true;
         }
+
+
 
         private void ProcessStraightMissileBehaviour(StraightMissile straightMissile)
         {

@@ -8,7 +8,7 @@ namespace CoreGameSystems
 {
     public class WeaponBehaviourSystem : MonoBehaviour
     {
-        private WeaponsBehaviour _weaponsBehaviour;
+        private WeaponsStrategy _weaponsBehaviour;
         private WeaponRegistry _weaponRegistry;
         private ShipRegistry _shipRegistry;
 
@@ -17,7 +17,7 @@ namespace CoreGameSystems
         {
             _weaponRegistry = weaponRegistry;
             _shipRegistry = shipRegistry;
-            _weaponsBehaviour = new WeaponsBehaviour();
+            _weaponsBehaviour = new WeaponsStrategy();
             EventBus.WeaponChangeAttackStateAction += OnWeaponChangeAttackStateAction;
         }
 

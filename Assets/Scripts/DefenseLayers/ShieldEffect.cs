@@ -10,14 +10,13 @@ namespace DefenseLayers
         public MaterialPropertyBlock MaterialBlock { get; private set; }
         public Transform ShieldTransform;
         public float RemainingLifetime;
-        public Color Color;
+        public float SpriteAlpha;
 
         public override void Init(uint poolId)
         {
             base.Init(poolId);
             MaterialBlock = new();
-            Color = SpriteRenderer.color;
+            SpriteAlpha = 1;
         }
     }
 }
-

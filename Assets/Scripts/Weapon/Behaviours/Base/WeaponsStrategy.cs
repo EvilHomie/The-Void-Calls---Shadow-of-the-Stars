@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Weapons
 {
-    public class WeaponsBehaviour
+    public class WeaponsStrategy
     {
         private readonly Dictionary<WeaponType, WeaponInvoker> _invokers;
 
-        public WeaponsBehaviour()
+        public WeaponsStrategy()
         {
             _invokers = new();
             RegisterInvokers();
@@ -24,8 +24,8 @@ namespace Weapons
 
         private void RegisterInvokers()
         {
-            _invokers[WeaponType.MiningDrill] = CreateInvoker(new MiningDrillBehaviour());
-            _invokers[WeaponType.BoltRepeater] = CreateInvoker(new BoltRepeaterBehaviour());
+            _invokers[WeaponType.MiningDrill] = CreateInvoker(new MiningDrillStrategy());
+            _invokers[WeaponType.BoltRepeater] = CreateInvoker(new BoltRepeaterStrategy());
         }
 
         private WeaponInvoker CreateInvoker<TWeapon>(IWeaponBehaviour<TWeapon> behaviour) where TWeapon : WeaponBase

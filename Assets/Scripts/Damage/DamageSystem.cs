@@ -1,82 +1,66 @@
 using DefenseLayers;
-using System.Collections.Generic;
-using Weapons;
+using DI;
+using UnityEngine;
 
 namespace CoreGameSystems
 {
-    public class DamageSystem : GameSystemBase
+    public class DamageSystem : MonoBehaviour
     {
-        public delegate void DamageAction(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData);
-
-        private readonly Dictionary<DefenseLayerType, DamageAction> _damageStrategies = new();
-
-        protected override void AwakeInit()
+        [Inject]
+        public void Construct()
         {
-            _damageStrategies.Add(DefenseLayerType.Hull, ApplyHullDamage);
-            _damageStrategies.Add(DefenseLayerType.Armor, ApplyArmorDamage);
-            _damageStrategies.Add(DefenseLayerType.Shield, ApplyShieldDamage);
-            _damageStrategies.Add(DefenseLayerType.AsteroidHull, ApplyAsteroidHullDamage);
+            EventBus.ShieldDamagedAction += ApplyShieldDamage;
+            EventBus.ArmorDamagedAction += ApplyArmorDamage;
+            EventBus.HullDamagedAction += ApplyHullDamage;
+            EventBus.AsteroidDamagedAction += ApplyAsteroidDamage;
         }
 
-        protected override void Subscribe()
+        private void ApplyShieldDamage(ShieldDefenseLayer layer, HitData hitData)
         {
-            base.Subscribe();
-            EventBus.HitAction += OnHit;
-        }
+            layer.CurrentPoints -= hitData.Damage;
 
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            EventBus.HitAction -= OnHit;
-        }       
-
-        private void OnHit(WeaponRuntimeDamage damageData, DefenseLayerBase layer, HitData hitData)
-        {
-            var layerType = layer.LayerType;
-            _damageStrategies[layerType].Invoke(layer, damageData);
-
-            EventBus.DefenseLayerHitAction?.Invoke(layer, hitData);
-        }
-
-
-        private void ApplyShieldDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
-        {
-            defenseLayer.CurrentHealthPoints -= damageData.DamageShield;
-
-            if (defenseLayer.CurrentHealthPoints <= 0)
+            if (layer.CurrentPoints <= 0)
             {
-                defenseLayer.CurrentHealthPoints = 0;
-                defenseLayer.Collider.enabled = false;
+                layer.CurrentPoints = 0;
+                layer.Collider.enabled = false;
+
+                Debug.LogError("Shield Destroyed");
             }
         }
 
-        private void ApplyArmorDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
+        private void ApplyAsteroidDamage(AsteroidDefenseLayer layer, HitData hitData)
         {
-            defenseLayer.CurrentHealthPoints -= damageData.DamageArmor;
+            layer.CurrentPoints -= hitData.Damage;
 
-            if (defenseLayer.CurrentHealthPoints <= 0)
+            if (layer.CurrentPoints <= 0)
             {
-                defenseLayer.CurrentHealthPoints = 0;
-                defenseLayer.Collider.enabled = false;
-            }
-        }
-        private void ApplyHullDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
-        {
-            defenseLayer.CurrentHealthPoints -= damageData.DamageHull;
+                layer.CurrentPoints = 0;
 
-            if (defenseLayer.CurrentHealthPoints <= 0)
-            {
-                defenseLayer.CurrentHealthPoints = 0;
+                Debug.LogError("Asteroid Destoyed");
             }
         }
 
-        private void ApplyAsteroidHullDamage(DefenseLayerBase defenseLayer, WeaponRuntimeDamage damageData)
+        private void ApplyArmorDamage(HullDefenseLayer layer, HitData hitData)
         {
-            defenseLayer.CurrentHealthPoints -= damageData.DamageAsteroid;
+            layer.CurrentArmorPoints -= hitData.Damage;
 
-            if (defenseLayer.CurrentHealthPoints <= 0)
+            if (layer.CurrentArmorPoints <= 0)
             {
-                defenseLayer.CurrentHealthPoints = 0;
+                layer.CurrentArmorPoints = 0;
+
+                Debug.LogError("Armor Destroyed");
+            }
+        }
+
+        private void ApplyHullDamage(HullDefenseLayer layer, HitData hitData)
+        {
+            layer.CurrentHullPoints -= hitData.Damage;
+
+            if (layer.CurrentHullPoints <= 0)
+            {
+                layer.CurrentHullPoints = 0;
+
+                Debug.LogError("Hull Destroyed");
             }
         }
     }

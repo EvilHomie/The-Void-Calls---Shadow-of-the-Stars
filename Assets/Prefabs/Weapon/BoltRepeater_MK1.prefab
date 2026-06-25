@@ -5125,7 +5125,7 @@ MonoBehaviour:
   <Name>k__BackingField: S_BoltRepeater_MK1
   <HitLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 1073757312
+    m_Bits: 1207975040
   <WeaponTransform>k__BackingField: {fileID: 11203282507777302}
   <ShootPointTransform>k__BackingField: {fileID: 1993834376407665666}
   <Collider>k__BackingField: {fileID: 4118397664315645279}

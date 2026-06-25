@@ -1,6 +1,6 @@
 namespace Weapons
 {
-    public class BeamEmitterBehaviour : IWeaponBehaviour<BeamEmitter>
+    public class BeamEmitterStrategy : IWeaponBehaviour<BeamEmitter>
     {
         public void HandleStartShoot(BeamEmitter weapon)
         {

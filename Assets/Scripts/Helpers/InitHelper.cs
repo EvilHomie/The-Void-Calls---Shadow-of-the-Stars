@@ -1,4 +1,5 @@
 using Asteroids;
+using CoreGameSystems;
 using DefenseLayers;
 using Registries;
 using Ships;
@@ -72,18 +73,21 @@ namespace Helpers
         {
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
-                if (defenseLayer.LayerType == DefenseLayerType.Hull)
+                switch (defenseLayer)
                 {
-                    var hp = shipInstance.Equip.Chassis.Hull;
-                    defenseLayer.Init(hp);
-                }
-                else if (defenseLayer.LayerType == DefenseLayerType.Shield)
-                {
-                    defenseLayer.Init(2000);
-                }
-                else //if (defenseLayer.LayerType == DefenseLayerType.Armor)
-                {
-                    defenseLayer.Init(2000);
+                    case ShieldDefenseLayer shield:
+                        shield.CurrentPoints = 2000;
+                        shield.MaxPoints = 2000;
+                        break;
+
+                    case HullDefenseLayer hull:
+
+                        var hullHP = shipInstance.Equip.Chassis.Hull;
+                        hull.CurrentHullPoints = hullHP;
+                        hull.MaxHullPoints = hullHP;
+                        hull.CurrentArmorPoints = 2000;
+                        hull.MaxArmorPoints = 2000;
+                        break;
                 }
 
                 shipInstance.OwnColliders.Add(defenseLayer.Collider);
@@ -113,7 +117,8 @@ namespace Helpers
             rigidBody.mass = mass;
 
             var hp = mass * WorldConfig.AsteroidTonHP;
-            asteroid.AsteroidHullLayer.Init(hp);
+            asteroid.AsteroidHullLayer.CurrentPoints = hp;
+            asteroid.AsteroidHullLayer.MaxPoints = hp;
         }
 
         public static float GetMassModifier(AsteroidType asteroidType)

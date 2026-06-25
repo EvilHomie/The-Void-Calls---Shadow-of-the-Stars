@@ -800,10 +800,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &141888733
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -990,10 +990,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &151904139
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -1242,6 +1242,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169187059}
   m_CullTransparentMesh: 1
+--- !u!1 &216658262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 216658263}
+  - component: {fileID: 216658264}
+  m_Layer: 0
+  m_Name: HitRegistrationSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &216658263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216658262}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 742259293}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &216658264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216658262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a8e8d68ebb0ed94488ac29efa08fbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &235733270
 GameObject:
   m_ObjectHideFlags: 0
@@ -1577,10 +1621,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &267370297
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2164,10 +2208,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &276623325
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2354,10 +2398,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &278580587
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -2425,6 +2469,183 @@ PolygonCollider2D:
       - {x: 0.26878968, y: 0.38554418}
       - {x: 0.13598001, y: 0.45163006}
   m_UseDelaunayMesh: 1
+--- !u!1 &288073286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 288073290}
+  - component: {fileID: 288073289}
+  - component: {fileID: 288073288}
+  - component: {fileID: 288073287}
+  - component: {fileID: 288073291}
+  m_Layer: 27
+  m_Name: Square
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &288073287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288073286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dabae4380c4e9044a59fb4de9b4fc1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestHullLayer
+  hullPoints: 1000
+  armorPoints: 100
+--- !u!60 &288073288
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288073286}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.5, y: 0.5}
+      - {x: -0.5, y: -0.5}
+      - {x: 0.5, y: -0.5}
+      - {x: 0.5, y: 0.5}
+  m_UseDelaunayMesh: 1
+--- !u!212 &288073289
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288073286}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Color: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
+--- !u!4 &288073290
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288073286}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.559, y: 0.585, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &288073291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288073286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8fb4bf730f45d4b96ab2b129b1a1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullDefenseLayer
+  <Size>k__BackingField: 0
+  <Collider>k__BackingField: {fileID: 288073288}
+  CurrentHullPoints: 0
+  MaxHullPoints: 0
+  CurrentArmorPoints: 0
+  MaxArmorPoints: 0
 --- !u!1 &312768622
 GameObject:
   m_ObjectHideFlags: 0
@@ -4825,10 +5046,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &688707753
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -4978,6 +5199,8 @@ Transform:
   - {fileID: 1027794155}
   - {fileID: 802507657}
   - {fileID: 1131035736}
+  - {fileID: 1374963307}
+  - {fileID: 216658263}
   m_Father: {fileID: 1161313473}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &748629606
@@ -5099,10 +5322,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &748629611
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -5722,10 +5945,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &834375346
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -6230,10 +6453,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &850864480
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -6731,10 +6954,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &988192833
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -8555,10 +8778,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &1254056213
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -9222,7 +9445,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1883150519}
+  m_Father: {fileID: 742259293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1374963308
 MonoBehaviour:
@@ -10741,10 +10964,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &1642596887
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -11136,6 +11359,8 @@ MonoBehaviour:
   cinemachineCamera: {fileID: 1027794154}
   movementVisualizeSystem: {fileID: 802507658}
   aimSystem: {fileID: 1131035737}
+  projectileBehaviourSystem: {fileID: 1374963308}
+  hitRegistrationSystem: {fileID: 216658264}
 --- !u!4 &1676256109
 Transform:
   m_ObjectHideFlags: 0
@@ -11990,10 +12215,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &1871452475
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -12095,7 +12320,6 @@ Transform:
   - {fileID: 257707062}
   - {fileID: 789032729}
   - {fileID: 936842253}
-  - {fileID: 1374963307}
   - {fileID: 1865616979}
   - {fileID: 504730500}
   - {fileID: 1161313473}
@@ -12610,10 +12834,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &1919649175
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -13153,10 +13377,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &1955926556
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -14844,10 +15068,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!60 &2133473589
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -15501,9 +15725,6 @@ MonoBehaviour:
     - {fileID: 6611752092666870622}
     <ThrustersBR>k__BackingField:
     - {fileID: 7519563215545521654}
-  ResistanceStats:
-    Energy: 0
-    Kinetic: 0
   IntentData:
     MoveDirection: {x: 0, y: 0}
     DamperEnabled: 0
@@ -15539,10 +15760,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 6067823510272302866}
+  CurrentHullPoints: 0
+  MaxHullPoints: 0
+  CurrentArmorPoints: 0
+  MaxArmorPoints: 0
 --- !u!114 &448499877063536248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21533,11 +21755,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98fe6211522fec42804d9979e403b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ArmorLayer
-  <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
 --- !u!114 &1574517475158618393 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2220114467959634555, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
@@ -21562,10 +21779,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  CurrentHullPoints: 0
+  MaxHullPoints: 0
+  CurrentArmorPoints: 0
+  MaxArmorPoints: 0
 --- !u!212 &1594310143860554634
 SpriteRenderer:
   serializedVersion: 2
@@ -21744,7 +21962,7 @@ MonoBehaviour:
   - {fileID: 8604929877622526926}
   <DefenseLayers>k__BackingField:
   - {fileID: 2909099016407291277}
-  - {fileID: 1563161010883863418}
+  - {fileID: 0}
   - {fileID: 3545697994377127089}
   <HullCollider>k__BackingField: {fileID: 8682259554545190453}
   IsAttacking: 0
@@ -21791,9 +22009,6 @@ MonoBehaviour:
     <ThrustersFR>k__BackingField: []
     <ThrustersBL>k__BackingField: []
     <ThrustersBR>k__BackingField: []
-  ResistanceStats:
-    Energy: 0
-    Kinetic: 0
   IntentData:
     MoveDirection: {x: 0, y: 0}
     DamperEnabled: 0
@@ -22272,32 +22487,34 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 6144
-  <Transform>k__BackingField: {fileID: 5608015294395564607}
-  <ShootPoint>k__BackingField: {fileID: 6768350703369789473}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 0}
+  <ShootPointTransform>k__BackingField: {fileID: 0}
+  <Collider>k__BackingField: {fileID: 0}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
+  BaseDamage:
     DamageEnergy: 0
     DamageKinetic: 0
-    DamageMultipliersEnergy: 0
-    DamageMultipliersKinetic: 0
-    DamageMultipliersAsteroid: 0
-  AimStats:
+    AsteroidMultiplier: 0
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
     MaxDistance: 0
     MaxRotateAngle: 0
     RotateSpeed: 0
-  RuntimeData:
-    NextHitTime: 0
-    HitDelay: 0
-    NoHitTargetPoint: {x: 0, y: 0}
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   <BeamLineLR>k__BackingField: {fileID: 0}
   <ShootSpotPS>k__BackingField: {fileID: 0}
+  NextHitTime: 0
+  HitDelay: 0
 --- !u!114 &2686990372026803491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22316,37 +22533,45 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
-  <Transform>k__BackingField: {fileID: 8579177336568868412}
-  <ShootPoint>k__BackingField: {fileID: 4096293797574829357}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 0}
+  <ShootPointTransform>k__BackingField: {fileID: 0}
+  <Collider>k__BackingField: {fileID: 0}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
+  BaseDamage:
     DamageEnergy: 0
     DamageKinetic: 0
-    DamageMultipliersEnergy: 0
-    DamageMultipliersKinetic: 0
-    DamageMultipliersAsteroid: 0
-  AimStats:
+    AsteroidMultiplier: 0
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
     MaxDistance: 0
     MaxRotateAngle: 0
     RotateSpeed: 0
-  RuntimeData:
-    NextShootTime: 0
-    ShootDelay: 0
-    ProjectileSpeed: 0
-    InvProjectileSpeed: 0
-    ProjectileLifeTime: 0
-  <FireRate>k__BackingField: 0
-  <SpreadAngle>k__BackingField: 0
-  <ProjectileSpeed>k__BackingField: 0
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 4037891060208201413}
+  BaseFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  RuntimeFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  NextShootTime: 0
+  LogicStats:
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
 --- !u!4 &2707935566826505324
 Transform:
   m_ObjectHideFlags: 0
@@ -22460,10 +22685,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  CurrentHullPoints: 0
+  MaxHullPoints: 0
+  CurrentArmorPoints: 0
+  MaxArmorPoints: 0
 --- !u!114 &2936196779539328305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22482,32 +22708,34 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 0
-  <Transform>k__BackingField: {fileID: 0}
-  <ShootPoint>k__BackingField: {fileID: 0}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 0}
+  <ShootPointTransform>k__BackingField: {fileID: 0}
+  <Collider>k__BackingField: {fileID: 0}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
+  BaseDamage:
     DamageEnergy: 0
     DamageKinetic: 0
-    DamageMultipliersEnergy: 0
-    DamageMultipliersKinetic: 0
-    DamageMultipliersAsteroid: 0
-  AimStats:
+    AsteroidMultiplier: 0
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
     MaxDistance: 0
     MaxRotateAngle: 0
     RotateSpeed: 0
-  RuntimeData:
-    NextHitTime: 0
-    HitDelay: 0
-    NoHitTargetPoint: {x: 0, y: 0}
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   <BeamLineLR>k__BackingField: {fileID: 0}
   <ShootSpotPS>k__BackingField: {fileID: 0}
+  NextHitTime: 0
+  HitDelay: 0
 --- !u!114 &2937113174186957443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32242,10 +32470,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 1
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!1 &3637676288863529459
 GameObject:
   m_ObjectHideFlags: 0
@@ -37384,10 +37612,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 2
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 0}
+  <Transform>k__BackingField: {fileID: 0}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!1 &4092753978400086827
 GameObject:
   m_ObjectHideFlags: 0
@@ -43202,11 +43430,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98fe6211522fec42804d9979e403b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ArmorLayer
-  <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
 --- !u!50 &5410821745558995686
 Rigidbody2D:
   serializedVersion: 5
@@ -43394,37 +43617,45 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
-  <Transform>k__BackingField: {fileID: 7653245146193944007}
-  <ShootPoint>k__BackingField: {fileID: 8194723345704637651}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 0}
+  <ShootPointTransform>k__BackingField: {fileID: 0}
+  <Collider>k__BackingField: {fileID: 0}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
-    DamageEnergy: 1
-    DamageKinetic: 2
-    DamageMultipliersEnergy: 2
-    DamageMultipliersKinetic: 4
-    DamageMultipliersAsteroid: 0.5
-  AimStats:
-    MaxDistance: 10
-    MaxRotateAngle: 25
-    RotateSpeed: 90
-  RuntimeData:
-    NextShootTime: 0
-    ShootDelay: 0
-    ProjectileSpeed: 0
-    InvProjectileSpeed: 0
-    ProjectileLifeTime: 0
-  <FireRate>k__BackingField: 7
-  <SpreadAngle>k__BackingField: 1
-  <ProjectileSpeed>k__BackingField: 10
+  BaseDamage:
+    DamageEnergy: 0
+    DamageKinetic: 0
+    AsteroidMultiplier: 0
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 6660632306448098118}
+  BaseFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  RuntimeFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  NextShootTime: 0
+  LogicStats:
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
 --- !u!114 &5849907229595957561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48844,37 +49075,45 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
-  <Transform>k__BackingField: {fileID: 677628287182309316}
-  <ShootPoint>k__BackingField: {fileID: 5093785044105006293}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 0}
+  <ShootPointTransform>k__BackingField: {fileID: 0}
+  <Collider>k__BackingField: {fileID: 0}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
+  BaseDamage:
     DamageEnergy: 0
     DamageKinetic: 0
-    DamageMultipliersEnergy: 0
-    DamageMultipliersKinetic: 0
-    DamageMultipliersAsteroid: 0
-  AimStats:
+    AsteroidMultiplier: 0
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
     MaxDistance: 0
     MaxRotateAngle: 0
     RotateSpeed: 0
-  RuntimeData:
-    NextShootTime: 0
-    ShootDelay: 0
-    ProjectileSpeed: 0
-    InvProjectileSpeed: 0
-    ProjectileLifeTime: 0
-  <FireRate>k__BackingField: 0
-  <SpreadAngle>k__BackingField: 0
-  <ProjectileSpeed>k__BackingField: 0
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 5071422090283419453}
+  BaseFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  RuntimeFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  NextShootTime: 0
+  LogicStats:
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
 --- !u!114 &6611752092666870622 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7384907801623682868, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
@@ -63579,37 +63818,45 @@ MonoBehaviour:
   <HitLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 1073757312
-  <Transform>k__BackingField: {fileID: 6355126420582318325}
-  <ShootPoint>k__BackingField: {fileID: 4881261329908648417}
-  DamageData:
-    Energy: 0
-    Kinetic: 0
-    Asteroid: 0
-  ShootPointData:
+  <WeaponTransform>k__BackingField: {fileID: 0}
+  <ShootPointTransform>k__BackingField: {fileID: 0}
+  <Collider>k__BackingField: {fileID: 0}
+  ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
     ZDepth: 0
-  BaseStats:
-    DamageEnergy: 1
-    DamageKinetic: 2
-    DamageMultipliersEnergy: 2
-    DamageMultipliersKinetic: 4
-    DamageMultipliersAsteroid: 0.5
-  AimStats:
-    MaxDistance: 10
-    MaxRotateAngle: 25
-    RotateSpeed: 90
-  RuntimeData:
-    NextShootTime: 0
-    ShootDelay: 0
-    ProjectileSpeed: 0
-    InvProjectileSpeed: 0
-    ProjectileLifeTime: 0
-  <FireRate>k__BackingField: 7
-  <SpreadAngle>k__BackingField: 1
-  <ProjectileSpeed>k__BackingField: 10
+  BaseDamage:
+    DamageEnergy: 0
+    DamageKinetic: 0
+    AsteroidMultiplier: 0
+  RuntimeDamage:
+    DamageShield: 0
+    DamageArmor: 0
+    DamageHull: 0
+    DamageAsteroid: 0
+  BaseAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
+  RuntimeAimStats:
+    MaxDistance: 0
+    MaxRotateAngle: 0
+    RotateSpeed: 0
   projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
   <ShootSpotPS>k__BackingField: {fileID: 7956569634936290932}
+  BaseFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  RuntimeFireStats:
+    FireRate: 0
+    SpreadAngle: 0
+    ProjectileSpeed: 0
+  NextShootTime: 0
+  LogicStats:
+    ShootDelay: 0
+    InvProjectileSpeed: 0
+    ProjectileLifeTime: 0
 --- !u!4 &7133786232005126217
 Transform:
   m_ObjectHideFlags: 0
@@ -73923,10 +74170,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
   <Size>k__BackingField: 0
-  CurrentHealthPoints: 0
-  ResistanceMultipliers:
-    Energy: 0
-    Kinetic: 0
+  <Collider>k__BackingField: {fileID: 237454092568867116}
+  <Transform>k__BackingField: {fileID: 3018963278841741078}
+  CurrentPoints: 0
+  MaxPoints: 0
 --- !u!1 &8275106588751887653
 GameObject:
   m_ObjectHideFlags: 0
@@ -78811,7 +79058,7 @@ MonoBehaviour:
   - {fileID: 6256898441656785849}
   <DefenseLayers>k__BackingField:
   - {fileID: 1591782287040721865}
-  - {fileID: 5394451447051768869}
+  - {fileID: 0}
   - {fileID: 4086881228449710921}
   <HullCollider>k__BackingField: {fileID: 5179692454554450623}
   IsAttacking: 0
@@ -78858,9 +79105,6 @@ MonoBehaviour:
     <ThrustersFR>k__BackingField: []
     <ThrustersBL>k__BackingField: []
     <ThrustersBR>k__BackingField: []
-  ResistanceStats:
-    Energy: 0
-    Kinetic: 0
   IntentData:
     MoveDirection: {x: 0, y: 0}
     DamperEnabled: 0
@@ -79349,3 +79593,4 @@ SceneRoots:
   - {fileID: 4507262679446174333}
   - {fileID: 7645366496222196025}
   - {fileID: 3810844271664388295}
+  - {fileID: 288073290}

@@ -34,6 +34,8 @@ namespace DI
         [SerializeField] CinemachineCamera cinemachineCamera;
         [SerializeField] MovementVisualizeSystem movementVisualizeSystem;
         [SerializeField] AimSystem aimSystem;
+        [SerializeField] ProjectileBehaviourSystem projectileBehaviourSystem;
+        [SerializeField] HitRegistrationSystem hitRegistrationSystem;
 
 
         protected override void InstallBindings()
@@ -56,6 +58,8 @@ namespace DI
             Container.Bind<CinemachineCamera>().FromInstance(cinemachineCamera).AsSingleton();
             Container.Bind<MovementVisualizeSystem>().FromInstance(movementVisualizeSystem).AsSingleton();
             Container.Bind<AimSystem>().FromInstance(aimSystem).AsSingleton();
+            Container.Bind<ProjectileBehaviourSystem>().FromInstance(projectileBehaviourSystem).AsSingleton();
+            Container.Bind<HitRegistrationSystem>().FromInstance(hitRegistrationSystem).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();

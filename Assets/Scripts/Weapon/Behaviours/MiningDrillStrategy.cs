@@ -1,11 +1,22 @@
-using DefenseLayers;
 using CoreGameSystems;
+using DI;
 using UnityEngine;
 
 namespace Weapons
 {
-    public class MiningDrillBehaviour : IWeaponBehaviour<ConstantBeamWeapon>
+    public class MiningDrillStrategy : IWeaponBehaviour<ConstantBeamWeapon>
     {
+        private HitRegistrationSystem _hitRegistrationSystem;
+
+        public MiningDrillStrategy() { Debug.LogError(1); }
+
+        [Inject]
+        public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem)
+        {
+            Debug.LogError(2);
+            _hitRegistrationSystem = hitRegistrationSystem;
+        }
+
         public void HandleStartShoot(ConstantBeamWeapon weapon)
         {
             weapon.BeamLineLR.enabled = true;
@@ -37,27 +48,14 @@ namespace Weapons
 
             if (GameFlowSystem.CoreTime < nextHitTime) return;
 
-            var hit = Physics2D.OverlapPoint(worldHitPos, weapon.HitLayers);
+            var collider = Physics2D.OverlapPoint(worldHitPos, weapon.HitLayers);
 
-            if (hit == null || weapon.IgnoredColliders.Contains(hit)) return;
+            if (collider == null || weapon.IgnoredColliders.Contains(collider)) return;
 
             var hitDelay = weapon.HitDelay;
             weapon.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
 
-            var damage = weapon.RuntimeDamage;
-            damage.DamageHull *= hitDelay;
-            damage.DamageArmor *= hitDelay;
-            damage.DamageShield *= hitDelay;
-            damage.DamageAsteroid *= hitDelay;
-
-            var hitData = new HitData
-            {
-                Position = worldHitPos,
-                Size = weapon.Size
-            };
-
-            hit.TryGetComponent(out DefenseLayerBase defenceLayer);
-            EventBus.HitAction?.Invoke(damage, defenceLayer, hitData);
+            _hitRegistrationSystem.RegisterHitDynamic(collider, worldHitPos, weapon.Size, weapon.RuntimeDamage, hitDelay);
         }
     }
 }

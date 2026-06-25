@@ -10,6 +10,7 @@ public class Batching : MonoBehaviour
     {
         _sr = GetComponent<SpriteRenderer>();
         _matBlock = new();
+        _sr.SetPropertyBlock(_matBlock);
     }
 
     private void OnEnable()

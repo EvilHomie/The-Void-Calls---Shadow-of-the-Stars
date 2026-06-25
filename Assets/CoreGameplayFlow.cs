@@ -14,6 +14,7 @@ namespace CoreGameSystems
         private CameraRigSystem _cameraRigSystem;
         private MovementVisualizeSystem _movementVisualizeSystem;
         private AimSystem _aimSystem;
+        private ProjectileBehaviourSystem _projectileBehaviourSystem;
 
         [Inject]
         public void Construct(
@@ -26,7 +27,8 @@ namespace CoreGameSystems
             EnvironmentSystem environmentSystem,
             CameraRigSystem cameraRigSystem,
             MovementVisualizeSystem movementVisualizeSystem,
-            AimSystem aimSystem)
+            AimSystem aimSystem,
+            ProjectileBehaviourSystem projectileBehaviourSystem)
         {
             _playerControlSystem = playerControlSystem;
             _playerMovementSystem = playerMovementSystem;
@@ -37,6 +39,7 @@ namespace CoreGameSystems
             _cameraRigSystem = cameraRigSystem;
             _movementVisualizeSystem = movementVisualizeSystem;
             _aimSystem = aimSystem;
+            _projectileBehaviourSystem = projectileBehaviourSystem;
             gameFlowSystem.AddTickObserver(this);
         }
 
@@ -56,6 +59,7 @@ namespace CoreGameSystems
             _weaponBehaviourSystem.Execute(deltaTime);
             _playerWeaponGroupSystem.Execute();
             _aimSystem.Execute();
+            _projectileBehaviourSystem.Execute(deltaTime);
 
             _movementVisualizeSystem.Execute();
             _cameraRigSystem.Execute(deltaTime);
