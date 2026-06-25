@@ -1,5 +1,5 @@
 using DI;
-using CoreGameSystems;
+using General;
 using System.Collections.Generic;
 using UnityEngine;
 using Weapons;

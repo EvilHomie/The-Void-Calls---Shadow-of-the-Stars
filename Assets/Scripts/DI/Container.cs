@@ -85,13 +85,13 @@ namespace DI
             return binding ?? throw new Exception($"Зависимость {type.Name} не найдена!");
         }
 
-        public void Instantiate(MonoBehaviour instance)
-        {
-            instance.gameObject.SetActive(false);
-            GameObject gameobject = UnityEngine.Object.Instantiate(instance).gameObject;
-            InjectMonoBehaviour(instance);
-            gameobject.SetActive(true);
-        }
+        //public void Instantiate(MonoBehaviour instance)
+        //{
+        //    instance.gameObject.SetActive(false);
+        //    GameObject gameobject = UnityEngine.Object.Instantiate(instance).gameObject;
+        //    InjectMonoBehaviour(instance);
+        //    gameobject.SetActive(true);
+        //}
 
         public void InjectMonoBehaviour(MonoBehaviour monoBehaviour)
         {

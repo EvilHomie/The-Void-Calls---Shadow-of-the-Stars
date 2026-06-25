@@ -1,10 +1,11 @@
+using CoreGameSystems;
 using DefenseLayers;
 using Ships;
 using System;
 using UnityEngine;
 using Weapons;
 
-namespace CoreGameSystems
+namespace General
 {
     public class EventBus : MonoBehaviour
     {

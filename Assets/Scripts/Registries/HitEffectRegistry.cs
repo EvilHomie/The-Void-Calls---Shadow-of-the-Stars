@@ -1,6 +1,6 @@
 using DI;
 using GamePools;
-using CoreGameSystems;
+using General;
 using HitParticles;
 using System.Collections.Generic;
 using UnityEngine;

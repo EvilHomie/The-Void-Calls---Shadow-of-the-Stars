@@ -1,10 +1,11 @@
 using DI;
+using General;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-namespace CoreGameSystems
+namespace PlayerInput
 {
     public class PCInput : IPlayerInput
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CoreGameSystems
+namespace General
 {
     public class GameFlowSystem : GameSystemBase
     {

@@ -1,4 +1,6 @@
 ﻿using DI;
+using General;
+using PlayerInput;
 using Ships;
 using System;
 using System.Collections.Generic;
@@ -25,7 +27,7 @@ namespace CoreGameSystems
         [Inject]
         public void Construct(
             MouseCursorSystem mouseCursorSystem,
-            PlayerIntentData  playerIntentData,
+            PlayerIntentData playerIntentData,
             CinemachineCamera cinemachineCamera,
             CinemachineTargetGroup cinemachineTargetGroup)
         {

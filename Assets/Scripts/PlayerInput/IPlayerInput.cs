@@ -1,4 +1,4 @@
-﻿namespace CoreGameSystems
+﻿namespace PlayerInput
 {
     public interface IPlayerInput
     {

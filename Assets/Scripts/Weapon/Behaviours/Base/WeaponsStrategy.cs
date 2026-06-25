@@ -1,3 +1,5 @@
+using CoreGameSystems;
+using DI;
 using System;
 using System.Collections.Generic;
 
@@ -6,9 +8,11 @@ namespace Weapons
     public class WeaponsStrategy
     {
         private readonly Dictionary<WeaponType, WeaponInvoker> _invokers;
+        private HitRegistrationSystem _hitRegistrationSystem;
 
-        public WeaponsStrategy()
+        public WeaponsStrategy(HitRegistrationSystem hitRegistrationSystem)
         {
+            _hitRegistrationSystem = hitRegistrationSystem;
             _invokers = new();
             RegisterInvokers();
         }
@@ -24,7 +28,7 @@ namespace Weapons
 
         private void RegisterInvokers()
         {
-            _invokers[WeaponType.MiningDrill] = CreateInvoker(new MiningDrillStrategy());
+            _invokers[WeaponType.MiningDrill] = CreateInvoker(new MiningDrillStrategy(_hitRegistrationSystem));
             _invokers[WeaponType.BoltRepeater] = CreateInvoker(new BoltRepeaterStrategy());
         }
 

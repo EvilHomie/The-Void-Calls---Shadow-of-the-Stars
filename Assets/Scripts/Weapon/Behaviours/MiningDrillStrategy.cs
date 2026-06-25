@@ -1,5 +1,5 @@
 using CoreGameSystems;
-using DI;
+using General;
 using UnityEngine;
 
 namespace Weapons
@@ -8,12 +8,8 @@ namespace Weapons
     {
         private HitRegistrationSystem _hitRegistrationSystem;
 
-        public MiningDrillStrategy() { Debug.LogError(1); }
-
-        [Inject]
-        public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem)
+        public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem) 
         {
-            Debug.LogError(2);
             _hitRegistrationSystem = hitRegistrationSystem;
         }
 

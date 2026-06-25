@@ -1,4 +1,5 @@
 using DI;
+using General;
 using Helpers;
 using Registries;
 using UnityEngine;
@@ -13,11 +14,11 @@ namespace CoreGameSystems
         private ShipRegistry _shipRegistry;
 
         [Inject]
-        public void Construct(WeaponRegistry weaponRegistry, ShipRegistry shipRegistry)
+        public void Construct(WeaponRegistry weaponRegistry, ShipRegistry shipRegistry, HitRegistrationSystem hitRegistrationSystem)
         {
             _weaponRegistry = weaponRegistry;
             _shipRegistry = shipRegistry;
-            _weaponsBehaviour = new WeaponsStrategy();
+            _weaponsBehaviour = new WeaponsStrategy(hitRegistrationSystem);
             EventBus.WeaponChangeAttackStateAction += OnWeaponChangeAttackStateAction;
         }
 

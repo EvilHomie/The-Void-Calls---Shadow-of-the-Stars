@@ -4,6 +4,7 @@ using Registries;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using EventBus = General.EventBus;
 
 namespace CoreGameSystems
 {
