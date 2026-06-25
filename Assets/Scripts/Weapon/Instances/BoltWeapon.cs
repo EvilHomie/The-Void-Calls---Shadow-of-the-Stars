@@ -36,5 +36,6 @@ namespace Weapons
         public float ShootDelay;
         public float InvProjectileSpeed;
         public float ProjectileLifeTime;
+        public float SpreadTimeMultiplier;
     }
 }

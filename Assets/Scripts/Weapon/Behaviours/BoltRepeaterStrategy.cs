@@ -33,7 +33,6 @@ namespace Weapons
             var spawnPos = shootPointData.Position;
             var aimPos = aimData.AimPosition;
             var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
-
             var shootDirection = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, fireStats.SpreadAngle);
             var boltSelfVelocity = shootDirection * fireStats.ProjectileSpeed;
 
@@ -45,7 +44,9 @@ namespace Weapons
             toAimSpeed = Mathf.Max(0.001f, toAimSpeed);
             var timeToAimPos = distanceToAimPos / toAimSpeed;
 
-            var hitTime = coreTime + timeToAimPos;
+            var spreadTimeMultiplier = logicStats.SpreadTimeMultiplier;
+            var spreadRandomMultiplier = 1 + Random.Range(-spreadTimeMultiplier, spreadTimeMultiplier);
+            var hitTime = coreTime + timeToAimPos * spreadRandomMultiplier;
             var destroyTime = coreTime + logicStats.ProjectileLifeTime;
 
             var shootData = new BoltWeaponShootData(

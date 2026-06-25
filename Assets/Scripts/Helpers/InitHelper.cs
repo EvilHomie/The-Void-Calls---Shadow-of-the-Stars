@@ -202,6 +202,7 @@ namespace Helpers
                 var invProjectileSpeed = 1f / baseFireStats.ProjectileSpeed;
                 logicStats.InvProjectileSpeed = invProjectileSpeed;
                 logicStats.ProjectileLifeTime = baseAimStats.MaxDistance * invProjectileSpeed;
+                logicStats.SpreadTimeMultiplier = baseFireStats.SpreadAngle / 100;
             }
             else if (weaponBase is ConstantBeamWeapon miningDrill)
             {
