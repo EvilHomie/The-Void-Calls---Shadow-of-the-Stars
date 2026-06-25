@@ -8,14 +8,14 @@ using EventBus = General.EventBus;
 
 namespace CoreGameSystems
 {
-    public class DamageVizualizeSystem : GameSystemBase, ICoreUpdateTickObserver
+    public class DamageVizualizeSystem : MonoBehaviour
     {
         [SerializeField] PoolReference sparksPoolBlue;
         [SerializeField] PoolReference sparksPoolYellow;
         [SerializeField] PoolReference sparksPoolGrey;
         [SerializeField] PoolReference _shieldCollisionPoolEffect;
         [SerializeField] PoolReference _shieldHitPoolEffect;
-        ShieldsEffectRegistry _shieldsEffectRegistry;
+        private ShieldsEffectRegistry _shieldsEffectRegistry;
         private HitEffectRegistry _hitEffectRegistry;
 
         private readonly float _collisionEffectDuration = 0.2f;
@@ -55,20 +55,16 @@ namespace CoreGameSystems
                 {SizeType.L, 15 },
                 {SizeType.XL, 125 }
             };
-        }
-
-        protected override void Subscribe()
-        {
-            base.Subscribe();
 
             EventBus.ShieldDamagedAction += OnShieldHit;
             EventBus.ArmorDamagedAction += OnArmorDamaged;
             EventBus.HullDamagedAction += OnHullDamaged;
             EventBus.AsteroidDamagedAction += OnAsteroidHullDamaged;
         }
-        public void CoreUpdateTick(float deltaTime)
+        public void Execute(float deltaTime)
         {
             UpdateShieldEffects();
+            UpdateActiveSparks();
         }
 
         //private void OnDefenseLayerCollisionAction(DefenseLayerBase layerBase, HitData hitData)
@@ -91,6 +87,17 @@ namespace CoreGameSystems
         //            break;
         //    }
         //}
+
+        private void UpdateActiveSparks()
+        {
+            foreach (var hitParticle in _hitEffectRegistry.ActiveHitParticles)
+            {
+                if (!hitParticle.IsPlaying)
+                {
+                    _hitEffectRegistry.RequestRemoveActiveHitParticle(hitParticle);
+                }
+            }
+        }
 
         private void OnHullDamaged(DefenseLayerBase layerBase, HitData hitData)
         {

@@ -1483,12 +1483,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 257707061}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1883150519}
+  m_Father: {fileID: 742259293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &257707063
 MonoBehaviour:
@@ -2483,7 +2483,7 @@ GameObject:
   - component: {fileID: 288073287}
   - component: {fileID: 288073291}
   m_Layer: 27
-  m_Name: Square
+  m_Name: TestSquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5201,6 +5201,8 @@ Transform:
   - {fileID: 1131035736}
   - {fileID: 1374963307}
   - {fileID: 216658263}
+  - {fileID: 257707062}
+  - {fileID: 936842253}
   m_Father: {fileID: 1161313473}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &748629606
@@ -6829,7 +6831,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1883150519}
+  m_Father: {fileID: 742259293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &936842254
 MonoBehaviour:
@@ -11361,6 +11363,7 @@ MonoBehaviour:
   aimSystem: {fileID: 1131035737}
   projectileBehaviourSystem: {fileID: 1374963308}
   hitRegistrationSystem: {fileID: 216658264}
+  damageVizualizeSystem: {fileID: 936842254}
 --- !u!4 &1676256109
 Transform:
   m_ObjectHideFlags: 0
@@ -11880,50 +11883,6 @@ MonoBehaviour:
   _startCapacity: 500
   _maxCapacity: 1000
   _prewarmAmount: 50
---- !u!1 &1865616978
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1865616979}
-  - component: {fileID: 1865616980}
-  m_Layer: 0
-  m_Name: HitParticlesBehaviourSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1865616979
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1865616978}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1883150519}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1865616980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1865616978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30665cce46fea94f9552ad37c7d5675, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameSystems.HitParticlesBehaviourSystem
 --- !u!1 &1871379484
 GameObject:
   m_ObjectHideFlags: 0
@@ -12317,10 +12276,7 @@ Transform:
   m_Children:
   - {fileID: 914527448}
   - {fileID: 1208889898}
-  - {fileID: 257707062}
   - {fileID: 789032729}
-  - {fileID: 936842253}
-  - {fileID: 1865616979}
   - {fileID: 504730500}
   - {fileID: 1161313473}
   m_Father: {fileID: 0}
@@ -22572,6 +22528,7 @@ MonoBehaviour:
     ShootDelay: 0
     InvProjectileSpeed: 0
     ProjectileLifeTime: 0
+    SpreadTimeMultiplier: 0
 --- !u!4 &2707935566826505324
 Transform:
   m_ObjectHideFlags: 0
@@ -43656,6 +43613,7 @@ MonoBehaviour:
     ShootDelay: 0
     InvProjectileSpeed: 0
     ProjectileLifeTime: 0
+    SpreadTimeMultiplier: 0
 --- !u!114 &5849907229595957561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49114,6 +49072,7 @@ MonoBehaviour:
     ShootDelay: 0
     InvProjectileSpeed: 0
     ProjectileLifeTime: 0
+    SpreadTimeMultiplier: 0
 --- !u!114 &6611752092666870622 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7384907801623682868, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
@@ -63857,6 +63816,7 @@ MonoBehaviour:
     ShootDelay: 0
     InvProjectileSpeed: 0
     ProjectileLifeTime: 0
+    SpreadTimeMultiplier: 0
 --- !u!4 &7133786232005126217
 Transform:
   m_ObjectHideFlags: 0
