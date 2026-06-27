@@ -11,7 +11,6 @@ namespace Projectiles
         public float DestroyTime;
         public float HitTime;
         public Vector2 AimPos;
-        public LayerMask HitLayers;
         public WeaponRuntimeDamage DamageData;
         public HashSet<Collider2D> IgnoredColliders = new();
 

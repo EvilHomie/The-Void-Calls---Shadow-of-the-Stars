@@ -7,25 +7,21 @@ namespace Weapons
     {
         public readonly uint ProjectilePoolId;
         public readonly HashSet<Collider2D> IgnoredColliders;
-        public readonly float DestroyTime;
-        public readonly float HitTime;
-        public readonly Vector2 SpawnPosition;
+        public readonly float LifeTime;
+        public readonly Vector2 SpawnPos;
         public readonly Vector2 AimPos;
         public readonly Vector2 Velocity;
         public readonly Vector2 Direction;
-        public readonly LayerMask HitLayers;
         public readonly WeaponRuntimeDamage DamageData;
         public readonly SizeType Size;
 
-        public BoltWeaponShootData(uint poolId, SizeType size, HashSet<Collider2D> ignoredColliders, float destroyTime, float hitTime, Vector2 spawnPos, Vector2 aimPos, Vector2 velocity, Vector2 direction, LayerMask hitLayers, WeaponRuntimeDamage damageData)
+        public BoltWeaponShootData(uint poolId, SizeType size, HashSet<Collider2D> ignoredColliders, float lifeTime, Vector2 spawnPos, Vector2 aimPos, Vector2 velocity, Vector2 direction, WeaponRuntimeDamage damageData)
         {
             IgnoredColliders = ignoredColliders;
-            HitLayers = hitLayers;
             ProjectilePoolId = poolId;
-            DestroyTime = destroyTime;
+            LifeTime = lifeTime;
             Direction = direction;
-            HitTime = hitTime;
-            SpawnPosition = spawnPos;
+            SpawnPos = spawnPos;
             AimPos = aimPos;
             Velocity = velocity;
             DamageData = damageData;

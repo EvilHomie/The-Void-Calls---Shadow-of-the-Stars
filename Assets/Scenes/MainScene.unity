@@ -501,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5121146181307444945, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8888522502499535022, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1259,7 +1259,7 @@ GameObject:
   - component: {fileID: 193760476}
   - component: {fileID: 193760475}
   - component: {fileID: 193760474}
-  m_Layer: 27
+  m_Layer: 9
   m_Name: TestSquare (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2682,7 +2682,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dabae4380c4e9044a59fb4de9b4fc1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestHullLayer
-  hullPoints: 10000
+  hullPoints: 50
   armorPoints: 0
 --- !u!60 &288073288
 PolygonCollider2D:
@@ -2836,13 +2836,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 312768623}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: Shields
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &312768623
 Transform:
   m_ObjectHideFlags: 0
@@ -3756,7 +3756,7 @@ GameObject:
   - component: {fileID: 522049304}
   - component: {fileID: 522049303}
   - component: {fileID: 522049302}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: TestSquare (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4137,7 +4137,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5121146181307444945, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8888522502499535022, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7082,7 +7082,7 @@ GameObject:
   - component: {fileID: 901234605}
   - component: {fileID: 901234604}
   - component: {fileID: 901234603}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: TestSquare (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7119,7 +7119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dabae4380c4e9044a59fb4de9b4fc1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestHullLayer
-  hullPoints: 100
+  hullPoints: 50
   armorPoints: 10
 --- !u!60 &901234605
 PolygonCollider2D:
@@ -7293,7 +7293,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 922475116396337017, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1992484860595282371, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7341,7 +7341,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6435178079138045922, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7978,7 +7978,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2939208631155464014, guid: c674d7ae2925c2448a8db318798b0e21, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5904006120509081286, guid: c674d7ae2925c2448a8db318798b0e21, type: 3}
       propertyPath: m_Name
@@ -7986,15 +7986,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5904006120509081286, guid: c674d7ae2925c2448a8db318798b0e21, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6415532662170376252, guid: c674d7ae2925c2448a8db318798b0e21, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7464383726143902158, guid: c674d7ae2925c2448a8db318798b0e21, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8768018641968506880, guid: c674d7ae2925c2448a8db318798b0e21, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9801,7 +9801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dabae4380c4e9044a59fb4de9b4fc1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestHullLayer
-  hullPoints: 100
+  hullPoints: 50
   armorPoints: 0
 --- !u!60 &1300294991
 PolygonCollider2D:
@@ -10114,7 +10114,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5121146181307444945, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8888522502499535022, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11315,7 +11315,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 922475116396337017, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1992484860595282371, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11363,7 +11363,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6435178079138045922, guid: d162d503aae3925458e3db0b8edc8c15, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11556,7 +11556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5121146181307444945, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8888522502499535022, guid: 4ed2d97faa19d8445acec172ebc9b117, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14519,15 +14519,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3366958931173237647, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5971323083723899898, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7141259213136177515, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8748008673660980155, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Name
@@ -14535,7 +14535,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8748008673660980155, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16157,7 +16157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5510811092087903939}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boosters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16320,15 +16320,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3366958931173237647, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5971323083723899898, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7141259213136177515, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8748008673660980155, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Name
@@ -16336,7 +16336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8748008673660980155, guid: adf14d8af7c38364989f737654dfa37b, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16353,7 +16353,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2796986468803005647}
   - component: {fileID: 8495758523725276426}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: WeaponSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22213,7 +22213,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 234266691371105835, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 277715304110908122, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22261,15 +22261,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1139256862525083729, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7528368962327126728, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9048117374568266560, guid: fb5b6aeb934648b4d95f4c15c3492012, type: 3}
       propertyPath: m_Layer
-      value: 27
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22462,7 +22462,7 @@ GameObject:
   - component: {fileID: 7499525876400719661}
   - component: {fileID: 369967703989194507}
   - component: {fileID: 989548960586914695}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: S_Ship_Miner_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23126,7 +23126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2896738527738280205}
   - component: {fileID: 2937113174186957443}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: WeaponSlot (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23244,9 +23244,6 @@ MonoBehaviour:
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_MiningDrill_Mk1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 6144
   <WeaponTransform>k__BackingField: {fileID: 0}
   <ShootPointTransform>k__BackingField: {fileID: 0}
   <Collider>k__BackingField: {fileID: 0}
@@ -23289,9 +23286,6 @@ MonoBehaviour:
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_BoltRepeater_MK1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1073757312
   <WeaponTransform>k__BackingField: {fileID: 0}
   <ShootPointTransform>k__BackingField: {fileID: 0}
   <Collider>k__BackingField: {fileID: 0}
@@ -23464,9 +23458,6 @@ MonoBehaviour:
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 0
   <Name>k__BackingField: 
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 0
   <WeaponTransform>k__BackingField: {fileID: 0}
   <ShootPointTransform>k__BackingField: {fileID: 0}
   <Collider>k__BackingField: {fileID: 0}
@@ -28308,7 +28299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 760875815254518241}
   - component: {fileID: 973981246931358700}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: WeaponSlot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38566,7 +38557,7 @@ GameObject:
   - component: {fileID: 237454092568867116}
   - component: {fileID: 8240890248626110818}
   - component: {fileID: 4627567701485345344}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: AroundShield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38922,7 +38913,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1951153429202113855}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Engines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44273,7 +44264,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 345224794563203095}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Thrusters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44372,9 +44363,6 @@ MonoBehaviour:
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 1
   <Name>k__BackingField: S_BoltRepeater_MK1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1073757312
   <WeaponTransform>k__BackingField: {fileID: 0}
   <ShootPointTransform>k__BackingField: {fileID: 0}
   <Collider>k__BackingField: {fileID: 0}
@@ -49682,7 +49670,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1861061939537212264}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: WeaponSlots
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49830,9 +49818,6 @@ MonoBehaviour:
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 0
   <Name>k__BackingField: S_BoltRepeater_MK1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1073757312
   <WeaponTransform>k__BackingField: {fileID: 0}
   <ShootPointTransform>k__BackingField: {fileID: 0}
   <Collider>k__BackingField: {fileID: 0}
@@ -64573,9 +64558,6 @@ MonoBehaviour:
   <Size>k__BackingField: 0
   <WeaponType>k__BackingField: 1
   <Name>k__BackingField: S_BoltRepeater_MK1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1073757312
   <WeaponTransform>k__BackingField: {fileID: 0}
   <ShootPointTransform>k__BackingField: {fileID: 0}
   <Collider>k__BackingField: {fileID: 0}
@@ -69476,7 +69458,7 @@ GameObject:
   - component: {fileID: 6067823510272302866}
   - component: {fileID: 415437287638455908}
   - component: {fileID: 962024171159606105}
-  m_Layer: 27
+  m_Layer: 8
   m_Name: Hull
   m_TagString: Untagged
   m_Icon: {fileID: 0}

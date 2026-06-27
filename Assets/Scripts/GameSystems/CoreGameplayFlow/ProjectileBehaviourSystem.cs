@@ -40,7 +40,7 @@ namespace CoreGameSystems
             {
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
-                    if (ProjectileIsHit(projectile)) continue;
+                    if (ProceedProjectileHit(projectile)) continue;
                 }
 
                 if (projectile is Bolt bolt)
@@ -53,27 +53,38 @@ namespace CoreGameSystems
         private void SpawnBolt(in BoltWeaponShootData boltShootData)
         {
             var projectile = _projectileRegistry.GetBolt(boltShootData.ProjectilePoolId);
+
+            var spawnPos = boltShootData.SpawnPos;
+            var aimPos = boltShootData.AimPos;
+            var velocity = boltShootData.Velocity;
+            var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
+
+            var toAim = (aimPos - spawnPos).normalized;
+            var toAimSpeed = Vector2.Dot(velocity, toAim);
+            toAimSpeed = Mathf.Max(0.001f, toAimSpeed);
+            var timeToAimPos = distanceToAimPos / toAimSpeed;
+            var coreTime = GameFlowSystem.CoreTime;
+
             projectile.Transform.localScale = _deffProjectileSize * _projectileSizeMap[boltShootData.Size];
-            projectile.CurrentPos = boltShootData.SpawnPosition; ;
-            projectile.Velocity = boltShootData.Velocity; ;
-            projectile.DestroyTime = boltShootData.DestroyTime;
-            projectile.HitTime = boltShootData.HitTime; ;
-            projectile.HitLayers = boltShootData.HitLayers;
+            projectile.CurrentPos = spawnPos;
+            projectile.Velocity = velocity;
+            projectile.DestroyTime = coreTime + boltShootData.LifeTime;
+            projectile.HitTime = coreTime + timeToAimPos;
             projectile.DamageData = boltShootData.DamageData;
             projectile.IgnoredColliders = boltShootData.IgnoredColliders;
             projectile.IsMissed = false;
             projectile.Size = boltShootData.Size;
-            projectile.AimPos = boltShootData.AimPos;
+            projectile.AimPos = aimPos;
 
             projectile.Transform.up = boltShootData.Direction;
-            projectile.Transform.position = boltShootData.SpawnPosition; ;
+            projectile.Transform.position = spawnPos;
         }
 
         private void ProcceedBoltBehaviour(Bolt bolt, float deltaTime)
         {
             if (!bolt.IsMissed && GameFlowSystem.CoreTime >= bolt.HitTime)
             {
-                if (ProjectileIsHit(bolt)) return;
+                if (ProceedProjectileHit(bolt)) return;
             }
 
             var pos = bolt.CurrentPos;
@@ -81,36 +92,22 @@ namespace CoreGameSystems
 
             var hitResult = WeaponHelper.TryGetProjectileHit(pos, nextPos, bolt.AimPos);
 
-
-            var interceptedHit = Physics2D.Linecast(pos, nextPos, LayersId.AsteroidsMask);
-            var defenseCollider = interceptedHit.collider;
-
-            if (defenseCollider)
+            if (!hitResult.HasHit)
             {
-                var isOverlapPoint = defenseCollider.OverlapPoint(bolt.AimPos);
-
-                if (isOverlapPoint)
-                {
-                    bolt.CurrentPos = nextPos;
-                    bolt.Transform.position = nextPos;
-                    return;
-                }
-
-                var hitPoint = interceptedHit.point;
-                var hitReusult = new HitResult(true, defenseCollider, hitPoint);
-                _hitRegistrationSystem.RegisterHit(hitReusult, bolt.Size, bolt.DamageData);
-                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
-                return;
+                bolt.CurrentPos = nextPos;
+                bolt.Transform.position = nextPos;
             }
-
-            bolt.CurrentPos = nextPos;
-            bolt.Transform.position = nextPos;
+            else
+            {
+                _hitRegistrationSystem.RegisterHit(hitResult, bolt.Size, bolt.DamageData);
+                _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+            }
         }
 
-        private bool ProjectileIsHit(ProjectileBase projectile)
+        private bool ProceedProjectileHit(ProjectileBase projectile)
         {
             var position = projectile.CurrentPos;
-            var defenseCollider = Physics2D.OverlapPoint(position, LayersId.HitMask);
+            var defenseCollider = Physics2D.OverlapPoint(position, LayersId.DamageableMask);
             var hasHit = defenseCollider && !projectile.IgnoredColliders.Contains(defenseCollider);
 
             if (hasHit)
@@ -123,6 +120,7 @@ namespace CoreGameSystems
             projectile.IsMissed = true;
             return false;
         }
+
 
 
 

@@ -13,13 +13,10 @@ TagManager:
   - UI
   - 
   - Asteroid
-  - 
-  - 
-  - S
-  - M
-  - L
-  - XL
-  - 
+  - Ship
+  - Station
+  - Projectile
+  - InterceptableProjectile
   - 
   - 
   - 
@@ -32,11 +29,14 @@ TagManager:
   - 
   - 
   - 
-  - Defense
   - 
   - 
-  - DestructibleProjectile
-  - UnDestructibleProjectile
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

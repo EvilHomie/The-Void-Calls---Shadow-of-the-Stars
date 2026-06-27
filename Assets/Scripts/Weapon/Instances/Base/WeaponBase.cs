@@ -10,7 +10,6 @@ namespace Weapons
         [field: SerializeField] public SizeType Size { get; private set; }
         [field: SerializeField] public WeaponType WeaponType { get; private set; }
         [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public LayerMask HitLayers { get; private set; }
         [field: SerializeField] public Transform WeaponTransform { get; private set; }
         [field: SerializeField] public Transform ShootPointTransform { get; private set; }
         [field: SerializeField] public Collider2D Collider { get; private set; }

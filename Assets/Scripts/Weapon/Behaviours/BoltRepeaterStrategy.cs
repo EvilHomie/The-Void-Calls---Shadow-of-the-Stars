@@ -27,39 +27,28 @@ namespace Weapons
             ref readonly var fireStats = ref weapon.RuntimeFireStats;
             ref readonly var logicStats = ref weapon.LogicStats;
 
-            var aimData = weapon.AimData;
-
             var shootPointData = weapon.ShootPointTransformData;
             var spawnPos = shootPointData.Position;
-            var aimPos = aimData.AimPosition;
-            var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
-            var shootDirection = WeaponHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, fireStats.SpreadAngle);
-            var boltSelfVelocity = shootDirection * fireStats.ProjectileSpeed;
+            var baseAimPos = weapon.AimData.AimPosition;
+            var distanceToAimPos = Vector2.Distance(baseAimPos, spawnPos);
+            var spreadedDirection = WeaponHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, fireStats.SpreadAngle);
+            var spreadTimeMultiplier = logicStats.SpreadTimeMultiplier;
+            var distanceMultiplier = 1 + Random.Range(-spreadTimeMultiplier, spreadTimeMultiplier);
+            var spreadedAimPos = spawnPos + spreadedDirection * (distanceToAimPos * distanceMultiplier);
 
+            var boltSelfVelocity = spreadedDirection * fireStats.ProjectileSpeed;
             var shipVelocity = weapon.ShipRB.linearVelocity;
             var boltTotalVelocity = shipVelocity + boltSelfVelocity;
-
-            var toAim = (aimPos - spawnPos).normalized;
-            var toAimSpeed = Vector2.Dot(boltTotalVelocity, toAim);
-            toAimSpeed = Mathf.Max(0.001f, toAimSpeed);
-            var timeToAimPos = distanceToAimPos / toAimSpeed;
-
-            var spreadTimeMultiplier = logicStats.SpreadTimeMultiplier;
-            var spreadRandomMultiplier = 1 + Random.Range(-spreadTimeMultiplier, spreadTimeMultiplier);
-            var hitTime = coreTime + timeToAimPos * spreadRandomMultiplier;
-            var destroyTime = coreTime + logicStats.ProjectileLifeTime;
 
             var shootData = new BoltWeaponShootData(
                 weapon.ProjectilePoolId,
                 weapon.Size,
                 weapon.IgnoredColliders,
-                destroyTime,
-                hitTime,
+                logicStats.ProjectileLifeTime,
                 spawnPos,
-                aimPos,
+                spreadedAimPos,
                 boltTotalVelocity,
-                shootDirection,
-                weapon.HitLayers,
+                spreadedDirection,
                 weapon.RuntimeDamage);
 
             weapon.ShootSpotPS.Emit(1);

@@ -37,56 +37,95 @@ namespace Helpers
             }
         }
 
+        //public static HitResult TryGetBeamHit(Vector2 startPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
+        //{
+        //    Collider2D defenseCollider;
+        //    bool hasHit;
+        //    Vector2 hitPoint;
+
+        //    var interceptedHit = Physics2D.Linecast(startPos, aimPos, LayersId.AsteroidsMask);
+
+        //    if (interceptedHit)
+        //    {
+        //        hasHit = true;
+        //        defenseCollider = interceptedHit.collider;
+        //        hitPoint = defenseCollider.OverlapPoint(aimPos) ? aimPos : interceptedHit.point;
+        //    }
+        //    else
+        //    {
+        //        defenseCollider = Physics2D.OverlapPoint(aimPos, LayersId.DefenseMask);
+        //        hitPoint = aimPos;
+        //        hasHit = defenseCollider && !ignoredColliders.Contains(defenseCollider);
+        //    }
+
+        //    return new HitResult(hasHit, defenseCollider, hitPoint);
+        //}
+
         public static HitResult TryGetBeamHit(Vector2 startPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
         {
-            Collider2D defenseCollider;
-            bool hasHit;
-            Vector2 hitPoint;
-
             var interceptedHit = Physics2D.Linecast(startPos, aimPos, LayersId.AsteroidsMask);
 
             if (interceptedHit)
             {
-                hasHit = true;
-                defenseCollider = interceptedHit.collider;
-                hitPoint = defenseCollider.OverlapPoint(aimPos) ? aimPos : interceptedHit.point;
-            }
-            else
-            {
-                defenseCollider = Physics2D.OverlapPoint(aimPos, LayersId.DefenseMask);
-                hitPoint = aimPos;
-                hasHit = defenseCollider && !ignoredColliders.Contains(defenseCollider);
+                var collider = interceptedHit.collider;
+                var hitPoint = collider.OverlapPoint(aimPos) ? aimPos : interceptedHit.point;
+
+                return new HitResult(true, collider, hitPoint);
             }
 
-            return new HitResult(hasHit, defenseCollider, hitPoint);
+            var defenseCollider = Physics2D.OverlapPoint(aimPos, LayersId.ShipMask);
+
+            if (!defenseCollider || ignoredColliders.Contains(defenseCollider))
+            {
+                return new HitResult(false, null, aimPos);
+            }
+
+            return new HitResult(true, defenseCollider, aimPos);
         }
+
+        //public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos)
+        //{
+        //    Collider2D defenseCollider;
+        //    bool hasHit;
+        //    Vector2 hitPoint;
+        //    var interceptedHit = Physics2D.Linecast(currentPos, nextPos, LayersId.AsteroidsMask);            
+
+        //    if (interceptedHit)
+        //    {
+        //        defenseCollider = interceptedHit.collider;
+        //        hasHit = !defenseCollider.OverlapPoint(aimPos);
+        //        hitPoint = interceptedHit.point;
+        //    }
+        //    else
+        //    {
+        //        hasHit = false;
+        //        defenseCollider = null;
+        //        hitPoint = Vector2.zero;
+        //    }
+
+        //    return new HitResult(hasHit, defenseCollider, hitPoint);
+        //}
 
         public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos)
         {
-            Collider2D defenseCollider;
-            bool hasHit;
-            Vector2 hitPoint;
-            var interceptedHit = Physics2D.Linecast(currentPos, nextPos, LayersId.AsteroidsMask);            
+            var hit = Physics2D.Linecast(currentPos, nextPos, LayersId.AsteroidsMask);
 
-            if (interceptedHit)
+            if (!hit)
             {
-                defenseCollider = interceptedHit.collider;
-                hasHit = !defenseCollider.OverlapPoint(aimPos);
-                hitPoint = interceptedHit.point;
-            }
-            else
-            {
-                hasHit = false;
-                defenseCollider = null;
-                hitPoint = Vector2.zero;
+                return HitResult.NoHit;
             }
 
-            return new HitResult(hasHit, defenseCollider, hitPoint);
+            if (hit.collider.OverlapPoint(aimPos))
+            {
+                return HitResult.NoHit;
+            }
+
+            return new HitResult(true, hit.collider, hit.point);
         }
 
         public static HitResult TryGetHitInPoint(Vector2 point, HashSet<Collider2D> ignoredColliders)
         {
-            var defenseCollider = Physics2D.OverlapPoint(point, LayersId.HitMask);
+            var defenseCollider = Physics2D.OverlapPoint(point, LayersId.DamageableMask);
             var hasHit = defenseCollider && !ignoredColliders.Contains(defenseCollider);
             return new HitResult(hasHit, defenseCollider, point);
         }
@@ -97,6 +136,7 @@ namespace Helpers
             public readonly Collider2D Collider;
             public readonly Vector2 Point;
 
+            public static readonly HitResult NoHit = new(false, null, Vector2.zero);
             public HitResult(bool hasHit, Collider2D collider, Vector2 point)
             {
                 HasHit = hasHit;

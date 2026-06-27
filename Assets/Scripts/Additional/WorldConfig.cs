@@ -28,23 +28,23 @@ public static class WorldConfig
     };
 }
 
-public static class SpriteSortingOrders
-{
-    //public const int StarryCanvas = -150;
-    //public const int WeaponsUnderHull = -100;
-    //public const int Engine = -50;
-    //public const int Ship = 0;
-    //public const int Asteroid = 0;
-    //public const int WeaponsOnHull = 50;
-    //public const int Projectile = 200;
-}
+//public static class SpriteSortingOrders
+//{
+//    //public const int StarryCanvas = -150;
+//    //public const int WeaponsUnderHull = -100;
+//    //public const int Engine = -50;
+//    //public const int Ship = 0;
+//    //public const int Asteroid = 0;
+//    //public const int WeaponsOnHull = 50;
+//    //public const int Projectile = 200;
+//}
 
 public static class LayersId
 {
-    public static int ShieldLayer = LayerMask.NameToLayer("Shield");
-    public static int ArmorLayer = LayerMask.NameToLayer("Armor");
-    public static int HullLayer = LayerMask.NameToLayer("Hull");
     public static readonly int AsteroidsMask = LayerMask.GetMask("Asteroid");
-    public static readonly int DefenseMask = LayerMask.GetMask("Defense");
-    public static readonly int HitMask = AsteroidsMask | DefenseMask;
+    public static readonly int ShipMask = LayerMask.GetMask("Ship");
+    public static readonly int StationMask = LayerMask.GetMask("Station");
+    public static readonly int Projectile = LayerMask.GetMask("Projectile");
+    public static readonly int InterceptableProjectile = LayerMask.GetMask("InterceptableProjectile");
+    public static readonly int DamageableMask = AsteroidsMask | ShipMask | StationMask | InterceptableProjectile;
 }
