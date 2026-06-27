@@ -1,20 +1,33 @@
+using System;
 using UnityEngine;
 
 namespace DefenseLayers
 {
     public class ShieldDefenseLayer : DefenseLayerBase
     {
-        [field: SerializeField] public Transform Transform { get; private set; }
+        public Transform Transform { get; private set; }
+        public ShieldTransformRuntimeData ShieldTransformRuntimeData;
+        private const float _shieldEffectDeffSize = 0.05f;
 
-        public float CurrentPoints;
-        public float MaxPoints;
-        public ShieldTransformData TransformData;
+        public void Init(float basePoints)
+        {
+            base.InitBase(basePoints);
+            var transform = this.transform;
+            Transform = transform;
+            var rootSize = transform.root.localScale.x;
+            ShieldTransformRuntimeData.LossyScale = transform.lossyScale;
+            ShieldTransformRuntimeData.HitEffectSize = _shieldEffectDeffSize / rootSize;
+            ShieldTransformRuntimeData.Position = transform.position;
+            ShieldTransformRuntimeData.Rotation = transform.rotation;
+        }
     }
-     
-    public struct ShieldTransformData
+
+    [Serializable]
+    public struct ShieldTransformRuntimeData
     {
-        float LossyScale;
-        Vector2 Position;
-        Quaternion Rotation;
+        public float HitEffectSize;
+        public Vector2 LossyScale;
+        public Vector2 Position;
+        public Quaternion Rotation;
     }
 }

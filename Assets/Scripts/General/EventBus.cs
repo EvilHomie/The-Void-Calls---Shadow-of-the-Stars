@@ -14,7 +14,7 @@ namespace General
         public delegate void DamageDelegate(WeaponRuntimeDamage damageData, DefenseLayerBase layer, HitData hitData);
         public static DamageDelegate DamageAction;
 
-        public delegate void BoltWeaponShootDelegate(in BoltWeaponShootData data);
+        public delegate void BoltWeaponShootDelegate(in BoltSpawnData data);
         public static BoltWeaponShootDelegate BoltWeaponShootAction;
 
         public static Action<Collider2D, Transform, bool> OnShieldCross;

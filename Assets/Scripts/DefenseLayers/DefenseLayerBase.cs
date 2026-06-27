@@ -2,16 +2,18 @@ using UnityEngine;
 
 namespace DefenseLayers
 {
+    [RequireComponent(typeof(Collider2D))]
     public abstract class DefenseLayerBase : MonoBehaviour
     {
-        [field: SerializeField] public SizeType Size { get; private set; }
-        [field: SerializeField] public Collider2D Collider { get; private set; }
-    }
+        public float CurrentBasePoints;
+        public float MaxBasePoints;
+        public Collider2D Collider { get; private set; }
 
-    public enum DefenseLayerType
-    {
-        Shield,
-        Hull,
-        Asteroid
+        protected void InitBase(float points)
+        {
+            Collider = GetComponent<Collider2D>();
+            CurrentBasePoints = points;
+            MaxBasePoints = points;
+        }
     }
 }

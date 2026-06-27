@@ -14,7 +14,6 @@ namespace CoreGameSystems
     {
         private ProjectileRegistry _projectileRegistry;
         private HitRegistrationSystem _hitRegistrationSystem;
-        private Dictionary<SizeType, float> _projectileSizeMap;
         private Vector3 _deffProjectileSize = Vector3.one;
 
         [Inject]
@@ -22,15 +21,6 @@ namespace CoreGameSystems
         {
             _projectileRegistry = shipRegistry;
             _hitRegistrationSystem = hitRegistrationSystem;
-
-            _projectileSizeMap = new()
-            {
-                {SizeType.S, 1 },
-                {SizeType.M, 2 },
-                {SizeType.L, 6 },
-                {SizeType.XL, 12 }
-            };
-
             EventBus.BoltWeaponShootAction += SpawnBolt;
         }
 
@@ -50,7 +40,7 @@ namespace CoreGameSystems
             }
         }
 
-        private void SpawnBolt(in BoltWeaponShootData boltShootData)
+        private void SpawnBolt(in BoltSpawnData boltShootData)
         {
             var projectile = _projectileRegistry.GetBolt(boltShootData.ProjectilePoolId);
 
@@ -65,7 +55,7 @@ namespace CoreGameSystems
             var timeToAimPos = distanceToAimPos / toAimSpeed;
             var coreTime = GameFlowSystem.CoreTime;
 
-            projectile.Transform.localScale = _deffProjectileSize * _projectileSizeMap[boltShootData.Size];
+            projectile.Transform.localScale = _deffProjectileSize * GameConfig.SizeMap[boltShootData.Size];
             projectile.CurrentPos = spawnPos;
             projectile.Velocity = velocity;
             projectile.DestroyTime = coreTime + boltShootData.LifeTime;
@@ -107,7 +97,7 @@ namespace CoreGameSystems
         private bool ProceedProjectileHit(ProjectileBase projectile)
         {
             var position = projectile.CurrentPos;
-            var defenseCollider = Physics2D.OverlapPoint(position, LayersId.DamageableMask);
+            var defenseCollider = Physics2D.OverlapPoint(position, GameLayers.DamageableMask);
             var hasHit = defenseCollider && !projectile.IgnoredColliders.Contains(defenseCollider);
 
             if (hasHit)

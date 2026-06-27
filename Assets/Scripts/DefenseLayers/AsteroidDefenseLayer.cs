@@ -2,7 +2,9 @@ namespace DefenseLayers
 {
     public class AsteroidDefenseLayer : DefenseLayerBase
     {
-        public float CurrentPoints;
-        public float MaxPoints;
+        public void Init(float basePoints)
+        {
+            base.InitBase(basePoints);
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class WorldConfig
+public static class GameConfig
 {
     public const float WorldUnitMod = 0.01f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
     public const float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
@@ -26,6 +26,14 @@ public static class WorldConfig
         {AsteroidType.Nickel, 3f },
         {AsteroidType.Gold, 3.5f }
     };
+
+    public static readonly Dictionary<SizeType, float> SizeMap = new()
+    {
+        {SizeType.S, 1 },
+        {SizeType.M, 2 },
+        {SizeType.L, 4 },
+        {SizeType.XL, 8 }
+    };
 }
 
 //public static class SpriteSortingOrders
@@ -39,12 +47,21 @@ public static class WorldConfig
 //    //public const int Projectile = 200;
 //}
 
-public static class LayersId
+public static class GameLayers
 {
+    public static readonly int WeaponLayer = LayerMask.NameToLayer("Weapon");
+    public static readonly int AsteroidsLayer = LayerMask.NameToLayer("Asteroid");
+    public static readonly int ShipLayer = LayerMask.NameToLayer("Ship");
+    public static readonly int StationLayer = LayerMask.NameToLayer("Station");
+    public static readonly int ProjectileLayer = LayerMask.NameToLayer("Projectile");
+    public static readonly int InterceptableProjectileLayer = LayerMask.NameToLayer("InterceptableProjectile");
+
+    public static readonly int WeaponMask = LayerMask.GetMask("Weapon");
     public static readonly int AsteroidsMask = LayerMask.GetMask("Asteroid");
     public static readonly int ShipMask = LayerMask.GetMask("Ship");
     public static readonly int StationMask = LayerMask.GetMask("Station");
     public static readonly int Projectile = LayerMask.GetMask("Projectile");
     public static readonly int InterceptableProjectile = LayerMask.GetMask("InterceptableProjectile");
-    public static readonly int DamageableMask = AsteroidsMask | ShipMask | StationMask | InterceptableProjectile;
+    public static readonly int DamageableMask = AsteroidsMask | ShipMask | StationMask | InterceptableProjectile | WeaponMask;
+    public static readonly int InterceptMask = AsteroidsMask;
 }

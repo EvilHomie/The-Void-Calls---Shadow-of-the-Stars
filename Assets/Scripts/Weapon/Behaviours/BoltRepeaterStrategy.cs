@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeaterStrategy : IWeaponBehaviour<BoltWeapon>
+    public class BoltRepeaterStrategy : IWeaponBehaviour<BoltRepeater>
     {
-        public void HandleStartShoot(BoltWeapon weapon)
+        public void HandleStartShoot(BoltRepeater weapon)
         {
             ProcessShooting(weapon);
         }
-        public void HandleCancelShoot(BoltWeapon weapon)
+        public void HandleCancelShoot(BoltRepeater weapon)
         {
         }
 
-        public void ProcessShooting(BoltWeapon weapon)
+        public void ProcessShooting(BoltRepeater weapon)
         {
             var nextShootTime = weapon.NextShootTime;
             var coreTime = GameFlowSystem.CoreTime;
@@ -27,7 +27,7 @@ namespace Weapons
             ref readonly var fireStats = ref weapon.RuntimeFireStats;
             ref readonly var logicStats = ref weapon.LogicStats;
 
-            var shootPointData = weapon.ShootPointTransformData;
+            var shootPointData = weapon.ShootPointRuntimeData;
             var spawnPos = shootPointData.Position;
             var baseAimPos = weapon.AimData.AimPosition;
             var distanceToAimPos = Vector2.Distance(baseAimPos, spawnPos);
@@ -40,7 +40,7 @@ namespace Weapons
             var shipVelocity = weapon.ShipRB.linearVelocity;
             var boltTotalVelocity = shipVelocity + boltSelfVelocity;
 
-            var shootData = new BoltWeaponShootData(
+            var shootData = new BoltSpawnData(
                 weapon.ProjectilePoolId,
                 weapon.Size,
                 weapon.IgnoredColliders,

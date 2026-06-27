@@ -13,7 +13,7 @@ namespace Helpers
         public static void InitShip(ShipInstance shipInstance)
         {
             InitShipStats(shipInstance);
-            InitDefenceLayers(shipInstance);
+            InitShipDefenceLayers(shipInstance);
             InitWeapons(shipInstance);
             InitEngines(shipInstance);
         }
@@ -38,8 +38,8 @@ namespace Helpers
             var totalStrafeDrag = equip.Chassis.StrafeDrag + chassisMultipliers.StrafeDragMultiplier * equip.Chassis.StrafeDrag;
             var totalRotateDrag = equip.Chassis.RotateDrag + chassisMultipliers.RotateDragMultiplier * equip.Chassis.RotateDrag;
 
-            var worldUnitMod = WorldConfig.WorldUnitMod;
-            var inertiaDampingForce = WorldConfig.InertiaDampingForce;
+            var worldUnitMod = GameConfig.WorldUnitMod;
+            var inertiaDampingForce = GameConfig.InertiaDampingForce;
             var mainEngine = equip.MainEngine;
             var sideEngine = equip.SideEngine;
 
@@ -69,27 +69,23 @@ namespace Helpers
             movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
         }
 
-        private static void InitDefenceLayers(ShipInstance shipInstance)
+        private static void InitShipDefenceLayers(ShipInstance shipInstance)
         {
             foreach (var defenseLayer in shipInstance.DefenseLayers)
             {
                 switch (defenseLayer)
                 {
                     case ShieldDefenseLayer shield:
-                        shield.CurrentPoints = 2000;
-                        shield.MaxPoints = 2000;
+                        shield.Init(2000);
                         break;
 
                     case HullDefenseLayer hull:
-
                         var hullHP = shipInstance.Equip.Chassis.Hull;
-                        hull.CurrentHullPoints = hullHP;
-                        hull.MaxHullPoints = hullHP;
-                        hull.CurrentArmorPoints = 2000;
-                        hull.MaxArmorPoints = 2000;
+                        hull.Init(hullHP, 2000);
                         break;
                 }
 
+                defenseLayer.gameObject.layer = GameLayers.ShipLayer;
                 shipInstance.OwnColliders.Add(defenseLayer.Collider);
             }
         }
@@ -101,24 +97,24 @@ namespace Helpers
 
             if (asteroid.AsteroidType.Contains(AsteroidType.Cluster))
             {
-                rigidBody.angularDamping = WorldConfig.ClusterAsteroidAngularDamping;
-                rigidBody.linearDamping = WorldConfig.ClusterAsteroidLinearDamping;
+                rigidBody.angularDamping = GameConfig.ClusterAsteroidAngularDamping;
+                rigidBody.linearDamping = GameConfig.ClusterAsteroidLinearDamping;
             }
             else
             {
-                rigidBody.angularDamping = WorldConfig.DriftingAsteroidAngularDamping;
-                rigidBody.linearDamping = WorldConfig.DriftingAsteroidLinearDamping;
+                rigidBody.angularDamping = GameConfig.DriftingAsteroidAngularDamping;
+                rigidBody.linearDamping = GameConfig.DriftingAsteroidLinearDamping;
             }
 
             var massMod = GetMassModifier(asteroid.AsteroidType);
             var scale = asteroid.Transform.localScale.x;
-            var baseMass = WorldConfig.AsteroidBaseMass * scale * scale;
+            var baseMass = GameConfig.AsteroidBaseMass * scale * scale;
             var mass = massMod * baseMass;
             rigidBody.mass = mass;
 
-            var hp = mass * WorldConfig.AsteroidTonHP;
-            asteroid.AsteroidHullLayer.CurrentPoints = hp;
-            asteroid.AsteroidHullLayer.MaxPoints = hp;
+            var hp = mass * GameConfig.AsteroidTonHP;
+            asteroid.AsteroidHullLayer.Init(hp);
+            asteroid.gameObject.layer = GameLayers.AsteroidsLayer;
         }
 
         public static float GetMassModifier(AsteroidType asteroidType)
@@ -126,7 +122,7 @@ namespace Helpers
             float sum = 0f;
             int count = 0;
 
-            foreach (var pair in WorldConfig.AsteroidMassModByType)
+            foreach (var pair in GameConfig.AsteroidMassModByType)
             {
                 if (!asteroidType.Contains(pair.Key)) continue;
 
@@ -145,11 +141,12 @@ namespace Helpers
             {
                 var weapon = slot.Weapon;
                 UpdateWeaponStats(weapon);
-                weapon.InitBase(shipInstance.AimData, shipInstance.Size, shipInstance.OwnColliders);
+                weapon.InitBase(shipInstance.AimData, shipInstance.Size, shipInstance.OwnColliders, 100);
+                weapon.gameObject.layer = GameLayers.WeaponLayer;
 
-                if (weapon.Collider != null)
+                if (weapon.TryGetComponent<HullDefenseLayer>(out var hullDefenseLayer))
                 {
-                    shipInstance.OwnColliders.Add(weapon.Collider);
+                    shipInstance.OwnColliders.Add(hullDefenseLayer.Collider);
                 }
 
                 if (weapon is IRigidBodyDependentWeapon dependentWeapon)
@@ -193,7 +190,7 @@ namespace Helpers
             runtimeDamage.DamageHull = baseDamage.DamageKinetic + baseDamage.DamageEnergy;
             runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull * baseDamage.AsteroidMultiplier;
 
-            if (weaponBase is BoltWeapon boltRepeater)
+            if (weaponBase is BoltRepeater boltRepeater)
             {
                 var baseFireStats = boltRepeater.BaseFireStats;
                 boltRepeater.RuntimeFireStats = baseFireStats;
@@ -204,9 +201,9 @@ namespace Helpers
                 logicStats.ProjectileLifeTime = baseAimStats.MaxDistance * invProjectileSpeed;
                 logicStats.SpreadTimeMultiplier = baseFireStats.SpreadAngle / 100;
             }
-            else if (weaponBase is ConstantBeamWeapon miningDrill)
+            else if (weaponBase is MiningDrill miningDrill)
             {
-                miningDrill.HitDelay = 1f / WorldConfig.ConstantBeamHitRate;
+                miningDrill.HitDelay = 1f / GameConfig.ConstantBeamHitRate;
             }
         }
 

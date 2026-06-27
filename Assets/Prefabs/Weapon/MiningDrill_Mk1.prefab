@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7805618572351980631}
   - component: {fileID: 5780516257231714530}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: LineRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 277715304110908122}
   - component: {fileID: 8512886715161163408}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: MiningDrill_Mk1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,16 +198,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49788d04f724094a852ecb1e5ff207c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Size>k__BackingField: 0
-  <WeaponType>k__BackingField: 0
-  <Name>k__BackingField: S_MiningDrill_Mk1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1207975040
-  <WeaponTransform>k__BackingField: {fileID: 277715304110908122}
   <ShootPointTransform>k__BackingField: {fileID: 5640150070507161033}
-  <Collider>k__BackingField: {fileID: 3822096338377281754}
-  ShootPointTransformData:
+  <HullDefenseLayer>k__BackingField: {fileID: 456121997974708331}
+  HullPoints: 0
+  ShootPointRuntimeData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
   BaseDamage:
@@ -242,7 +236,8 @@ GameObject:
   - component: {fileID: 4689513398153094930}
   - component: {fileID: 5982898709032140263}
   - component: {fileID: 3822096338377281754}
-  m_Layer: 10
+  - component: {fileID: 456121997974708331}
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -460,6 +455,22 @@ PolygonCollider2D:
       - {x: 0.039833333, y: -0.107}
       - {x: 0.063666664, y: -0.10683333}
   m_UseDelaunayMesh: 1
+--- !u!114 &456121997974708331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7528368962327126728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8fb4bf730f45d4b96ab2b129b1a1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullDefenseLayer
+  CurrentBasePoints: 0
+  MaxBasePoints: 0
+  CurrentArmorPoints: 0
+  MaxArmorPoints: 0
 --- !u!1 &9048117374568266560
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +482,7 @@ GameObject:
   - component: {fileID: 5640150070507161033}
   - component: {fileID: 5758410437419035918}
   - component: {fileID: 8165730582877688925}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

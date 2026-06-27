@@ -1,39 +1,37 @@
 using CoreGameSystems;
 using General;
 using Helpers;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Splines;
 
 namespace Weapons
 {
-    public class MiningDrillStrategy : IWeaponBehaviour<ConstantBeamWeapon>
+    public class MiningDrillStrategy : IWeaponBehaviour<MiningDrill>
     {
-        private HitRegistrationSystem _hitRegistrationSystem;
+        private readonly HitRegistrationSystem _hitRegistrationSystem;
 
         public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem)
         {
             _hitRegistrationSystem = hitRegistrationSystem;
         }
 
-        public void HandleStartShoot(ConstantBeamWeapon weapon)
+        public void HandleStartShoot(MiningDrill weapon)
         {
             weapon.BeamLineLR.enabled = true;
             weapon.ShootSpotPS.Play();
             ProcessShooting(weapon);
         }
 
-        public void HandleCancelShoot(ConstantBeamWeapon weapon)
+        public void HandleCancelShoot(MiningDrill weapon)
         {
             weapon.BeamLineLR.enabled = false;
             weapon.ShootSpotPS.Stop();
         }
 
-        public void ProcessShooting(ConstantBeamWeapon weapon)
+        public void ProcessShooting(MiningDrill weapon)
         {
             ref readonly var aimStats = ref weapon.RuntimeAimStats;
             var nextHitTime = weapon.NextHitTime;
-            ref readonly var shootPointData = ref weapon.ShootPointTransformData;
+            ref readonly var shootPointData = ref weapon.ShootPointRuntimeData;
             var aimPosition = weapon.AimData.AimPosition;
 
             var startLinePos = shootPointData.Position;

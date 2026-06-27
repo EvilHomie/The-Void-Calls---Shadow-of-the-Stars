@@ -18,11 +18,11 @@ namespace CoreGameSystems
 
         private void ApplyShieldDamage(ShieldDefenseLayer layer, HitData hitData)
         {
-            layer.CurrentPoints -= hitData.Damage;
+            layer.CurrentBasePoints -= hitData.Damage;
 
-            if (layer.CurrentPoints <= 0)
+            if (layer.CurrentBasePoints <= 0)
             {
-                layer.CurrentPoints = 0;
+                layer.CurrentBasePoints = 0;
                 layer.Collider.enabled = false;
 
                 Debug.LogError("Shield Destroyed");
@@ -31,11 +31,11 @@ namespace CoreGameSystems
 
         private void ApplyAsteroidDamage(AsteroidDefenseLayer layer, HitData hitData)
         {
-            layer.CurrentPoints -= hitData.Damage;
+            layer.CurrentBasePoints -= hitData.Damage;
 
-            if (layer.CurrentPoints <= 0)
+            if (layer.CurrentBasePoints <= 0)
             {
-                layer.CurrentPoints = 0;
+                layer.CurrentBasePoints = 0;
                 layer.Collider.enabled = false;
                 Debug.LogError("Asteroid Destoyed");
             }
@@ -55,11 +55,11 @@ namespace CoreGameSystems
 
         private void ApplyHullDamage(HullDefenseLayer layer, HitData hitData)
         {
-            layer.CurrentHullPoints -= hitData.Damage;
+            layer.CurrentBasePoints -= hitData.Damage;
 
-            if (layer.CurrentHullPoints <= 0)
+            if (layer.CurrentBasePoints <= 0)
             {
-                layer.CurrentHullPoints = 0;
+                layer.CurrentBasePoints = 0;
                 layer.Collider.enabled = false;
                 Debug.LogError("Hull Destroyed");
             }

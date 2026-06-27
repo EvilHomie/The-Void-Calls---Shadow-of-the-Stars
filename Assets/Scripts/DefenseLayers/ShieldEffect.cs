@@ -8,7 +8,7 @@ namespace DefenseLayers
     {
         [field: SerializeField] public SpriteRenderer SpriteRenderer { get; private set; }
         public MaterialPropertyBlock MaterialBlock { get; private set; }
-        public Transform ShieldTransform;
+        public ShieldDefenseLayer OwnerShield;
         public float RemainingLifetime;
         public float SpriteAlpha;
 

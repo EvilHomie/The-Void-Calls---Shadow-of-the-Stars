@@ -55,7 +55,7 @@ namespace Debugs
         private void UpdateStaticData(ShipInstance shipInstance)
         {
             _playerShip = shipInstance;
-            var worldUnitModReversed = WorldConfig.WorldUnitModReversed;
+            var worldUnitModReversed = GameConfig.WorldUnitModReversed;
             var movementStaticData = shipInstance.MovementStats;
 
             MaxDirectSpeedText.text = $"MaxDirSpeed: {movementStaticData.DirectMaxSpeed * worldUnitModReversed:F0} м/с";
@@ -79,7 +79,7 @@ namespace Debugs
 
         private void UpdateRuntimeData(float fixedDT)
         {
-            var worldUnitModReversed = WorldConfig.WorldUnitModReversed;
+            var worldUnitModReversed = GameConfig.WorldUnitModReversed;
             var movementRuntimeData = _playerShip.MovementRuntimeData;
             var movementStaticData = _playerShip.MovementStats;
 

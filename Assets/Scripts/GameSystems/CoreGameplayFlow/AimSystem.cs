@@ -45,7 +45,7 @@ namespace CoreGameSystems
         {
             _weaponsAimMarkers = new();
 
-            for (int i = 0; i < WorldConfig.MaxMainWeaponSlotsCount; i++)
+            for (int i = 0; i < GameConfig.MaxMainWeaponSlotsCount; i++)
             {
                 var weaponMarker = Instantiate(weaponAimMarkerPrefab, markerConteiner);
                 weaponMarker.gameObject.SetActive(false);
@@ -117,7 +117,7 @@ namespace CoreGameSystems
 
                 var weapon = weaponSlot.Weapon;
 
-                if (weapon is not BoltWeapon boltWeapon) continue;
+                if (weapon is not BoltRepeater boltWeapon) continue;
 
                 var projectileSpeed = boltWeapon.RuntimeFireStats.ProjectileSpeed;
 
@@ -150,7 +150,7 @@ namespace CoreGameSystems
                 if (!weaponSlot.IsInActiveGroup) continue;
 
                 var weapon = weaponSlot.Weapon;
-                var shootPointData = weapon.ShootPointTransformData;
+                var shootPointData = weapon.ShootPointRuntimeData;
                 var shootPosition = shootPointData.Position;
                 var direction = shootPointData.Direction;
                 var aimStats = weapon.RuntimeAimStats;
@@ -168,7 +168,7 @@ namespace CoreGameSystems
 
         private Vector2 GetTargetLeadPosition(AimData aimData, Rigidbody2D ownRigidBody)
         {
-            var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointTransformData.Position;
+            var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointRuntimeData.Position;
             var targetRB = aimData.TargetRigidBody;
 
             var shooterVelocity = ownRigidBody.linearVelocity;

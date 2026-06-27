@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3366958931173237647}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1253, z: 0.01}
+  m_LocalPosition: {x: 0, y: 0.1253, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4879,6 +4879,7 @@ GameObject:
   - component: {fileID: 8756887422197455900}
   - component: {fileID: 6903474741279475664}
   - component: {fileID: 4118397664315645279}
+  - component: {fileID: 620716618695523076}
   m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
@@ -5074,6 +5075,22 @@ PolygonCollider2D:
       - {x: 0.021333333, y: -0.0533}
       - {x: 0.024833333, y: -0.048133336}
   m_UseDelaunayMesh: 1
+--- !u!114 &620716618695523076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7141259213136177515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8fb4bf730f45d4b96ab2b129b1a1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.HullDefenseLayer
+  CurrentBasePoints: 0
+  MaxBasePoints: 0
+  CurrentArmorPoints: 0
+  MaxArmorPoints: 0
 --- !u!1 &8748008673660980155
 GameObject:
   m_ObjectHideFlags: 0
@@ -5120,16 +5137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Size>k__BackingField: 0
-  <WeaponType>k__BackingField: 1
-  <Name>k__BackingField: S_BoltRepeater_MK1
-  <HitLayers>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 1207975040
-  <WeaponTransform>k__BackingField: {fileID: 11203282507777302}
   <ShootPointTransform>k__BackingField: {fileID: 1993834376407665666}
-  <Collider>k__BackingField: {fileID: 4118397664315645279}
-  ShootPointTransformData:
+  <HullDefenseLayer>k__BackingField: {fileID: 620716618695523076}
+  HullPoints: 0
+  ShootPointRuntimeData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
   BaseDamage:

@@ -31,7 +31,7 @@ namespace Helpers
                 var finalWorldAngle = parentAngle + localAngle;
                 weaponTransform.rotation = Quaternion.Euler(0f, 0f, finalWorldAngle);
 
-                ref var shootPointData = ref weapon.ShootPointTransformData;
+                ref var shootPointData = ref weapon.ShootPointRuntimeData;
                 shootPointData.Direction = weaponTransform.up;
                 shootPointData.Position = weapon.ShootPointTransform.position;
             }
@@ -63,7 +63,7 @@ namespace Helpers
 
         public static HitResult TryGetBeamHit(Vector2 startPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
         {
-            var interceptedHit = Physics2D.Linecast(startPos, aimPos, LayersId.AsteroidsMask);
+            var interceptedHit = Physics2D.Linecast(startPos, aimPos, GameLayers.InterceptMask);
 
             if (interceptedHit)
             {
@@ -73,7 +73,7 @@ namespace Helpers
                 return new HitResult(true, collider, hitPoint);
             }
 
-            var defenseCollider = Physics2D.OverlapPoint(aimPos, LayersId.ShipMask);
+            var defenseCollider = Physics2D.OverlapPoint(aimPos, GameLayers.ShipMask);
 
             if (!defenseCollider || ignoredColliders.Contains(defenseCollider))
             {
@@ -108,7 +108,7 @@ namespace Helpers
 
         public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos)
         {
-            var hit = Physics2D.Linecast(currentPos, nextPos, LayersId.AsteroidsMask);
+            var hit = Physics2D.Linecast(currentPos, nextPos, GameLayers.InterceptMask);
 
             if (!hit)
             {
@@ -125,7 +125,7 @@ namespace Helpers
 
         public static HitResult TryGetHitInPoint(Vector2 point, HashSet<Collider2D> ignoredColliders)
         {
-            var defenseCollider = Physics2D.OverlapPoint(point, LayersId.DamageableMask);
+            var defenseCollider = Physics2D.OverlapPoint(point, GameLayers.DamageableMask);
             var hasHit = defenseCollider && !ignoredColliders.Contains(defenseCollider);
             return new HitResult(hasHit, defenseCollider, point);
         }

@@ -1,3 +1,4 @@
+using DefenseLayers;
 using Ships;
 using System;
 using System.Collections.Generic;
@@ -7,27 +8,29 @@ namespace Weapons
 {
     public abstract class WeaponBase : MonoBehaviour, IShipModule
     {
-        [field: SerializeField] public SizeType Size { get; private set; }
-        [field: SerializeField] public WeaponType WeaponType { get; private set; }
-        [field: SerializeField] public string Name { get; private set; }
-        [field: SerializeField] public Transform WeaponTransform { get; private set; }
         [field: SerializeField] public Transform ShootPointTransform { get; private set; }
-        [field: SerializeField] public Collider2D Collider { get; private set; }
+        [field: SerializeField] public HullDefenseLayer HullDefenseLayer { get; private set; }
+        public abstract WeaponType WeaponType { get; }
+        public SizeType Size { get; private set; }
+        public string Name { get; private set; }
+        public Transform WeaponTransform { get; private set; }
         public AimData AimData { get; private set; }
         public HashSet<Collider2D> IgnoredColliders { get; private set; }
 
-        public ShootPointTransformData ShootPointTransformData;
+        public float HullPoints;
+        public ShootPointRuntimeData ShootPointRuntimeData;
         public WeaponBaseDamage BaseDamage;
         public WeaponRuntimeDamage RuntimeDamage;
         public WeaponAimStats BaseAimStats;
         public WeaponAimStats RuntimeAimStats;
 
-
-        public void InitBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders)
+        public void InitBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders, float hullPoints)
         {
             AimData = targetData;
             Size = size;
             IgnoredColliders = ignoredColliders;
+            WeaponTransform = transform;
+            HullDefenseLayer.Init(hullPoints);
         }
     }
 
@@ -57,7 +60,7 @@ namespace Weapons
     }
 
     [Serializable]
-    public struct ShootPointTransformData
+    public struct ShootPointRuntimeData
     {
         public Vector2 Position;
         public Vector2 Direction;

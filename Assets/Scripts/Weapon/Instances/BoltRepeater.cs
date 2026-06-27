@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltWeapon : WeaponBase, IRigidBodyDependentWeapon
-    {  
+    public class BoltRepeater : WeaponBase, IRigidBodyDependentWeapon
+    {
+        public override WeaponType WeaponType => WeaponType.BoltRepeater;
         [SerializeField] PoolReference projectilePool;
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
         public Rigidbody2D ShipRB { get; private set; }
