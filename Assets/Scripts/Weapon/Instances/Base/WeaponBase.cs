@@ -28,7 +28,6 @@ namespace Weapons
         {
             AimData = targetData;
             Size = size;
-            ShootPointTransformData.ZDepth = ShootPointTransform.position.z;
             IgnoredColliders = ignoredColliders;
         }
     }
@@ -63,6 +62,5 @@ namespace Weapons
     {
         public Vector2 Position;
         public Vector2 Direction;
-        public float ZDepth;
     }
 }

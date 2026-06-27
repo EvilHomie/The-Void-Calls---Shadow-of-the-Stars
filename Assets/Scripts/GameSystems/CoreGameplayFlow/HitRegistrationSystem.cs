@@ -1,22 +1,23 @@
 using DefenseLayers;
+using General;
 using System;
 using UnityEngine;
 using Weapons;
-using General;
+using static Helpers.WeaponHelper;
 
 namespace CoreGameSystems
 {
     public class HitRegistrationSystem : MonoBehaviour
     {
-        public void RegisterHit(Collider2D collider, Vector2 position, SizeType size, in WeaponRuntimeDamage damageData)
+        public void RegisterHit(in HitResult hitResult, SizeType size, in WeaponRuntimeDamage damageData)
         {
             var hitData = new HitData
             {
-                Position = position,
+                Position = hitResult.Point,
                 Size = size
             };
 
-            collider.TryGetComponent(out DefenseLayerBase defenceLayer);
+            hitResult.Collider.TryGetComponent(out DefenseLayerBase defenceLayer);
 
             switch (defenceLayer)
             {
@@ -46,15 +47,15 @@ namespace CoreGameSystems
             }
         }
 
-        public void RegisterHitDynamic(Collider2D collider, Vector2 position, SizeType size, in WeaponRuntimeDamage damageData, float hitDelay)
+        public void RegisterHitDynamic(in HitResult hitResult, SizeType size, in WeaponRuntimeDamage damageData, float hitDelay)
         {
             var hitData = new HitData
             {
-                Position = position,
+                Position = hitResult.Point,
                 Size = size
             };
 
-            collider.TryGetComponent(out DefenseLayerBase defenceLayer);
+            hitResult.Collider.TryGetComponent(out DefenseLayerBase defenceLayer);
 
             switch (defenceLayer)
             {
@@ -81,6 +82,8 @@ namespace CoreGameSystems
                     hitData.Damage = damageData.DamageAsteroid * hitDelay;
                     EventBus.AsteroidDamagedAction?.Invoke(asteroid, hitData);
                     break;
+
+                default: break;
             }
         }
     }

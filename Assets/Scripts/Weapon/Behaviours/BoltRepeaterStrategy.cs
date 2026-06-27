@@ -33,7 +33,7 @@ namespace Weapons
             var spawnPos = shootPointData.Position;
             var aimPos = aimData.AimPosition;
             var distanceToAimPos = Vector2.Distance(aimPos, spawnPos);
-            var shootDirection = WeaponSystemHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, fireStats.SpreadAngle);
+            var shootDirection = WeaponHelper.GetDirectionWithSpreadBrookTaylor(shootPointData.Direction, fireStats.SpreadAngle);
             var boltSelfVelocity = shootDirection * fireStats.ProjectileSpeed;
 
             var shipVelocity = weapon.ShipRB.linearVelocity;
@@ -56,7 +56,7 @@ namespace Weapons
                 destroyTime,
                 hitTime,
                 spawnPos,
-                shootPointData.ZDepth,
+                aimPos,
                 boltTotalVelocity,
                 shootDirection,
                 weapon.HitLayers,

@@ -36,7 +36,7 @@ namespace CoreGameSystems
             if (layer.CurrentPoints <= 0)
             {
                 layer.CurrentPoints = 0;
-
+                layer.Collider.enabled = false;
                 Debug.LogError("Asteroid Destoyed");
             }
         }
@@ -60,7 +60,7 @@ namespace CoreGameSystems
             if (layer.CurrentHullPoints <= 0)
             {
                 layer.CurrentHullPoints = 0;
-
+                layer.Collider.enabled = false;
                 Debug.LogError("Hull Destroyed");
             }
         }

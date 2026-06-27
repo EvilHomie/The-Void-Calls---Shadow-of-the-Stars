@@ -10,14 +10,15 @@ namespace Projectiles
         public SizeType Size;
         public float DestroyTime;
         public float HitTime;
+        public Vector2 AimPos;
         public LayerMask HitLayers;
         public WeaponRuntimeDamage DamageData;
         public HashSet<Collider2D> IgnoredColliders = new();
 
         public abstract ProjectileType ProjectileType { get; }
 
-        public Vector3 Position;
-        public Vector3 Velocity;
+        public Vector2 CurrentPos;
+        public Vector2 Velocity;
         public bool IsMissed;
     }
 

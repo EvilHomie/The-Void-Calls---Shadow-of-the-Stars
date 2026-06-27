@@ -5132,10 +5132,9 @@ MonoBehaviour:
   ShootPointTransformData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
-    ZDepth: 0
   BaseDamage:
-    DamageEnergy: 5
-    DamageKinetic: 10
+    DamageEnergy: 1
+    DamageKinetic: 2
     AsteroidMultiplier: 0.5
   RuntimeDamage:
     DamageShield: 0
@@ -5165,3 +5164,4 @@ MonoBehaviour:
     ShootDelay: 0
     InvProjectileSpeed: 0
     ProjectileLifeTime: 0
+    SpreadTimeMultiplier: 0

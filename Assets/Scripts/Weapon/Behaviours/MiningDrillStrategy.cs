@@ -1,6 +1,9 @@
 using CoreGameSystems;
 using General;
+using Helpers;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines;
 
 namespace Weapons
 {
@@ -8,7 +11,7 @@ namespace Weapons
     {
         private HitRegistrationSystem _hitRegistrationSystem;
 
-        public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem) 
+        public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem)
         {
             _hitRegistrationSystem = hitRegistrationSystem;
         }
@@ -33,25 +36,25 @@ namespace Weapons
             ref readonly var shootPointData = ref weapon.ShootPointTransformData;
             var aimPosition = weapon.AimData.AimPosition;
 
-            Vector3 spawnLinePos = shootPointData.Position;
-            spawnLinePos.z = shootPointData.ZDepth;
-            var distanceToAimPosition = Vector2.Distance(aimPosition, spawnLinePos);
-            var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
+            var startLinePos = shootPointData.Position;
+            var distanceToAimPosition = Vector2.Distance(aimPosition, startLinePos);
+            distanceToAimPosition = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);
 
-            Vector3 worldHitPos = spawnLinePos + (Vector3)shootPointData.Direction * aimDistance;
-            weapon.BeamLineLR.SetPosition(0, spawnLinePos);
-            weapon.BeamLineLR.SetPosition(1, worldHitPos);
+            var endLinePos = startLinePos + shootPointData.Direction * distanceToAimPosition;
 
-            if (GameFlowSystem.CoreTime < nextHitTime) return;
+            var hitResult = WeaponHelper.TryGetBeamHit(startLinePos, endLinePos, weapon.IgnoredColliders);
 
-            var collider = Physics2D.OverlapPoint(worldHitPos, weapon.HitLayers);
+            weapon.BeamLineLR.SetPosition(0, startLinePos);
+            weapon.BeamLineLR.SetPosition(1, hitResult.Point);
 
-            if (collider == null || weapon.IgnoredColliders.Contains(collider)) return;
+            var coreTime = GameFlowSystem.CoreTime;
+
+            if (coreTime < nextHitTime || !hitResult.HasHit) return;
 
             var hitDelay = weapon.HitDelay;
-            weapon.NextHitTime = GameFlowSystem.CoreTime + hitDelay;
+            weapon.NextHitTime = coreTime + hitDelay;
 
-            _hitRegistrationSystem.RegisterHitDynamic(collider, worldHitPos, weapon.Size, weapon.RuntimeDamage, hitDelay);
+            _hitRegistrationSystem.RegisterHitDynamic(hitResult, weapon.Size, weapon.RuntimeDamage, hitDelay);
         }
     }
 }

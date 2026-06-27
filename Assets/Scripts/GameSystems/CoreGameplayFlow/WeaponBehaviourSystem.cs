@@ -44,11 +44,11 @@ namespace CoreGameSystems
         private void Aim(float dTime)
         {
             var playerShip = _shipRegistry.PlayerShip;
-            WeaponSystemHelper.AimAtTarget(playerShip, dTime);
+            WeaponHelper.AimAtTarget(playerShip, dTime);
 
             foreach (var ship in _shipRegistry.ShipsInFight)
             {
-                WeaponSystemHelper.AimAtTarget(ship, dTime);
+                WeaponHelper.AimAtTarget(ship, dTime);
             }
         }
 

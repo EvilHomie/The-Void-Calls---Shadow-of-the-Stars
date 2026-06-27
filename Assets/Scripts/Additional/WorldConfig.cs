@@ -44,4 +44,7 @@ public static class LayersId
     public static int ShieldLayer = LayerMask.NameToLayer("Shield");
     public static int ArmorLayer = LayerMask.NameToLayer("Armor");
     public static int HullLayer = LayerMask.NameToLayer("Hull");
+    public static readonly int AsteroidsMask = LayerMask.GetMask("Asteroid");
+    public static readonly int DefenseMask = LayerMask.GetMask("Defense");
+    public static readonly int HitMask = AsteroidsMask | DefenseMask;
 }

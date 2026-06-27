@@ -2,7 +2,6 @@ using DefenseLayers;
 using DI;
 using Registries;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using EventBus = General.EventBus;
 
@@ -145,7 +144,9 @@ namespace CoreGameSystems
             effect.RemainingLifetime = _collisionEffectDuration;
 
             effect.SpriteAlpha = 1;
-            effect.SpriteRenderer.color = effect.SpriteRenderer.color.WithAlpha(1);
+            var color = effect.SpriteRenderer.color;
+            color.a = 1;
+            effect.SpriteRenderer.color = color;
 
             effectTransform.SetPositionAndRotation(shieldTransform.position, shieldTransform.rotation);
             effectTransform.localScale = shieldTransform.lossyScale;
@@ -180,7 +181,9 @@ namespace CoreGameSystems
                 effectTransform.localScale = shieldTransform.lossyScale;
                 var newAlpha = effect.RemainingLifetime * _collisionEffectDurationReversed;
                 effect.SpriteAlpha = newAlpha;
-                effect.SpriteRenderer.color = effect.SpriteRenderer.color.WithAlpha(newAlpha);
+                var color = effect.SpriteRenderer.color;
+                color.a = newAlpha;
+                effect.SpriteRenderer.color = color;
             }
         }
     }
