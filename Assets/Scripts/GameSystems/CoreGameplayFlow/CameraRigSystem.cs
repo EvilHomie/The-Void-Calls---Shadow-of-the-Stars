@@ -40,8 +40,8 @@ namespace CoreGameSystems
             {
                 {SizeType.S, new (1,5) },
                 {SizeType.M, new (2,10) },
-                {SizeType.L, new (8,20) },
-                {SizeType.XL, new (1,30) }
+                {SizeType.L, new (4,20) },
+                {SizeType.XL, new (8,30) }
             };
             EventBus.PlayerShipSpawned += Init;
         }

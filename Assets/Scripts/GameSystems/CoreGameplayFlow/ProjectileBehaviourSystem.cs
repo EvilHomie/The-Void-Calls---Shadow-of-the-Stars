@@ -30,7 +30,9 @@ namespace CoreGameSystems
             {
                 if (GameFlowSystem.CoreTime >= projectile.DestroyTime)
                 {
-                    if (ProceedProjectileHit(projectile)) continue;
+                    ProceedProjectileHit(projectile);
+                    _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+                    continue;
                 }
 
                 if (projectile is Bolt bolt)
@@ -74,7 +76,11 @@ namespace CoreGameSystems
         {
             if (!bolt.IsMissed && GameFlowSystem.CoreTime >= bolt.HitTime)
             {
-                if (ProceedProjectileHit(bolt)) return;
+                if (ProceedProjectileHit(bolt))
+                {
+                    _projectileRegistry.RequestRemoveActiveProjectile(bolt);
+                    return;
+                }
             }
 
             var pos = bolt.CurrentPos;
@@ -103,8 +109,7 @@ namespace CoreGameSystems
             if (hasHit)
             {
                 var hitResult = new HitResult(hasHit, defenseCollider, position);
-                _hitRegistrationSystem.RegisterHit(hitResult, projectile.Size, projectile.DamageData);
-                _projectileRegistry.RequestRemoveActiveProjectile(projectile);
+                _hitRegistrationSystem.RegisterHit(hitResult, projectile.Size, projectile.DamageData);                
                 return true;
             }
             projectile.IsMissed = true;

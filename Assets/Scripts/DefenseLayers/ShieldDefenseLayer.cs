@@ -5,22 +5,21 @@ namespace DefenseLayers
 {
     public class ShieldDefenseLayer : DefenseLayerBase
     {
+        public SizeType Size { get; private set; }
         public Transform Transform { get; private set; }
         public Transform ParentTransform { get; private set; }
         public ShieldTransformRuntimeData ShieldTransformRuntimeData;
-        
-        public float RootSize;
 
         public float RegRate;
 
-        public void Init(float basePoints, float regRate)
+        public void Init(float basePoints, float regRate, SizeType size)
         {
             base.InitBase(basePoints);
             var transform = this.transform;
             Transform = transform;
-            RootSize = transform.root.localScale.x;
             ParentTransform = transform.parent;
             RegRate = regRate;
+            Size = size;
         }
     }
 

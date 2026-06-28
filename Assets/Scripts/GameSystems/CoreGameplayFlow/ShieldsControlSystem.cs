@@ -36,7 +36,7 @@ namespace CoreGameSystems
             var transform = layer.transform;
             shieldTransformRuntimeData.Position = transform.position;
             shieldTransformRuntimeData.Rotation = transform.rotation;
-            shieldTransformRuntimeData.LossyScale = transform.lossyScale;
+            shieldTransformRuntimeData.LossyScale = transform.localScale * GameConfig.SizeMap[layer.Size];
         }
 
         private void HandleRegeneration(ShieldDefenseLayer layer, float deltaTime)

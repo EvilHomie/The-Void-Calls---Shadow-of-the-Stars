@@ -11,7 +11,7 @@ namespace Helpers
     public class InitHelper
     {
         public static void InitShip(ShipInstance shipInstance)
-        {
+        {            
             InitShipStats(shipInstance);
             InitShipDefenceLayers(shipInstance);
             InitWeapons(shipInstance);
@@ -71,8 +71,10 @@ namespace Helpers
 
         private static void InitShipDefenceLayers(ShipInstance shipInstance)
         {
+            shipInstance.transform.localScale = Vector3.one * GameConfig.SizeMap[shipInstance.Size];
+
             var shield = shipInstance.Shield;
-            shield.Init(100, 1);
+            shield.Init(100, 1, shipInstance.Size);
             shield.gameObject.layer = GameLayers.ShipLayer;
             shipInstance.OwnColliders.Add(shield.Collider);
 
@@ -130,9 +132,12 @@ namespace Helpers
         public static void InitWeapons(ShipInstance shipInstance)
         {
             var shipRb = shipInstance.Rigidbody;
+            var shipSize = GameConfig.SizeMap[shipInstance.Size];
 
             foreach (var slot in shipInstance.WeaponSlots)
             {
+                var slotSize = GameConfig.SizeMap[slot.Size];
+                slot.transform.localScale = slotSize / shipSize * Vector3.one;
                 var weapon = slot.Weapon;
                 UpdateWeaponStats(weapon);
                 weapon.InitBase(shipInstance.AimData, shipInstance.Size, shipInstance.OwnColliders, 100);
