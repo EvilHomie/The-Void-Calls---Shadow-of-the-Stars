@@ -140,7 +140,7 @@ namespace Helpers
                 slot.transform.localScale = slotSize / shipSize * Vector3.one;
                 var weapon = slot.Weapon;
                 UpdateWeaponStats(weapon);
-                weapon.InitBase(shipInstance.AimData, shipInstance.Size, shipInstance.OwnColliders, 100);
+                weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders, 100);
                 weapon.gameObject.layer = GameLayers.WeaponLayer;
 
                 if (weapon.TryGetComponent<HullDefenseLayer>(out var hullDefenseLayer))

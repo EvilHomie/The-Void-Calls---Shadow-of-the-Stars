@@ -1,4 +1,5 @@
 using DefenseLayers;
+using ShipModules;
 using Ships;
 using System;
 using System.Collections.Generic;

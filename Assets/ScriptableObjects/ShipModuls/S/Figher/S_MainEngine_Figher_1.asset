@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a9f0104092ad94d88b3785e43710b1, type: 3}
-  m_Name: S_Thruster_MK1
+  m_Script: {fileID: 11500000, guid: b414911938450a2429c3e5e202ca1fda, type: 3}
+  m_Name: S_MainEngine_Figher_1
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: S_Thruster_MK1
+  <Name>k__BackingField: S_MainEngine_MK1
   <Size>k__BackingField: 1
-  <StrafeThrust>k__BackingField: 1000
-  <RotateThrust>k__BackingField: 300
+  <DirectThrust>k__BackingField: 1000
+  <ReverseThrust>k__BackingField: 2000
+  <BoostThrust>k__BackingField: 2000
+  <BoostMaxTime>k__BackingField: 5

@@ -1,5 +1,19 @@
-public interface IShipModule
+using System;
+
+namespace ShipModules
 {
-    public SizeType Size { get; }
-    public string Name { get; }
+    public interface IShipModule
+    {
+        public SizeType Size { get; }
+        public string Name { get; }
+    }
+}
+
+[Serializable]
+public enum SizeType
+{
+    S,
+    M,
+    L,
+    XL
 }

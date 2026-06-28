@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ShipModules
@@ -15,6 +16,7 @@ namespace ShipModules
         public MainEngineMultipliers MainEngineMultipliers;
     }
 
+    [Serializable]
     public struct MainEngineMultipliers
     {
         public float DirectThrustMultiplier;

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ShipModules
@@ -13,10 +14,10 @@ namespace ShipModules
         public ThrustersMultipliers ThrustersMultipliers;
     }
 
+    [Serializable]
     public struct ThrustersMultipliers
     {
         public float StrafeThrustMultiplier;
         public float RotateThrustMultiplier;
     }
 }
-
