@@ -12,7 +12,6 @@ namespace DI
 {
     public class GameInstaller : Installer
     {
-        [SerializeField] ShipInstance playerShip;
         [SerializeField] Camera mainCamera;
         [SerializeField] MouseCursorSystem mouseCursorSystem;
         [SerializeField] GameFlowSystem gameFlowSystem;
@@ -39,11 +38,11 @@ namespace DI
         [SerializeField] ProjectileBehaviourSystem projectileBehaviourSystem;
         [SerializeField] HitRegistrationSystem hitRegistrationSystem;
         [SerializeField] DamageVizualizeSystem damageVizualizeSystem;
+        [SerializeField] ShieldsControlSystem  shieldsControlSystem;
 
 
         protected override void InstallBindings()
         {
-            Container.Bind<ShipInstance>().FromInstance(playerShip).AsSingleton();
             Container.Bind<GameFlowSystem>().FromInstance(gameFlowSystem).AsSingleton();
             Container.Bind<ShipRegistry>().FromInstance(shipRegistry).AsSingleton();
             Container.Bind<WeaponRegistry>().FromInstance(weaponRegistry).AsSingleton();
@@ -64,6 +63,7 @@ namespace DI
             Container.Bind<ProjectileBehaviourSystem>().FromInstance(projectileBehaviourSystem).AsSingleton();
             Container.Bind<HitRegistrationSystem>().FromInstance(hitRegistrationSystem).AsSingleton();
             Container.Bind<DamageVizualizeSystem>().FromInstance(damageVizualizeSystem).AsSingleton();
+            Container.Bind<ShieldsControlSystem>().FromInstance(shieldsControlSystem).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();

@@ -1,3 +1,5 @@
+using DI;
+using General;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,72 +9,106 @@ namespace Registries
     public class ShipRegistry : MonoBehaviour, ICorePreUpdateTickObserver
     {
         public ShipInstance PlayerShip => _playerShip;
-        public IReadOnlyCollection<ShipInstance> OtherShips => _ships;
-        public IReadOnlyCollection<ShipInstance> ShipsInFight => _shipsInFight;
+        public IReadOnlyCollection<ShipInstance> Lod0Ships => _lod0Ships;
+        public IReadOnlyCollection<ShipInstance> Lod1Ships => _lod1Ships;
 
         private ShipInstance _playerShip;
-        private readonly HashSet<ShipInstance> _ships = new(200); // за исключением игрока
-        private readonly HashSet<ShipInstance> _shipsToAdd = new(20);
-        private readonly HashSet<ShipInstance> _shipsToRemove = new(20);
 
-        private readonly HashSet<ShipInstance> _shipsInFight = new(200); // за исключением игрока
-        private readonly HashSet<ShipInstance> _shipsInFightToAdd = new(20);
-        private readonly HashSet<ShipInstance> _shipsInFightToRemove = new(20);
+        private readonly HashSet<ShipInstance> _lod0Ships = new(50);
+        private readonly HashSet<ShipInstance> _lod1Ships = new(200);
+
+        private readonly Dictionary<SimulationLevel, HashSet<ShipInstance>> _shipsToAdd = new()
+        {
+            {SimulationLevel.Lod0, new HashSet<ShipInstance>(50) },
+            {SimulationLevel.Lod1, new HashSet<ShipInstance>(200) }
+
+        };
+        private readonly Dictionary<SimulationLevel, HashSet<ShipInstance>> _shipsToRemove = new()
+        {
+            {SimulationLevel.Lod0, new HashSet<ShipInstance>(50) },
+            {SimulationLevel.Lod1, new HashSet<ShipInstance>(200) }
+        };
+
+        [Inject]
+        public void Construct(GameFlowSystem gameFlowSystem)
+        {
+            gameFlowSystem.AddTickObserver(this);
+        }
 
         public void CorePreUpdateTick()
         {
             Sync();
         }
 
-        public void RequestAddPlayerShip(ShipInstance shipInstance)
+        public void RegisterPlayerShip(ShipInstance shipInstance)
         {
             _playerShip = shipInstance;
         }
 
-        public void RequestRemovePlayerShip(ShipInstance shipInstance)
+        public void UnRegisterPlayerShip()
         {
             _playerShip = null;
         }
 
-        public void RequestRemoveOnExitFight(ShipInstance shipInstance)
+        public void RegisterShip(ShipInstance shipInstance, SimulationLevel simulationLevel)
         {
-            _shipsInFightToAdd.Remove(shipInstance);
-            _shipsInFightToRemove.Add(shipInstance);
+            _shipsToRemove[simulationLevel].Remove(shipInstance);
+            _shipsToAdd[simulationLevel].Add(shipInstance);
         }
 
-        public void RequestAddOnEnterFight(ShipInstance shipInstance)
+        public void UnregisterShip(ShipInstance shipInstance, SimulationLevel simulationLevel)
         {
-            _shipsInFightToRemove.Remove(shipInstance);
-            _shipsInFightToAdd.Add(shipInstance);
+            _shipsToAdd[simulationLevel].Remove(shipInstance);
+            _shipsToRemove[simulationLevel].Add(shipInstance);
         }
 
-        public void RequestAddOtherShip(ShipInstance shipInstance)
+        public void SetSimulationLevel(ShipInstance shipInstance, SimulationLevel simulationLevel)
         {
-            _shipsToRemove.Remove(shipInstance);
-            _shipsToAdd.Add(shipInstance);
-        }
-
-        public void RequestRemoveOtherShip(ShipInstance shipInstance)
-        {
-            _shipsToAdd.Remove(shipInstance);
-            _shipsToRemove.Add(shipInstance);
+            switch (simulationLevel)
+            {
+                case SimulationLevel.None:
+                    UnregisterShip(shipInstance, SimulationLevel.Lod0);
+                    UnregisterShip(shipInstance, SimulationLevel.Lod1);
+                    break;
+                case SimulationLevel.Lod0:
+                    UnregisterShip(shipInstance, SimulationLevel.Lod1);
+                    RegisterShip(shipInstance, simulationLevel);
+                    break;
+                case SimulationLevel.Lod1:
+                    UnregisterShip(shipInstance, SimulationLevel.Lod0);
+                    RegisterShip(shipInstance, simulationLevel);
+                    break;
+            }
         }
 
         private void Sync()
         {
-            foreach (var ship in _shipsToRemove)
-            {
-                _ships.Remove(ship);
-            }
-
-            _shipsToRemove.Clear();
-
-            foreach (var ship in _shipsToAdd)
-            {
-                _ships.Add(ship);
-            }
-
-            _shipsToAdd.Clear();
+            Sync(_lod0Ships, SimulationLevel.Lod0);
+            Sync(_lod1Ships, SimulationLevel.Lod1);
         }
+
+        private void Sync(HashSet<ShipInstance> ships, SimulationLevel simulationLevel)
+        {
+            var shipsToRemove = _shipsToRemove[simulationLevel];
+            foreach (var ship in shipsToRemove)
+            {
+                ships.Remove(ship);
+            }
+            shipsToRemove.Clear();
+
+            var shipsToAdd = _shipsToAdd[simulationLevel];
+            foreach (var ship in shipsToAdd)
+            {
+                ships.Add(ship);
+            }
+            shipsToAdd.Clear();
+        }
+    }
+
+    public enum SimulationLevel
+    {
+        None,
+        Lod0,
+        Lod1
     }
 }

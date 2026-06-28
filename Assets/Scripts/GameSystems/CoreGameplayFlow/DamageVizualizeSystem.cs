@@ -1,7 +1,7 @@
 using DefenseLayers;
 using DI;
 using Registries;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using EventBus = General.EventBus;
 
@@ -17,8 +17,9 @@ namespace CoreGameSystems
         private ShieldsEffectRegistry _shieldsEffectRegistry;
         private HitEffectRegistry _hitEffectRegistry;
 
-        private readonly float _collisionEffectDuration = 0.2f;
-        private float _collisionEffectDurationReversed;
+        private const float _collisionEffectDuration = 0.2f;
+        private const float _collisionEffectDurationReversed = 1 / _collisionEffectDuration;
+        private const float _shieldEffectDeffSize = 0.05f;
 
 
         private uint _shieldHitPoolId;
@@ -28,16 +29,19 @@ namespace CoreGameSystems
         private uint _sparksPoolGreyId;
 
 
-        private Vector2 _vector2One = Vector2.one;        
         private static readonly int EffectUVId = Shader.PropertyToID("_EffectUV");
         private static readonly int HitSizeId = Shader.PropertyToID("_HitSize");
+
+
+        private HashSet<ShieldDefenseLayer> _shieldWithEffects = new(100);
+        private HashSet<ShieldDefenseLayer> _shieldWithEffectsToAdd = new(100);
+        private HashSet<ShieldDefenseLayer> _shieldWithEffectsToRemove = new(100);
 
         [Inject]
         public void Construct(HitEffectRegistry hitEffectRegistry, ShieldsEffectRegistry shieldsEffectRegistry)
         {
             _hitEffectRegistry = hitEffectRegistry;
             _shieldsEffectRegistry = shieldsEffectRegistry;
-            _collisionEffectDurationReversed = 1 / _collisionEffectDuration;
 
             _shieldHitPoolId = _shieldHitPoolEffect.Id;
             _shieldCollisionPoolId = _shieldCollisionPoolEffect.Id;
@@ -46,13 +50,13 @@ namespace CoreGameSystems
             _sparksPoolGreyId = sparksPoolGrey.Id;
 
             EventBus.ShieldDamagedAction += OnShieldHit;
-            EventBus.ArmorDamagedAction += OnArmorDamaged;
-            EventBus.HullDamagedAction += OnHullDamaged;
-            EventBus.AsteroidDamagedAction += OnAsteroidHullDamaged;
+            EventBus.ArmorDamagedAction += OnArmorHit;
+            EventBus.HullDamagedAction += OnHullHit;
+            EventBus.AsteroidDamagedAction += OnAsteroidHit;
         }
         public void Execute(float deltaTime)
         {
-            UpdateShieldEffects();
+            UpdateShieldEffects(deltaTime);
             UpdateActiveSparks();
         }
 
@@ -88,92 +92,87 @@ namespace CoreGameSystems
             }
         }
 
-        private void OnHullDamaged(DefenseLayerBase layerBase, HitData hitData)
+        private void OnHullHit(HullDefenseLayer layer, HitData hitData)
         {
-            var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
-            hitEffect.Transform.position = hitData.Position;
-            hitEffect.IsPlaying = true;
+            SpawnSpark(_sparksPoolGreyId, hitData);
         }
-        private void OnArmorDamaged(DefenseLayerBase layerBase, HitData hitData)
+        private void OnArmorHit(HullDefenseLayer layer, HitData hitData)
         {
-            var hitEffect = _hitEffectRegistry.Get(_sparksPoolYellowId);
-            hitEffect.Transform.position = hitData.Position;
-            hitEffect.IsPlaying = true;
+            SpawnSpark(_sparksPoolYellowId, hitData);
+        }
+        private void OnAsteroidHit(AsteroidDefenseLayer layer, HitData hitData)
+        {
+            SpawnSpark(_sparksPoolGreyId, hitData);
         }
 
-        private void OnShieldHit(ShieldDefenseLayer layerBase, HitData hitData)
+        private void OnShieldHit(ShieldDefenseLayer layer, HitData hitData)
         {
-            var effect = _hitEffectRegistry.Get(_sparksPoolBlueId);
-            effect.Transform.position = hitData.Position;
-            effect.Transform.localScale = _vector2One * GameConfig.SizeMap[hitData.Size];
+            SpawnSpark(_sparksPoolBlueId, hitData);
+            SpawnShieldEffect(layer, hitData, _shieldHitPoolId);
+        }
+
+        private void OnShieldCollision(ShieldDefenseLayer layer, HitData hitData)
+        {
+            SpawnShieldEffect(layer, hitData, _shieldCollisionPoolId);
+        }
+
+
+
+        private void SpawnSpark(uint sparkId, in HitData hitData)
+        {
+            var effect = _hitEffectRegistry.Get(sparkId);
+            var transform = effect.Transform;
+            transform.position = hitData.Position;
+            transform.localScale = Vector2.one * GameConfig.SizeMap[hitData.Size];
             effect.IsPlaying = true;
-
-            SetUpShieldEffect(layerBase, hitData.Position, _shieldHitPoolId);
         }
 
-        private void OnShieldCollision(ShieldDefenseLayer layerBase, HitData hitData)
-        {
-            SetUpShieldEffect(layerBase, hitData.Position, _shieldCollisionPoolId);
-        }
-
-        private void OnAsteroidHullDamaged(DefenseLayerBase layerBase, HitData hitData)
-        {
-            var hitEffect = _hitEffectRegistry.Get(_sparksPoolGreyId);
-            hitEffect.Transform.position = hitData.Position;
-            hitEffect.IsPlaying = true;
-        }
-
-        private void SetUpShieldEffect(ShieldDefenseLayer shieldLayer, Vector2 hitPos, uint effectPoolId)
+        private void SpawnShieldEffect(ShieldDefenseLayer layer, in HitData hitData, uint effectPoolId)
         {
             var effect = _shieldsEffectRegistry.Get(effectPoolId);
+            ref readonly var shieldTransformRuntimeData = ref layer.ShieldTransformRuntimeData;
 
-            effect.OwnerShield = shieldLayer;
-            effect.RemainingLifetime = _collisionEffectDuration;
+            effect.OwnerShield = layer;
+            effect.RemainingLifeTime = _collisionEffectDuration;
 
-            ref readonly var shieldTransformRuntimeData = ref shieldLayer.ShieldTransformRuntimeData;
-
-            effect.SpriteAlpha = 1;
-            var color = effect.SpriteRenderer.color;
-            color.a = 1;
-            effect.SpriteRenderer.color = color;
-
-            var effectTransform = effect.Transform;
-            effectTransform.SetPositionAndRotation(shieldTransformRuntimeData.Position, shieldTransformRuntimeData.Rotation);
-            effectTransform.localScale = shieldTransformRuntimeData.LossyScale;
-
-            Vector2 local = shieldLayer.Transform.InverseTransformPoint(hitPos);
+            Vector2 local = layer.Transform.InverseTransformPoint(hitData.Position);
             local.x += 0.5f;
             local.y += 0.5f;
 
             var materialBlock = effect.MaterialBlock;
             materialBlock.SetVector(EffectUVId, local);
-            materialBlock.SetFloat(HitSizeId, shieldTransformRuntimeData.HitEffectSize);
+            materialBlock.SetFloat(HitSizeId, _shieldEffectDeffSize / layer.RootSize);
             effect.SpriteRenderer.SetPropertyBlock(materialBlock);
         }
 
-        private void UpdateShieldEffects()
+        private void UpdateShieldEffects(float deltaTime)
         {
             foreach (var effect in _shieldsEffectRegistry.ActiveEffects)
             {
-                effect.RemainingLifetime -= Time.deltaTime;
+                UpdateShieldEffect(effect);
 
-                if (effect.RemainingLifetime <= 0 || effect.OwnerShield == null)
+                effect.RemainingLifeTime -= deltaTime;
+
+                if (effect.RemainingLifeTime <= 0 || effect.OwnerShield == null)
                 {
                     _shieldsEffectRegistry.RequestRemove(effect);
                     continue;
                 }
-
-                ref readonly var shieldTransformRuntimeData = ref effect.OwnerShield.ShieldTransformRuntimeData;
-
-                var effectTransform = effect.Transform;
-                effectTransform.SetPositionAndRotation(shieldTransformRuntimeData.Position, shieldTransformRuntimeData.Rotation);
-                effectTransform.localScale = shieldTransformRuntimeData.LossyScale;
-                var newAlpha = effect.RemainingLifetime * _collisionEffectDurationReversed;
-                effect.SpriteAlpha = newAlpha;
-                var color = effect.SpriteRenderer.color;
-                color.a = newAlpha;
-                effect.SpriteRenderer.color = color;
             }
+        }
+
+        private void UpdateShieldEffect(ShieldEffect effect)
+        {
+            ref readonly var shieldTransformRuntimeData = ref effect.OwnerShield.ShieldTransformRuntimeData;
+
+            var effectTransform = effect.Transform;
+            effectTransform.SetPositionAndRotation(shieldTransformRuntimeData.Position, shieldTransformRuntimeData.Rotation);
+            effectTransform.localScale = shieldTransformRuntimeData.LossyScale;
+            var newAlpha = effect.RemainingLifeTime * _collisionEffectDurationReversed;
+            effect.SpriteAlpha = newAlpha;
+            var color = effect.SpriteRenderer.color;
+            color.a = newAlpha;
+            effect.SpriteRenderer.color = color;
         }
     }
 }

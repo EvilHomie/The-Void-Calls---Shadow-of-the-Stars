@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace General
 {
-    public class GameFlowSystem : GameSystemBase
+    public class GameFlowSystem : MonoBehaviour
     {
         public static float CoreTime { get; private set; }
         public static float CoreTickDeltaTime { get; private set; }
@@ -20,9 +20,8 @@ namespace General
         private GameState _currentGameState = GameState.None;
         private float _gameSpeed = 1;
 
-        protected override void AwakeInit()
+        private void Awake()
         {
-            base.AwakeInit();
             _gameSpeed = 1;
             _currentGameState = GameState.None;
         }

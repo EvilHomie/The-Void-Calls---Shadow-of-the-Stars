@@ -13,7 +13,7 @@ namespace Weapons
         public abstract WeaponType WeaponType { get; }
         public SizeType Size { get; private set; }
         public string Name { get; private set; }
-        public Transform WeaponTransform { get; private set; }
+        public Transform Transform { get; private set; }
         public AimData AimData { get; private set; }
         public HashSet<Collider2D> IgnoredColliders { get; private set; }
 
@@ -29,7 +29,7 @@ namespace Weapons
             AimData = targetData;
             Size = size;
             IgnoredColliders = ignoredColliders;
-            WeaponTransform = transform;
+            Transform = transform;
             HullDefenseLayer.Init(hullPoints);
         }
     }

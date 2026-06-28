@@ -1,10 +1,11 @@
 using DI;
 using General;
+using Registries;
 using UnityEngine;
 
 namespace CoreGameSystems
 {
-    public class CoreGameplayFlow : MonoBehaviour, ICoreFixedUpdateTickObserver, ICorePostLateUpdateTickObserver, ICoreUpdateTickObserver
+    public class CoreGameplayFlow : MonoBehaviour, ICoreFixedUpdateTickObserver, ICorePostLateUpdateTickObserver, ICoreUpdateTickObserver, ICorePreUpdateTickObserver
     {
         private PlayerControlSystem _playerControlSystem;
         private PlayerMovementSystem _playerMovementSystem;
@@ -17,6 +18,7 @@ namespace CoreGameSystems
         private AimSystem _aimSystem;
         private ProjectileBehaviourSystem _projectileBehaviourSystem;
         private DamageVizualizeSystem _damageVizualizeSystem;
+        private ShieldsControlSystem _shieldsControlSystem;
 
         [Inject]
         public void Construct(
@@ -31,7 +33,8 @@ namespace CoreGameSystems
             MovementVisualizeSystem movementVisualizeSystem,
             AimSystem aimSystem,
             ProjectileBehaviourSystem projectileBehaviourSystem,
-            DamageVizualizeSystem damageVizualizeSystem)
+            DamageVizualizeSystem damageVizualizeSystem,
+            ShieldsControlSystem shieldsControlSystem)
         {
             _playerControlSystem = playerControlSystem;
             _playerMovementSystem = playerMovementSystem;
@@ -44,6 +47,7 @@ namespace CoreGameSystems
             _aimSystem = aimSystem;
             _projectileBehaviourSystem = projectileBehaviourSystem;
             _damageVizualizeSystem = damageVizualizeSystem;
+            _shieldsControlSystem = shieldsControlSystem;
             gameFlowSystem.AddTickObserver(this);
         }
 
@@ -57,6 +61,10 @@ namespace CoreGameSystems
             _playerControlSystem.Execute(); // Запись намерений игрока. 
         }
 
+        public void CorePreUpdateTick()
+        {
+        }
+
         public void CoreUpdateTick(float deltaTime)
         {
             _mouseCursorSystem.Execute();
@@ -65,6 +73,7 @@ namespace CoreGameSystems
             _aimSystem.Execute();
             _projectileBehaviourSystem.Execute(deltaTime);
 
+            _shieldsControlSystem.Execute(deltaTime);
             _damageVizualizeSystem.Execute(deltaTime);
             _movementVisualizeSystem.Execute();
             _cameraRigSystem.Execute(deltaTime);

@@ -6,26 +6,27 @@ namespace DefenseLayers
     public class ShieldDefenseLayer : DefenseLayerBase
     {
         public Transform Transform { get; private set; }
+        public Transform ParentTransform { get; private set; }
         public ShieldTransformRuntimeData ShieldTransformRuntimeData;
-        private const float _shieldEffectDeffSize = 0.05f;
+        
+        public float RootSize;
 
-        public void Init(float basePoints)
+        public float RegRate;
+
+        public void Init(float basePoints, float regRate)
         {
             base.InitBase(basePoints);
             var transform = this.transform;
             Transform = transform;
-            var rootSize = transform.root.localScale.x;
-            ShieldTransformRuntimeData.LossyScale = transform.lossyScale;
-            ShieldTransformRuntimeData.HitEffectSize = _shieldEffectDeffSize / rootSize;
-            ShieldTransformRuntimeData.Position = transform.position;
-            ShieldTransformRuntimeData.Rotation = transform.rotation;
+            RootSize = transform.root.localScale.x;
+            ParentTransform = transform.parent;
+            RegRate = regRate;
         }
     }
 
     [Serializable]
     public struct ShieldTransformRuntimeData
-    {
-        public float HitEffectSize;
+    {     
         public Vector2 LossyScale;
         public Vector2 Position;
         public Quaternion Rotation;

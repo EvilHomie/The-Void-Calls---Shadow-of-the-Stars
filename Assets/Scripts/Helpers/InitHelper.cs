@@ -71,23 +71,17 @@ namespace Helpers
 
         private static void InitShipDefenceLayers(ShipInstance shipInstance)
         {
-            foreach (var defenseLayer in shipInstance.DefenseLayers)
-            {
-                switch (defenseLayer)
-                {
-                    case ShieldDefenseLayer shield:
-                        shield.Init(2000);
-                        break;
+            var shield = shipInstance.Shield;
+            shield.Init(100, 1);
+            shield.gameObject.layer = GameLayers.ShipLayer;
+            shipInstance.OwnColliders.Add(shield.Collider);
 
-                    case HullDefenseLayer hull:
-                        var hullHP = shipInstance.Equip.Chassis.Hull;
-                        hull.Init(hullHP, 2000);
-                        break;
-                }
+            var hull = shipInstance.Hull;
+            var hullHP = shipInstance.Equip.Chassis.Hull;
+            hull.Init(hullHP, 100);
 
-                defenseLayer.gameObject.layer = GameLayers.ShipLayer;
-                shipInstance.OwnColliders.Add(defenseLayer.Collider);
-            }
+            hull.gameObject.layer = GameLayers.ShipLayer;
+            shipInstance.OwnColliders.Add(hull.Collider);
         }
 
         public static void InitAsteroid(Asteroid asteroid)
@@ -204,18 +198,6 @@ namespace Helpers
             else if (weaponBase is MiningDrill miningDrill)
             {
                 miningDrill.HitDelay = 1f / GameConfig.ConstantBeamHitRate;
-            }
-        }
-
-        public static void RegisterShip(ShipInstance shipInstance, ShipRegistry shipRegistry, bool asPlayer)
-        {
-            if (!asPlayer)
-            {
-                shipRegistry.RequestAddOtherShip(shipInstance);
-            }
-            else
-            {
-                shipRegistry.RequestAddPlayerShip(shipInstance);
             }
         }
     }

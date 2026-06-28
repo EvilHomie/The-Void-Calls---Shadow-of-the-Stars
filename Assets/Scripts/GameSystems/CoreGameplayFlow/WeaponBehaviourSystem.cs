@@ -46,7 +46,7 @@ namespace CoreGameSystems
             var playerShip = _shipRegistry.PlayerShip;
             WeaponHelper.AimAtTarget(playerShip, dTime);
 
-            foreach (var ship in _shipRegistry.ShipsInFight)
+            foreach (var ship in _shipRegistry.Lod0Ships)
             {
                 WeaponHelper.AimAtTarget(ship, dTime);
             }

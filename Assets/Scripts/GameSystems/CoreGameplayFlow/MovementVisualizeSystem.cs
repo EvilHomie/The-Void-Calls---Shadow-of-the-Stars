@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CoreGameSystems
 {
-    public class MovementVisualizeSystem : GameSystemBase
+    public class MovementVisualizeSystem : MonoBehaviour
     {
         private static readonly int _plumePowerValueID = Shader.PropertyToID("_PowerValue");
 

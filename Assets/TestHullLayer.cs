@@ -12,6 +12,11 @@ public class TestHullLayer : MonoBehaviour
     private void Start()
     {
         hullDefenseLayer.Init(hullPoints, armorPoints);
-        shieldDefenseLayer.Init(ShieldPoints);
+        shieldDefenseLayer.Init(ShieldPoints, 5);
+    }
+
+    private void Update()
+    {
+        transform.root.Rotate(new Vector3(0, 0, 10 * Time.deltaTime));
     }
 }

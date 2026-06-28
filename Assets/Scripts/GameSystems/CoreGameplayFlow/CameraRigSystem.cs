@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace CoreGameSystems
 {
-    public class CameraRigSystem : GameSystemBase
+    public class CameraRigSystem : MonoBehaviour
     {        
         [SerializeField] float _mouseCursorWeight;
         [SerializeField] float _changeOrtSizeSpeed;

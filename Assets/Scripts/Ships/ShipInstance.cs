@@ -10,7 +10,8 @@ namespace Ships
         [field: SerializeField] public SizeType Size { get; private set; }
         [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
         [field: SerializeField] public List<WeaponSlot> WeaponSlots { get; private set; }
-        [field: SerializeField] public DefenseLayerBase[] DefenseLayers { get; private set; }
+        [field: SerializeField] public ShieldDefenseLayer Shield { get; private set; }
+        [field: SerializeField] public HullDefenseLayer Hull { get; private set; }
         [field: SerializeField] public Collider2D HullCollider { get; private set; }
         public HashSet<Collider2D> OwnColliders = new();
 

@@ -6,6 +6,7 @@ public class EnemyMovementTest : MonoBehaviour
     [SerializeField] private float moveForce = 20f;
     [SerializeField] private float turnTorque = 10f;
     [SerializeField] private float maxSpeed = 10f;
+    [SerializeField] private float maxTorque = 10f;
     [SerializeField] private float timer = 10f;
 
     private Rigidbody2D _rb;
@@ -31,7 +32,6 @@ public class EnemyMovementTest : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Debug.LogError(_state);
         _timer += Time.fixedDeltaTime;
 
         if (_timer >= timer)
@@ -68,6 +68,7 @@ public class EnemyMovementTest : MonoBehaviour
                 break;
         }
 
+        ClampTorque();
         ClampSpeed();
     }
 
@@ -96,6 +97,16 @@ public class EnemyMovementTest : MonoBehaviour
         {
             _rb.linearVelocity =
                 _rb.linearVelocity.normalized * maxSpeed;
+        }
+    }
+
+    private void ClampTorque()
+    {
+        float torque = _rb.angularVelocity;
+
+        if (torque > maxTorque)
+        {
+            _rb.angularVelocity = maxTorque;
         }
     }
 }

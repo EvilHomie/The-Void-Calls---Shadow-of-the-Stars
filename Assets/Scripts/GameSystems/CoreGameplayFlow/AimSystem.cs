@@ -61,8 +61,10 @@ namespace CoreGameSystems
             var playerShip = _shipRegistry.PlayerShip;
             UpdateMarkersPosition(playerShip);
 
-            foreach (var ship in _shipRegistry.ShipsInFight)
+            foreach (var ship in _shipRegistry.Lod0Ships)
             {
+                var aimData = ship.AimData;
+                aimData.AimPosition = aimData.TargetRigidBody.position;
                 // нужна будет логика по расчету точки прицеливания = упреждению как у игрока
                 //ref var shipAimData = ref ship.AimData; 
                 //var targetRigidBody = shipAimData.TargetRigidBody;
@@ -135,8 +137,6 @@ namespace CoreGameSystems
             _leadMarker.gameObject.SetActive(true);
             _showLeadMarker = true;
         }
-
-
 
         private void UpdateMarkersPosition(ShipInstance shipInstance)
         {

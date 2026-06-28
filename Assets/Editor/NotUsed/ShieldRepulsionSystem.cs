@@ -1,76 +1,76 @@
-using DI;
-using Registries;
-using UnityEngine;
-using General;
+//using DI;
+//using Registries;
+//using UnityEngine;
+//using General;
 
-namespace CoreGameSystems
-{
-    public class ShieldRepulsionSystem : GameSystemBase, ICoreFixedUpdateTickObserver
-    {
-        [SerializeField] private float _shieldForce = 25f;
-        [SerializeField] private float _deadZone = 0.02f;
+//namespace CoreGameSystems
+//{
+//    public class ShieldRepulsionSystem : GameSystemBase, ICoreFixedUpdateTickObserver
+//    {
+//        [SerializeField] private float _shieldForce = 25f;
+//        [SerializeField] private float _deadZone = 0.02f;
 
-        private ShieldRepulsionRegistry _shieldRepulsionRegistry;
+//        private ShieldRepulsionRegistry _shieldRepulsionRegistry;
 
-        [Inject]
-        public void Construct(ShieldRepulsionRegistry shieldRepulsionRegistry)
-        {
-            _shieldRepulsionRegistry = shieldRepulsionRegistry;
-        }
+//        [Inject]
+//        public void Construct(ShieldRepulsionRegistry shieldRepulsionRegistry)
+//        {
+//            _shieldRepulsionRegistry = shieldRepulsionRegistry;
+//        }
 
-        public void CoreFixedUpdateTick(float fixedDT)
-        {
-            foreach ((Rigidbody2D rb, Transform transform) in _shieldRepulsionRegistry.TrackedBodies)
-            {
-                ProcessRepulsion(rb, transform);
-            }
-        }
+//        public void CoreFixedUpdateTick(float fixedDT)
+//        {
+//            foreach ((Rigidbody2D rb, Transform transform) in _shieldRepulsionRegistry.TrackedBodies)
+//            {
+//                ProcessRepulsion(rb, transform);
+//            }
+//        }
 
-        protected override void Subscribe()
-        {
-            base.Subscribe();
-            EventBus.OnShieldCross += HandleShieldCross;
-        }
+//        protected override void Subscribe()
+//        {
+//            base.Subscribe();
+//            EventBus.OnShieldCross += HandleShieldCross;
+//        }
 
-        protected override void Unsubscribe()
-        {
-            base.Unsubscribe();
-            EventBus.OnShieldCross -= HandleShieldCross;
-        }
+//        protected override void Unsubscribe()
+//        {
+//            base.Unsubscribe();
+//            EventBus.OnShieldCross -= HandleShieldCross;
+//        }
 
-        private void HandleShieldCross(Collider2D other, Transform transform, bool entered)
-        {
-            if (!other.attachedRigidbody) return;
-            var rb = other.attachedRigidbody;
+//        private void HandleShieldCross(Collider2D other, Transform transform, bool entered)
+//        {
+//            if (!other.attachedRigidbody) return;
+//            var rb = other.attachedRigidbody;
 
-            if (entered) _shieldRepulsionRegistry.RequestAdd(rb, transform);
-            else _shieldRepulsionRegistry.RequestRemove(rb, transform);
-        }
+//            if (entered) _shieldRepulsionRegistry.RequestAdd(rb, transform);
+//            else _shieldRepulsionRegistry.RequestRemove(rb, transform);
+//        }
 
-        private void ProcessRepulsion(Rigidbody2D rb, Transform transform)
-        {
-            Vector2 shieldCenter = transform.position;
-            var objectPosition = rb.position;
+//        private void ProcessRepulsion(Rigidbody2D rb, Transform transform)
+//        {
+//            Vector2 shieldCenter = transform.position;
+//            var objectPosition = rb.position;
 
-            var fromCenter = objectPosition - shieldCenter;
+//            var fromCenter = objectPosition - shieldCenter;
 
-            // Shield ellipse radius
-            var radiusX = transform.localScale.x * 0.5f;
-            var radiusY = transform.localScale.y * 0.5f;
-            var x = fromCenter.x / radiusX;
-            var y = fromCenter.y / radiusY;
-            var normalizedDistanceSq = x * x + y * y;
+//            // Shield ellipse radius
+//            var radiusX = transform.localScale.x * 0.5f;
+//            var radiusY = transform.localScale.y * 0.5f;
+//            var x = fromCenter.x / radiusX;
+//            var y = fromCenter.y / radiusY;
+//            var normalizedDistanceSq = x * x + y * y;
 
-            // глубина проникновения где 0 = edge 1 = center
-            var penetration = 1f - normalizedDistanceSq;
-            // отсекает эффект на границе и если за пределами.
-            if (penetration <= _deadZone) return;
+//            // глубина проникновения где 0 = edge 1 = center
+//            var penetration = 1f - normalizedDistanceSq;
+//            // отсекает эффект на границе и если за пределами.
+//            if (penetration <= _deadZone) return;
 
-            // Чем глубже объект внутри тем сильнее выталкивание
-            var pushForce = penetration * _shieldForce;
+//            // Чем глубже объект внутри тем сильнее выталкивание
+//            var pushForce = penetration * _shieldForce;
 
-            rb.AddForce(fromCenter.normalized * pushForce, ForceMode2D.Force);
-        }
-    }
-}
+//            rb.AddForce(fromCenter.normalized * pushForce, ForceMode2D.Force);
+//        }
+//    }
+//}
 

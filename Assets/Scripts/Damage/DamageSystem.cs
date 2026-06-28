@@ -23,7 +23,7 @@ namespace CoreGameSystems
             if (layer.CurrentBasePoints <= 0)
             {
                 layer.CurrentBasePoints = 0;
-                layer.Collider.enabled = false;
+                layer.gameObject.SetActive(false);
 
                 Debug.LogError("Shield Destroyed");
             }

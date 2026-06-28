@@ -9,7 +9,7 @@ namespace DefenseLayers
         [field: SerializeField] public SpriteRenderer SpriteRenderer { get; private set; }
         public MaterialPropertyBlock MaterialBlock { get; private set; }
         public ShieldDefenseLayer OwnerShield;
-        public float RemainingLifetime;
+        public float RemainingLifeTime;
         public float SpriteAlpha;
 
         public override void Init(uint poolId)

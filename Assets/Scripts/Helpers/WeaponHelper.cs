@@ -1,7 +1,3 @@
-using CoreGameSystems;
-using General;
-using Projectiles;
-using Registries;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +14,7 @@ namespace Helpers
             {
                 var weapon = slot.Weapon;
                 ref readonly var aimStats = ref weapon.RuntimeAimStats;
-                var weaponTransform = weapon.WeaponTransform;
+                var weaponTransform = weapon.Transform;
                 Vector2 weaponPosition = weaponTransform.position;
                 Vector2 targetDir = aimPos - weaponPosition;
 
