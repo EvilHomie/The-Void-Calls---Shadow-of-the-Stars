@@ -68,9 +68,9 @@ namespace CoreGameSystems
         public void CoreUpdateTick(float deltaTime)
         {
             _mouseCursorSystem.Execute();
-            _weaponBehaviourSystem.Execute(deltaTime);
             _playerWeaponGroupSystem.Execute();
-            _aimSystem.Execute();
+            _aimSystem.Execute(deltaTime);
+            _weaponBehaviourSystem.Execute();
             _projectileBehaviourSystem.Execute(deltaTime);
 
             _shieldsControlSystem.Execute(deltaTime);

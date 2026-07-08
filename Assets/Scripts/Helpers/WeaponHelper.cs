@@ -6,6 +6,33 @@ namespace Helpers
 {
     public class WeaponHelper
     {
+        //public static void AimAtTarget(ShipInstance shipInstance, float dTime)
+        //{
+        //    Vector2 aimPos = shipInstance.AimData.AimPosition;
+
+        //    foreach (var slot in shipInstance.WeaponSlots)
+        //    {
+        //        var weapon = slot.Weapon;
+        //        ref readonly var aimStats = ref weapon.RuntimeAimStats;
+        //        var weaponTransform = weapon.Transform;
+        //        Vector2 weaponPosition = weaponTransform.position;
+        //        Vector2 targetDir = aimPos - weaponPosition;
+
+        //        var targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
+        //var currentWorldAngle = Mathf.DeltaAngle(0f, weaponTransform.eulerAngles.z);
+        //        var newWorldAngle = Mathf.MoveTowardsAngle(currentWorldAngle, targetAngle, aimStats.RotateSpeed * dTime);
+        //        var parentAngle = weaponTransform.parent.eulerAngles.z;
+        //        var localAngle = Mathf.DeltaAngle(0f, newWorldAngle - parentAngle);
+        //        localAngle = Mathf.Clamp(localAngle, -aimStats.MaxRotateAngle, aimStats.MaxRotateAngle);
+        //        var finalWorldAngle = parentAngle + localAngle;
+        //        weaponTransform.rotation = Quaternion.Euler(0f, 0f, finalWorldAngle);
+
+        //        ref var shootPointData = ref weapon.ShootPointRuntimeData;
+        //        shootPointData.Direction = weaponTransform.up;
+        //        shootPointData.Position = weapon.ShootPointTransform.position;
+        //    }
+        //}
+
         public static void AimAtTarget(ShipInstance shipInstance, float dTime)
         {
             Vector2 aimPos = shipInstance.AimData.AimPosition;
@@ -13,19 +40,20 @@ namespace Helpers
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 var weapon = slot.Weapon;
-                ref readonly var aimStats = ref weapon.RuntimeAimStats;
-                var weaponTransform = weapon.Transform;
-                Vector2 weaponPosition = weaponTransform.position;
-                Vector2 targetDir = aimPos - weaponPosition;
 
-                var targetAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg - 90f;
-                var currentWorldAngle = Mathf.DeltaAngle(0f, weaponTransform.eulerAngles.z);
-                var worldAngle = Mathf.MoveTowardsAngle(currentWorldAngle, targetAngle, aimStats.RotateSpeed * dTime);
-                var parentAngle = weaponTransform.parent.eulerAngles.z;
-                var localAngle = Mathf.DeltaAngle(0f, worldAngle - parentAngle);
-                localAngle = Mathf.Clamp(localAngle, -aimStats.MaxRotateAngle, aimStats.MaxRotateAngle);
-                var finalWorldAngle = parentAngle + localAngle;
-                weaponTransform.rotation = Quaternion.Euler(0f, 0f, finalWorldAngle);
+                if(weapon == null) continue;
+
+                var weaponTransform = weapon.Transform;
+                ref readonly var aimStats = ref weapon.RuntimeAimStats;
+                var localTargetPos = weapon.SlotTransform.InverseTransformPoint(aimPos);
+
+                var localTargetAngle = Vector2.SignedAngle(Vector2.up, localTargetPos);
+                var maxAngle = aimStats.MaxRotateAngle;
+                localTargetAngle = Mathf.Clamp(localTargetAngle, -maxAngle, maxAngle);
+
+                var newAngle = Mathf.MoveTowardsAngle(weapon.RotateAngle, localTargetAngle, aimStats.RotateSpeed * dTime);
+                weapon.RotateAngle = newAngle;
+                weaponTransform.localRotation = Quaternion.Euler(0, 0, newAngle);
 
                 ref var shootPointData = ref weapon.ShootPointRuntimeData;
                 shootPointData.Direction = weaponTransform.up;

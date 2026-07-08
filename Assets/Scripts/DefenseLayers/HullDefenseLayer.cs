@@ -5,7 +5,7 @@ namespace DefenseLayers
         public float CurrentArmorPoints;
         public float MaxArmorPoints;
 
-        public void Init(float basePoints, float armorPoints = 0)
+        public void Init(float basePoints, float armorPoints)
         {
             base.InitBase(basePoints);
             CurrentArmorPoints = armorPoints;

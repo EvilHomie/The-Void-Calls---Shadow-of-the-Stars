@@ -11,7 +11,8 @@ namespace Helpers
     public class InitHelper
     {
         public static void InitShip(ShipInstance shipInstance)
-        {            
+        {
+            shipInstance.Init();
             InitShipStats(shipInstance);
             InitShipDefenceLayers(shipInstance);
             InitWeapons(shipInstance);
@@ -71,14 +72,15 @@ namespace Helpers
 
         private static void InitShipDefenceLayers(ShipInstance shipInstance)
         {
-            shipInstance.transform.localScale = Vector3.one * GameConfig.SizeMap[shipInstance.Size];
+            var size = shipInstance.Size;
+            shipInstance.transform.localScale = Vector3.one * GameConfig.SizeMap[size];
 
             var shield = shipInstance.Shield;
-            shield.Init(100, 1, shipInstance.Size);
+            shield.Init(100, 1, size);
             shield.gameObject.layer = GameLayers.ShipLayer;
             shipInstance.OwnColliders.Add(shield.Collider);
 
-            var hull = shipInstance.Hull;
+            var hull = shipInstance.Hull;            
             var hullHP = shipInstance.Equip.Chassis.Hull;
             hull.Init(hullHP, 100);
 
@@ -136,10 +138,14 @@ namespace Helpers
 
             foreach (var slot in shipInstance.WeaponSlots)
             {
+                slot.Init();
+                var weapon = slot.Weapon;
+
+                if(weapon == null) continue;
+
                 var slotSize = GameConfig.SizeMap[slot.Size];
                 slot.transform.localScale = slotSize / shipSize * Vector3.one;
-                var weapon = slot.Weapon;
-                UpdateWeaponStats(weapon);
+                SetWeaponStats(weapon);
                 weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders, 100);
                 weapon.gameObject.layer = GameLayers.WeaponLayer;
 
@@ -178,7 +184,7 @@ namespace Helpers
             foreach (var plume in view.ThrustersBR) plume.Init();
         }
 
-        public static void UpdateWeaponStats(WeaponBase weaponBase)
+        public static void SetWeaponStats(WeaponBase weaponBase)
         {
             var baseAimStats = weaponBase.BaseAimStats;
             weaponBase.RuntimeAimStats = baseAimStats;
@@ -200,7 +206,7 @@ namespace Helpers
                 logicStats.ProjectileLifeTime = baseAimStats.MaxDistance * invProjectileSpeed;
                 logicStats.SpreadTimeMultiplier = baseFireStats.SpreadAngle / 100;
             }
-            else if (weaponBase is MiningDrill miningDrill)
+            else if (weaponBase is ConstantBeam miningDrill)
             {
                 miningDrill.HitDelay = 1f / GameConfig.ConstantBeamHitRate;
             }

@@ -27,7 +27,7 @@ namespace Weapons
             ref readonly var fireStats = ref weapon.RuntimeFireStats;
             ref readonly var logicStats = ref weapon.LogicStats;
 
-            var shootPointData = weapon.ShootPointRuntimeData;
+            ref readonly var shootPointData = ref weapon.ShootPointRuntimeData;
             var spawnPos = shootPointData.Position;
             var baseAimPos = weapon.AimData.AimPosition;
             var distanceToAimPos = Vector2.Distance(baseAimPos, spawnPos);

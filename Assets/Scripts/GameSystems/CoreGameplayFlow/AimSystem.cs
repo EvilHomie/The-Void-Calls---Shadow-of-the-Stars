@@ -1,5 +1,6 @@
 using DI;
 using General;
+using Helpers;
 using Registries;
 using Ships;
 using System.Collections.Generic;
@@ -56,19 +57,29 @@ namespace CoreGameSystems
             _leadMarker.gameObject.SetActive(false);
         }
 
-        public void Execute()
+        public void Execute(float deltaTime)
+        {
+            ProccedPlayerAim(deltaTime);
+            ProceedEnemyAim(deltaTime);
+        }
+
+        private void ProccedPlayerAim(float deltaTime)
         {
             var playerShip = _shipRegistry.PlayerShip;
+            var aimData = playerShip.AimData;
+            aimData.AimPosition = _mouseCursor.WorldPostition;
+            WeaponHelper.AimAtTarget(playerShip, deltaTime);
             UpdateMarkersPosition(playerShip);
+        }
 
+        private void ProceedEnemyAim(float deltaTime)
+        {
             foreach (var ship in _shipRegistry.Lod0Ships)
             {
                 var aimData = ship.AimData;
                 aimData.AimPosition = aimData.TargetRigidBody.position;
-                // нужна будет логика по расчету точки прицеливания = упреждению как у игрока
-                //ref var shipAimData = ref ship.AimData; 
-                //var targetRigidBody = shipAimData.TargetRigidBody;
-                //shipAimData.AimPosition = targetRigidBody.position;
+                WeaponHelper.AimAtTarget(ship, deltaTime);
+                // пока что боты глупые и всегда целятся в центр игрока без упреждения
             }
         }
 
@@ -108,7 +119,7 @@ namespace CoreGameSystems
             var aimData = playerShip.AimData;
             var fastestProjectileSpeed = 0f;
 
-            for (int i = 0; i < playerShip.WeaponSlots.Count; i++)
+            for (int i = 0; i < playerShip.WeaponSlots.Length; i++)
             {
                 var weaponSlot = playerShip.WeaponSlots[i];
 
@@ -141,16 +152,15 @@ namespace CoreGameSystems
         private void UpdateMarkersPosition(ShipInstance shipInstance)
         {
             var aimData = shipInstance.AimData;
-            aimData.AimPosition = _mouseCursor.WorldPostition;
 
-            for (int i = 0; i < shipInstance.WeaponSlots.Count; i++)
+            for (int i = 0; i < shipInstance.WeaponSlots.Length; i++)
             {
                 var weaponSlot = shipInstance.WeaponSlots[i];
 
                 if (!weaponSlot.IsInActiveGroup) continue;
 
                 var weapon = weaponSlot.Weapon;
-                var shootPointData = weapon.ShootPointRuntimeData;
+                ref readonly var shootPointData = ref weapon.ShootPointRuntimeData;
                 var shootPosition = shootPointData.Position;
                 var direction = shootPointData.Direction;
                 var aimStats = weapon.RuntimeAimStats;
@@ -168,7 +178,9 @@ namespace CoreGameSystems
 
         private Vector2 GetTargetLeadPosition(AimData aimData, Rigidbody2D ownRigidBody)
         {
-            var weaponShooterPos = aimData.FastetsBoltWeapon.ShootPointRuntimeData.Position;
+            var fastestBoltWeapon = aimData.FastetsBoltWeapon;
+            ref readonly var shootPointRuntimeData = ref fastestBoltWeapon.ShootPointRuntimeData;
+            var weaponShooterPos = shootPointRuntimeData.Position;
             var targetRB = aimData.TargetRigidBody;
 
             var shooterVelocity = ownRigidBody.linearVelocity;

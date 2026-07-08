@@ -11,20 +11,17 @@ namespace CoreGameSystems
     {
         private WeaponsStrategy _weaponsBehaviour;
         private WeaponRegistry _weaponRegistry;
-        private ShipRegistry _shipRegistry;
 
         [Inject]
-        public void Construct(WeaponRegistry weaponRegistry, ShipRegistry shipRegistry, HitRegistrationSystem hitRegistrationSystem)
+        public void Construct(WeaponRegistry weaponRegistry, HitRegistrationSystem hitRegistrationSystem)
         {
             _weaponRegistry = weaponRegistry;
-            _shipRegistry = shipRegistry;
             _weaponsBehaviour = new WeaponsStrategy(hitRegistrationSystem);
             EventBus.WeaponChangeAttackStateAction += OnWeaponChangeAttackStateAction;
         }
 
-        public void Execute(float deltaTime)
+        public void Execute()
         {
-            Aim(deltaTime);
             ProceedShooting();
         }
         private void OnWeaponChangeAttackStateAction(WeaponBase weapon, bool state)
@@ -38,17 +35,6 @@ namespace CoreGameSystems
             {
                 _weaponRegistry.RequestRemoveOnStopAttack(weapon);
                 _weaponsBehaviour.HandleCancelShoot(weapon);
-            }
-        }
-
-        private void Aim(float dTime)
-        {
-            var playerShip = _shipRegistry.PlayerShip;
-            WeaponHelper.AimAtTarget(playerShip, dTime);
-
-            foreach (var ship in _shipRegistry.Lod0Ships)
-            {
-                WeaponHelper.AimAtTarget(ship, dTime);
             }
         }
 

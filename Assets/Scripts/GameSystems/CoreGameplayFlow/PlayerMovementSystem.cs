@@ -48,7 +48,7 @@ namespace CoreGameSystems
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
             var shipRight = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
             var directionToTarget = aimPos - shipPos;
-            var targetInsideShip = playerShip.HullCollider.OverlapPoint(aimPos);
+            var targetInsideShip = playerShip.Hull.Collider.OverlapPoint(aimPos);
 
             if (intentData.DamperEnabled != movementRuntimeData.InertiaDampingIsActive)
             {

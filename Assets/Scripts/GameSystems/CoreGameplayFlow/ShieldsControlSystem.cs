@@ -34,9 +34,10 @@ namespace CoreGameSystems
         {
             ref var shieldTransformRuntimeData = ref layer.ShieldTransformRuntimeData;
             var transform = layer.transform;
-            shieldTransformRuntimeData.Position = transform.position;
-            shieldTransformRuntimeData.Rotation = transform.rotation;
-            shieldTransformRuntimeData.LossyScale = transform.localScale * GameConfig.SizeMap[layer.Size];
+            shieldTransformRuntimeData.WorldPosition = transform.position;
+            shieldTransformRuntimeData.WorldRotation = transform.rotation;
+            layer.RadiusTransform.localScale = Vector3.one * shieldTransformRuntimeData.Radius;
+            shieldTransformRuntimeData.CurrentLossyScale = shieldTransformRuntimeData.DeffaultLossyScale * shieldTransformRuntimeData.Radius;
         }
 
         private void HandleRegeneration(ShieldDefenseLayer layer, float deltaTime)

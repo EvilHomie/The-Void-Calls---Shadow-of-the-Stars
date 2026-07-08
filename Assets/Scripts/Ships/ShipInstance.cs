@@ -8,11 +8,11 @@ namespace Ships
     public class ShipInstance : MonoBehaviour
     {
         [field: SerializeField] public SizeType Size { get; private set; }
-        [field: SerializeField] public Rigidbody2D Rigidbody { get; private set; }
-        [field: SerializeField] public List<WeaponSlot> WeaponSlots { get; private set; }
+        [field: SerializeField] public Transform WeaponSlotsContainer { get; private set; }
         [field: SerializeField] public ShieldDefenseLayer Shield { get; private set; }
         [field: SerializeField] public HullDefenseLayer Hull { get; private set; }
-        [field: SerializeField] public Collider2D HullCollider { get; private set; }
+        public Rigidbody2D Rigidbody { get; private set; }
+        public WeaponSlot[] WeaponSlots;
         public HashSet<Collider2D> OwnColliders = new();
 
         public bool IsAttacking;
@@ -25,6 +25,12 @@ namespace Ships
         public MovementView MovementView;
 
         public ShipIntentData IntentData;
+
+        public void Init()
+        {
+            WeaponSlots = WeaponSlotsContainer.GetComponentsInChildren<WeaponSlot>();
+            Rigidbody = GetComponent<Rigidbody2D>();
+        }
     }
 }
 

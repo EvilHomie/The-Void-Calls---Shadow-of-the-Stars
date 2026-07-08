@@ -2,9 +2,9 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class MiningDrill : WeaponBase
+    public class ConstantBeam : WeaponBase
     {
-        public override WeaponType WeaponType => WeaponType.MiningDrill;
+        public override WeaponType WeaponType => WeaponType.ConstantBeamWeapon;
         [field: SerializeField] public LineRenderer BeamLineLR { get; private set; }
         [field: SerializeField] public ParticleSystem ShootSpotPS { get; private set; }
 

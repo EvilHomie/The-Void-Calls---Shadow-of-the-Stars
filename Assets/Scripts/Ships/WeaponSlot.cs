@@ -6,11 +6,16 @@ namespace Ships
 {
     public class WeaponSlot : MonoBehaviour
     {
-        [field: SerializeField] public SizeType Size { get; set; }
-        [field: SerializeField] public WeaponBase Weapon { get; set; }
+        [field: SerializeField] public SizeType Size { get; private set; }
+        [field: SerializeField] public WeaponMountType WeaponMountType { get; private set; }
+        public WeaponBase Weapon { get; private set; }
         public WeaponGroup WeaponGroup;
-        public WeaponMountType WeaponMountType;
         public bool IsInActiveGroup;
+
+        public void Init()
+        {
+            Weapon = GetComponentInChildren<WeaponBase>();
+        }
     }
 }
 

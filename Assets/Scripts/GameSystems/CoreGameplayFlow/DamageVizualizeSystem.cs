@@ -168,8 +168,8 @@ namespace CoreGameSystems
             ref readonly var shieldTransformRuntimeData = ref effect.OwnerShield.ShieldTransformRuntimeData;
 
             var effectTransform = effect.Transform;
-            effectTransform.SetPositionAndRotation(shieldTransformRuntimeData.Position, shieldTransformRuntimeData.Rotation);
-            effectTransform.localScale = shieldTransformRuntimeData.LossyScale;
+            effectTransform.SetPositionAndRotation(shieldTransformRuntimeData.WorldPosition, shieldTransformRuntimeData.WorldRotation);
+            effectTransform.localScale = shieldTransformRuntimeData.CurrentLossyScale;
             var newAlpha = effect.RemainingLifeTime * _collisionEffectDurationReversed;
             effect.SpriteAlpha = newAlpha;
             var color = effect.SpriteRenderer.color;

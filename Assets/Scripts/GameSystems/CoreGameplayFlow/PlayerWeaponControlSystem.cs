@@ -43,6 +43,12 @@ public class PlayerWeaponControlSystem : MonoBehaviour
         {
             foreach (var slot in playerShip.WeaponSlots)
             {
+                if (slot.Weapon == null)
+                {
+                    slot.IsInActiveGroup = false;
+                    continue;
+                }
+
                 bool isInNewGroup = slot.WeaponGroup.ContainsAny(newActiveGroup);
                 slot.IsInActiveGroup = isInNewGroup;
             }
@@ -54,6 +60,13 @@ public class PlayerWeaponControlSystem : MonoBehaviour
         foreach (var slot in playerShip.WeaponSlots)
         {
             var weapon = slot.Weapon;
+
+            if (weapon == null)
+            {
+                slot.IsInActiveGroup = false;
+                continue;
+            }
+
             bool isInNewGroup = slot.WeaponGroup.ContainsAny(newActiveGroup);
             bool isInOldGroup = slot.WeaponGroup.ContainsAny(lastActiveGroup);
 
@@ -83,7 +96,7 @@ public class PlayerWeaponControlSystem : MonoBehaviour
         {
             bool isInGroup = slot.WeaponGroup.ContainsAny(playerShip.ActiveWeaponGroup);
 
-            if (!isInGroup) continue;
+            if (!isInGroup || slot.Weapon == null) continue;
 
             EventBus.WeaponChangeAttackStateAction?.Invoke(slot.Weapon, isAttack);
         }

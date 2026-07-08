@@ -15,8 +15,11 @@ namespace Weapons
         public SizeType Size { get; private set; }
         public string Name { get; private set; }
         public Transform Transform { get; private set; }
+        public Transform SlotTransform { get; private set; }
         public AimData AimData { get; private set; }
         public HashSet<Collider2D> IgnoredColliders { get; private set; }
+
+        public float RotateAngle;
 
         public float HullPoints;
         public ShootPointRuntimeData ShootPointRuntimeData;
@@ -30,8 +33,11 @@ namespace Weapons
             AimData = targetData;
             Size = size;
             IgnoredColliders = ignoredColliders;
+            var transform = this.transform;
+            SlotTransform = transform.parent;
             Transform = transform;
-            HullDefenseLayer.Init(hullPoints);
+            HullDefenseLayer.Init(hullPoints, 0);
+            RotateAngle = transform.localEulerAngles.z;
         }
     }
 
