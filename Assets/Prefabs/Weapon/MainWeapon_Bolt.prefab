@@ -5101,7 +5101,7 @@ GameObject:
   - component: {fileID: 11203282507777302}
   - component: {fileID: 4236350825165343440}
   m_Layer: 10
-  m_Name: BoltRepeater_MK1
+  m_Name: MainWeapon_Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -9,6 +9,7 @@ namespace Weapons
 {
     public abstract class WeaponBase : MonoBehaviour, IShipModule
     {
+        [field: SerializeField] public WeaponMountType WeaponMountType { get; private set; }
         [field: SerializeField] public Transform ShootPointTransform { get; private set; }
         [field: SerializeField] public HullDefenseLayer HullDefenseLayer { get; private set; }
         public abstract WeaponType WeaponType { get; }

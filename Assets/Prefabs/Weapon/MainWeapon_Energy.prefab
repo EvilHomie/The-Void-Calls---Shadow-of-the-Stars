@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 277715304110908122}
   - component: {fileID: 8512886715161163408}
   m_Layer: 8
-  m_Name: MiningDrill_Mk1
+  m_Name: MainWeapon_Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,8 +198,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1042c211b1b8d64c930459236224ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <WeaponMountType>k__BackingField: 0
   <ShootPointTransform>k__BackingField: {fileID: 5640150070507161033}
   <HullDefenseLayer>k__BackingField: {fileID: 456121997974708331}
+  RotateAngle: 0
   HullPoints: 0
   ShootPointRuntimeData:
     Position: {x: 0, y: 0}
@@ -308,7 +310,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: a24f11afa60473543bf2c09d3c92ac94, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1206c8dff6a73374b8e8b8823b08d001, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -355,8 +357,8 @@ PolygonCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.128, y: 0.172}
+    pivot: {x: 0.5, y: 0.3}
+    oldSize: {x: 0.128, y: 0.192}
     newSize: {x: 0.17066666, y: 0.22933333}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -498,7 +500,7 @@ Transform:
   m_GameObject: {fileID: 9048117374568266560}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.1, z: -0.1}
+  m_LocalPosition: {x: -0, y: 0.1271, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

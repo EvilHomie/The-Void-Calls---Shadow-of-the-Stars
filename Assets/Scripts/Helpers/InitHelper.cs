@@ -140,11 +140,11 @@ namespace Helpers
             {
                 slot.Init();
                 var weapon = slot.Weapon;
+                var slotSize = GameConfig.SizeMap[slot.Size];
+                slot.transform.localScale = slotSize / shipSize * Vector3.one;
 
                 if(weapon == null) continue;
 
-                var slotSize = GameConfig.SizeMap[slot.Size];
-                slot.transform.localScale = slotSize / shipSize * Vector3.one;
                 SetWeaponStats(weapon);
                 weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders, 100);
                 weapon.gameObject.layer = GameLayers.WeaponLayer;
