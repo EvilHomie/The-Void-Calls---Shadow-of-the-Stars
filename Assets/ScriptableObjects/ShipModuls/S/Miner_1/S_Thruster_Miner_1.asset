@@ -16,3 +16,6 @@ MonoBehaviour:
   <Size>k__BackingField: 1
   <StrafeThrust>k__BackingField: 1000
   <RotateThrust>k__BackingField: 300
+  ThrustersMultipliers:
+    StrafeThrustMultiplier: 0
+    RotateThrustMultiplier: 0

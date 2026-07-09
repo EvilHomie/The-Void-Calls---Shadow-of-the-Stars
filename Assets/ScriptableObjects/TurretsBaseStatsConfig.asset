@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720609c9ee4e96e49a1874c1f9f2635b, type: 3}
+  m_Name: TurretsBaseStatsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponBaseStatsConfig
+  <BaseStats>k__BackingField:
+  - Name: MiningDrill
+    <WeaponType>k__BackingField: 0
+    <StatsBySize>k__BackingField:
+    - Size: S
+      <SizeType>k__BackingField: 0
+      <GeneralStats>k__BackingField:
+        <Distance>k__BackingField: 3
+        <RotateAngle>k__BackingField: 15
+        <RotateSpeed>k__BackingField: 30
+        <DamageEnergy>k__BackingField: 2
+        <DamageKinetic>k__BackingField: 1
+        <AsteroidMultiplier>k__BackingField: 2
+        <HullPoints>k__BackingField: 100
+        <ArmorPoints>k__BackingField: 100
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 0
+        <SpreadAngle>k__BackingField: 0
+        <ProjectileSpeed>k__BackingField: 0
+        <PoolReference>k__BackingField: {fileID: 0}
+    - Size: M
+      <SizeType>k__BackingField: 1
+      <GeneralStats>k__BackingField:
+        <Distance>k__BackingField: 6
+        <RotateAngle>k__BackingField: 15
+        <RotateSpeed>k__BackingField: 30
+        <DamageEnergy>k__BackingField: 4
+        <DamageKinetic>k__BackingField: 2
+        <AsteroidMultiplier>k__BackingField: 2
+        <HullPoints>k__BackingField: 200
+        <ArmorPoints>k__BackingField: 200
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 0
+        <SpreadAngle>k__BackingField: 0
+        <ProjectileSpeed>k__BackingField: 0
+        <PoolReference>k__BackingField: {fileID: 0}
+    - Size: L
+      <SizeType>k__BackingField: 2
+      <GeneralStats>k__BackingField:
+        <Distance>k__BackingField: 12
+        <RotateAngle>k__BackingField: 15
+        <RotateSpeed>k__BackingField: 30
+        <DamageEnergy>k__BackingField: 8
+        <DamageKinetic>k__BackingField: 4
+        <AsteroidMultiplier>k__BackingField: 4
+        <HullPoints>k__BackingField: 400
+        <ArmorPoints>k__BackingField: 400
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 0
+        <SpreadAngle>k__BackingField: 0
+        <ProjectileSpeed>k__BackingField: 0
+        <PoolReference>k__BackingField: {fileID: 0}
+  - Name: BoltRepeater
+    <WeaponType>k__BackingField: 1
+    <StatsBySize>k__BackingField:
+    - Size: S
+      <SizeType>k__BackingField: 0
+      <GeneralStats>k__BackingField:
+        <Distance>k__BackingField: 3
+        <RotateAngle>k__BackingField: 20
+        <RotateSpeed>k__BackingField: 45
+        <DamageEnergy>k__BackingField: 2
+        <DamageKinetic>k__BackingField: 4
+        <AsteroidMultiplier>k__BackingField: 1
+        <HullPoints>k__BackingField: 100
+        <ArmorPoints>k__BackingField: 100
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 6
+        <SpreadAngle>k__BackingField: 1
+        <ProjectileSpeed>k__BackingField: 3
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+    - Size: M
+      <SizeType>k__BackingField: 1
+      <GeneralStats>k__BackingField:
+        <Distance>k__BackingField: 6
+        <RotateAngle>k__BackingField: 20
+        <RotateSpeed>k__BackingField: 45
+        <DamageEnergy>k__BackingField: 4
+        <DamageKinetic>k__BackingField: 8
+        <AsteroidMultiplier>k__BackingField: 1
+        <HullPoints>k__BackingField: 200
+        <ArmorPoints>k__BackingField: 200
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 5
+        <SpreadAngle>k__BackingField: 1
+        <ProjectileSpeed>k__BackingField: 3
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+    - Size: L
+      <SizeType>k__BackingField: 2
+      <GeneralStats>k__BackingField:
+        <Distance>k__BackingField: 12
+        <RotateAngle>k__BackingField: 20
+        <RotateSpeed>k__BackingField: 45
+        <DamageEnergy>k__BackingField: 8
+        <DamageKinetic>k__BackingField: 16
+        <AsteroidMultiplier>k__BackingField: 1
+        <HullPoints>k__BackingField: 400
+        <ArmorPoints>k__BackingField: 400
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 4
+        <SpreadAngle>k__BackingField: 1
+        <ProjectileSpeed>k__BackingField: 3
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}

@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8130819136874071256}
   - component: {fileID: 4803701623172086643}
-  m_Layer: 8
+  - component: {fileID: 314685931335667621}
+  m_Layer: 12
   m_Name: LineRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,6 +152,18 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &314685931335667621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88421062009398551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d67672eb002f60459df0ec76204558d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapons.BeamLineRenderer
 --- !u!1 &731153723811523052
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +175,9 @@ GameObject:
   - component: {fileID: 7148186069570526665}
   - component: {fileID: 3388147872104161420}
   - component: {fileID: 2567772045140854138}
-  m_Layer: 8
+  - component: {fileID: 8267872988146235497}
+  - component: {fileID: 7069619159300477594}
+  m_Layer: 12
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +193,7 @@ Transform:
   m_GameObject: {fileID: 731153723811523052}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.1158, z: -0.1}
+  m_LocalPosition: {x: -0, y: 0.1158, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4987,6 +5002,30 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &8267872988146235497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731153723811523052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e896dbdc8a00c640a7668e98c1df030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapons.ShootPoint
+--- !u!114 &7069619159300477594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731153723811523052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed5f75ab979f6b48b398c711ac77528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapons.ShootEffect
 --- !u!1 &1238404758664919056
 GameObject:
   m_ObjectHideFlags: 0
@@ -4997,8 +5036,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3271502584528632669}
   - component: {fileID: 1463236555450576836}
-  m_Layer: 8
-  m_Name: Turret_Energy
+  m_Layer: 12
+  m_Name: Turret_MiningDrill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5034,33 +5073,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1042c211b1b8d64c930459236224ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponMountType>k__BackingField: 1
-  <ShootPointTransform>k__BackingField: {fileID: 7148186069570526665}
-  <HullDefenseLayer>k__BackingField: {fileID: 3754037698176706684}
+  <WeaponType>k__BackingField: 0
+  <ModuleType>k__BackingField: 1
   RotateAngle: 0
-  HullPoints: 0
   ShootPointRuntimeData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
-  BaseDamage:
-    DamageEnergy: 2
-    DamageKinetic: 1
-    AsteroidMultiplier: 2
   RuntimeDamage:
     DamageShield: 0
     DamageArmor: 0
     DamageHull: 0
     DamageAsteroid: 0
-  BaseAimStats:
-    MaxDistance: 10
-    MaxRotateAngle: 180
-    RotateSpeed: 45
   RuntimeAimStats:
     MaxDistance: 0
     MaxRotateAngle: 0
     RotateSpeed: 0
-  <BeamLineLR>k__BackingField: {fileID: 4803701623172086643}
-  <ShootSpotPS>k__BackingField: {fileID: 3388147872104161420}
   NextHitTime: 0
   HitDelay: 0
 --- !u!1 &2140104452513164881
@@ -5075,7 +5102,7 @@ GameObject:
   - component: {fileID: 3991523156337653874}
   - component: {fileID: 7313792763378952569}
   - component: {fileID: 3754037698176706684}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,6 +11,8 @@ namespace ShipModules
         [field: SerializeField] public float StrafeThrust { get; private set; }
         [field: SerializeField] public float RotateThrust { get; private set; }
 
+        public ModuleType ModuleType => ModuleType.Thruster;
+
         public ThrustersMultipliers ThrustersMultipliers;
     }
 

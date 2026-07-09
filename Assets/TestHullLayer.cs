@@ -11,7 +11,7 @@ public class TestHullLayer : MonoBehaviour
 
     private void Start()
     {
-        hullDefenseLayer.Init(hullPoints, armorPoints);
+        //hullDefenseLayer.Init(hullPoints, armorPoints);
         //shieldDefenseLayer.Init(ShieldPoints, 5);
     }
 

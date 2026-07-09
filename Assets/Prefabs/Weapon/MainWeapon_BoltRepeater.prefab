@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1993834376407665666}
-  m_Layer: 10
+  - component: {fileID: 3705536624858096294}
+  m_Layer: 12
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,6 +32,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 11203282507777302}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3705536624858096294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3366958931173237647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e896dbdc8a00c640a7668e98c1df030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapons.ShootPoint
 --- !u!1 &5971323083723899898
 GameObject:
   m_ObjectHideFlags: 0
@@ -42,7 +55,8 @@ GameObject:
   - component: {fileID: 5419636110986277612}
   - component: {fileID: 3926388394405067671}
   - component: {fileID: 7108464027045128436}
-  m_Layer: 10
+  - component: {fileID: 3676982107539147946}
+  m_Layer: 12
   m_Name: ShootEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4867,6 +4881,18 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &3676982107539147946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5971323083723899898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ed5f75ab979f6b48b398c711ac77528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapons.ShootEffect
 --- !u!1 &7141259213136177515
 GameObject:
   m_ObjectHideFlags: 0
@@ -4879,7 +4905,7 @@ GameObject:
   - component: {fileID: 6903474741279475664}
   - component: {fileID: 4118397664315645279}
   - component: {fileID: 620716618695523076}
-  m_Layer: 10
+  m_Layer: 12
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5100,8 +5126,8 @@ GameObject:
   m_Component:
   - component: {fileID: 11203282507777302}
   - component: {fileID: 4236350825165343440}
-  m_Layer: 10
-  m_Name: MainWeapon_Bolt
+  m_Layer: 12
+  m_Name: MainWeapon_BoltRepeater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5137,42 +5163,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 722517a84e2f9d64faa6a878fc048398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ShootPointTransform>k__BackingField: {fileID: 1993834376407665666}
-  <HullDefenseLayer>k__BackingField: {fileID: 620716618695523076}
-  HullPoints: 0
+  <WeaponType>k__BackingField: 1
+  <ModuleType>k__BackingField: 0
+  RotateAngle: 0
   ShootPointRuntimeData:
     Position: {x: 0, y: 0}
     Direction: {x: 0, y: 0}
-  BaseDamage:
-    DamageEnergy: 1
-    DamageKinetic: 2
-    AsteroidMultiplier: 0.5
   RuntimeDamage:
     DamageShield: 0
     DamageArmor: 0
     DamageHull: 0
     DamageAsteroid: 0
-  BaseAimStats:
-    MaxDistance: 10
-    MaxRotateAngle: 15
-    RotateSpeed: 45
   RuntimeAimStats:
     MaxDistance: 0
     MaxRotateAngle: 0
     RotateSpeed: 0
-  projectilePool: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
-  <ShootSpotPS>k__BackingField: {fileID: 3926388394405067671}
-  BaseFireStats:
-    FireRate: 7
-    SpreadAngle: 1
-    ProjectileSpeed: 14
   RuntimeFireStats:
     FireRate: 0
     SpreadAngle: 0
     ProjectileSpeed: 0
-  NextShootTime: 0
   LogicStats:
     ShootDelay: 0
     InvProjectileSpeed: 0
     ProjectileLifeTime: 0
     SpreadTimeMultiplier: 0
+  NextShootTime: 0

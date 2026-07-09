@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class BoltRepeaterStrategy : IWeaponBehaviour<BoltRepeater>
+    public class ProjectileWeaponStrategy : IWeaponBehaviour<ProjectileWeapon>
     {
-        public void HandleStartShoot(BoltRepeater weapon)
+        public void HandleStartShoot(ProjectileWeapon weapon)
         {
             ProcessShooting(weapon);
         }
-        public void HandleCancelShoot(BoltRepeater weapon)
+        public void HandleCancelShoot(ProjectileWeapon weapon)
         {
         }
 
-        public void ProcessShooting(BoltRepeater weapon)
+        public void ProcessShooting(ProjectileWeapon weapon)
         {
             var nextShootTime = weapon.NextShootTime;
             var coreTime = GameFlowSystem.CoreTime;
@@ -24,8 +24,8 @@ namespace Weapons
                 return;
             }
 
-            ref readonly var fireStats = ref weapon.RuntimeFireStats;
             ref readonly var logicStats = ref weapon.LogicStats;
+            ref readonly var fireStats = ref weapon.RuntimeFireStats;
 
             ref readonly var shootPointData = ref weapon.ShootPointRuntimeData;
             var spawnPos = shootPointData.Position;
@@ -51,7 +51,7 @@ namespace Weapons
                 spreadedDirection,
                 weapon.RuntimeDamage);
 
-            weapon.ShootSpotPS.Emit(1);
+            weapon.ShootEffectPS.Emit(1);
             weapon.NextShootTime = GameFlowSystem.CoreTime + logicStats.ShootDelay;
 
             EventBus.BoltWeaponShootAction?.Invoke(in shootData);

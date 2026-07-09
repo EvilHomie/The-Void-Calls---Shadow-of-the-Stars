@@ -16,6 +16,8 @@ namespace ShipModules
         [field: SerializeField] public float RotateDrag { get; private set; }
 
         public ChassisMultipliers ChassisMultipliers;
+
+        public ModuleType ModuleType => ModuleType.Chassis;
     }
 
     [Serializable]

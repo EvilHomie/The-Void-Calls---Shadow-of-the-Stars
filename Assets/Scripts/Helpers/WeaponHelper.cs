@@ -97,7 +97,7 @@ namespace Helpers
                 return new HitResult(true, collider, hitPoint);
             }
 
-            var defenseCollider = Physics2D.OverlapPoint(aimPos, GameLayers.ShipMask);
+            var defenseCollider = Physics2D.OverlapPoint(aimPos, GameLayers.DamageableMask);
 
             if (!defenseCollider || ignoredColliders.Contains(defenseCollider))
             {

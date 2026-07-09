@@ -29,7 +29,7 @@ namespace Weapons
         private void RegisterInvokers()
         {
             _invokers[WeaponType.MiningDrill] = CreateInvoker(new ConstantBeamStrategy(_hitRegistrationSystem));
-            _invokers[WeaponType.BoltRepeater] = CreateInvoker(new BoltRepeaterStrategy());
+            _invokers[WeaponType.BoltRepeater] = CreateInvoker(new ProjectileWeaponStrategy());
         }
 
         private WeaponInvoker CreateInvoker<TWeapon>(IWeaponBehaviour<TWeapon> behaviour) where TWeapon : WeaponBase

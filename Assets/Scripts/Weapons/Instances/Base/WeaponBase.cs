@@ -9,10 +9,10 @@ namespace Weapons
 {
     public abstract class WeaponBase : MonoBehaviour, IShipModule
     {
-        [field: SerializeField] public WeaponMountType WeaponMountType { get; private set; }
-        [field: SerializeField] public Transform ShootPointTransform { get; private set; }
-        [field: SerializeField] public HullDefenseLayer HullDefenseLayer { get; private set; }
-        public abstract WeaponType WeaponType { get; }
+        [field: SerializeField] public WeaponType WeaponType { get; private set; }
+        [field: SerializeField] public ModuleType ModuleType { get; private set; }
+        public Transform ShootPointTransform { get; private set; }
+        public HullDefenseLayer HullDefenseLayer { get; private set; }
         public SizeType Size { get; private set; }
         public string Name { get; private set; }
         public Transform Transform { get; private set; }
@@ -21,15 +21,11 @@ namespace Weapons
         public HashSet<Collider2D> IgnoredColliders { get; private set; }
 
         public float RotateAngle;
-
-        public float HullPoints;
         public ShootPointRuntimeData ShootPointRuntimeData;
-        public WeaponBaseDamage BaseDamage;
         public WeaponRuntimeDamage RuntimeDamage;
-        public WeaponAimStats BaseAimStats;
         public WeaponAimStats RuntimeAimStats;
 
-        public void InitBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders, float hullPoints)
+        public void InitBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders)
         {
             AimData = targetData;
             Size = size;
@@ -37,9 +33,13 @@ namespace Weapons
             var transform = this.transform;
             SlotTransform = transform.parent;
             Transform = transform;
-            HullDefenseLayer.Init(hullPoints, 0);
+            HullDefenseLayer = GetComponentInChildren<HullDefenseLayer>();
+            ShootPointTransform = GetComponentInChildren<ShootPoint>().transform;
             RotateAngle = transform.localEulerAngles.z;
+            OnInitialize();
         }
+
+        protected abstract void OnInitialize();
     }
 
     [Serializable]

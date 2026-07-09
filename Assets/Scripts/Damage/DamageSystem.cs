@@ -61,6 +61,16 @@ namespace CoreGameSystems
             {
                 layer.CurrentBasePoints = 0;
                 layer.Collider.enabled = false;
+
+                if (layer.OwnModule == ModuleType.Chassis)
+                {
+                    layer.transform.root.gameObject.SetActive(false);
+                }
+                else
+                {
+                    layer.transform.gameObject.SetActive(false);
+                }
+                
                 Debug.LogError("Hull Destroyed");
             }
         }

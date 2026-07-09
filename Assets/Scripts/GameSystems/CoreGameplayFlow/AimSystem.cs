@@ -130,9 +130,10 @@ namespace CoreGameSystems
 
                 var weapon = weaponSlot.Weapon;
 
-                if (weapon is not BoltRepeater boltWeapon) continue;
+                if (weapon is not ProjectileWeapon boltWeapon) continue;
 
-                var projectileSpeed = boltWeapon.RuntimeFireStats.ProjectileSpeed;
+                ref readonly var fireStats = ref boltWeapon.RuntimeFireStats;
+                var projectileSpeed = fireStats.ProjectileSpeed;
 
                 if (fastestProjectileSpeed < projectileSpeed)
                 {
@@ -163,7 +164,7 @@ namespace CoreGameSystems
                 ref readonly var shootPointData = ref weapon.ShootPointRuntimeData;
                 var shootPosition = shootPointData.Position;
                 var direction = shootPointData.Direction;
-                var aimStats = weapon.RuntimeAimStats;
+                ref readonly var aimStats = ref weapon.RuntimeAimStats;
 
                 var distanceToAimPosition = Vector2.Distance(shipInstance.AimData.AimPosition, shootPosition);
                 var aimDistance = Mathf.Min(aimStats.MaxDistance, distanceToAimPosition);

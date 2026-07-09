@@ -14,6 +14,7 @@ namespace ShipModules
         [field: SerializeField] public float BoostMaxTime { get; private set; }
 
         public MainEngineMultipliers MainEngineMultipliers;
+        public ModuleType ModuleType => ModuleType.MainEngine;
     }
 
     [Serializable]

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GameConfig
+public class GameConfig : MonoBehaviour
 {
     public const float WorldUnitMod = 0.01f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
     public const float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
@@ -14,7 +14,7 @@ public static class GameConfig
     public const float ClusterAsteroidLinearDamping = 0.2f;
     public const float DriftingAsteroidAngularDamping = 0;
     public const float DriftingAsteroidLinearDamping = 0;
-    public const int MaxMainWeaponSlotsCount = 5;
+    public const int MaxMainWeaponSlotsCount = 20;
     public const float ConstantBeamHitRate = 15;
 
     public static readonly Dictionary<AsteroidType, float> AsteroidMassModByType = new() // доп модификатор массы в зависимости от типа
@@ -34,6 +34,20 @@ public static class GameConfig
         {SizeType.L, 4 },
         {SizeType.XL, 8 }
     };
+
+    [SerializeField] WeaponBaseStatsConfig mainWeaponsBaseStats;
+    [SerializeField] WeaponBaseStatsConfig turretsBaseStats;
+
+    public static WeaponBaseStatsConfig MainWeaponsBaseStats { get; private set; }
+    public static WeaponBaseStatsConfig TurretsBaseStats { get; private set; }
+
+    private void Awake()
+    {
+        mainWeaponsBaseStats.FillCollection();
+        turretsBaseStats.FillCollection();
+        MainWeaponsBaseStats = mainWeaponsBaseStats;
+        TurretsBaseStats = turretsBaseStats;
+    }
 }
 
 //public static class SpriteSortingOrders

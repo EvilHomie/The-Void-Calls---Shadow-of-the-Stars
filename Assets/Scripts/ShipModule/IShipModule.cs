@@ -5,6 +5,7 @@ namespace ShipModules
     public interface IShipModule
     {
         public SizeType Size { get; }
+        public ModuleType ModuleType { get; }
         public string Name { get; }
     }
 }
@@ -16,4 +17,14 @@ public enum SizeType
     M,
     L,
     XL
+}
+
+[Serializable]
+public enum ModuleType
+{
+    MainWeapon,
+    Turret,
+    Thruster,
+    Chassis,
+    MainEngine
 }

@@ -1,6 +1,7 @@
 using Asteroids;
 using DefenseLayers;
 using Ships;
+using System;
 using UnityEngine;
 using Weapons;
 
@@ -77,9 +78,9 @@ namespace Helpers
             shield.gameObject.layer = GameLayers.ShipLayer;
             shipInstance.OwnColliders.Add(shield.Collider);
 
-            var hull = shipInstance.Hull;            
+            var hull = shipInstance.Hull;
             var hullHP = shipInstance.Equip.Chassis.Hull;
-            hull.Init(hullHP, 100);
+            hull.Init(hullHP, 100, ModuleType.Chassis);
 
             hull.gameObject.layer = GameLayers.ShipLayer;
             shipInstance.OwnColliders.Add(hull.Collider);
@@ -137,15 +138,18 @@ namespace Helpers
                 slot.Init();
                 var weapon = slot.Weapon;
 
-                if(weapon == null) continue;
+                if (weapon == null) continue;
 
+                weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders);
                 SetWeaponStats(weapon);
-                weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders, 100);
+
+
+
                 weapon.gameObject.layer = GameLayers.WeaponLayer;
 
-                if (weapon.TryGetComponent<HullDefenseLayer>(out var hullDefenseLayer))
+                if (weapon.HullDefenseLayer != null)
                 {
-                    shipInstance.OwnColliders.Add(hullDefenseLayer.Collider);
+                    shipInstance.OwnColliders.Add(weapon.HullDefenseLayer.Collider);
                 }
 
                 if (weapon is IRigidBodyDependentWeapon dependentWeapon)
@@ -180,27 +184,50 @@ namespace Helpers
 
         public static void SetWeaponStats(WeaponBase weaponBase)
         {
-            var baseAimStats = weaponBase.BaseAimStats;
-            weaponBase.RuntimeAimStats = baseAimStats;
-            var baseDamage = weaponBase.BaseDamage;
-            ref var runtimeDamage = ref weaponBase.RuntimeDamage;
-            runtimeDamage.DamageArmor = baseDamage.DamageKinetic;
-            runtimeDamage.DamageShield = baseDamage.DamageEnergy;
-            runtimeDamage.DamageHull = baseDamage.DamageKinetic + baseDamage.DamageEnergy;
-            runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull * baseDamage.AsteroidMultiplier;
+            var moduleType = weaponBase.ModuleType;
 
-            if (weaponBase is BoltRepeater boltRepeater)
+            var statsConfig = moduleType switch
             {
-                var baseFireStats = boltRepeater.BaseFireStats;
-                boltRepeater.RuntimeFireStats = baseFireStats;
-                ref var logicStats = ref boltRepeater.LogicStats;
-                logicStats.ShootDelay = 1f / baseFireStats.FireRate;
-                var invProjectileSpeed = 1f / baseFireStats.ProjectileSpeed;
+                ModuleType.MainWeapon => GameConfig.MainWeaponsBaseStats,
+                ModuleType.Turret => GameConfig.TurretsBaseStats,
+                _ => throw new Exception($" Weapon {weaponBase.Name} has wrong module Type= {moduleType}")
+            };
+
+            var baseStats = statsConfig.GetStats(weaponBase.WeaponType, weaponBase.Size);
+            var generalStats = baseStats.GeneralStats;
+
+            ref var runtimeAimStats = ref weaponBase.RuntimeAimStats;
+            runtimeAimStats.MaxDistance = generalStats.Distance;
+            runtimeAimStats.MaxRotateAngle = generalStats.RotateAngle;
+            runtimeAimStats.RotateSpeed = generalStats.RotateSpeed;
+
+            ref var runtimeDamage = ref weaponBase.RuntimeDamage;
+            runtimeDamage.DamageArmor = generalStats.DamageKinetic;
+            runtimeDamage.DamageShield = generalStats.DamageEnergy;
+            runtimeDamage.DamageHull = generalStats.DamageKinetic + generalStats.DamageEnergy;
+            runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull * generalStats.AsteroidMultiplier;
+
+            weaponBase.HullDefenseLayer.Init(generalStats.HullPoints, generalStats.ArmorPoints, moduleType);
+
+            if (weaponBase is ProjectileWeapon projectileWeapon)
+            {
+                var projectileWeaponStats = baseStats.ProjectileWeaponStats;
+
+                ref var runtimeFireStats = ref projectileWeapon.RuntimeFireStats;
+                runtimeFireStats.FireRate = projectileWeaponStats.FireRate;
+                runtimeFireStats.SpreadAngle = projectileWeaponStats.SpreadAngle;
+                runtimeFireStats.ProjectileSpeed = projectileWeaponStats.ProjectileSpeed;
+
+                ref var logicStats = ref projectileWeapon.LogicStats;
+                logicStats.ShootDelay = 1f / projectileWeaponStats.FireRate;
+                var invProjectileSpeed = 1f / projectileWeaponStats.ProjectileSpeed;
                 logicStats.InvProjectileSpeed = invProjectileSpeed;
-                logicStats.ProjectileLifeTime = baseAimStats.MaxDistance * invProjectileSpeed;
-                logicStats.SpreadTimeMultiplier = baseFireStats.SpreadAngle / 100;
+                logicStats.ProjectileLifeTime = generalStats.Distance * invProjectileSpeed;
+                logicStats.SpreadTimeMultiplier = projectileWeaponStats.SpreadAngle / 100;
+
+                projectileWeapon.Init(projectileWeaponStats.PoolReference.Id);
             }
-            else if (weaponBase is MiningDrill miningDrill)
+            else if (weaponBase is ConstantBeamWeapon miningDrill)
             {
                 miningDrill.HitDelay = 1f / GameConfig.ConstantBeamHitRate;
             }

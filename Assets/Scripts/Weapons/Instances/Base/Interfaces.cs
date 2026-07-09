@@ -8,8 +8,9 @@ namespace Weapons
         void Init(Rigidbody2D rb);
     }
 
-    public interface IConstantBeamWeapon
+    public interface IPoolDependentWeapon
     {
-       
+        public uint ProjectilePoolId { get; }
+        void Init(uint poolId);
     }
 }
