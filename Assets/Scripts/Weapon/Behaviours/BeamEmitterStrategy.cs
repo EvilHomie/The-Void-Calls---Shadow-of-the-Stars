@@ -1,16 +1,16 @@
 namespace Weapons
 {
-    public class BeamEmitterStrategy : IWeaponBehaviour<BeamEmitter>
+    public class BeamEmitterStrategy : IWeaponBehaviour<PulseLaser>
     {
-        public void HandleStartShoot(BeamEmitter weapon)
+        public void HandleStartShoot(PulseLaser weapon)
         {
         }
 
-        public void HandleCancelShoot(BeamEmitter weapon)
+        public void HandleCancelShoot(PulseLaser weapon)
         {
         }
 
-        public void ProcessShooting(BeamEmitter weapon)
+        public void ProcessShooting(PulseLaser weapon)
         {
         }
     }

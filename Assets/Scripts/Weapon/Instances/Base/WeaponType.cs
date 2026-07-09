@@ -1,6 +1,8 @@
 public enum WeaponType
 {
-    ConstantBeamWeapon,
-    BoltWeapon,
-    PulseBeamWeapon,
+    MiningDrill,
+    BoltRepeater,
+    PulseLaser,
+    BeamEmitter,
+    ShardBattery,
 }

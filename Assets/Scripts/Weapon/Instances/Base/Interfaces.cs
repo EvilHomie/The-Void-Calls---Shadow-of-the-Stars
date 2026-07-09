@@ -7,4 +7,9 @@ namespace Weapons
         public Rigidbody2D ShipRB { get; }
         void Init(Rigidbody2D rb);
     }
+
+    public interface IConstantBeamWeapon
+    {
+       
+    }
 }

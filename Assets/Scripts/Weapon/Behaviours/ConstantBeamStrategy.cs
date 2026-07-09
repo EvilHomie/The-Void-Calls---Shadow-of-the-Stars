@@ -5,29 +5,29 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class MiningDrillStrategy : IWeaponBehaviour<ConstantBeam>
+    public class ConstantBeamStrategy : IWeaponBehaviour<MiningDrill>
     {
         private readonly HitRegistrationSystem _hitRegistrationSystem;
 
-        public MiningDrillStrategy(HitRegistrationSystem hitRegistrationSystem)
+        public ConstantBeamStrategy(HitRegistrationSystem hitRegistrationSystem)
         {
             _hitRegistrationSystem = hitRegistrationSystem;
         }
 
-        public void HandleStartShoot(ConstantBeam weapon)
+        public void HandleStartShoot(MiningDrill weapon)
         {
             weapon.BeamLineLR.enabled = true;
             weapon.ShootSpotPS.Play();
             ProcessShooting(weapon);
         }
 
-        public void HandleCancelShoot(ConstantBeam weapon)
+        public void HandleCancelShoot(MiningDrill weapon)
         {
             weapon.BeamLineLR.enabled = false;
             weapon.ShootSpotPS.Stop();
         }
 
-        public void ProcessShooting(ConstantBeam weapon)
+        public void ProcessShooting(MiningDrill weapon)
         {
             ref readonly var aimStats = ref weapon.RuntimeAimStats;
             var nextHitTime = weapon.NextHitTime;

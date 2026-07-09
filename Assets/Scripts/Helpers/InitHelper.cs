@@ -1,7 +1,5 @@
 using Asteroids;
-using CoreGameSystems;
 using DefenseLayers;
-using Registries;
 using Ships;
 using UnityEngine;
 using Weapons;
@@ -73,7 +71,6 @@ namespace Helpers
         private static void InitShipDefenceLayers(ShipInstance shipInstance)
         {
             var size = shipInstance.Size;
-            shipInstance.transform.localScale = Vector3.one * GameConfig.SizeMap[size];
 
             var shield = shipInstance.Shield;
             shield.Init(100, 1, size);
@@ -134,14 +131,11 @@ namespace Helpers
         public static void InitWeapons(ShipInstance shipInstance)
         {
             var shipRb = shipInstance.Rigidbody;
-            var shipSize = GameConfig.SizeMap[shipInstance.Size];
 
             foreach (var slot in shipInstance.WeaponSlots)
             {
                 slot.Init();
                 var weapon = slot.Weapon;
-                var slotSize = GameConfig.SizeMap[slot.Size];
-                slot.transform.localScale = slotSize / shipSize * Vector3.one;
 
                 if(weapon == null) continue;
 
@@ -206,7 +200,7 @@ namespace Helpers
                 logicStats.ProjectileLifeTime = baseAimStats.MaxDistance * invProjectileSpeed;
                 logicStats.SpreadTimeMultiplier = baseFireStats.SpreadAngle / 100;
             }
-            else if (weaponBase is ConstantBeam miningDrill)
+            else if (weaponBase is MiningDrill miningDrill)
             {
                 miningDrill.HitDelay = 1f / GameConfig.ConstantBeamHitRate;
             }
