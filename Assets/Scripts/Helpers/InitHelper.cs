@@ -194,20 +194,22 @@ namespace Helpers
             };
 
             var baseStats = statsConfig.GetStats(weaponBase.WeaponType, weaponBase.Size);
-            var generalStats = baseStats.GeneralStats;
+            var aimStats = baseStats.AimStats;
+            var damageStats = baseStats.DamageStats;
+            var hullStats = baseStats.HullStats;
 
             ref var runtimeAimStats = ref weaponBase.RuntimeAimStats;
-            runtimeAimStats.MaxDistance = generalStats.Distance;
-            runtimeAimStats.MaxRotateAngle = generalStats.RotateAngle;
-            runtimeAimStats.RotateSpeed = generalStats.RotateSpeed;
+            runtimeAimStats.MaxDistance = aimStats.Distance;
+            runtimeAimStats.MaxRotateAngle = aimStats.RotateAngle;
+            runtimeAimStats.RotateSpeed = aimStats.RotateSpeed;
 
             ref var runtimeDamage = ref weaponBase.RuntimeDamage;
-            runtimeDamage.DamageArmor = generalStats.DamageKinetic;
-            runtimeDamage.DamageShield = generalStats.DamageEnergy;
-            runtimeDamage.DamageHull = generalStats.DamageKinetic + generalStats.DamageEnergy;
-            runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull * generalStats.AsteroidMultiplier;
+            runtimeDamage.DamageArmor = damageStats.DamageKinetic;
+            runtimeDamage.DamageShield = damageStats.DamageEnergy;
+            runtimeDamage.DamageHull = damageStats.DamageKinetic + damageStats.DamageEnergy;
+            runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull + runtimeDamage.DamageHull * damageStats.AsteroidBonusPercent * 0.01f;
 
-            weaponBase.HullDefenseLayer.Init(generalStats.HullPoints, generalStats.ArmorPoints, moduleType);
+            weaponBase.HullDefenseLayer.Init(hullStats.HullPoints, hullStats.ArmorPoints, moduleType);
 
             if (weaponBase is ProjectileWeapon projectileWeapon)
             {
@@ -222,7 +224,7 @@ namespace Helpers
                 logicStats.ShootDelay = 1f / projectileWeaponStats.FireRate;
                 var invProjectileSpeed = 1f / projectileWeaponStats.ProjectileSpeed;
                 logicStats.InvProjectileSpeed = invProjectileSpeed;
-                logicStats.ProjectileLifeTime = generalStats.Distance * invProjectileSpeed;
+                logicStats.ProjectileLifeTime = aimStats.Distance * invProjectileSpeed;
                 logicStats.SpreadTimeMultiplier = projectileWeaponStats.SpreadAngle / 100;
 
                 projectileWeapon.Init(projectileWeaponStats.PoolReference.Id);

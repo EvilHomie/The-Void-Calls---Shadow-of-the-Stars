@@ -1,10 +1,11 @@
+using Configs;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameConfig : MonoBehaviour
 {
     public const float WorldUnitMod = 0.01f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
-    public const float WorldUnitModReversed = 100f; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
+    public const float WorldUnitModReversed = 1 / WorldUnitMod; // модификатор мирового пространства. т.е. при 100, 1 еденица пространства это 100 метров  
     public const float InertiaDampingForce = 50f; // значение торможения за еденицу drag у корабля. Будто пассивное торможение 
 
     public const float AsteroidBaseMass = 10; // масса для астероидов в тоннах при scale = 1;

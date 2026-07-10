@@ -38,10 +38,10 @@ namespace CoreGameSystems
 
             _viewDistanceMap = new()
             {
-                {SizeType.S, new (1,5) },
-                {SizeType.M, new (2,10) },
-                {SizeType.L, new (4,20) },
-                {SizeType.XL, new (8,30) }
+                {SizeType.S, new (1,2) },
+                {SizeType.M, new (1,4) },
+                {SizeType.L, new (1,8) },
+                {SizeType.XL, new (1,16) }
             };
             EventBus.PlayerShipSpawned += Init;
         }

@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720609c9ee4e96e49a1874c1f9f2635b, type: 3}
+  m_Name: MainWeaponBaseStatsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponBaseStatsConfig
+  <BaseStats>k__BackingField:
+  - Name: MiningDrill
+    <WeaponType>k__BackingField: 0
+    <StatsBySize>k__BackingField:
+    - Name: MiningDrill
+      WeaponType: 0
+      <SizeType>k__BackingField: 0
+      <AimStats>k__BackingField:
+        <Distance>k__BackingField: 2
+        <RotateAngle>k__BackingField: 30
+        <RotateSpeed>k__BackingField: 30
+      <DamageStats>k__BackingField:
+        <DamageEnergy>k__BackingField: 2
+        <DamageKinetic>k__BackingField: 1
+        <AsteroidBonusPercent>k__BackingField: 50
+      <HullStats>k__BackingField:
+        <HullPoints>k__BackingField: 100
+        <ArmorPoints>k__BackingField: 10
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 0
+        <SpreadAngle>k__BackingField: 0
+        <ProjectileSpeed>k__BackingField: 0
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+      <ConstantBeamWeaponStats>k__BackingField:
+        TESTFIELD: 0
+    - Name: MiningDrill
+      WeaponType: 0
+      <SizeType>k__BackingField: 1
+      <AimStats>k__BackingField:
+        <Distance>k__BackingField: 4
+        <RotateAngle>k__BackingField: 30
+        <RotateSpeed>k__BackingField: 30
+      <DamageStats>k__BackingField:
+        <DamageEnergy>k__BackingField: 4
+        <DamageKinetic>k__BackingField: 2
+        <AsteroidBonusPercent>k__BackingField: 50
+      <HullStats>k__BackingField:
+        <HullPoints>k__BackingField: 200
+        <ArmorPoints>k__BackingField: 20
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 0
+        <SpreadAngle>k__BackingField: 0
+        <ProjectileSpeed>k__BackingField: 0
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+      <ConstantBeamWeaponStats>k__BackingField:
+        TESTFIELD: 0
+    - Name: MiningDrill
+      WeaponType: 0
+      <SizeType>k__BackingField: 2
+      <AimStats>k__BackingField:
+        <Distance>k__BackingField: 8
+        <RotateAngle>k__BackingField: 30
+        <RotateSpeed>k__BackingField: 30
+      <DamageStats>k__BackingField:
+        <DamageEnergy>k__BackingField: 8
+        <DamageKinetic>k__BackingField: 4
+        <AsteroidBonusPercent>k__BackingField: 50
+      <HullStats>k__BackingField:
+        <HullPoints>k__BackingField: 400
+        <ArmorPoints>k__BackingField: 40
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 0
+        <SpreadAngle>k__BackingField: 0
+        <ProjectileSpeed>k__BackingField: 0
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+      <ConstantBeamWeaponStats>k__BackingField:
+        TESTFIELD: 0
+  - Name: BoltRepeater
+    <WeaponType>k__BackingField: 1
+    <StatsBySize>k__BackingField:
+    - Name: BoltRepeater
+      WeaponType: 1
+      <SizeType>k__BackingField: 0
+      <AimStats>k__BackingField:
+        <Distance>k__BackingField: 2
+        <RotateAngle>k__BackingField: 20
+        <RotateSpeed>k__BackingField: 40
+      <DamageStats>k__BackingField:
+        <DamageEnergy>k__BackingField: 1
+        <DamageKinetic>k__BackingField: 2
+        <AsteroidBonusPercent>k__BackingField: 0
+      <HullStats>k__BackingField:
+        <HullPoints>k__BackingField: 100
+        <ArmorPoints>k__BackingField: 10
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 8
+        <SpreadAngle>k__BackingField: 1
+        <ProjectileSpeed>k__BackingField: 3
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+      <ConstantBeamWeaponStats>k__BackingField:
+        TESTFIELD: 0
+    - Name: BoltRepeater
+      WeaponType: 1
+      <SizeType>k__BackingField: 1
+      <AimStats>k__BackingField:
+        <Distance>k__BackingField: 4
+        <RotateAngle>k__BackingField: 20
+        <RotateSpeed>k__BackingField: 40
+      <DamageStats>k__BackingField:
+        <DamageEnergy>k__BackingField: 2
+        <DamageKinetic>k__BackingField: 4
+        <AsteroidBonusPercent>k__BackingField: 0
+      <HullStats>k__BackingField:
+        <HullPoints>k__BackingField: 200
+        <ArmorPoints>k__BackingField: 20
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 7
+        <SpreadAngle>k__BackingField: 1
+        <ProjectileSpeed>k__BackingField: 3
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+      <ConstantBeamWeaponStats>k__BackingField:
+        TESTFIELD: 0
+    - Name: BoltRepeater
+      WeaponType: 1
+      <SizeType>k__BackingField: 2
+      <AimStats>k__BackingField:
+        <Distance>k__BackingField: 8
+        <RotateAngle>k__BackingField: 20
+        <RotateSpeed>k__BackingField: 40
+      <DamageStats>k__BackingField:
+        <DamageEnergy>k__BackingField: 4
+        <DamageKinetic>k__BackingField: 8
+        <AsteroidBonusPercent>k__BackingField: 0
+      <HullStats>k__BackingField:
+        <HullPoints>k__BackingField: 400
+        <ArmorPoints>k__BackingField: 40
+      <ProjectileWeaponStats>k__BackingField:
+        <FireRate>k__BackingField: 6
+        <SpreadAngle>k__BackingField: 1
+        <ProjectileSpeed>k__BackingField: 3
+        <PoolReference>k__BackingField: {fileID: 11400000, guid: 15cc853c4a424c7409480c9e7afdbba4, type: 2}
+      <ConstantBeamWeaponStats>k__BackingField:
+        TESTFIELD: 0

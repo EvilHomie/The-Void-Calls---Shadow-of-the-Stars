@@ -40,15 +40,7 @@ namespace Weapons
         }
 
         protected abstract void OnInitialize();
-    }
-
-    [Serializable]
-    public struct WeaponBaseDamage
-    {
-        public float DamageEnergy;
-        public float DamageKinetic;
-        public float AsteroidMultiplier;
-    }
+    }    
 
     [Serializable]
     public struct WeaponRuntimeDamage
