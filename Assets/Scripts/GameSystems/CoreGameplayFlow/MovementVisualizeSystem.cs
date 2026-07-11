@@ -119,7 +119,7 @@ namespace CoreGameSystems
                 {
                     forwardParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
                     reverseParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-                    return;
+                    continue;
                 }
 
                 if (value > 0 && !forwardParticles.isPlaying)
