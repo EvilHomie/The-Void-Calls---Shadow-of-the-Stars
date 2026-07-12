@@ -232,7 +232,7 @@ namespace Helpers
                 var invProjectileSpeed = 1f / projectileWeaponStats.ProjectileSpeed;
                 logicStats.InvProjectileSpeed = invProjectileSpeed;
                 logicStats.ProjectileLifeTime = aimStats.Distance * invProjectileSpeed;
-                logicStats.SpreadTimeMultiplier = projectileWeaponStats.SpreadAngle / 100;
+                logicStats.SpreadTimeMultiplier = projectileWeaponStats.SpreadAngle * 0.01f;
 
                 projectileWeapon.Init(projectileWeaponStats.PoolReference.Id);
             }

@@ -32,7 +32,7 @@ namespace Configs
         }
 
 #if UNITY_EDITOR
-        private void OnValidate() // просто для красоты чтобы в коллекции вместо номера элемента была конкретика
+        private void OnValidate() // просто для красоты чтобы в коллекции вместо номера элемента была конкретика и для PropertyDrawer
         {
             for (int i = 0; i < BaseStats.Length; i++)
             {
@@ -64,7 +64,7 @@ namespace Configs
     public struct WeaponStatsBySize
     {
         [HideInInspector] public string Name;
-        [HideInInspector] public WeaponType WeaponType;
+        [HideInInspector] public WeaponType WeaponType; // используется в PropertyDrawer для показа специфичных статов
         [field: SerializeField] public SizeType SizeType { get; private set; }
         [field: SerializeField] public AimStats AimStats { get; private set; }
         [field: SerializeField] public DamageStats DamageStats { get; private set; }

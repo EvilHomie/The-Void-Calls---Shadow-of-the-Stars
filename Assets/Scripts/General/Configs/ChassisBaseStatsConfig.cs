@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -80,20 +81,19 @@ namespace Configs
         [field: SerializeField, Min(0.001f)] public float RotateDrag { get; private set; }
         [field: SerializeField, Min(1)] public int CargoSize { get; private set; }
     }
+}
+public enum ShipId
+{
+    None = 0,
 
-    public enum ShipId
-    {
-        None = 0,
+    // 1-99 S
+    Courier = 1,
+    Pulsar = 2,
 
-        // 1-99 S
-        Courier = 1,
-        Pulsar = 2,
+    // 100-199 M
+    Nemesis = 100,
+    Manorina = 101,
 
-        // 100-199 M
-        Nemesis = 100,
-        Manorina = 101,
-
-        // 200-299 L
-        Odysseus = 200
-    }
+    // 200-299 L
+    Odysseus = 200
 }

@@ -17,8 +17,44 @@ MonoBehaviour:
     <Id>k__BackingField: 1
     <HullPoints>k__BackingField: 500
     <Mass>k__BackingField: 5
-    <DirectDrag>k__BackingField: 2
+    <DirectDrag>k__BackingField: 3
     <ReverseDrag>k__BackingField: 5
     <StrafeDrag>k__BackingField: 6
-    <RotateDrag>k__BackingField: 2
+    <RotateDrag>k__BackingField: 3
     <CargoSize>k__BackingField: 20
+  - Name: ' Pulsar S'
+    <Id>k__BackingField: 2
+    <HullPoints>k__BackingField: 400
+    <Mass>k__BackingField: 4
+    <DirectDrag>k__BackingField: 2
+    <ReverseDrag>k__BackingField: 4
+    <StrafeDrag>k__BackingField: 5
+    <RotateDrag>k__BackingField: 2
+    <CargoSize>k__BackingField: 10
+  - Name: ' Manorina M'
+    <Id>k__BackingField: 101
+    <HullPoints>k__BackingField: 2000
+    <Mass>k__BackingField: 20
+    <DirectDrag>k__BackingField: 12
+    <ReverseDrag>k__BackingField: 20
+    <StrafeDrag>k__BackingField: 24
+    <RotateDrag>k__BackingField: 12
+    <CargoSize>k__BackingField: 80
+  - Name: ' Nemesis M'
+    <Id>k__BackingField: 100
+    <HullPoints>k__BackingField: 1500
+    <Mass>k__BackingField: 15
+    <DirectDrag>k__BackingField: 10
+    <ReverseDrag>k__BackingField: 16
+    <StrafeDrag>k__BackingField: 20
+    <RotateDrag>k__BackingField: 8
+    <CargoSize>k__BackingField: 40
+  - Name: ' Odysseus L'
+    <Id>k__BackingField: 200
+    <HullPoints>k__BackingField: 4000
+    <Mass>k__BackingField: 40
+    <DirectDrag>k__BackingField: 24
+    <ReverseDrag>k__BackingField: 40
+    <StrafeDrag>k__BackingField: 48
+    <RotateDrag>k__BackingField: 24
+    <CargoSize>k__BackingField: 160

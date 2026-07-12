@@ -1,4 +1,3 @@
-using Configs;
 using CoreGameSystems;
 using DefenseLayers;
 using System.Collections.Generic;
@@ -32,16 +31,6 @@ namespace Ships
         public void Init()
         {
             Rigidbody = GetComponent<Rigidbody2D>();
-
-            var weaponsSlots = WeaponSlotsContainer.GetComponentsInChildren<WeaponSlot>();
-            MainWeaponsSlots.Clear();
-            TurretsSlots.Clear();
-
-            foreach (var slot in weaponsSlots)
-            {
-                var weaponsCollection = slot.WeaponMountType == WeaponMountType.MainWeapon ? MainWeaponsSlots : TurretsSlots;
-                weaponsCollection.Add(slot);
-            }
         }
     }
 }
