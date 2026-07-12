@@ -1,10 +1,11 @@
+using CoreGameSystems;
 using DefenseLayers;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ships
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class ShipInstance : MonoBehaviour
     {
         [field: SerializeField] public SizeType Size { get; private set; }
@@ -12,7 +13,8 @@ namespace Ships
         [field: SerializeField] public ShieldDefenseLayer Shield { get; private set; }
         [field: SerializeField] public HullDefenseLayer Hull { get; private set; }
         public Rigidbody2D Rigidbody { get; private set; }
-        public WeaponSlot[] WeaponSlots;
+        public List<WeaponSlot> MainWeaponsSlots { get; private set; } = new();
+        public List<WeaponSlot> TurretsSlots { get; private set; } = new();
         public HashSet<Collider2D> OwnColliders = new();
 
         public bool IsAttacking;
@@ -28,32 +30,17 @@ namespace Ships
 
         public void Init()
         {
-            WeaponSlots = WeaponSlotsContainer.GetComponentsInChildren<WeaponSlot>();
             Rigidbody = GetComponent<Rigidbody2D>();
+
+            var weaponsSlots = WeaponSlotsContainer.GetComponentsInChildren<WeaponSlot>();
+            MainWeaponsSlots.Clear();
+            TurretsSlots.Clear();
+
+            foreach (var slot in weaponsSlots)
+            {
+                var weaponsCollection = slot.WeaponMountType == WeaponMountType.MainWeapon ? MainWeaponsSlots : TurretsSlots;
+                weaponsCollection.Add(slot);
+            }
         }
     }
-}
-
-[Serializable]
-public struct ShipIntentData
-{
-    // Относится к движению (обрабатывается в физическом тике)
-    public Vector2 MoveDirection;
-    public bool DamperEnabled;
-    public bool ResetThrottle;
-    public bool BoostersIsActive;
-
-    // Вне физического тика
-    public ChangeSignal AttackChangeSignal;
-    public WeaponGroup ChangeWeaponGroup;
-    public float ChangeZoom;
-
-}
-
-[Serializable]
-public enum ChangeSignal
-{
-    None,
-    Performed,
-    Canceled
 }

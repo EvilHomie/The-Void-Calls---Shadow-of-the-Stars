@@ -5,10 +5,8 @@ using UnityEngine;
 
 namespace Configs
 {
-
-
-    [CreateAssetMenu(fileName = "WeaponBaseStatsConfig", menuName = "Scriptable Objects/WeaponBaseStatsConfig")]
-    public class WeaponBaseStatsConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "WeaponsBaseStatsConfig", menuName = "Scriptable Objects/WeaponsBaseStatsConfig")]
+    public class WeaponsBaseStatsConfig : ScriptableObject
     {
         [field: SerializeField] public WeaponBaseStats[] BaseStats { get; private set; }
 

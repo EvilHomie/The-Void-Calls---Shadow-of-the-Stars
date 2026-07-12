@@ -37,7 +37,7 @@ namespace Helpers
         {
             Vector2 aimPos = shipInstance.AimData.AimPosition;
 
-            foreach (var slot in shipInstance.WeaponSlots)
+            foreach (var slot in shipInstance.MainWeaponsSlots)
             {
                 var weapon = slot.Weapon;
 

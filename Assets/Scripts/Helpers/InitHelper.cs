@@ -133,7 +133,7 @@ namespace Helpers
         {
             var shipRb = shipInstance.Rigidbody;
 
-            foreach (var slot in shipInstance.WeaponSlots)
+            foreach (var slot in shipInstance.MainWeaponsSlots)
             {
                 slot.Init();
                 var weapon = slot.Weapon;

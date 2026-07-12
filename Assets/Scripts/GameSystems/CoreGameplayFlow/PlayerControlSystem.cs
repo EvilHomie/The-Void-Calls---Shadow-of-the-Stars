@@ -1,6 +1,7 @@
 using DI;
 using PlayerInput;
 using Registries;
+using System;
 using UnityEngine;
 
 namespace CoreGameSystems
@@ -25,15 +26,15 @@ namespace CoreGameSystems
         private void WriteIntentData()
         {
             var playerShip = _shipRegystry.PlayerShip;
-            ref var intentData = ref playerShip.IntentData;
+            ref var shipIntentData = ref playerShip.IntentData;
 
-            intentData.MoveDirection = _playerIntentData.MoveInput;
-            intentData.DamperEnabled = _playerIntentData.DamperEnabled;
-            intentData.ResetThrottle = _playerIntentData.ResetThrottle;
-            intentData.BoostersIsActive = _playerIntentData.BoostersIsActive;
+            shipIntentData.MoveDirection = _playerIntentData.MoveInput;
+            shipIntentData.DamperEnabled = _playerIntentData.DamperEnabled;
+            shipIntentData.ResetThrottle = _playerIntentData.ResetThrottle;
+            shipIntentData.BoostersIsActive = _playerIntentData.BoostersIsActive;
 
-            intentData.AttackChangeSignal = _playerIntentData.AttackChangeSignal;
-            intentData.ChangeWeaponGroup = _playerIntentData.ChangeWeaponGroup;
+            shipIntentData.AttackChangeSignal = _playerIntentData.AttackChangeSignal;
+            shipIntentData.ChangeWeaponGroup = _playerIntentData.ChangeWeaponGroup;
         }
 
         private void ResetData()
@@ -41,5 +42,29 @@ namespace CoreGameSystems
             _playerIntentData.AttackChangeSignal = ChangeSignal.None;
             _playerIntentData.ChangeZoom = 0;
         }
+    }
+
+    [Serializable]
+    public struct ShipIntentData
+    {
+        // Относится к движению (обрабатывается в физическом тике)
+        public Vector2 MoveDirection;
+        public bool DamperEnabled;
+        public bool ResetThrottle;
+        public bool BoostersIsActive;
+
+        // Вне физического тика
+        public ChangeSignal AttackChangeSignal;
+        public WeaponGroup ChangeWeaponGroup;
+        public float ChangeZoom;
+
+    }
+
+    [Serializable]
+    public enum ChangeSignal
+    {
+        None,
+        Performed,
+        Canceled
     }
 }

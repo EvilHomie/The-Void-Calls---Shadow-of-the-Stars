@@ -119,9 +119,9 @@ namespace CoreGameSystems
             var aimData = playerShip.AimData;
             var fastestProjectileSpeed = 0f;
 
-            for (int i = 0; i < playerShip.WeaponSlots.Length; i++)
+            for (int i = 0; i < playerShip.MainWeaponsSlots.Count; i++)
             {
-                var weaponSlot = playerShip.WeaponSlots[i];
+                var weaponSlot = playerShip.MainWeaponsSlots[i];
 
                 if (!weaponSlot.IsInActiveGroup) continue;
 
@@ -154,9 +154,9 @@ namespace CoreGameSystems
         {
             var aimData = shipInstance.AimData;
 
-            for (int i = 0; i < shipInstance.WeaponSlots.Length; i++)
+            for (int i = 0; i < shipInstance.MainWeaponsSlots.Count; i++)
             {
-                var weaponSlot = shipInstance.WeaponSlots[i];
+                var weaponSlot = shipInstance.MainWeaponsSlots[i];
 
                 if (!weaponSlot.IsInActiveGroup) continue;
 

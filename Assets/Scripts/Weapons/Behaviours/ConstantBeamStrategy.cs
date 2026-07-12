@@ -52,7 +52,7 @@ namespace Weapons
             var hitDelay = weapon.HitDelay;
             weapon.NextHitTime = coreTime + hitDelay;
 
-            _hitRegistrationSystem.RegisterHitDynamic(hitResult, weapon.Size, weapon.RuntimeDamage, hitDelay);
+            _hitRegistrationSystem.RegisterDynamicHit(hitResult, weapon.Size, weapon.RuntimeDamage, hitDelay);
         }
     }
 }

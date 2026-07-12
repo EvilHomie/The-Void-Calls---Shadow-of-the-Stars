@@ -47,7 +47,7 @@ namespace CoreGameSystems
             }
         }
 
-        public void RegisterHitDynamic(in HitResult hitResult, SizeType size, in WeaponRuntimeDamage damageData, float hitDelay)
+        public void RegisterDynamicHit(in HitResult hitResult, SizeType size, in WeaponRuntimeDamage damageData, float hitDelay)
         {
             var hitData = new HitData
             {

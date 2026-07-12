@@ -36,11 +36,11 @@ public class GameConfig : MonoBehaviour
         {SizeType.XL, 8 }
     };
 
-    [SerializeField] WeaponBaseStatsConfig mainWeaponsBaseStats;
-    [SerializeField] WeaponBaseStatsConfig turretsBaseStats;
+    [SerializeField] WeaponsBaseStatsConfig mainWeaponsBaseStats;
+    [SerializeField] WeaponsBaseStatsConfig turretsBaseStats;
 
-    public static WeaponBaseStatsConfig MainWeaponsBaseStats { get; private set; }
-    public static WeaponBaseStatsConfig TurretsBaseStats { get; private set; }
+    public static WeaponsBaseStatsConfig MainWeaponsBaseStats { get; private set; }
+    public static WeaponsBaseStatsConfig TurretsBaseStats { get; private set; }
 
     private void Awake()
     {
