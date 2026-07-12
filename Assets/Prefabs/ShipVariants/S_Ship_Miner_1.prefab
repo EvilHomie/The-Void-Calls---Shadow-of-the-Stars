@@ -143,11 +143,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
-  <Size>k__BackingField: 0
+  <Id>k__BackingField: 1
   <WeaponSlotsContainer>k__BackingField: {fileID: 4190993684250912781}
   <Shield>k__BackingField: {fileID: 2928605171747997568}
   <Hull>k__BackingField: {fileID: 4291034122756888095}
-  WeaponSlots: []
   IsAttacking: 0
   ActiveWeaponGroup: 0
   AimData:
@@ -180,7 +179,6 @@ MonoBehaviour:
     BoostersIsActive: 0
     BoostersPower: 0
   Equip:
-    Chassis: {fileID: 11400000, guid: d7c58d660237235419f39a0806ef6301, type: 2}
     MainEngine: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
     SideEngine: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
   MovementView:

@@ -65,7 +65,8 @@ namespace CoreGameSystems
         private void Init(ShipInstance shipInstance)
         {
             UpdateTargetGroup(shipInstance);
-            _currentViewDistance = _viewDistanceMap[shipInstance.Size];
+            var size = GameConfig.ChassisBaseStats.GetShipSize(shipInstance.Id);
+            _currentViewDistance = _viewDistanceMap[size];
             _targetOrthographicSize = (_currentViewDistance.x + _currentViewDistance.y) / 2;
             _currentOrthographicSize = _cinemachineCamera.Lens.OrthographicSize;
             _changeOrtSizeSpeed = _currentViewDistance.y;

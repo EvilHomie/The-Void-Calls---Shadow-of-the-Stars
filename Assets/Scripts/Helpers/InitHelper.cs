@@ -1,8 +1,7 @@
 using Asteroids;
-using DefenseLayers;
+using Configs;
 using Ships;
 using System;
-using UnityEngine;
 using Weapons;
 
 namespace Helpers
@@ -11,14 +10,16 @@ namespace Helpers
     {
         public static void InitShip(ShipInstance shipInstance)
         {
+            var chassisStats = GameConfig.ChassisBaseStats.GetStats(shipInstance.Id);
+
             shipInstance.Init();
-            InitShipStats(shipInstance);
-            InitShipDefenceLayers(shipInstance);
+            InitMovement(shipInstance, chassisStats);
+            InitShipDefenceLayers(shipInstance, chassisStats);
             InitWeapons(shipInstance);
             InitEngines(shipInstance);
         }
 
-        private static void InitShipStats(ShipInstance shipInstance)
+        private static void InitMovement(ShipInstance shipInstance, in ChassisBaseStats chassisStats)
         {
             ref var movement = ref shipInstance.MovementRuntimeData;
             movement.InertiaDampingIsActive = true;
@@ -26,17 +27,13 @@ namespace Helpers
             ref var movementCharacteristics = ref shipInstance.MovementStats;
             ref var equip = ref shipInstance.Equip;
 
-            var chassisMultipliers = equip.Chassis.ChassisMultipliers;
+            
+
             var mainEngineMultipliers = equip.MainEngine.MainEngineMultipliers;
             var sideEngineMultipliers = equip.SideEngine.ThrustersMultipliers;
 
-            var totalMass = equip.Chassis.Mass + chassisMultipliers.MassMultiplier * equip.Chassis.Mass;
-            shipInstance.Rigidbody.mass = totalMass;
+            shipInstance.Rigidbody.mass = chassisStats.Mass;
 
-            var totalDirectDrag = equip.Chassis.DirectDrag + chassisMultipliers.DirectDragMultiplier * equip.Chassis.DirectDrag;
-            var totalReverseDrag = equip.Chassis.ReverseDrag + chassisMultipliers.ReverseDragMultiplier * equip.Chassis.ReverseDrag;
-            var totalStrafeDrag = equip.Chassis.StrafeDrag + chassisMultipliers.StrafeDragMultiplier * equip.Chassis.StrafeDrag;
-            var totalRotateDrag = equip.Chassis.RotateDrag + chassisMultipliers.RotateDragMultiplier * equip.Chassis.RotateDrag;
 
             var worldUnitMod = GameConfig.WorldUnitMod;
             var inertiaDampingForce = GameConfig.InertiaDampingForce;
@@ -49,29 +46,29 @@ namespace Helpers
             var totalRotateThrust = sideEngine.RotateThrust + sideEngineMultipliers.RotateThrustMultiplier * sideEngine.RotateThrust;
             var totalBoostThrust = mainEngine.BoostThrust + mainEngineMultipliers.BoostThrustMultiplier * mainEngine.BoostThrust;
 
-            movementCharacteristics.DirectMaxSpeed = totalDirectThrust / totalDirectDrag * worldUnitMod;
-            movementCharacteristics.DirectAcceleration = totalDirectThrust / totalMass * worldUnitMod;
-            movementCharacteristics.DirectDampingAcceleration = totalDirectDrag * inertiaDampingForce * worldUnitMod;
+            movementCharacteristics.DirectMaxSpeed = totalDirectThrust / chassisStats.DirectDrag * worldUnitMod;
+            movementCharacteristics.DirectAcceleration = totalDirectThrust / chassisStats.Mass * worldUnitMod;
+            movementCharacteristics.DirectDampingAcceleration = chassisStats.DirectDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.ReverseMaxSpeed = totalReverseThrust / totalReverseDrag * worldUnitMod;
-            movementCharacteristics.ReverseAcceleration = totalReverseThrust / totalMass * worldUnitMod;
-            movementCharacteristics.ReverseDampingAcceleration = totalReverseDrag * inertiaDampingForce * worldUnitMod;
+            movementCharacteristics.ReverseMaxSpeed = totalReverseThrust / chassisStats.ReverseDrag * worldUnitMod;
+            movementCharacteristics.ReverseAcceleration = totalReverseThrust / chassisStats.Mass * worldUnitMod;
+            movementCharacteristics.ReverseDampingAcceleration = chassisStats.ReverseDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / totalStrafeDrag * worldUnitMod;
-            movementCharacteristics.StrafeAcceleration = totalStrafeThrust / totalMass * worldUnitMod;
-            movementCharacteristics.StrafeDampingAcceleration = totalStrafeDrag * inertiaDampingForce * worldUnitMod;
+            movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / chassisStats.StrafeDrag * worldUnitMod;
+            movementCharacteristics.StrafeAcceleration = totalStrafeThrust / chassisStats.Mass * worldUnitMod;
+            movementCharacteristics.StrafeDampingAcceleration = chassisStats.StrafeDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.RotateSpeed = totalRotateThrust / totalRotateDrag;
+            movementCharacteristics.RotateSpeed = totalRotateThrust / chassisStats.RotateDrag;
 
 
-            movementCharacteristics.BoostersMaxSpeed = totalBoostThrust / totalDirectDrag * worldUnitMod;
-            movementCharacteristics.BoostersAcceleration = totalBoostThrust / totalMass * worldUnitMod;
+            movementCharacteristics.BoostersMaxSpeed = totalBoostThrust / chassisStats.DirectDrag * worldUnitMod;
+            movementCharacteristics.BoostersAcceleration = totalBoostThrust / chassisStats.Mass * worldUnitMod;
             movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
         }
 
-        private static void InitShipDefenceLayers(ShipInstance shipInstance)
+        private static void InitShipDefenceLayers(ShipInstance shipInstance, in ChassisBaseStats chassisBaseStats)
         {
-            var size = shipInstance.Size;
+            var size = GameConfig.ChassisBaseStats.GetShipSize(shipInstance.Id);
 
             var shield = shipInstance.Shield;
             shield.Init(100, 1, size);
@@ -79,8 +76,8 @@ namespace Helpers
             shipInstance.OwnColliders.Add(shield.Collider);
 
             var hull = shipInstance.Hull;
-            var hullHP = shipInstance.Equip.Chassis.Hull;
-            hull.Init(hullHP, 100, ModuleType.Chassis);
+            var hullPoints = chassisBaseStats.HullPoints;
+            hull.Init(hullPoints, 100, ModuleType.Chassis);
 
             hull.gameObject.layer = GameLayers.ShipLayer;
             shipInstance.OwnColliders.Add(hull.Collider);
@@ -131,9 +128,19 @@ namespace Helpers
 
         public static void InitWeapons(ShipInstance shipInstance)
         {
+            var weaponsSlots = shipInstance.WeaponSlotsContainer.GetComponentsInChildren<WeaponSlot>();
+            shipInstance.MainWeaponsSlots.Clear();
+            shipInstance.TurretsSlots.Clear();
+
+            foreach (var slot in weaponsSlots)
+            {
+                var weaponsCollection = slot.WeaponMountType == WeaponMountType.MainWeapon ? shipInstance.MainWeaponsSlots : shipInstance.TurretsSlots;
+                weaponsCollection.Add(slot);
+            }
+
             var shipRb = shipInstance.Rigidbody;
 
-            foreach (var slot in shipInstance.MainWeaponsSlots)
+            foreach (var slot in weaponsSlots)
             {
                 slot.Init();
                 var weapon = slot.Weapon;

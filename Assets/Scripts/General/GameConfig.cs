@@ -38,16 +38,22 @@ public class GameConfig : MonoBehaviour
 
     [SerializeField] WeaponsBaseStatsConfig mainWeaponsBaseStats;
     [SerializeField] WeaponsBaseStatsConfig turretsBaseStats;
+    [SerializeField] ChassisBaseStatsConfig chassisBaseStats;
 
     public static WeaponsBaseStatsConfig MainWeaponsBaseStats { get; private set; }
     public static WeaponsBaseStatsConfig TurretsBaseStats { get; private set; }
+    public static ChassisBaseStatsConfig ChassisBaseStats { get; private set; }
 
     private void Awake()
     {
         mainWeaponsBaseStats.FillCollection();
-        turretsBaseStats.FillCollection();
         MainWeaponsBaseStats = mainWeaponsBaseStats;
+
+        turretsBaseStats.FillCollection();
         TurretsBaseStats = turretsBaseStats;
+
+        chassisBaseStats.FillCollection();
+        ChassisBaseStats = chassisBaseStats;
     }
 }
 

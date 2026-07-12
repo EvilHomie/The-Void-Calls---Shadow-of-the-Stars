@@ -76,17 +76,17 @@ namespace Configs
     [Serializable]
     public struct AimStats
     {
-        [field: SerializeField] public float Distance { get; private set; }
-        [field: SerializeField] public float RotateAngle { get; private set; }
-        [field: SerializeField] public float RotateSpeed { get; private set; }
+        [field: SerializeField, Min(0.001f)] public float Distance { get; private set; }
+        [field: SerializeField, Min(0)] public float RotateAngle { get; private set; }
+        [field: SerializeField, Min(0)] public float RotateSpeed { get; private set; }
     }
 
     [Serializable]
     public struct ProjectileWeaponStats
     {
-        [field: SerializeField] public float FireRate { get; private set; }
-        [field: SerializeField] public float SpreadAngle { get; private set; }
-        [field: SerializeField] public float ProjectileSpeed { get; private set; }
+        [field: SerializeField, Min(0.001f)] public float FireRate { get; private set; }
+        [field: SerializeField, Min(0)] public float SpreadAngle { get; private set; }
+        [field: SerializeField, Min(0.001f)] public float ProjectileSpeed { get; private set; }
         [field: SerializeField] public PoolReference PoolReference { get; private set; }
     }
 
@@ -103,15 +103,15 @@ namespace Configs
     [Serializable]
     public struct DamageStats
     {
-        [field: SerializeField] public float DamageEnergy { get; private set; }
-        [field: SerializeField] public float DamageKinetic { get; private set; }
-        [field: SerializeField] public float AsteroidBonusPercent { get; private set; }
+        [field: SerializeField, Min(0)] public float DamageEnergy { get; private set; }
+        [field: SerializeField, Min(0)] public float DamageKinetic { get; private set; }
+        [field: SerializeField, Min(0)] public float AsteroidBonusPercent { get; private set; }
     }
 
     [Serializable]
     public struct HullStats
     {
-        [field: SerializeField] public float HullPoints { get; private set; }
-        [field: SerializeField] public float ArmorPoints { get; private set; }
+        [field: SerializeField, Min(1)] public float HullPoints { get; private set; }
+        [field: SerializeField, Min(0)] public float ArmorPoints { get; private set; }
     }
 }

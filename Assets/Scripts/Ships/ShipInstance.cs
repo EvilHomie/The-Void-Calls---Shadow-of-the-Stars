@@ -1,3 +1,4 @@
+using Configs;
 using CoreGameSystems;
 using DefenseLayers;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Ships
     [RequireComponent(typeof(Rigidbody2D))]
     public class ShipInstance : MonoBehaviour
     {
-        [field: SerializeField] public SizeType Size { get; private set; }
+        [field: SerializeField] public ShipId Id { get; private set; }
         [field: SerializeField] public Transform WeaponSlotsContainer { get; private set; }
         [field: SerializeField] public ShieldDefenseLayer Shield { get; private set; }
         [field: SerializeField] public HullDefenseLayer Hull { get; private set; }

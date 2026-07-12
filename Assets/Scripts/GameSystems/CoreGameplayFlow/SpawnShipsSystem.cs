@@ -29,6 +29,7 @@ namespace CoreGameSystems
             EventBus.PlayerShipSpawned?.Invoke(testPlayerShip);
 
             SetDepthPos(testPlayerShip);
+           
 
             foreach (var ship in testEnemies)
             {
