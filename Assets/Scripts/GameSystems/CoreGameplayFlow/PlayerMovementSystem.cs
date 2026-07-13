@@ -14,7 +14,7 @@ namespace CoreGameSystems
         private const float _damperMaxFactor = 5f; // усиление гасителей при макс скорости (будто выше сопротивление)
         private const float _damperMinFactor = 0.5f; // сила гасителей при минимальной скорости (чтобы не залипало)
         private const float _rotateSlowAngle = 20f;
-        private const float _minBoostersPowerForEnableMod = 0.2f;
+        private const float _minBoostersPowerForEnableMod = 0.2f; // значение при котором можно использовать ускорители = 20%
         private const float _throttleZeroDelay = 0.3f;
 
         private float _smoothZoneMod; // 1/ _smoothZoneTime. сугубо чтобы уйти от деления в логике
@@ -153,7 +153,7 @@ namespace CoreGameSystems
 
             if (!movementRuntimeData.BoostersIsActive)
             {
-                boostersPower += fixedDT;
+                boostersPower += fixedDT * movementStats.BoostRechargeSpeed;
             }
             else
             {

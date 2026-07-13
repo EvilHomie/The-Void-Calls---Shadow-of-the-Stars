@@ -22,5 +22,6 @@ namespace Ships
         public float BoostersMaxSpeed;
         public float BoostersAcceleration;
         public float BoostersMaxPower;
+        public float BoostRechargeSpeed;
     }
 }

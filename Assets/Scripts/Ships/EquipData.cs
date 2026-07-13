@@ -6,7 +6,7 @@ namespace Ships
     [Serializable]
     public struct EquipData
     {
-        public MainEngine MainEngine;
+        public MainEngineId MainEngineId;
         public Thruster SideEngine;
     }
 }

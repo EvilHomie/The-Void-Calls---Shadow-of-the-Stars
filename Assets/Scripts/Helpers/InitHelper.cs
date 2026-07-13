@@ -11,15 +11,16 @@ namespace Helpers
         public static void InitShip(ShipInstance shipInstance)
         {
             var chassisStats = GameConfig.ChassisBaseStats.GetStats(shipInstance.Id);
+            var size = GameConfig.ChassisBaseStats.GetShipSize(shipInstance.Id);
 
             shipInstance.Init();
-            InitMovement(shipInstance, chassisStats);
-            InitShipDefenceLayers(shipInstance, chassisStats);
+            InitMovement(shipInstance, chassisStats, size);
+            InitShipDefenceLayers(shipInstance, chassisStats, size);
             InitWeapons(shipInstance);
             InitEngines(shipInstance);
         }
 
-        private static void InitMovement(ShipInstance shipInstance, in ChassisBaseStats chassisStats)
+        private static void InitMovement(ShipInstance shipInstance, in ChassisBaseStats chassisStats, SizeType size)
         {
             ref var movement = ref shipInstance.MovementRuntimeData;
             movement.InertiaDampingIsActive = true;
@@ -27,49 +28,54 @@ namespace Helpers
             ref var movementCharacteristics = ref shipInstance.MovementStats;
             ref var equip = ref shipInstance.Equip;
 
+            var mainEnginesStats = GameConfig.MainEnginesBaseStats.GetStats(shipInstance.Equip.MainEngineId, size);
             
 
-            var mainEngineMultipliers = equip.MainEngine.MainEngineMultipliers;
             var sideEngineMultipliers = equip.SideEngine.ThrustersMultipliers;
-
-            shipInstance.Rigidbody.mass = chassisStats.Mass;
-
 
             var worldUnitMod = GameConfig.WorldUnitMod;
             var inertiaDampingForce = GameConfig.InertiaDampingForce;
-            var mainEngine = equip.MainEngine;
             var sideEngine = equip.SideEngine;
 
-            var totalDirectThrust = mainEngine.DirectThrust + mainEngineMultipliers.DirectThrustMultiplier * mainEngine.DirectThrust;
-            var totalReverseThrust = mainEngine.ReverseThrust + mainEngineMultipliers.ReverseThrustMultiplier * mainEngine.ReverseThrust;
+            var mass = chassisStats.Mass;
+            var directDrag = chassisStats.DirectDrag;
+            var reverseDrag = chassisStats.ReverseDrag;
+            var strafeDrag = chassisStats.StrafeDrag;
+
+            var directThrust = mainEnginesStats.DirectThrust;
+            var reverseThrust = mainEnginesStats.ReverseThrust;
+            var boostThrust = mainEnginesStats.BoostThrust;
+            var boostMaxTime = mainEnginesStats.BoostMaxTime;
+            var boostRechargeSpeed = mainEnginesStats.BoostRechargeSpeed;
+
+            shipInstance.Rigidbody.mass = mass;
+
             var totalStrafeThrust = sideEngine.StrafeThrust + sideEngineMultipliers.StrafeThrustMultiplier * sideEngine.StrafeThrust;
             var totalRotateThrust = sideEngine.RotateThrust + sideEngineMultipliers.RotateThrustMultiplier * sideEngine.RotateThrust;
-            var totalBoostThrust = mainEngine.BoostThrust + mainEngineMultipliers.BoostThrustMultiplier * mainEngine.BoostThrust;
 
-            movementCharacteristics.DirectMaxSpeed = totalDirectThrust / chassisStats.DirectDrag * worldUnitMod;
-            movementCharacteristics.DirectAcceleration = totalDirectThrust / chassisStats.Mass * worldUnitMod;
-            movementCharacteristics.DirectDampingAcceleration = chassisStats.DirectDrag * inertiaDampingForce * worldUnitMod;
+            movementCharacteristics.DirectMaxSpeed = directThrust / directDrag * worldUnitMod;
+            movementCharacteristics.DirectAcceleration = directThrust / mass * worldUnitMod;
+            movementCharacteristics.DirectDampingAcceleration = directDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.ReverseMaxSpeed = totalReverseThrust / chassisStats.ReverseDrag * worldUnitMod;
-            movementCharacteristics.ReverseAcceleration = totalReverseThrust / chassisStats.Mass * worldUnitMod;
-            movementCharacteristics.ReverseDampingAcceleration = chassisStats.ReverseDrag * inertiaDampingForce * worldUnitMod;
+            movementCharacteristics.ReverseMaxSpeed = reverseThrust / reverseDrag * worldUnitMod;
+            movementCharacteristics.ReverseAcceleration = reverseThrust / mass * worldUnitMod;
+            movementCharacteristics.ReverseDampingAcceleration = reverseDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / chassisStats.StrafeDrag * worldUnitMod;
-            movementCharacteristics.StrafeAcceleration = totalStrafeThrust / chassisStats.Mass * worldUnitMod;
-            movementCharacteristics.StrafeDampingAcceleration = chassisStats.StrafeDrag * inertiaDampingForce * worldUnitMod;
+            movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / strafeDrag * worldUnitMod;
+            movementCharacteristics.StrafeAcceleration = totalStrafeThrust / mass * worldUnitMod;
+            movementCharacteristics.StrafeDampingAcceleration = strafeDrag * inertiaDampingForce * worldUnitMod;
 
             movementCharacteristics.RotateSpeed = totalRotateThrust / chassisStats.RotateDrag;
 
 
-            movementCharacteristics.BoostersMaxSpeed = totalBoostThrust / chassisStats.DirectDrag * worldUnitMod;
-            movementCharacteristics.BoostersAcceleration = totalBoostThrust / chassisStats.Mass * worldUnitMod;
-            movementCharacteristics.BoostersMaxPower = mainEngine.BoostMaxTime;
+            movementCharacteristics.BoostersMaxSpeed = boostThrust / directDrag * worldUnitMod + movementCharacteristics.DirectMaxSpeed;
+            movementCharacteristics.BoostersAcceleration = boostThrust / mass * worldUnitMod + movementCharacteristics.DirectAcceleration;
+            movementCharacteristics.BoostersMaxPower = boostMaxTime;
+            movementCharacteristics.BoostRechargeSpeed = boostRechargeSpeed;
         }
 
-        private static void InitShipDefenceLayers(ShipInstance shipInstance, in ChassisBaseStats chassisBaseStats)
+        private static void InitShipDefenceLayers(ShipInstance shipInstance, in ChassisBaseStats chassisBaseStats, SizeType size)
         {
-            var size = GameConfig.ChassisBaseStats.GetShipSize(shipInstance.Id);
-
             var shield = shipInstance.Shield;
             shield.Init(100, 1, size);
             shield.gameObject.layer = GameLayers.ShipLayer;

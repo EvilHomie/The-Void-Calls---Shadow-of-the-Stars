@@ -1,4 +1,3 @@
-using ShipModules;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,7 +10,7 @@ namespace Configs
     {
         [field: SerializeField] public MainEngineBaseStats[] BaseStats { get; private set; }
 
-        private Dictionary<(EngineId, SizeType), MainEngineStatsBySize> _statsByEngine;
+        private Dictionary<(MainEngineId, SizeType), MainEngineStatsBySize> _statsByEngine;
 
         public void FillCollection()
         {
@@ -27,7 +26,7 @@ namespace Configs
             }
         }
 
-        public MainEngineStatsBySize GetStats(EngineId id, SizeType sizeType)
+        public MainEngineStatsBySize GetStats(MainEngineId id, SizeType sizeType)
         {
             return _statsByEngine[(id, sizeType)];
         }
@@ -56,7 +55,7 @@ namespace Configs
     public struct MainEngineBaseStats
     {
         [HideInInspector] public string Name;
-        [field: SerializeField] public EngineId Id { get; private set; }
+        [field: SerializeField] public MainEngineId Id { get; private set; }
         [field: SerializeField] public MainEngineStatsBySize[] StatsBySize { get; private set; }
     }
 
@@ -73,7 +72,7 @@ namespace Configs
     }
 }
 
-public enum EngineId
+public enum MainEngineId
 {
     None = 0,
     CombatMK1 = 1,

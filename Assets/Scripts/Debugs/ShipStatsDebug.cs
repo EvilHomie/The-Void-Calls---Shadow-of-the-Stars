@@ -140,7 +140,7 @@ namespace Debugs
                 DirectSpeedDelta.text = $"Acceleration: {movementRuntimeData.DirectThrottle * accel * worldUnitModReversed:F0} м/с";
             }
 
-            BoosterPower.text = $"Power: {movementRuntimeData.BoostersPower:F1} м/с";
+            BoosterPower.text = $"Power: {movementRuntimeData.BoostersPower:F1}";
 
             _lastVelocity = _playerShip.Rigidbody.linearVelocity;
         }
