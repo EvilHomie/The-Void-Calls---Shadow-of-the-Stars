@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012e3f7f841caa43a3c3b23fe8df9c4, type: 3}
-  m_Name: Shield_Hit_Data
+  m_Name: Courier_PoolData
   m_EditorClassIdentifier: 
-  <PoolReference>k__BackingField: {fileID: 11400000, guid: cc5af2a5d07fd3b4cb87d0af96f3b541, type: 2}
-  <Prefab>k__BackingField: {fileID: 1597044082333300506, guid: efd2dd7bee38db645bd34cf14ea9566e, type: 3}
+  <PoolReference>k__BackingField: {fileID: 11400000, guid: d57f96c3802f9144eaae9b6523391dee, type: 2}
+  <Prefab>k__BackingField: {fileID: 5421825612968811053, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}

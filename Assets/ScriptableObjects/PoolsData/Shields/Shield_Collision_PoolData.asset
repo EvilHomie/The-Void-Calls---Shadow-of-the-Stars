@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6012e3f7f841caa43a3c3b23fe8df9c4, type: 3}
+  m_Name: Shield_Collision_PoolData
+  m_EditorClassIdentifier: 
+  <PoolReference>k__BackingField: {fileID: 11400000, guid: d6714235595456a4b89951aa8c01838d, type: 2}
+  <Prefab>k__BackingField: {fileID: 1597044082333300506, guid: 741762a2b69810f4e933b4096797710b, type: 3}

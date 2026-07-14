@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ShieldIdle
+  m_Name: Shield_Around
   m_Shader: {fileID: -6465566751694194690, guid: e0d02bad7e32ec34e9f87b5175634f84, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

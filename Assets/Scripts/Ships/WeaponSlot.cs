@@ -12,7 +12,7 @@ namespace Ships
         public WeaponGroup WeaponGroup;
         public bool IsInActiveGroup;
 
-        public void Init()
+        public void CacheDependencies()
         {
             Weapon = GetComponentInChildren<WeaponBase>();
         }

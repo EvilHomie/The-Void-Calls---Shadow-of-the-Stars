@@ -38,9 +38,9 @@ namespace CoreGameSystems
 
             _viewDistanceMap = new()
             {
-                {SizeType.S, new (1,4) },
-                {SizeType.M, new (1,6) },
-                {SizeType.L, new (1,8) },
+                {SizeType.S, new (1,3) },
+                {SizeType.M, new (1,5) },
+                {SizeType.L, new (1,7) },
                 {SizeType.XL, new (1,10) }
             };
             EventBus.PlayerShipSpawned += Init;

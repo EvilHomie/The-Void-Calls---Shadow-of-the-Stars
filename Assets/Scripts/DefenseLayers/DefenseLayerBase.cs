@@ -1,3 +1,4 @@
+using GamePools;
 using UnityEngine;
 
 namespace DefenseLayers
@@ -9,11 +10,15 @@ namespace DefenseLayers
         public float MaxBasePoints;
         public Collider2D Collider { get; private set; }
 
-        protected void InitBase(float points)
+        protected void SetupBase(float points)
         {
-            Collider = GetComponent<Collider2D>();
             CurrentBasePoints = points;
             MaxBasePoints = points;
+        }
+
+        public virtual void CacheDependencies()
+        {
+            Collider = GetComponent<Collider2D>();
         }
     }
 }

@@ -12,9 +12,9 @@ namespace DefenseLayers
         public float RemainingLifeTime;
         public float SpriteAlpha;
 
-        public override void Init(uint poolId)
+        public override void CacheDependencies(uint poolId)
         {
-            base.Init(poolId);
+            base.CacheDependencies(poolId);
             MaterialBlock = new();
             SpriteAlpha = 1;
         }

@@ -8,11 +8,14 @@ namespace GamePools
         public GameObject GameObject { get; private set; }
         public Transform Transform { get; private set; }
 
-        public virtual void Init(uint poolId)
+        public virtual void CacheDependencies(uint poolId)
         {
             PoolId = poolId;
             GameObject = gameObject;
             Transform = transform;
+            OnCacheDependencies();
         }
+
+        protected virtual void OnCacheDependencies() { }
     }
 }

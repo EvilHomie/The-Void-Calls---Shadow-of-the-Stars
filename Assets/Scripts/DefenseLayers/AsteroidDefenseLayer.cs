@@ -4,7 +4,7 @@ namespace DefenseLayers
     {
         public void Init(float basePoints)
         {
-            base.InitBase(basePoints);
+            base.SetupBase(basePoints);
         }
     }
 }

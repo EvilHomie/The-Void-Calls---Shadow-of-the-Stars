@@ -1,16 +1,16 @@
 using CoreGameSystems;
 using DefenseLayers;
+using GamePools;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ships
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class ShipInstance : MonoBehaviour
+    public class ShipInstance : PoolObjectBase
     {
         [field: SerializeField] public ShipId Id { get; private set; }
         public ShieldDefenseLayer Shield { get; private set; }
-        public Transform Transform { get; private set; }
         public HullDefenseLayer Hull { get; private set; }
         public Transform WeaponSlotsContainer { get; private set; }
         public Rigidbody2D Rigidbody { get; private set; }
@@ -29,13 +29,13 @@ namespace Ships
 
         public ShipIntentData IntentData;
 
-        public void Init()
+        protected override void OnCacheDependencies()
         {
+            base.OnCacheDependencies();
             Rigidbody = GetComponent<Rigidbody2D>();
             WeaponSlotsContainer = GetComponentInChildren<WeaponSlotsContainer>().transform;
             Hull = GetComponentInChildren<HullDefenseLayer>();
             Shield = GetComponentInChildren<ShieldDefenseLayer>();
-            Transform = GetComponent<Transform>();
         }
     }
 }

@@ -8,7 +8,7 @@ public class TestAsteroid : MonoBehaviour
     void Start()
     {
         var instance = GetComponent<Asteroid>();
-        instance.Init(default);
+        instance.CacheDependencies(default);
         InitHelper.InitAsteroid(instance);
         instance.Rigidbody.AddTorque(2, ForceMode2D.Impulse);
     }

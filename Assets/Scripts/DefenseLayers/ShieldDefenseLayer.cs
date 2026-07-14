@@ -10,14 +10,18 @@ namespace DefenseLayers
 
         public float RegRate;
 
-        public void Init(float basePoints, float regRate, float lossySize)
+        public override void CacheDependencies()
         {
-            base.InitBase(basePoints);
-            var transform = this.transform;
+            base.CacheDependencies();
             Transform = transform;
+        }
+
+        public void Setup(float basePoints, float regRate, float lossySize)
+        {
+            base.SetupBase(basePoints);
             RegRate = regRate;
 
-            var localScale = transform.localScale;
+            var localScale = Transform.localScale;
 
             ShieldTransformRuntimeData = new ShieldTransformRuntimeData()
             {

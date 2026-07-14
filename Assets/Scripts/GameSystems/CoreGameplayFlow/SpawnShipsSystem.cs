@@ -1,4 +1,5 @@
 using DI;
+using GamePools;
 using General;
 using Helpers;
 using Registries;
@@ -11,32 +12,43 @@ namespace CoreGameSystems
     {
         private ShipRegistry _shipRegistry;
         private GameFlowSystem _gameFlowSystem;
+        private ShipsPool _shipsPool;
 
-        [SerializeField] ShipInstance testPlayerShip;
-        [SerializeField] ShipInstance[] testEnemies;
+        [SerializeField] ShipId testPlayerShip;
+        [SerializeField] ShipId[] testEnemies;
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, GameFlowSystem gameFlowSystem)
+        public void Construct(ShipRegistry shipRegistry, GameFlowSystem gameFlowSystem, ShipsPool shipsPool)
         {
             _shipRegistry = shipRegistry;
             _gameFlowSystem = gameFlowSystem;
+            _shipsPool = shipsPool;
         }
 
         private void Start() // временный метод для запуска кор логики
         {
-            InitHelper.InitShip(testPlayerShip);
-            _shipRegistry.RegisterPlayerShip(testPlayerShip);
-            EventBus.PlayerShipSpawned?.Invoke(testPlayerShip);
+            var shipPoolId = _shipsPool.GetPoolIdByShipId(testPlayerShip);
 
-            SetDepthPos(testPlayerShip);
-           
+            var playerShipInstance = _shipsPool.Getitem(shipPoolId);
+            playerShipInstance.Transform.position = Vector3.zero;
 
-            foreach (var ship in testEnemies)
+
+            InitHelper.InitShip(playerShipInstance);
+            _shipRegistry.RegisterPlayerShip(playerShipInstance);
+            EventBus.PlayerShipSpawned?.Invoke(playerShipInstance);
+
+            SetDepthPos(playerShipInstance);
+
+
+            foreach (var enemy in testEnemies)
             {
-                InitHelper.InitShip(ship);
-                ship.AimData.TargetRigidBody = testPlayerShip.Rigidbody;
-                _shipRegistry.RegisterShip(ship, SimulationLevel.Lod0);
-                SetDepthPos(ship);
+                var enemyShipPoolId = _shipsPool.GetPoolIdByShipId(enemy);
+                var enemyInstance = _shipsPool.Getitem(enemyShipPoolId);
+
+                InitHelper.InitShip(enemyInstance);
+                enemyInstance.AimData.TargetRigidBody = playerShipInstance.Rigidbody;
+                _shipRegistry.RegisterShip(enemyInstance, SimulationLevel.Lod0);
+                SetDepthPos(enemyInstance);
             }
 
             _gameFlowSystem.ChangeGameState(GameState.CoreGameplay);

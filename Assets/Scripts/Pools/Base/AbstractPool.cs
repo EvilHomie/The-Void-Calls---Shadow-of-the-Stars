@@ -53,7 +53,7 @@ namespace GamePools
         {
             var prefab = _prefabs[poolId];
             var instance = Instantiate(prefab, parent);
-            instance.Init(poolId);
+            instance.CacheDependencies(poolId);
             instance.Transform.SetParent(_poolsParents[instance.PoolId]);
             return instance;
         }

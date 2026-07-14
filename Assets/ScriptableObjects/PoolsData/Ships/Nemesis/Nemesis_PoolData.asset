@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6012e3f7f841caa43a3c3b23fe8df9c4, type: 3}
-  m_Name: SparksPoolData_Blue
+  m_Name: Nemesis_PoolData
   m_EditorClassIdentifier: 
-  <PoolReference>k__BackingField: {fileID: 11400000, guid: d8761fa04187ee64f88e5f510e3c30e7, type: 2}
-  <Prefab>k__BackingField: {fileID: 1237531300013582031, guid: 5ad80177b77e4cb4f931fe212f2e7e54, type: 3}
+  <PoolReference>k__BackingField: {fileID: 11400000, guid: 45847a64ea9e68346bbdbd3e752ef775, type: 2}
+  <Prefab>k__BackingField: {fileID: 4570227518579856374, guid: d2bba46c00e63594fb81182856b7b64f, type: 3}

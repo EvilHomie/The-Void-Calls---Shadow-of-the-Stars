@@ -39,6 +39,7 @@ namespace DI
         [SerializeField] HitRegistrationSystem hitRegistrationSystem;
         [SerializeField] DamageVizualizeSystem damageVizualizeSystem;
         [SerializeField] ShieldsControlSystem  shieldsControlSystem;
+        [SerializeField] ShipsPool  shipsPool;
 
 
         protected override void InstallBindings()
@@ -64,6 +65,7 @@ namespace DI
             Container.Bind<HitRegistrationSystem>().FromInstance(hitRegistrationSystem).AsSingleton();
             Container.Bind<DamageVizualizeSystem>().FromInstance(damageVizualizeSystem).AsSingleton();
             Container.Bind<ShieldsControlSystem>().FromInstance(shieldsControlSystem).AsSingleton();
+            Container.Bind<ShipsPool>().FromInstance(shipsPool).AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();

@@ -6,9 +6,9 @@ namespace DefenseLayers
         public float MaxArmorPoints;
         public ModuleType OwnModule { get; private set; }
 
-        public void Init(float basePoints, float armorPoints, ModuleType moduleType)
+        public void Setup(float basePoints, float armorPoints, ModuleType moduleType)
         {
-            base.InitBase(basePoints);
+            base.SetupBase(basePoints);
             CurrentArmorPoints = armorPoints;
             MaxArmorPoints = armorPoints;
             OwnModule = moduleType;

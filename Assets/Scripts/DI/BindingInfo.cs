@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace DI
 {
@@ -22,6 +23,11 @@ namespace DI
 
         public BindingInfo FromInstance(object instance)
         {
+            if (instance == null)
+            {
+                throw new Exception($"Для контракта {Contract.Name} не был передан экземпляр.");
+            }
+
             ResolveType = ResolveType.Instance;
             Instance = instance;
 

@@ -14,14 +14,13 @@ namespace Helpers
             var chassisStats = GameConfig.ChassisBaseStats.GetStats(shipInstance.Id);
             var size = GameConfig.ChassisBaseStats.GetShipSizeType(shipInstance.Id);
 
-            shipInstance.Init();
-            InitMovement(shipInstance, chassisStats, size);
-            InitShipDefenceLayers(shipInstance, chassisStats, size);
+            SetupMovement(shipInstance, chassisStats, size);
+            SetupShipDefenceLayers(shipInstance, chassisStats, size);
             InitWeapons(shipInstance);
             InitEngines(shipInstance);
         }
 
-        private static void InitMovement(ShipInstance shipInstance, in ChassisBaseStats chassisStats, SizeType size)
+        private static void SetupMovement(ShipInstance shipInstance, in ChassisBaseStats chassisStats, SizeType size)
         {
             ref var movement = ref shipInstance.MovementRuntimeData;
             movement.InertiaDampingIsActive = true;
@@ -73,7 +72,7 @@ namespace Helpers
             movementCharacteristics.BoostRechargeSpeed = boostRechargeSpeed;
         }
 
-        private static void InitShipDefenceLayers(ShipInstance shipInstance, in ChassisBaseStats chassisBaseStats, SizeType size)
+        private static void SetupShipDefenceLayers(ShipInstance shipInstance, in ChassisBaseStats chassisBaseStats, SizeType size)
         {
             var shield = shipInstance.Shield;
             var lossySize = GameConfig.SizeMap[size];
@@ -81,7 +80,8 @@ namespace Helpers
 
             if (shield != null)
             {
-                shield.Init(100, 1, lossySize);
+                shield.CacheDependencies();
+                shield.Setup(100, 1, lossySize);
                 shield.gameObject.layer = GameLayers.ShipLayer;
                 shipInstance.OwnColliders.Add(shield.Collider);
             }
@@ -89,7 +89,8 @@ namespace Helpers
 
             var hull = shipInstance.Hull;
             var hullPoints = chassisBaseStats.HullPoints;
-            hull.Init(hullPoints, 100, ModuleType.Chassis);
+            hull.CacheDependencies();
+            hull.Setup(hullPoints, 100, ModuleType.Chassis);
 
             hull.gameObject.layer = GameLayers.ShipLayer;
             shipInstance.OwnColliders.Add(hull.Collider);
@@ -154,7 +155,7 @@ namespace Helpers
 
             foreach (var slot in weaponsSlots)
             {
-                slot.Init();
+                slot.CacheDependencies();
                 var weapon = slot.Weapon;
 
                 if (weapon == null) continue;
@@ -226,7 +227,7 @@ namespace Helpers
             runtimeDamage.DamageHull = damageStats.DamageKinetic + damageStats.DamageEnergy;
             runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull + runtimeDamage.DamageHull * damageStats.AsteroidBonusPercent * 0.01f;
 
-            weaponBase.HullDefenseLayer.Init(hullStats.HullPoints, hullStats.ArmorPoints, moduleType);
+            weaponBase.HullDefenseLayer.Setup(hullStats.HullPoints, hullStats.ArmorPoints, moduleType);
 
             if (weaponBase is ProjectileWeapon projectileWeapon)
             {
