@@ -6,7 +6,7 @@ namespace ShipModules
     {
         public SizeType Size { get; }
         public ModuleType ModuleType { get; }
-        public string Name { get; }
+        //public string Name { get; }
     }
 }
 

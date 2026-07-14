@@ -13,16 +13,16 @@ namespace Weapons
         public BoltRepeaterLogicStats LogicStats;
         public float NextShootTime;
 
-        public void Init(Rigidbody2D rb)
+        public void CacheRigidBody(Rigidbody2D rb)
         {
             ShipRB = rb;
         }
-        public void Init(uint poolId)
+        public void CachePool(uint poolId)
         {
             ProjectilePoolId = poolId;
         }
 
-        protected override void OnInitialize()
+        protected override void OnCacheDependencies()
         {
             ShootEffectPS = GetComponentInChildren<ShootEffect>().GetComponent<ParticleSystem>();
         }

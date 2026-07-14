@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c70cd1fd1a844498c54d8598a617e3, type: 3}
   m_Name: Nemesis_PoolReference
   m_EditorClassIdentifier: Assembly-CSharp::PoolReference
+  <Prefab>k__BackingField: {fileID: 4570227518579856374, guid: d2bba46c00e63594fb81182856b7b64f, type: 3}
+  _id: 1723614019

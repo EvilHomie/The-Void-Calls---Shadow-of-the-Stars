@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c70cd1fd1a844498c54d8598a617e3, type: 3}
   m_Name: Pulsar_PoolReference
   m_EditorClassIdentifier: Assembly-CSharp::PoolReference
+  <Prefab>k__BackingField: {fileID: 5308111233804096757, guid: 43ac4f4b7c4a8dd47aa77203c7b519da, type: 3}
+  _id: 3301442533

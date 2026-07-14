@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c70cd1fd1a844498c54d8598a617e3, type: 3}
   m_Name: Bolt_Yellow_PoolReference
   m_EditorClassIdentifier: Assembly-CSharp::PoolReference
+  <Prefab>k__BackingField: {fileID: 5959500612152639483, guid: e346f9fdfb4e7cb44a57b5ad6ae53005, type: 3}
+  _id: 696172132

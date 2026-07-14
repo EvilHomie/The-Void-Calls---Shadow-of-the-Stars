@@ -9,14 +9,12 @@ namespace Weapons
 {
     public abstract class WeaponBase : MonoBehaviour, IShipModule
     {
-        [field: SerializeField] public WeaponType WeaponType { get; private set; }
         [field: SerializeField] public ModuleType ModuleType { get; private set; }
+        public SizeType Size { get; private set; }
+        [field: SerializeField] public WeaponType WeaponType { get; private set; }
         public Transform ShootPointTransform { get; private set; }
         public HullDefenseLayer HullDefenseLayer { get; private set; }
-        public SizeType Size { get; private set; }
-        public string Name { get; private set; }
         public Transform Transform { get; private set; }
-        public Transform SlotTransform { get; private set; }
         public AimData AimData { get; private set; }
         public HashSet<Collider2D> IgnoredColliders { get; private set; }
 
@@ -25,21 +23,22 @@ namespace Weapons
         public WeaponRuntimeDamage RuntimeDamage;
         public WeaponAimStats RuntimeAimStats;
 
-        public void InitBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders)
+        public void CacheDependencies()
+        {
+            HullDefenseLayer = GetComponentInChildren<HullDefenseLayer>();
+            ShootPointTransform = GetComponentInChildren<ShootPoint>().transform;
+            Transform = transform;
+            OnCacheDependencies();
+        }
+
+        protected virtual void OnCacheDependencies() { }
+
+        public void SetupBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders)
         {
             AimData = targetData;
             Size = size;
-            IgnoredColliders = ignoredColliders;
-            var transform = this.transform;
-            SlotTransform = transform.parent;
-            Transform = transform;
-            HullDefenseLayer = GetComponentInChildren<HullDefenseLayer>();
-            ShootPointTransform = GetComponentInChildren<ShootPoint>().transform;
-            RotateAngle = transform.localEulerAngles.z;
-            OnInitialize();
+            IgnoredColliders = ignoredColliders;            
         }
-
-        protected abstract void OnInitialize();
     }    
 
     [Serializable]

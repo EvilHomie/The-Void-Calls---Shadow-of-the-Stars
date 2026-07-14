@@ -8,7 +8,10 @@ namespace DefenseLayers
     {
         public float CurrentBasePoints;
         public float MaxBasePoints;
+        
         public PolygonCollider2D Collider { get; private set; }
+        public Transform Transform { get; private set; }
+        public GameObject GameObject { get; private set; }
 
         protected void SetupBase(float points)
         {
@@ -19,6 +22,8 @@ namespace DefenseLayers
         public virtual void CacheDependencies()
         {
             Collider = GetComponent<PolygonCollider2D>();
+            Transform = transform;
+            GameObject = gameObject;
         }
     }
 }

@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c70cd1fd1a844498c54d8598a617e3, type: 3}
   m_Name: Shield_Hit_PoolReference
   m_EditorClassIdentifier: Assembly-CSharp::PoolReference
+  <Prefab>k__BackingField: {fileID: 1597044082333300506, guid: efd2dd7bee38db645bd34cf14ea9566e, type: 3}
+  _id: 3776785860

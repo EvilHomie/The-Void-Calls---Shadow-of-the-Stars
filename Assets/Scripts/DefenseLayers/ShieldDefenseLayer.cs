@@ -5,7 +5,6 @@ namespace DefenseLayers
 {
     public class ShieldDefenseLayer : DefenseLayerBase
     {
-        public Transform Transform { get; private set; }
         public SpriteRenderer SpriteRenderer { get; private set; }
         public ShieldTransformRuntimeData ShieldTransformRuntimeData;
 
@@ -14,7 +13,6 @@ namespace DefenseLayers
         public override void CacheDependencies()
         {
             base.CacheDependencies();
-            Transform = transform;
             SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 

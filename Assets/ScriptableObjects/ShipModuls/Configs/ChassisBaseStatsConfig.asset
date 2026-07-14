@@ -37,8 +37,8 @@ MonoBehaviour:
     <Mass>k__BackingField: 20
     <DirectDrag>k__BackingField: 12
     <ReverseDrag>k__BackingField: 20
-    <StrafeDrag>k__BackingField: 24
-    <RotateDrag>k__BackingField: 12
+    <StrafeDrag>k__BackingField: 50
+    <RotateDrag>k__BackingField: 50
     <CargoSize>k__BackingField: 80
   - Name: ' Nemesis M'
     <Id>k__BackingField: 100
@@ -46,8 +46,8 @@ MonoBehaviour:
     <Mass>k__BackingField: 15
     <DirectDrag>k__BackingField: 10
     <ReverseDrag>k__BackingField: 16
-    <StrafeDrag>k__BackingField: 20
-    <RotateDrag>k__BackingField: 8
+    <StrafeDrag>k__BackingField: 40
+    <RotateDrag>k__BackingField: 40
     <CargoSize>k__BackingField: 40
   - Name: ' Odysseus L'
     <Id>k__BackingField: 200
@@ -55,6 +55,6 @@ MonoBehaviour:
     <Mass>k__BackingField: 40
     <DirectDrag>k__BackingField: 24
     <ReverseDrag>k__BackingField: 40
-    <StrafeDrag>k__BackingField: 48
-    <RotateDrag>k__BackingField: 24
+    <StrafeDrag>k__BackingField: 96
+    <RotateDrag>k__BackingField: 96
     <CargoSize>k__BackingField: 160

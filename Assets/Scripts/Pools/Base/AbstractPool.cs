@@ -27,10 +27,10 @@ namespace GamePools
             FindPool(item.PoolId).Release(item);
         }
 
-        protected void CreateItemPool(PoolData poolData, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
+        protected void CreateItemPool(PoolReference reference, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
-            var poolId = poolData.PoolReference.Id;
-            T cast = poolData.Prefab.GetComponent<T>();
+            var poolId = reference.Id;
+            T cast = reference.Prefab.GetComponent<T>();
             _prefabs.Add(poolId, cast);
 
             var newPool = new ObjectPool<T>(

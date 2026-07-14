@@ -6,7 +6,7 @@ namespace GamePools
 {
     public class ShipsPool : AbstractPool<ShipInstance>
     {
-        [SerializeField] PoolData[] _poolsData;
+        [SerializeField] PoolReference[] _poolsReference;
         [SerializeField] int _startCapacity;
         [SerializeField] int _maxCapacity;
         [SerializeField] int _prewarmAmount;
@@ -14,14 +14,14 @@ namespace GamePools
         private readonly Dictionary<ShipId, uint> _poolIdByShipId = new();
         protected override void AwakeInit()
         {
-            foreach (var data in _poolsData)
+            foreach (var reference in _poolsReference)
             {
-                var container = new GameObject($"Pool_{data.PoolReference.name}").transform;
+                var container = new GameObject($"Pool_{reference.Prefab.name}").transform;
                 container.SetParent(transform);
-                CreateItemPool(data, _startCapacity, _maxCapacity, container, _prewarmAmount);
+                CreateItemPool(reference, _startCapacity, _maxCapacity, container, _prewarmAmount);
 
-                var shipId = data.Prefab.GetComponent<ShipInstance>().Id;
-                _poolIdByShipId.Add(shipId, data.PoolReference.Id);
+                var shipId = reference.Prefab.GetComponent<ShipInstance>().Id;
+                _poolIdByShipId.Add(shipId, reference.Id);
             }
         }
 

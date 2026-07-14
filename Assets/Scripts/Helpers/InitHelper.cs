@@ -184,8 +184,8 @@ namespace Helpers
                 var weapon = slot.Weapon;
 
                 if (weapon == null) continue;
-
-                weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders);
+                weapon.CacheDependencies();
+                weapon.SetupBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders);
                 SetWeaponStats(weapon);
 
                 weapon.gameObject.layer = GameLayers.WeaponLayer;
@@ -197,7 +197,7 @@ namespace Helpers
 
                 if (weapon is IRigidBodyDependentWeapon dependentWeapon)
                 {
-                    dependentWeapon.Init(shipRb);
+                    dependentWeapon.CacheRigidBody(shipRb);
                 }
             }
         }
@@ -233,7 +233,7 @@ namespace Helpers
             {
                 ModuleType.MainWeapon => GameConfig.MainWeaponsBaseStats,
                 ModuleType.Turret => GameConfig.TurretsBaseStats,
-                _ => throw new Exception($" Weapon {weaponBase.Name} has wrong module Type= {moduleType}")
+                _ => throw new Exception($" Weapon {weaponBase.gameObject.name} has wrong module Type= {moduleType}")
             };
 
             var baseStats = statsConfig.GetStats(weaponBase.WeaponType, weaponBase.Size);
@@ -270,7 +270,7 @@ namespace Helpers
                 logicStats.ProjectileLifeTime = aimStats.Distance * invProjectileSpeed;
                 logicStats.SpreadTimeMultiplier = projectileWeaponStats.SpreadAngle * 0.01f;
 
-                projectileWeapon.Init(projectileWeaponStats.PoolReference.Id);
+                projectileWeapon.CachePool(projectileWeaponStats.PoolReference.Id);
             }
             else if (weaponBase is ConstantBeamWeapon miningDrill)
             {

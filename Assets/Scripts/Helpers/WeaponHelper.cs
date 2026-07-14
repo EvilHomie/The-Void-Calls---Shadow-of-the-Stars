@@ -34,7 +34,35 @@ namespace Helpers
         //    }
         //}
 
-        public static void AimAtTarget(ShipInstance shipInstance, float dTime)
+        //public static void AimAtTarget(ShipInstance shipInstance, float dTime)
+        //{
+        //    Vector2 aimPos = shipInstance.AimData.AimPosition;
+
+        //    foreach (var slot in shipInstance.MainWeaponsSlots)
+        //    {
+        //        var weapon = slot.Weapon;
+
+        //        if (weapon == null) continue;
+
+        //        var weaponTransform = weapon.Transform;
+        //        ref readonly var aimStats = ref weapon.RuntimeAimStats;
+        //        var localTargetPos = weapon.SlotTransform.InverseTransformPoint(aimPos);
+
+        //        var localTargetAngle = Vector2.SignedAngle(Vector2.up, localTargetPos);
+        //        var maxAngle = aimStats.MaxRotateAngle;
+        //        //localTargetAngle = Mathf.Clamp(localTargetAngle, -maxAngle, maxAngle);
+
+        //        var newAngle = Mathf.MoveTowardsAngle(weapon.RotateAngle, localTargetAngle, aimStats.RotateSpeed * dTime);
+        //        weapon.RotateAngle = newAngle;
+        //        weaponTransform.localRotation = Quaternion.Euler(0, 0, newAngle);
+
+        //        ref var shootPointData = ref weapon.ShootPointRuntimeData;
+        //        shootPointData.Direction = weaponTransform.up;
+        //        shootPointData.Position = weapon.ShootPointTransform.position;
+        //    }
+        //}
+
+        public static void AimAtTarget(ShipInstance shipInstance, float dTime) // избавился от зависимости от слота
         {
             Vector2 aimPos = shipInstance.AimData.AimPosition;
 
@@ -42,49 +70,29 @@ namespace Helpers
             {
                 var weapon = slot.Weapon;
 
-                if(weapon == null) continue;
+                if (weapon == null) continue;
 
                 var weaponTransform = weapon.Transform;
                 ref readonly var aimStats = ref weapon.RuntimeAimStats;
-                var localTargetPos = weapon.SlotTransform.InverseTransformPoint(aimPos);
+                Vector2 weaponPos = weaponTransform.position;
+                var toTarget = aimPos - weaponPos;
 
-                var localTargetAngle = Vector2.SignedAngle(Vector2.up, localTargetPos);
-                var maxAngle = aimStats.MaxRotateAngle;
-                localTargetAngle = Mathf.Clamp(localTargetAngle, -maxAngle, maxAngle);
+                var angleDelta = Vector2.SignedAngle(weaponTransform.up, toTarget);
+                var maxRotationDelta = aimStats.RotateSpeed * dTime;
+                var rotationDelta = Mathf.Clamp(angleDelta, -maxRotationDelta, maxRotationDelta);
 
-                var newAngle = Mathf.MoveTowardsAngle(weapon.RotateAngle, localTargetAngle, aimStats.RotateSpeed * dTime);
-                weapon.RotateAngle = newAngle;
-                weaponTransform.localRotation = Quaternion.Euler(0, 0, newAngle);
+                var maxRotateAngle = aimStats.MaxRotateAngle;
+                ref var rotateAngle = ref weapon.RotateAngle;
+                rotateAngle += rotationDelta;
+                rotateAngle = Mathf.Clamp(rotateAngle, -maxRotateAngle, maxRotateAngle);
+
+                weaponTransform.localRotation = Quaternion.Euler(0, 0, rotateAngle);
 
                 ref var shootPointData = ref weapon.ShootPointRuntimeData;
                 shootPointData.Direction = weaponTransform.up;
                 shootPointData.Position = weapon.ShootPointTransform.position;
             }
         }
-
-        //public static HitResult TryGetBeamHit(Vector2 startPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
-        //{
-        //    Collider2D defenseCollider;
-        //    bool hasHit;
-        //    Vector2 hitPoint;
-
-        //    var interceptedHit = Physics2D.Linecast(startPos, aimPos, LayersId.AsteroidsMask);
-
-        //    if (interceptedHit)
-        //    {
-        //        hasHit = true;
-        //        defenseCollider = interceptedHit.collider;
-        //        hitPoint = defenseCollider.OverlapPoint(aimPos) ? aimPos : interceptedHit.point;
-        //    }
-        //    else
-        //    {
-        //        defenseCollider = Physics2D.OverlapPoint(aimPos, LayersId.DefenseMask);
-        //        hitPoint = aimPos;
-        //        hasHit = defenseCollider && !ignoredColliders.Contains(defenseCollider);
-        //    }
-
-        //    return new HitResult(hasHit, defenseCollider, hitPoint);
-        //}
 
         public static HitResult TryGetBeamHit(Vector2 startPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
         {
@@ -107,29 +115,6 @@ namespace Helpers
 
             return new HitResult(true, defenseCollider, aimPos);
         }
-
-        //public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos)
-        //{
-        //    Collider2D defenseCollider;
-        //    bool hasHit;
-        //    Vector2 hitPoint;
-        //    var interceptedHit = Physics2D.Linecast(currentPos, nextPos, LayersId.AsteroidsMask);            
-
-        //    if (interceptedHit)
-        //    {
-        //        defenseCollider = interceptedHit.collider;
-        //        hasHit = !defenseCollider.OverlapPoint(aimPos);
-        //        hitPoint = interceptedHit.point;
-        //    }
-        //    else
-        //    {
-        //        hasHit = false;
-        //        defenseCollider = null;
-        //        hitPoint = Vector2.zero;
-        //    }
-
-        //    return new HitResult(hasHit, defenseCollider, hitPoint);
-        //}
 
         public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
         {
@@ -169,42 +154,6 @@ namespace Helpers
                 Point = point;
             }
         }
-
-
-        // первая версия
-        /*
-        private bool IsHitOther(Vector2 startPos, Vector2 endPos, HashSet<Collider2D> ignoredColliders, out Vector2 hitPos, out Collider2D hitedCollider)
-        { 
-            var asteroidHit = Physics2D.Linecast(startPos, endPos, LayersId.AsteroidsMask);
-            hitedCollider = asteroidHit.collider;
-
-            if (hitedCollider != null) 
-            { 
-                hitPos = hitedCollider.OverlapPoint(endPos) ? endPos : asteroidHit.point;
-                return true;
-            }
-
-            hitedCollider = Physics2D.OverlapPoint(endPos, LayersId.DefenseMask);
-            hitPos = endPos;
-
-            if (!hitedCollider || ignoredColliders.Contains(hitedCollider))
-            { 
-                return false;
-            } 
-            else
-            { 
-                return true;
-            } 
-        }
-        */
-
-
-        //public static bool CanFire(WeaponBase weapon, LayerMask hitLayers)
-        //{
-        //    ref var aimStats = ref weapon.AimStats;
-        //    Ray ray = new(weapon.Transform.position, weapon.Transform.up);
-        //    return Physics.Raycast(ray, aimStats.MaxDistance, hitLayers);
-        //}
 
         public static Vector2 GetDirectionWithSpreadBrookTaylor(Vector2 baseDir, float spreadAngleDeg)
         {
