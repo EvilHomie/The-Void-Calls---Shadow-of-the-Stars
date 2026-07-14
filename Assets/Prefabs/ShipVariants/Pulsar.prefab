@@ -590,6 +590,7 @@ MonoBehaviour:
   Equip:
     MainEngineId: 1
     ThrusterId: 2
+    ShieldId: 2
   MovementView:
     LastMainEnginePowerValue: 0
     LastBoostersState: 0

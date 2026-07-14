@@ -1,5 +1,6 @@
 using Ships;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Helpers
@@ -87,12 +88,12 @@ namespace Helpers
 
         public static HitResult TryGetBeamHit(Vector2 startPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
         {
-            var interceptedHit = Physics2D.Linecast(startPos, aimPos, GameLayers.InterceptMask);
+            var interceptHit = Physics2D.Linecast(startPos, aimPos, GameLayers.InterceptMask);
 
-            if (interceptedHit)
+            if (interceptHit && !ignoredColliders.Contains(interceptHit.collider))
             {
-                var collider = interceptedHit.collider;
-                var hitPoint = collider.OverlapPoint(aimPos) ? aimPos : interceptedHit.point;
+                var collider = interceptHit.collider;
+                var hitPoint = collider.OverlapPoint(aimPos) ? aimPos : interceptHit.point;
 
                 return new HitResult(true, collider, hitPoint);
             }
@@ -130,21 +131,21 @@ namespace Helpers
         //    return new HitResult(hasHit, defenseCollider, hitPoint);
         //}
 
-        public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos)
+        public static HitResult TryGetProjectileHit(Vector2 currentPos, Vector2 nextPos, Vector2 aimPos, HashSet<Collider2D> ignoredColliders)
         {
-            var hit = Physics2D.Linecast(currentPos, nextPos, GameLayers.InterceptMask);
+            var interceptHit = Physics2D.Linecast(currentPos, nextPos, GameLayers.InterceptMask);
 
-            if (!hit)
+            if (!interceptHit || ignoredColliders.Contains(interceptHit.collider))
             {
                 return HitResult.NoHit;
             }
 
-            if (hit.collider.OverlapPoint(aimPos))
+            if (interceptHit.collider.OverlapPoint(aimPos))
             {
                 return HitResult.NoHit;
             }
 
-            return new HitResult(true, hit.collider, hit.point);
+            return new HitResult(true, interceptHit.collider, interceptHit.point);
         }
 
         public static HitResult TryGetHitInPoint(Vector2 point, HashSet<Collider2D> ignoredColliders)

@@ -41,12 +41,14 @@ public class GameConfig : MonoBehaviour
     [SerializeField] ChassisBaseStatsConfig chassisBaseStats;
     [SerializeField] MainEnginesBaseStatsConfig mainEnginesBaseStats;
     [SerializeField] ThrustersBaseStatsConfig thrustersBaseStats;
+    [SerializeField] ShieldsBaseStatsConfig shieldsBaseStatsConfig;
 
     public static WeaponsBaseStatsConfig MainWeaponsBaseStats { get; private set; }
     public static WeaponsBaseStatsConfig TurretsBaseStats { get; private set; }
     public static ChassisBaseStatsConfig ChassisBaseStats { get; private set; }
     public static MainEnginesBaseStatsConfig MainEnginesBaseStats { get; private set; }
     public static ThrustersBaseStatsConfig ThrustersBaseStats { get; private set; }
+    public static ShieldsBaseStatsConfig ShieldsBaseStatsConfig { get; private set; }
 
     private void Awake()
     {
@@ -64,6 +66,9 @@ public class GameConfig : MonoBehaviour
 
         thrustersBaseStats.FillCollection();
         ThrustersBaseStats = thrustersBaseStats;
+
+        shieldsBaseStatsConfig.FillCollection();
+        ShieldsBaseStatsConfig = shieldsBaseStatsConfig;
     }
 }
 
@@ -86,13 +91,18 @@ public static class GameLayers
     public static readonly int StationLayer = LayerMask.NameToLayer("Station");
     public static readonly int ProjectileLayer = LayerMask.NameToLayer("Projectile");
     public static readonly int InterceptableProjectileLayer = LayerMask.NameToLayer("InterceptableProjectile");
+    public static readonly int FrontShieldLayer = LayerMask.NameToLayer("FrontShieldLayer");
 
     public static readonly int WeaponMask = LayerMask.GetMask("Weapon");
     public static readonly int AsteroidsMask = LayerMask.GetMask("Asteroid");
     public static readonly int ShipMask = LayerMask.GetMask("Ship");
     public static readonly int StationMask = LayerMask.GetMask("Station");
-    public static readonly int Projectile = LayerMask.GetMask("Projectile");
-    public static readonly int InterceptableProjectile = LayerMask.GetMask("InterceptableProjectile");
-    public static readonly int DamageableMask = AsteroidsMask | ShipMask | StationMask | InterceptableProjectile | WeaponMask;
-    public static readonly int InterceptMask = AsteroidsMask;
+    public static readonly int ProjectileMask = LayerMask.GetMask("Projectile");
+    public static readonly int InterceptableProjectileMask = LayerMask.GetMask("InterceptableProjectile");
+    public static readonly int FrontShieldMask = LayerMask.GetMask("FrontShieldLayer");
+
+
+
+    public static readonly int DamageableMask = AsteroidsMask | ShipMask | StationMask | InterceptableProjectileMask | WeaponMask;
+    public static readonly int InterceptMask = AsteroidsMask | FrontShieldMask;
 }

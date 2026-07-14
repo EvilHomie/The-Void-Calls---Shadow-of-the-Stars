@@ -86,7 +86,7 @@ namespace CoreGameSystems
             var pos = bolt.CurrentPos;
             var nextPos = pos + bolt.Velocity * deltaTime;
 
-            var hitResult = WeaponHelper.TryGetProjectileHit(pos, nextPos, bolt.AimPos);
+            var hitResult = WeaponHelper.TryGetProjectileHit(pos, nextPos, bolt.AimPos, bolt.IgnoredColliders);
 
             if (!hitResult.HasHit)
             {

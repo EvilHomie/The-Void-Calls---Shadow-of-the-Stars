@@ -6,6 +6,7 @@ namespace DefenseLayers
     public class ShieldDefenseLayer : DefenseLayerBase
     {
         public Transform Transform { get; private set; }
+        public SpriteRenderer SpriteRenderer { get; private set; }
         public ShieldTransformRuntimeData ShieldTransformRuntimeData;
 
         public float RegRate;
@@ -14,6 +15,7 @@ namespace DefenseLayers
         {
             base.CacheDependencies();
             Transform = transform;
+            SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public void Setup(float basePoints, float regRate, float lossySize)

@@ -46,7 +46,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _InnerSoftness: 0.5
-    - _InnerThickness: 0.462
+    - _InnerThickness: 0.437
     - _Lenth: 0.67
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}

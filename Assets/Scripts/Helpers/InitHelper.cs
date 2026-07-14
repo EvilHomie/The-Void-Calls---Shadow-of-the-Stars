@@ -2,6 +2,7 @@ using Asteroids;
 using Configs;
 using Ships;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Weapons;
 
@@ -78,14 +79,38 @@ namespace Helpers
             var lossySize = GameConfig.SizeMap[size];
             shipInstance.Transform.localScale = Vector3.one * lossySize;
 
-            if (shield != null)
+            var shieldId = shipInstance.Equip.ShieldId;
+
+            if (shieldId != ShieldId.None)
             {
                 shield.CacheDependencies();
-                shield.Setup(100, 1, lossySize);
-                shield.gameObject.layer = GameLayers.ShipLayer;
-                shipInstance.OwnColliders.Add(shield.Collider);
-            }
 
+                var shieldStats = GameConfig.ShieldsBaseStatsConfig.GetStats(shieldId, size);
+                var shape = shieldStats.ShieldShape;
+
+                shield.SpriteRenderer.sprite = shape;
+                var collider = shield.Collider;
+
+                collider.pathCount = shape.GetPhysicsShapeCount();
+                var points = new List<Vector2>();
+
+                for (int i = 0; i < shape.GetPhysicsShapeCount(); i++)
+                {
+                    points.Clear();
+                    shape.GetPhysicsShape(i, points);
+                    collider.SetPath(i, points);
+                }
+
+                shield.Setup(shieldStats.Capacity, shieldStats.RegRate, lossySize);
+                shipInstance.OwnColliders.Add(collider);
+
+                shield.gameObject.layer = shieldId == ShieldId.FrontMK1 ? GameLayers.FrontShieldLayer : GameLayers.ShipLayer;
+            }
+            else
+            {
+                shield.CacheDependencies();
+                shield.Transform.gameObject.SetActive(false);
+            }
 
             var hull = shipInstance.Hull;
             var hullPoints = chassisBaseStats.HullPoints;

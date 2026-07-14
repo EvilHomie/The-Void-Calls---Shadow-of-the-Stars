@@ -7,5 +7,6 @@ namespace Ships
     {
         public MainEngineId MainEngineId;
         public ThrusterId ThrusterId;
+        public ShieldId ShieldId;
     }
 }
