@@ -38,10 +38,10 @@ namespace CoreGameSystems
 
             _viewDistanceMap = new()
             {
-                {SizeType.S, new (1,2) },
-                {SizeType.M, new (1,4) },
+                {SizeType.S, new (1,4) },
+                {SizeType.M, new (1,6) },
                 {SizeType.L, new (1,8) },
-                {SizeType.XL, new (1,16) }
+                {SizeType.XL, new (1,10) }
             };
             EventBus.PlayerShipSpawned += Init;
         }
@@ -77,7 +77,7 @@ namespace CoreGameSystems
         {
             _cinemachineTargetGroup.Targets.Clear();
 
-            var shipTransform = shipInstance.transform;
+            var shipTransform = shipInstance.Transform;
 
             var playerTarget = new CinemachineTargetGroup.Target()
             {

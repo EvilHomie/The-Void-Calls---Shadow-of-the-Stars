@@ -1,4 +1,3 @@
-using ShipModules;
 using System;
 
 namespace Ships
@@ -7,6 +6,6 @@ namespace Ships
     public struct EquipData
     {
         public MainEngineId MainEngineId;
-        public Thruster SideEngine;
+        public ThrusterId ThrusterId;
     }
 }

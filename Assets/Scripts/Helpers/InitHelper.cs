@@ -30,13 +30,11 @@ namespace Helpers
             ref var equip = ref shipInstance.Equip;
 
             var mainEnginesStats = GameConfig.MainEnginesBaseStats.GetStats(shipInstance.Equip.MainEngineId, size);
+            var thrustersStats = GameConfig.ThrustersBaseStats.GetStats(shipInstance.Equip.ThrusterId, size);
 
-
-            var sideEngineMultipliers = equip.SideEngine.ThrustersMultipliers;
 
             var worldUnitMod = GameConfig.WorldUnitMod;
             var inertiaDampingForce = GameConfig.InertiaDampingForce;
-            var sideEngine = equip.SideEngine;
 
             var mass = chassisStats.Mass;
             var directDrag = chassisStats.DirectDrag;
@@ -49,10 +47,10 @@ namespace Helpers
             var boostMaxTime = mainEnginesStats.BoostMaxTime;
             var boostRechargeSpeed = mainEnginesStats.BoostRechargeSpeed;
 
-            shipInstance.Rigidbody.mass = mass;
+            var strafeThrust = thrustersStats.StrafeThrust;
+            var rotateThrust = thrustersStats.RotateThrust;
 
-            var totalStrafeThrust = sideEngine.StrafeThrust + sideEngineMultipliers.StrafeThrustMultiplier * sideEngine.StrafeThrust;
-            var totalRotateThrust = sideEngine.RotateThrust + sideEngineMultipliers.RotateThrustMultiplier * sideEngine.RotateThrust;
+            shipInstance.Rigidbody.mass = mass;
 
             movementCharacteristics.DirectMaxSpeed = directThrust / directDrag * worldUnitMod;
             movementCharacteristics.DirectAcceleration = directThrust / mass * worldUnitMod;
@@ -62,11 +60,11 @@ namespace Helpers
             movementCharacteristics.ReverseAcceleration = reverseThrust / mass * worldUnitMod;
             movementCharacteristics.ReverseDampingAcceleration = reverseDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.StrafeMaxSpeed = totalStrafeThrust / strafeDrag * worldUnitMod;
-            movementCharacteristics.StrafeAcceleration = totalStrafeThrust / mass * worldUnitMod;
+            movementCharacteristics.StrafeMaxSpeed = strafeThrust / strafeDrag * worldUnitMod;
+            movementCharacteristics.StrafeAcceleration = strafeThrust / mass * worldUnitMod;
             movementCharacteristics.StrafeDampingAcceleration = strafeDrag * inertiaDampingForce * worldUnitMod;
 
-            movementCharacteristics.RotateSpeed = totalRotateThrust / chassisStats.RotateDrag;
+            movementCharacteristics.RotateSpeed = rotateThrust / chassisStats.RotateDrag;
 
 
             movementCharacteristics.BoostersMaxSpeed = boostThrust / directDrag * worldUnitMod + movementCharacteristics.DirectMaxSpeed;

@@ -5994,10 +5994,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5883dbcb34ac32f479fcdac5857233ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnShipsSystem
-  testPlayerShip: {fileID: 4507262679446174334}
-  testEnemies:
-  - {fileID: 1538942191183691189}
-  - {fileID: 1482267825125294113}
+  testPlayerShip: {fileID: 7085458918266230295}
+  testEnemies: []
 --- !u!1 &797286962
 GameObject:
   m_ObjectHideFlags: 0
@@ -13635,6 +13633,7 @@ MonoBehaviour:
   turretsBaseStats: {fileID: 11400000, guid: c738ebb42c550f649a0dc73dc207c696, type: 2}
   chassisBaseStats: {fileID: 11400000, guid: b834586d19d236a42935205d26bf10c1, type: 2}
   mainEnginesBaseStats: {fileID: 11400000, guid: 4252211fd788e3144aa7eb5bb19d4032, type: 2}
+  thrustersBaseStats: {fileID: 11400000, guid: fe16f2b50e00eb944b7e5c25289fb7d1, type: 2}
 --- !u!1 &1946297436
 GameObject:
   m_ObjectHideFlags: 0
@@ -16001,28 +16000,6 @@ Transform:
   - {fileID: 1955926552}
   m_Father: {fileID: 1646238865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1482267825125294113 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7641557133222027342, guid: 65cf8ba9ad9688d48b5bde5fa81eef30, type: 3}
-  m_PrefabInstance: {fileID: 5904533270330752684}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
---- !u!114 &1538942191183691189 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7767660025812212419, guid: 43ac4f4b7c4a8dd47aa77203c7b519da, type: 3}
-  m_PrefabInstance: {fileID: 1848359003902931199}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
 --- !u!1001 &1848359003902931199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16075,6 +16052,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pulsar
       objectReference: {fileID: 0}
+    - target: {fileID: 7767660025812212419, guid: 43ac4f4b7c4a8dd47aa77203c7b519da, type: 3}
+      propertyPath: Equip.ThrusterId
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16085,17 +16066,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1165193577563783804, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
   m_PrefabInstance: {fileID: 7343486920492400205}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4507262679446174334 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1901153747440595472, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
-  m_PrefabInstance: {fileID: 7343486920492400205}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
 --- !u!1001 &5376204608969580365
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16107,6 +16077,10 @@ PrefabInstance:
     - target: {fileID: 4570227518579856374, guid: d2bba46c00e63594fb81182856b7b64f, type: 3}
       propertyPath: m_Name
       value: Nemesis
+      objectReference: {fileID: 0}
+    - target: {fileID: 6465790878641905335, guid: d2bba46c00e63594fb81182856b7b64f, type: 3}
+      propertyPath: Equip.ThrusterId
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7021252408330456521, guid: d2bba46c00e63594fb81182856b7b64f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16165,6 +16139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manorina
       objectReference: {fileID: 0}
+    - target: {fileID: 7641557133222027342, guid: 65cf8ba9ad9688d48b5bde5fa81eef30, type: 3}
+      propertyPath: Equip.ThrusterId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7924146452511069563, guid: 65cf8ba9ad9688d48b5bde5fa81eef30, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.74
@@ -16210,6 +16188,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65cf8ba9ad9688d48b5bde5fa81eef30, type: 3}
+--- !u!114 &7085458918266230295 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1728582041876794952, guid: d3069937496e16d41a53b6ad6db8758b, type: 3}
+  m_PrefabInstance: {fileID: 7378758001872400229}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3b35fe9eb15964b9bd82311028e5fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
 --- !u!1001 &7343486920492400205
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16258,17 +16247,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1359042423950226052, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
-      propertyPath: m_Name
-      value: WeaponSlotsContainer
-      objectReference: {fileID: 0}
     - target: {fileID: 1901153747440595472, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
-      propertyPath: Equip.MainEngineId
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1901153747440595472, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
-      propertyPath: <Id>k__BackingField
-      value: 1
+      propertyPath: Equip.ThrusterId
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5421825612968811053, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
       propertyPath: m_Name
@@ -16277,28 +16258,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1359042423950226052, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7343486920492400207}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
---- !u!1 &7343486920492400206 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1359042423950226052, guid: 6fd63005cfb36c341961cd319d834e5f, type: 3}
-  m_PrefabInstance: {fileID: 7343486920492400205}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7343486920492400207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7343486920492400206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e492b97550217244bad51041cc2c13c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ships.WeaponSlots
 --- !u!1001 &7378758001872400229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16307,6 +16268,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1728582041876794952, guid: d3069937496e16d41a53b6ad6db8758b, type: 3}
+      propertyPath: Equip.ThrusterId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4052075478028798600, guid: d3069937496e16d41a53b6ad6db8758b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.41

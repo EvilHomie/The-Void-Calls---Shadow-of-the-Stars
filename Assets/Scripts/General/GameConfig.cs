@@ -40,11 +40,13 @@ public class GameConfig : MonoBehaviour
     [SerializeField] WeaponsBaseStatsConfig turretsBaseStats;
     [SerializeField] ChassisBaseStatsConfig chassisBaseStats;
     [SerializeField] MainEnginesBaseStatsConfig mainEnginesBaseStats;
+    [SerializeField] ThrustersBaseStatsConfig thrustersBaseStats;
 
     public static WeaponsBaseStatsConfig MainWeaponsBaseStats { get; private set; }
     public static WeaponsBaseStatsConfig TurretsBaseStats { get; private set; }
     public static ChassisBaseStatsConfig ChassisBaseStats { get; private set; }
     public static MainEnginesBaseStatsConfig MainEnginesBaseStats { get; private set; }
+    public static ThrustersBaseStatsConfig ThrustersBaseStats { get; private set; }
 
     private void Awake()
     {
@@ -59,6 +61,9 @@ public class GameConfig : MonoBehaviour
 
         mainEnginesBaseStats.FillCollection();
         MainEnginesBaseStats = mainEnginesBaseStats;
+
+        thrustersBaseStats.FillCollection();
+        ThrustersBaseStats = thrustersBaseStats;
     }
 }
 

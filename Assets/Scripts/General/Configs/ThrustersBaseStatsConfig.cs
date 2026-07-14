@@ -5,30 +5,30 @@ using UnityEngine;
 
 namespace Configs
 {
-    [CreateAssetMenu(fileName = "MainEnginesBaseStatsConfig ", menuName = "Scriptable Objects/MainEnginesBaseStatsConfig ")]
-    public class MainEnginesBaseStatsConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "ThrustersBaseStatsConfig ", menuName = "Scriptable Objects/ThrustersBaseStatsConfig ")]
+    public class ThrustersBaseStatsConfig : ScriptableObject
     {
-        [field: SerializeField] public MainEngineBaseStats[] BaseStats { get; private set; }
+        [field: SerializeField] public ThrusterBaseStats[] BaseStats { get; private set; }
 
-        private Dictionary<(MainEngineId, SizeType), MainEngineStatsBySize> _statsByEngine;
+        private Dictionary<(ThrusterId, SizeType), ThrusterStatsBySize> _statsByThruster;
 
         public void FillCollection()
         {
-            _statsByEngine ??= new();
+            _statsByThruster ??= new();
 
             for (int i = 0; i < BaseStats.Length; i++)
             {
                 for (int j = 0; j < BaseStats[i].StatsBySize.Length; j++)
                 {
                     var stats = BaseStats[i].StatsBySize[j];
-                    _statsByEngine.Add((BaseStats[i].Id, stats.Size), stats);
+                    _statsByThruster.Add((BaseStats[i].Id, stats.Size), stats);
                 }
             }
         }
 
-        public MainEngineStatsBySize GetStats(MainEngineId id, SizeType sizeType)
+        public ThrusterStatsBySize GetStats(ThrusterId id, SizeType sizeType)
         {
-            return _statsByEngine[(id, sizeType)];
+            return _statsByThruster[(id, sizeType)];
         }
 
 #if UNITY_EDITOR
@@ -52,30 +52,27 @@ namespace Configs
 
 
     [Serializable]
-    public struct MainEngineBaseStats
+    public struct ThrusterBaseStats
     {
         [HideInInspector] public string Name;
-        [field: SerializeField] public MainEngineId Id { get; private set; }
-        [field: SerializeField] public MainEngineStatsBySize[] StatsBySize { get; private set; }
+        [field: SerializeField] public ThrusterId Id { get; private set; }
+        [field: SerializeField] public ThrusterStatsBySize[] StatsBySize { get; private set; }
     }
 
     [Serializable]
-    public struct MainEngineStatsBySize
+    public struct ThrusterStatsBySize
     {
         [HideInInspector] public string Name;
         [field: SerializeField] public SizeType Size { get; private set; }
-        [field: SerializeField] public float DirectThrust { get; private set; }
-        [field: SerializeField] public float ReverseThrust { get; private set; }
-        [field: SerializeField] public float BoostThrust { get; private set; }
-        [field: SerializeField] public float BoostMaxTime { get; private set; }
-        [field: SerializeField] public float BoostRechargeSpeed { get; private set; }
+        [field: SerializeField] public float StrafeThrust { get; private set; }
+        [field: SerializeField] public float RotateThrust { get; private set; }
     }
 }
 
-public enum MainEngineId
+public enum ThrusterId
 {
     None = 0,
-    CombatMK1 = 1,
-    UniversalMK1 = 2,
-    TravelMK1 = 3
+    RotationMK1 = 1,
+    BalancedMK1 = 2,
+    StrafeMK1 = 3
 }

@@ -16,51 +16,72 @@ MonoBehaviour:
   - Name: CombatMK1
     <Id>k__BackingField: 1
     <StatsBySize>k__BackingField:
-    - Name: CombatMK1
+    - Name: 'CombatMK1 S '
       <Size>k__BackingField: 0
       <DirectThrust>k__BackingField: 750
       <ReverseThrust>k__BackingField: 750
       <BoostThrust>k__BackingField: 500
       <BoostMaxTime>k__BackingField: 6
       <BoostRechargeSpeed>k__BackingField: 2
-    - Name: CombatMK1
+    - Name: 'CombatMK1 M '
       <Size>k__BackingField: 1
       <DirectThrust>k__BackingField: 1500
       <ReverseThrust>k__BackingField: 1500
       <BoostThrust>k__BackingField: 1000
       <BoostMaxTime>k__BackingField: 6
       <BoostRechargeSpeed>k__BackingField: 2
+    - Name: 'CombatMK1 L '
+      <Size>k__BackingField: 2
+      <DirectThrust>k__BackingField: 3000
+      <ReverseThrust>k__BackingField: 3000
+      <BoostThrust>k__BackingField: 2000
+      <BoostMaxTime>k__BackingField: 6
+      <BoostRechargeSpeed>k__BackingField: 2
   - Name: UniversalMK1
     <Id>k__BackingField: 2
     <StatsBySize>k__BackingField:
-    - Name: UniversalMK1
+    - Name: 'UniversalMK1 S '
       <Size>k__BackingField: 0
       <DirectThrust>k__BackingField: 750
       <ReverseThrust>k__BackingField: 500
       <BoostThrust>k__BackingField: 500
       <BoostMaxTime>k__BackingField: 4
       <BoostRechargeSpeed>k__BackingField: 1
-    - Name: UniversalMK1
+    - Name: 'UniversalMK1 M '
       <Size>k__BackingField: 1
       <DirectThrust>k__BackingField: 1500
       <ReverseThrust>k__BackingField: 1000
       <BoostThrust>k__BackingField: 1000
       <BoostMaxTime>k__BackingField: 4
       <BoostRechargeSpeed>k__BackingField: 1
+    - Name: 'UniversalMK1 L '
+      <Size>k__BackingField: 2
+      <DirectThrust>k__BackingField: 3000
+      <ReverseThrust>k__BackingField: 2000
+      <BoostThrust>k__BackingField: 2000
+      <BoostMaxTime>k__BackingField: 4
+      <BoostRechargeSpeed>k__BackingField: 1
   - Name: TravelMK1
     <Id>k__BackingField: 3
     <StatsBySize>k__BackingField:
-    - Name: TravelMK1
+    - Name: 'TravelMK1 S '
       <Size>k__BackingField: 0
       <DirectThrust>k__BackingField: 1000
       <ReverseThrust>k__BackingField: 250
       <BoostThrust>k__BackingField: 250
       <BoostMaxTime>k__BackingField: 2
       <BoostRechargeSpeed>k__BackingField: 0.5
-    - Name: TravelMK1
+    - Name: 'TravelMK1 M '
       <Size>k__BackingField: 1
       <DirectThrust>k__BackingField: 2000
       <ReverseThrust>k__BackingField: 500
       <BoostThrust>k__BackingField: 500
+      <BoostMaxTime>k__BackingField: 2
+      <BoostRechargeSpeed>k__BackingField: 0.5
+    - Name: 'TravelMK1 L '
+      <Size>k__BackingField: 2
+      <DirectThrust>k__BackingField: 4000
+      <ReverseThrust>k__BackingField: 1000
+      <BoostThrust>k__BackingField: 1000
       <BoostMaxTime>k__BackingField: 2
       <BoostRechargeSpeed>k__BackingField: 0.5
