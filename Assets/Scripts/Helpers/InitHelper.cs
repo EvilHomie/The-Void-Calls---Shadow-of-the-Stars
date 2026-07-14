@@ -2,6 +2,7 @@ using Asteroids;
 using Configs;
 using Ships;
 using System;
+using UnityEngine;
 using Weapons;
 
 namespace Helpers
@@ -11,7 +12,7 @@ namespace Helpers
         public static void InitShip(ShipInstance shipInstance)
         {
             var chassisStats = GameConfig.ChassisBaseStats.GetStats(shipInstance.Id);
-            var size = GameConfig.ChassisBaseStats.GetShipSize(shipInstance.Id);
+            var size = GameConfig.ChassisBaseStats.GetShipSizeType(shipInstance.Id);
 
             shipInstance.Init();
             InitMovement(shipInstance, chassisStats, size);
@@ -29,7 +30,7 @@ namespace Helpers
             ref var equip = ref shipInstance.Equip;
 
             var mainEnginesStats = GameConfig.MainEnginesBaseStats.GetStats(shipInstance.Equip.MainEngineId, size);
-            
+
 
             var sideEngineMultipliers = equip.SideEngine.ThrustersMultipliers;
 
@@ -77,9 +78,16 @@ namespace Helpers
         private static void InitShipDefenceLayers(ShipInstance shipInstance, in ChassisBaseStats chassisBaseStats, SizeType size)
         {
             var shield = shipInstance.Shield;
-            shield.Init(100, 1, size);
-            shield.gameObject.layer = GameLayers.ShipLayer;
-            shipInstance.OwnColliders.Add(shield.Collider);
+            var lossySize = GameConfig.SizeMap[size];
+            shipInstance.Transform.localScale = Vector3.one * lossySize;
+
+            if (shield != null)
+            {
+                shield.Init(100, 1, lossySize);
+                shield.gameObject.layer = GameLayers.ShipLayer;
+                shipInstance.OwnColliders.Add(shield.Collider);
+            }
+
 
             var hull = shipInstance.Hull;
             var hullPoints = chassisBaseStats.HullPoints;
@@ -155,8 +163,6 @@ namespace Helpers
 
                 weapon.InitBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders);
                 SetWeaponStats(weapon);
-
-
 
                 weapon.gameObject.layer = GameLayers.WeaponLayer;
 

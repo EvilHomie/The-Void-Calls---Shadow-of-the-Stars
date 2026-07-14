@@ -19,25 +19,35 @@ namespace CoreGameSystems
         {
             var playerShip = _shipRegistry.PlayerShip;
             var playerShield = playerShip.Shield;
-            UpdateShieldTransformRuntimeData(playerShield);
-            HandleRegeneration(playerShield, deltaTime);
+
+            if (playerShield != null)
+            {
+                UpdateShieldTransformRuntimeData(playerShield);
+                HandleRegeneration(playerShield, deltaTime);
+            }
 
             foreach (var ship in _shipRegistry.Lod0Ships)
             {
                 var shield = ship.Shield;
-                UpdateShieldTransformRuntimeData(shield);
-                HandleRegeneration(shield, deltaTime);
+
+                if (shield != null)
+                {
+                    UpdateShieldTransformRuntimeData(shield);
+                    HandleRegeneration(shield, deltaTime);
+                }  
             }
         }
 
         private void UpdateShieldTransformRuntimeData(ShieldDefenseLayer layer)
         {
             ref var shieldTransformRuntimeData = ref layer.ShieldTransformRuntimeData;
-            var transform = layer.transform;
+            var transform = layer.Transform;
             shieldTransformRuntimeData.WorldPosition = transform.position;
             shieldTransformRuntimeData.WorldRotation = transform.rotation;
-            layer.RadiusTransform.localScale = Vector3.one * shieldTransformRuntimeData.Radius;
-            shieldTransformRuntimeData.CurrentLossyScale = shieldTransformRuntimeData.DeffaultLossyScale * shieldTransformRuntimeData.Radius;
+            var currentLocalScale = shieldTransformRuntimeData.DeffaultLocalScale * shieldTransformRuntimeData.RadiusMod;
+            transform.localScale = currentLocalScale;
+            shieldTransformRuntimeData.CurrentLocalScale = currentLocalScale;
+            shieldTransformRuntimeData.CurrentLossyScale = currentLocalScale * shieldTransformRuntimeData.lossySize;
         }
 
         private void HandleRegeneration(ShieldDefenseLayer layer, float deltaTime)

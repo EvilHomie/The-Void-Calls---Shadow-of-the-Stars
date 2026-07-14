@@ -142,7 +142,7 @@ namespace CoreGameSystems
             var materialBlock = effect.MaterialBlock;
             materialBlock.SetVector(EffectUVId, local);
 
-            var relativeSize = GameConfig.SizeMap[hitData.Size] / GameConfig.SizeMap[layer.Size];
+            var relativeSize = GameConfig.SizeMap[hitData.Size] / shieldTransformRuntimeData.lossySize;
             materialBlock.SetFloat(HitSizeId, _shieldEffectDeffSize * relativeSize);
             effect.SpriteRenderer.SetPropertyBlock(materialBlock);
         }

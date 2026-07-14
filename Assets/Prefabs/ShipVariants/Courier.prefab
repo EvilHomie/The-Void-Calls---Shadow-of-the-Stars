@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4190993684250912781}
+  - component: {fileID: 269615856620025366}
   m_Layer: 8
-  m_Name: WeaponSlots
+  m_Name: WeaponSlotsContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,6 +34,18 @@ Transform:
   - {fileID: 459953926652019859}
   m_Father: {fileID: 1165193577563783804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &269615856620025366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1359042423950226052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e492b97550217244bad51041cc2c13c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ships.WeaponSlots
 --- !u!1 &2326537598141909115
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,7 +112,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4753111969530610171}
-  - {fileID: 9034878234246333217}
+  - {fileID: 4153006939001996753}
   - {fileID: 8577154075811777129}
   - {fileID: 4190993684250912781}
   m_Father: {fileID: 0}
@@ -144,9 +157,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
   <Id>k__BackingField: 1
-  <WeaponSlotsContainer>k__BackingField: {fileID: 4190993684250912781}
-  <Shield>k__BackingField: {fileID: 2928605171747997568}
-  <Hull>k__BackingField: {fileID: 4291034122756888095}
   IsAttacking: 0
   ActiveWeaponGroup: 0
   AimData:
@@ -168,6 +178,7 @@ MonoBehaviour:
     BoostersMaxSpeed: 0
     BoostersAcceleration: 0
     BoostersMaxPower: 0
+    BoostRechargeSpeed: 0
   MovementRuntimeData:
     DirectThrottle: 0
     MainEnginePower: 0
@@ -179,7 +190,7 @@ MonoBehaviour:
     BoostersIsActive: 0
     BoostersPower: 0
   Equip:
-    MainEngine: {fileID: 11400000, guid: 4a60a8bb0a115744a9c686132cc0f9b3, type: 2}
+    MainEngineId: 2
     SideEngine: {fileID: 11400000, guid: dc64e3cc295f9cf47aade3eeef5d0b6b, type: 2}
   MovementView:
     LastMainEnginePowerValue: 0
@@ -597,38 +608,6 @@ Transform:
   - {fileID: 7563642013130732121}
   m_Father: {fileID: 8577154075811777129}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8624082669038843002
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9034878234246333217}
-  m_Layer: 8
-  m_Name: Shields
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9034878234246333217
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8624082669038843002}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.04, z: -0.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 4153006939001996753}
-  m_Father: {fileID: 1165193577563783804}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9065080859435927340
 GameObject:
   m_ObjectHideFlags: 0
@@ -843,7 +822,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 9034878234246333217}
+    m_TransformParent: {fileID: 1165193577563783804}
     m_Modifications:
     - target: {fileID: 3383561619596758914, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}
       propertyPath: m_LocalScale.x
@@ -859,11 +838,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3383561619596758914, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.016
+      value: -0.024000168
       objectReference: {fileID: 0}
     - target: {fileID: 3383561619596758914, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3383561619596758914, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -902,17 +881,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}
---- !u!114 &2928605171747997568 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4607987743055597011, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}
-  m_PrefabInstance: {fileID: 1681710263369697875}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcad1feff17708448babc9585f59646d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DefenseLayers.ShieldLayer
 --- !u!4 &4153006939001996753 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3383561619596758914, guid: 9ad2f00f46ad59040bcbc6ec7f1628a9, type: 3}

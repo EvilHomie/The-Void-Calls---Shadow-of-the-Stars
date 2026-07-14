@@ -1,4 +1,3 @@
-using Ships;
 using System;
 using UnityEngine;
 
@@ -6,29 +5,26 @@ namespace DefenseLayers
 {
     public class ShieldDefenseLayer : DefenseLayerBase
     {
-        public SizeType Size { get; private set; }
         public Transform Transform { get; private set; }
-        public Transform RadiusTransform { get; private set; }
         public ShieldTransformRuntimeData ShieldTransformRuntimeData;
 
         public float RegRate;
 
-        public void Init(float basePoints, float regRate, SizeType size)
+        public void Init(float basePoints, float regRate, float lossySize)
         {
             base.InitBase(basePoints);
             var transform = this.transform;
             Transform = transform;
-            RadiusTransform = transform.parent;
             RegRate = regRate;
-            Size = size;
 
-            var deffLossyScale = transform.localScale * GameConfig.SizeMap[size];
+            var localScale = transform.localScale;
 
             ShieldTransformRuntimeData = new ShieldTransformRuntimeData()
             {
-                Radius = 1,
-                DeffaultLossyScale = deffLossyScale,
-                CurrentLossyScale = deffLossyScale,
+                RadiusMod = 1,
+                lossySize = lossySize,
+                CurrentLocalScale = localScale,
+                DeffaultLocalScale = localScale,
                 WorldPosition = transform.position,
                 WorldRotation = transform.rotation
             };
@@ -38,9 +34,11 @@ namespace DefenseLayers
     [Serializable]
     public struct ShieldTransformRuntimeData
     {
-        public float Radius;
+        public float RadiusMod;
+        public float lossySize;
+        public Vector2 CurrentLocalScale;
         public Vector2 CurrentLossyScale;
-        public Vector2 DeffaultLossyScale;
+        public Vector2 DeffaultLocalScale;
         public Vector2 WorldPosition;
         public Quaternion WorldRotation;
     }

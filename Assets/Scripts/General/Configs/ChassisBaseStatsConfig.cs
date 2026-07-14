@@ -24,7 +24,7 @@ namespace Configs
             }
         }
 
-        public SizeType GetShipSize(ShipId shipId)
+        public SizeType GetShipSizeType(ShipId shipId)
         {
             int id = (int)shipId;
 
@@ -59,7 +59,7 @@ namespace Configs
                     return;
                 }
 
-                var name = $" {shipId} {GetShipSize(shipId)}";
+                var name = $" {shipId} {GetShipSizeType(shipId)}";
                 ChassisBaseStats[i].Name = name;
             }
 
