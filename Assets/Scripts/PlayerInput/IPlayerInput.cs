@@ -2,6 +2,6 @@
 {
     public interface IPlayerInput
     {
-        public PlayerIntentData PlayerIntentData { get; }
+        public ref InputData InputData { get; }
     }
 }

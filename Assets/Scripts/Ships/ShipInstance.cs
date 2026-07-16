@@ -1,6 +1,6 @@
-using CoreGameSystems;
 using DefenseLayers;
 using GamePools;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,9 +17,7 @@ namespace Ships
         public List<WeaponSlot> MainWeaponsSlots { get; private set; } = new();
         public List<WeaponSlot> TurretsSlots { get; private set; } = new();
         public HashSet<Collider2D> OwnColliders = new();
-
-        public bool IsAttacking;
-        public WeaponGroup ActiveWeaponGroup;
+        
         public AimData AimData;
         public MovementStats MovementStats;
         public MovementRuntimeData MovementRuntimeData;
@@ -27,7 +25,7 @@ namespace Ships
         public EquipData Equip;
         public MovementView MovementView;
 
-        public ShipIntentData IntentData;
+        public ShipControlData ControlData;
 
         protected override void OnCacheDependencies()
         {
@@ -37,5 +35,17 @@ namespace Ships
             Hull = GetComponentInChildren<HullDefenseLayer>();
             Shield = GetComponentInChildren<ShieldDefenseLayer>();
         }
+    }
+
+    [Serializable]
+    public struct ShipControlData
+    {
+        public Vector2 MoveDirection;
+        public bool DamperEnabled;
+        public bool EngineDisabled;
+        public bool BoostersEnabled;
+        public bool AttackIsActive;
+        public WeaponGroup ActiveWeaponGroup;
+        public Rigidbody2D NewTarget;
     }
 }

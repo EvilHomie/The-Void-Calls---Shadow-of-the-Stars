@@ -58,7 +58,7 @@ namespace CoreGameSystems
 
         public void CorePostLateUpdateTick(float deltaTime)
         {
-            _playerControlSystem.Execute(); // Запись намерений игрока. 
+            _playerControlSystem.Execute(); // Запись намерений игрока на следующий кадр.
         }
 
         public void CorePreUpdateTick()

@@ -6004,7 +6004,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5883dbcb34ac32f479fcdac5857233ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnShipsSystem
-  testPlayerShip: 101
+  testPlayerShip: 2
   testEnemies: 010000000200000064000000
 --- !u!1 &797286962
 GameObject:
@@ -15260,9 +15260,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2053247015}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2407d907d5d14d4e852045b57bdb067, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ff2b5170be7dfd479b572e2c7119756, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput.PlayerIntentData
 --- !u!4 &2053979723
 Transform:
   m_ObjectHideFlags: 0

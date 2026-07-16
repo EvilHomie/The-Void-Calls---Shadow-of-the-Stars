@@ -32,9 +32,9 @@ namespace CoreGameSystems
             CinemachineTargetGroup cinemachineTargetGroup)
         {
             _mouseCursorSystem = mouseCursorSystem;
-            _playerIntentData = playerIntentData;
             _cinemachineTargetGroup = cinemachineTargetGroup;
             _cinemachineCamera = cinemachineCamera;
+            _playerIntentData = playerIntentData;
 
             _viewDistanceMap = new()
             {
@@ -48,9 +48,11 @@ namespace CoreGameSystems
 
         public void Execute(float deltaTime)
         {
-            if (_playerIntentData.ChangeZoom != 0)
+            var changeZoomValue = _playerIntentData.InputSnapshot.ChangeZoomValue;
+
+            if (changeZoomValue != 0)
             {
-                OnMouseScroll(_playerIntentData.ChangeZoom);
+                OnMouseScroll(changeZoomValue);
             }
 
 

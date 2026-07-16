@@ -1,7 +1,6 @@
-using CoreGameSystems;
 using DI;
 using General;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -10,40 +9,34 @@ namespace PlayerInput
 {
     public class PCInput : IPlayerInput
     {
-        public PlayerIntentData PlayerIntentData { get; }
-
-        private readonly Dictionary<Key, WeaponGroup> _groupBindings = new()
-        {
-            { Key.Digit1, WeaponGroup.Group1 },
-            { Key.Digit2, WeaponGroup.Group2 },
-            { Key.Digit3, WeaponGroup.Group3 },
-            { Key.Digit4, WeaponGroup.Group4 },
-            { Key.Digit5, WeaponGroup.Group5 },
-        };
-
         private readonly InputSystem_Actions _inputActions;
 
+        public InputData _inputData;
+        public ref InputData InputData => ref _inputData;
+
         [Inject]
-        public PCInput(GameFlowSystem gameFlowSystem, PlayerIntentData playerIntentData)
+        public PCInput(GameFlowSystem gameFlowSystem)
         {
-            PlayerIntentData = playerIntentData;
             _inputActions = new InputSystem_Actions();
 
+            _inputData = new InputData()
+            {
+                DamperEnabled = true
+            };
+
+            // инпут по удержанию кнопки
             _inputActions.Player.LeftClick.performed += OnAttack;
             _inputActions.Player.LeftClick.canceled += OnAttack;
-
-            _inputActions.Player.ToggleDamper.performed += ToggleDamper;
-            _inputActions.Player.MouseScroll.performed += OnMouseScroll;
-
             _inputActions.Player.Move.performed += OnMove;
             _inputActions.Player.Move.canceled += OnMove;
-
+            _inputActions.Player.ToggleBoosters.performed += ToggleBoosters;
+            _inputActions.Player.ToggleBoosters.canceled += ToggleBoosters;
             _inputActions.Player.DisableEngine.performed += DisableEngine;
             _inputActions.Player.DisableEngine.canceled += DisableEngine;
 
-            _inputActions.Player.ToggleBoosters.performed += ToggleBoosters;
-            _inputActions.Player.ToggleBoosters.canceled += ToggleBoosters;
-
+            // инпут только при нажатии кнопки
+            _inputActions.Player.ToggleDamper.performed += ToggleDamper;
+            _inputActions.Player.MouseScroll.performed += OnMouseScroll;
             _inputActions.Player.SwitchWeaponsGroup.performed += SwitchWeaponsGroup;
 
             gameFlowSystem.GameStateChanged += OnGameStateChanged;
@@ -52,43 +45,58 @@ namespace PlayerInput
         private void OnGameStateChanged(GameState gameState)
         {
             if (gameState == GameState.CoreGameplay) _inputActions.Player.Enable();
-            else _inputActions.Player.Disable();
+            else
+            {
+                _inputActions.Player.Disable();
+
+                _inputData.ToggleAttackSignal = SignalState.Canceled;
+                _inputData.BoostersEnabled = false;                
+                _inputData.EngineDisabled = false;                
+            }
         }
 
         private void OnMove(InputAction.CallbackContext context)
         {
-            PlayerIntentData.MoveInput = context.ReadValue<Vector2>();
+            _inputData.MoveDirection = context.ReadValue<Vector2>();
         }
 
         private void OnAttack(InputAction.CallbackContext context)
         {
-            PlayerIntentData.AttackChangeSignal = context.performed ? ChangeSignal.Performed : ChangeSignal.Canceled;
+            _inputData.ToggleAttackSignal = context.performed ? SignalState.Performed : SignalState.Canceled;
         }
 
         private void ToggleDamper(InputAction.CallbackContext context)
         {
-            PlayerIntentData.DamperEnabled = !PlayerIntentData.DamperEnabled;
+            _inputData.DamperEnabled = !_inputData.DamperEnabled;
         }
 
         private void ToggleBoosters(InputAction.CallbackContext context)
         {
-            PlayerIntentData.BoostersIsActive = !PlayerIntentData.BoostersIsActive;
+            _inputData.BoostersEnabled = context.performed;
         }
 
         private void OnMouseScroll(InputAction.CallbackContext context)
         {
             var scroll = context.ReadValue<Vector2>().y;
-            PlayerIntentData.ChangeZoom = scroll;
+            _inputData.ChangeZoomValue += scroll;
         }
         private void DisableEngine(InputAction.CallbackContext context)
         {
-            PlayerIntentData.ResetThrottle = context.performed;
+            _inputData.EngineDisabled = context.performed;
         }
 
         private void SwitchWeaponsGroup(InputAction.CallbackContext context)
         {
             var key = ((KeyControl)context.control).keyCode;
-            PlayerIntentData.ChangeWeaponGroup = _groupBindings[key];
+            _inputData.NewWeaponsGroupKey = key;
         }
     }
+}
+
+[Serializable]
+public enum SignalState
+{
+    None,
+    Performed,
+    Canceled
 }

@@ -1,47 +1,60 @@
 using DI;
 using General;
 using Helpers;
+using PlayerInput;
 using Registries;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CoreGameSystems
 {
     public class PlayerWeaponControlSystem : MonoBehaviour
     {
         private ShipRegistry _shipRegistry;
+        private PlayerIntentData _playerIntentData;
+
+        private readonly Dictionary<Key, WeaponGroup> _groupBindings = new()
+        {
+            { Key.Digit1, WeaponGroup.Group1 },
+            { Key.Digit2, WeaponGroup.Group2 },
+            { Key.Digit3, WeaponGroup.Group3 },
+            { Key.Digit4, WeaponGroup.Group4 },
+            { Key.Digit5, WeaponGroup.Group5 },
+        };
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry)
+        public void Construct(ShipRegistry shipRegistry, PlayerIntentData playerIntentData)
         {
             _shipRegistry = shipRegistry;
+            _playerIntentData = playerIntentData;
         }
 
         public void Execute()
         {
-            var playerShip = _shipRegistry.PlayerShip;
-            ref readonly var intentData = ref playerShip.IntentData;
+            var toggleAttackSignal = _playerIntentData.InputSnapshot.ToggleAttackSignal;
 
-            if (intentData.AttackChangeSignal != ChangeSignal.None)
+            if (toggleAttackSignal != SignalState.None)
             {
-                OnPlayerChangeAttackState(intentData.AttackChangeSignal);
+                OnPlayerChangeAttackState(toggleAttackSignal);
             }
 
-            if (intentData.ChangeWeaponGroup != playerShip.ActiveWeaponGroup)
+            var newWeaponsGroupKey = _playerIntentData.InputSnapshot.NewWeaponsGroupKey;
+
+            if (newWeaponsGroupKey != Key.None)
             {
-                OnSwitchWeaponGroupAction(intentData.ChangeWeaponGroup);
+                OnSwitchWeaponGroupAction(newWeaponsGroupKey);
             }
         }
 
-        private void OnSwitchWeaponGroupAction(WeaponGroup newActiveGroup)
+        private void OnSwitchWeaponGroupAction(Key key)
         {
             var playerShip = _shipRegistry.PlayerShip;
+            ref var controlData = ref playerShip.ControlData;
+            var newActiveGroup = _groupBindings[key];
+            controlData.ActiveWeaponGroup = newActiveGroup;
 
-            if (playerShip.ActiveWeaponGroup == newActiveGroup) return;
-
-            var lastActiveGroup = playerShip.ActiveWeaponGroup;
-            playerShip.ActiveWeaponGroup = newActiveGroup;
-
-            if (!playerShip.IsAttacking)
+            if (!controlData.AttackIsActive) // проста€ смена состо€ни€ слота т.к. не стрел€ет
             {
                 foreach (var slot in playerShip.MainWeaponsSlots)
                 {
@@ -55,11 +68,10 @@ namespace CoreGameSystems
                     slot.IsInActiveGroup = isInNewGroup;
                 }
 
-                EventBus.PlayerSwitchWeaponsGroupAction?.Invoke();
                 return;
             }
 
-            foreach (var slot in playerShip.MainWeaponsSlots)
+            foreach (var slot in playerShip.MainWeaponsSlots) // логика в случае если мен€ютс€ группы во врем€ аттаки
             {
                 var weapon = slot.Weapon;
 
@@ -69,8 +81,8 @@ namespace CoreGameSystems
                     continue;
                 }
 
+                bool isInOldGroup = slot.IsInActiveGroup;
                 bool isInNewGroup = slot.WeaponGroup.ContainsAny(newActiveGroup);
-                bool isInOldGroup = slot.WeaponGroup.ContainsAny(lastActiveGroup);
 
                 if (isInNewGroup && !isInOldGroup)
                 {
@@ -83,24 +95,20 @@ namespace CoreGameSystems
                     EventBus.WeaponChangeAttackStateAction?.Invoke(weapon, false);
                 }
             }
-
-            EventBus.PlayerSwitchWeaponsGroupAction?.Invoke();
         }
 
-        private void OnPlayerChangeAttackState(ChangeSignal signal)
+        private void OnPlayerChangeAttackState(SignalState newSignal)
         {
             var playerShip = _shipRegistry.PlayerShip;
-
-            var isAttack = signal == ChangeSignal.Performed;
-            playerShip.IsAttacking = isAttack;
+            ref var controlData = ref playerShip.ControlData;
+            var attackState = newSignal == SignalState.Performed;
+            controlData.AttackIsActive = attackState;
 
             foreach (var slot in playerShip.MainWeaponsSlots)
             {
-                bool isInGroup = slot.WeaponGroup.ContainsAny(playerShip.ActiveWeaponGroup);
+                if (slot.Weapon == null || !slot.IsInActiveGroup) continue;
 
-                if (!isInGroup || slot.Weapon == null) continue;
-
-                EventBus.WeaponChangeAttackStateAction?.Invoke(slot.Weapon, isAttack);
+                EventBus.WeaponChangeAttackStateAction?.Invoke(slot.Weapon, attackState);
             }
         }
     }

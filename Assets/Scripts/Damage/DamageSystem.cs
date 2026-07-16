@@ -64,13 +64,11 @@ namespace CoreGameSystems
 
                 if (layer.OwnModule == ModuleType.Chassis)
                 {
-                    layer.transform.root.gameObject.SetActive(false);
-                    Debug.LogError(1);
+                    layer.Collider.attachedRigidbody.gameObject.SetActive(false);
                 }
                 else
                 {
-                    layer.transform.gameObject.SetActive(false);
-                    Debug.LogError(2);
+                    layer.Transform.gameObject.SetActive(false);
                 }
                 
                 Debug.LogError("Hull Destroyed");

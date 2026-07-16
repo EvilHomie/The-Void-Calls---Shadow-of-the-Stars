@@ -18,13 +18,9 @@ namespace General
         private readonly List<ICorePreFixedUpdateTickObserver> _corePreFixedUpdateTickObservers = new();
         private readonly List<ICorePostLateUpdateTickObserver> _corePostLateUpdateTickObserver = new();
         private GameState _currentGameState = GameState.None;
-        private float _gameSpeed = 1;
-
-        private void Awake()
-        {
-            _gameSpeed = 1;
-            _currentGameState = GameState.None;
-        }
+        private GameState _newGameState = GameState.None;
+        private float _currentGameSpeed = 1;
+        private float _newameSpeed = 1;
 
         public void AddTickObserver(ITickObserver observer)
         {
@@ -32,8 +28,8 @@ namespace General
             if (observer is ICoreUpdateTickObserver updateTickObserver) _coreUpdateTickObservers.Add(updateTickObserver);
             if (observer is ICoreLateUpdateTickObserver lateUpdateTickObserver) _coreLateUpdateTickObservers.Add(lateUpdateTickObserver);
             if (observer is ICoreFixedUpdateTickObserver fixedUpdateTickObserver) _coreFixedUpdateTickObservers.Add(fixedUpdateTickObserver);
-            if (observer is ICorePreFixedUpdateTickObserver  corePreFixedUpdateTickObserver) _corePreFixedUpdateTickObservers.Add(corePreFixedUpdateTickObserver);
-            if (observer is ICorePostLateUpdateTickObserver  corePostLateUpdateTickObserver) _corePostLateUpdateTickObserver.Add(corePostLateUpdateTickObserver);
+            if (observer is ICorePreFixedUpdateTickObserver corePreFixedUpdateTickObserver) _corePreFixedUpdateTickObservers.Add(corePreFixedUpdateTickObserver);
+            if (observer is ICorePostLateUpdateTickObserver corePostLateUpdateTickObserver) _corePostLateUpdateTickObserver.Add(corePostLateUpdateTickObserver);
         }
 
         public void RemoveTickObserver(ITickObserver observer)
@@ -48,37 +44,34 @@ namespace General
 
         public void ChangeGameState(GameState newState)
         {
-            if (_currentGameState == newState) return;
-
-            _currentGameState = newState;
-            GameStateChanged?.Invoke(newState);
+            _newGameState = newState;
         }
         public void ChangeGameSpeed(float speed)
         {
-            _gameSpeed = speed;
+            _newameSpeed = speed;
         }
 
         void Update()
-        {  
+        {
             if (_currentGameState == GameState.CoreGameplay)
             {
-                var coreDeltaTimeTick = Time.unscaledDeltaTime * _gameSpeed;
+                var coreDeltaTimeTick = Time.unscaledDeltaTime * _currentGameSpeed;
                 CoreTime += coreDeltaTimeTick;
                 CoreTickDeltaTime = coreDeltaTimeTick;
                 foreach (var observer in _corePreUpdateTickObservers) observer.CorePreUpdateTick();
                 foreach (var observer in _coreUpdateTickObservers) observer.CoreUpdateTick(coreDeltaTimeTick);
-            }            
+            }
         }
 
         private void FixedUpdate()
         {
             if (_currentGameState == GameState.CoreGameplay)
             {
-                var coreFixedDTTick = Time.fixedUnscaledDeltaTime * _gameSpeed;
+                var coreFixedDTTick = Time.fixedUnscaledDeltaTime * _currentGameSpeed;
 
                 foreach (var observer in _corePreFixedUpdateTickObservers) observer.CorePreFixedUpdateTick(coreFixedDTTick);
                 foreach (var observer in _coreFixedUpdateTickObservers) observer.CoreFixedUpdateTick(coreFixedDTTick);
-            }  
+            }
         }
 
         private void LateUpdate()
@@ -87,6 +80,14 @@ namespace General
             {
                 foreach (var observer in _coreLateUpdateTickObservers) observer.CoreLateUpdateTick();
                 foreach (var observer in _corePostLateUpdateTickObserver) observer.CorePostLateUpdateTick(CoreTickDeltaTime);
+            }
+
+            _currentGameSpeed = _newameSpeed;
+
+            if (_currentGameState != _newGameState)
+            {
+                _currentGameState = _newGameState;
+                GameStateChanged?.Invoke(_newGameState);
             }
         }
     }

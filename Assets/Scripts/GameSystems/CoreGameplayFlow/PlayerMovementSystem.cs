@@ -42,7 +42,7 @@ namespace CoreGameSystems
 
             ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
             ref var movementStats = ref playerShip.MovementStats;
-            ref readonly var intentData = ref playerShip.IntentData;
+            ref readonly var intentData = ref playerShip.ControlData;
 
             var rad = rotation * Mathf.Deg2Rad;
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
@@ -57,15 +57,15 @@ namespace CoreGameSystems
 
             var moveDirection = intentData.MoveDirection;
 
-            if (intentData.ResetThrottle)
+            if (intentData.EngineDisabled)
             {
                 moveDirection.y = 0;
                 movementRuntimeData.DirectThrottle = 0;
             }
 
-            if (intentData.BoostersIsActive != movementRuntimeData.BoostersIsActive)
+            if (intentData.BoostersEnabled != movementRuntimeData.BoostersIsActive)
             {
-                OnToogleBoosters(intentData.BoostersIsActive);
+                OnToogleBoosters(intentData.BoostersEnabled);
             }
 
             UpdateBoostersPower(fixedDT, movementStats, ref movementRuntimeData);

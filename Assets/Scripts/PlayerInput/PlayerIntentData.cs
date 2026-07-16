@@ -1,16 +1,22 @@
-using CoreGameSystems;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PlayerInput
 {
     public class PlayerIntentData : MonoBehaviour
+    {                
+        public InputData InputSnapshot;
+    }
+
+    public struct InputData
     {
-        public Vector2 MoveInput { get; set; }
-        public ChangeSignal AttackChangeSignal { get; set; }
-        public bool DamperEnabled { get; set; } = true;
-        public bool ResetThrottle { get; set; }
-        public bool BoostersIsActive { get; set; }
-        public WeaponGroup ChangeWeaponGroup { get; set; }
-        public float ChangeZoom { get; set; }
+        public Vector2 MoveDirection;
+        public SignalState ToggleAttackSignal;
+        public bool DamperEnabled;
+        public bool EngineDisabled;
+        public bool BoostersEnabled;
+        public Key NewWeaponsGroupKey;
+        public SignalState NewTargetSignal;
+        public float ChangeZoomValue;
     }
 }

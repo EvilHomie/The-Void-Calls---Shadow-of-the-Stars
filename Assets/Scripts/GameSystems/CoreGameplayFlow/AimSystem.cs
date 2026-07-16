@@ -1,10 +1,12 @@
 using DI;
 using General;
 using Helpers;
+using PlayerInput;
 using Registries;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Weapons;
 
 namespace CoreGameSystems
@@ -18,6 +20,7 @@ namespace CoreGameSystems
         private MouseCursorSystem _mouseCursor;
         private GameFlowSystem _gameFlowSystem;
         private CameraRigSystem _cameraRigSystem;
+        private PlayerIntentData _playerIntentData;
 
         [SerializeField] Transform leadMarkerPrefab;
         [SerializeField] Transform weaponAimMarkerPrefab;
@@ -29,15 +32,16 @@ namespace CoreGameSystems
 
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursorSystem mouseCursor, GameFlowSystem gameFlowSystem)
+        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursorSystem mouseCursor, GameFlowSystem gameFlowSystem, PlayerIntentData playerIntentData)
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;
             _gameFlowSystem = gameFlowSystem;
             _cameraRigSystem = cameraRig;
+            _playerIntentData = playerIntentData;
             _cameraRigSystem.CameraOrtoSizeChanged += UpdateMarkersSizes;
             _gameFlowSystem.GameStateChanged += OnGameStateChanged;
-            EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
+            //EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
             EventBus.ChangeTargetAction += OnChangeTarget;
             Init();
         }
@@ -66,6 +70,14 @@ namespace CoreGameSystems
         private void ProccedPlayerAim(float deltaTime)
         {
             var playerShip = _shipRegistry.PlayerShip;
+
+            ref readonly var controlData = ref playerShip.ControlData;
+
+            if (_playerIntentData.InputSnapshot.NewWeaponsGroupKey != Key.None)
+            {
+                OnPlayerSwitchWeaponGroup();
+            }
+
             var aimData = playerShip.AimData;
             aimData.AimPosition = _mouseCursor.WorldPostition;
             WeaponHelper.AimAtTarget(playerShip, deltaTime);

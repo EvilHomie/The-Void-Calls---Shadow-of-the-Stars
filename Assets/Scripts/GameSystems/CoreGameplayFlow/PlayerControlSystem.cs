@@ -1,70 +1,53 @@
 using DI;
 using PlayerInput;
 using Registries;
-using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace CoreGameSystems
 {
     public class PlayerControlSystem : MonoBehaviour
     {
+        private IPlayerInput _playerInput;
+        private ShipRegistry _shipRegistry;
         private PlayerIntentData _playerIntentData;
-        private ShipRegistry _shipRegystry;
+
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ShipRegistry shipRegistry)
+        public void Construct(IPlayerInput playerInput, ShipRegistry shipRegistry, PlayerIntentData playerIntentData)
         {
-            _playerIntentData = playerInput.PlayerIntentData;
-            _shipRegystry = shipRegistry;
+            _playerInput = playerInput;
+            _shipRegistry = shipRegistry;
+            _playerIntentData = playerIntentData;
         }
+
         public void Execute()
         {
-            WriteIntentData();
-            ResetData();
+            CreateSnapshot();
+            ResetSignals();
         }
 
-        private void WriteIntentData()
+        private void CreateSnapshot()
         {
-            var playerShip = _shipRegystry.PlayerShip;
-            ref var shipIntentData = ref playerShip.IntentData;
+            ref readonly var inputSnapshot = ref _playerInput.InputData;
+            _playerIntentData.InputSnapshot = inputSnapshot;
 
-            shipIntentData.MoveDirection = _playerIntentData.MoveInput;
-            shipIntentData.DamperEnabled = _playerIntentData.DamperEnabled;
-            shipIntentData.ResetThrottle = _playerIntentData.ResetThrottle;
-            shipIntentData.BoostersIsActive = _playerIntentData.BoostersIsActive;
+            var playerShip = _shipRegistry.PlayerShip;
+            ref var shipIntentData = ref playerShip.ControlData;
 
-            shipIntentData.AttackChangeSignal = _playerIntentData.AttackChangeSignal;
-            shipIntentData.ChangeWeaponGroup = _playerIntentData.ChangeWeaponGroup;
+            shipIntentData.MoveDirection = inputSnapshot.MoveDirection;
+            shipIntentData.DamperEnabled = inputSnapshot.DamperEnabled;
+            shipIntentData.EngineDisabled = inputSnapshot.EngineDisabled;
+            shipIntentData.BoostersEnabled = inputSnapshot.BoostersEnabled;
+            shipIntentData.NewTarget = null;
         }
-
-        private void ResetData()
+        private void ResetSignals()
         {
-            _playerIntentData.AttackChangeSignal = ChangeSignal.None;
-            _playerIntentData.ChangeZoom = 0;
+            ref var inputData = ref _playerInput.InputData;
+            inputData.ToggleAttackSignal = SignalState.None;
+            inputData.NewWeaponsGroupKey = Key.None;
+            inputData.NewTargetSignal = SignalState.None;
+            inputData.ChangeZoomValue = 0;
         }
-    }
-
-    [Serializable]
-    public struct ShipIntentData
-    {
-        // Относится к движению (обрабатывается в физическом тике)
-        public Vector2 MoveDirection;
-        public bool DamperEnabled;
-        public bool ResetThrottle;
-        public bool BoostersIsActive;
-
-        // Вне физического тика
-        public ChangeSignal AttackChangeSignal;
-        public WeaponGroup ChangeWeaponGroup;
-        public float ChangeZoom;
-
-    }
-
-    [Serializable]
-    public enum ChangeSignal
-    {
-        None,
-        Performed,
-        Canceled
     }
 }

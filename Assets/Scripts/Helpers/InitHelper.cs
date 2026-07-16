@@ -185,15 +185,12 @@ namespace Helpers
 
                 if (weapon == null) continue;
                 weapon.CacheDependencies();
+                weapon.HullDefenseLayer.CacheDependencies();
                 weapon.SetupBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders);
                 SetWeaponStats(weapon);
 
-                weapon.gameObject.layer = GameLayers.WeaponLayer;
-
-                if (weapon.HullDefenseLayer != null)
-                {
-                    shipInstance.OwnColliders.Add(weapon.HullDefenseLayer.Collider);
-                }
+                weapon.Transform.gameObject.layer = GameLayers.WeaponLayer;
+                shipInstance.OwnColliders.Add(weapon.HullDefenseLayer.Collider);
 
                 if (weapon is IRigidBodyDependentWeapon dependentWeapon)
                 {
