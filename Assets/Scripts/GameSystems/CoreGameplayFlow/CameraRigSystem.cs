@@ -18,7 +18,6 @@ namespace CoreGameSystems
         private MouseCursorSystem _mouseCursorSystem;
         CinemachineTargetGroup _cinemachineTargetGroup;
         CinemachineCamera _cinemachineCamera;
-        private PlayerIntentData _playerIntentData;
         private float _targetOrthographicSize;
         private float _currentOrthographicSize;
         private Dictionary<SizeType, Vector2> _viewDistanceMap;
@@ -27,14 +26,12 @@ namespace CoreGameSystems
         [Inject]
         public void Construct(
             MouseCursorSystem mouseCursorSystem,
-            PlayerIntentData playerIntentData,
             CinemachineCamera cinemachineCamera,
             CinemachineTargetGroup cinemachineTargetGroup)
         {
             _mouseCursorSystem = mouseCursorSystem;
             _cinemachineTargetGroup = cinemachineTargetGroup;
             _cinemachineCamera = cinemachineCamera;
-            _playerIntentData = playerIntentData;
 
             _viewDistanceMap = new()
             {
@@ -48,20 +45,18 @@ namespace CoreGameSystems
 
         public void Execute(float deltaTime)
         {
-            var changeZoomValue = _playerIntentData.InputSnapshot.ChangeZoomValue;
-
-            if (changeZoomValue != 0)
-            {
-                OnMouseScroll(changeZoomValue);
-            }
-
-
             if (_currentOrthographicSize != _targetOrthographicSize)
             {
                 _currentOrthographicSize = Mathf.MoveTowards(_currentOrthographicSize, _targetOrthographicSize, deltaTime * _changeOrtSizeSpeed);
                 _cinemachineCamera.Lens.OrthographicSize = _currentOrthographicSize;
                 CameraOrtoSizeChanged?.Invoke(_currentOrthographicSize);
             }
+        }
+
+        public void OnMouseScroll(float value)
+        {
+            _targetOrthographicSize -= value;
+            _targetOrthographicSize = Mathf.Clamp(_targetOrthographicSize, _currentViewDistance.x, _currentViewDistance.y);
         }
 
         private void Init(ShipInstance shipInstance)
@@ -97,12 +92,6 @@ namespace CoreGameSystems
 
             _cinemachineTargetGroup.Targets.Add(playerTarget);
             _cinemachineTargetGroup.Targets.Add(cursorTarget);
-        }
-
-        private void OnMouseScroll(float value)
-        {
-            _targetOrthographicSize -= value;
-            _targetOrthographicSize = Mathf.Clamp(_targetOrthographicSize, _currentViewDistance.x, _currentViewDistance.y);
         }
     }
 }

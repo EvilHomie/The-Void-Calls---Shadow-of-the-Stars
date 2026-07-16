@@ -9,13 +9,12 @@ namespace CoreGameSystems
     {
         private PlayerControlSystem _playerControlSystem;
         private PlayerMovementSystem _playerMovementSystem;
-        private PlayerWeaponControlSystem _playerWeaponGroupSystem;
         private MouseCursorSystem _mouseCursorSystem;
         private WeaponBehaviourSystem _weaponBehaviourSystem;
         private EnvironmentSystem _environmentSystem;
         private CameraRigSystem _cameraRigSystem;
         private MovementVisualizeSystem _movementVisualizeSystem;
-        private AimSystem _aimSystem;
+        private PlayerAimSystem _aimSystem;
         private ProjectileBehaviourSystem _projectileBehaviourSystem;
         private DamageVizualizeSystem _damageVizualizeSystem;
         private ShieldsControlSystem _shieldsControlSystem;
@@ -24,21 +23,19 @@ namespace CoreGameSystems
         public void Construct(
             PlayerControlSystem playerControlSystem,
             GameFlowSystem gameFlowSystem,
-            PlayerMovementSystem playerMovementSystem,
-            PlayerWeaponControlSystem playerWeaponGroupSystem,
+            PlayerMovementSystem playerMovementSystem,             
             MouseCursorSystem mouseCursorSystem,
             WeaponBehaviourSystem weaponBehaviourSystem,
             EnvironmentSystem environmentSystem,
             CameraRigSystem cameraRigSystem,
             MovementVisualizeSystem movementVisualizeSystem,
-            AimSystem aimSystem,
+            PlayerAimSystem aimSystem,
             ProjectileBehaviourSystem projectileBehaviourSystem,
             DamageVizualizeSystem damageVizualizeSystem,
             ShieldsControlSystem shieldsControlSystem)
         {
             _playerControlSystem = playerControlSystem;
             _playerMovementSystem = playerMovementSystem;
-            _playerWeaponGroupSystem = playerWeaponGroupSystem;
             _mouseCursorSystem = mouseCursorSystem;
             _weaponBehaviourSystem = weaponBehaviourSystem;
             _environmentSystem = environmentSystem;
@@ -58,7 +55,7 @@ namespace CoreGameSystems
 
         public void CorePostLateUpdateTick(float deltaTime)
         {
-            _playerControlSystem.Execute(); // Запись намерений игрока на следующий кадр.
+            _playerControlSystem.Execute(); // Считываение и применение инпута
         }
 
         public void CorePreUpdateTick()
@@ -68,7 +65,6 @@ namespace CoreGameSystems
         public void CoreUpdateTick(float deltaTime)
         {
             _mouseCursorSystem.Execute();
-            _playerWeaponGroupSystem.Execute();
             _aimSystem.Execute(deltaTime);
             _weaponBehaviourSystem.Execute();
             _projectileBehaviourSystem.Execute(deltaTime);

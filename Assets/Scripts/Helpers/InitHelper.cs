@@ -83,8 +83,6 @@ namespace Helpers
 
             if (shieldId != ShieldId.None)
             {
-                shield.CacheDependencies();
-
                 var shieldStats = GameConfig.ShieldsBaseStatsConfig.GetStats(shieldId, size);
                 var shape = shieldStats.ShieldShape;
 
@@ -108,13 +106,11 @@ namespace Helpers
             }
             else
             {
-                shield.CacheDependencies();
                 shield.Transform.gameObject.SetActive(false);
             }
 
             var hull = shipInstance.Hull;
             var hullPoints = chassisBaseStats.HullPoints;
-            hull.CacheDependencies();
             hull.Setup(hullPoints, 100, ModuleType.Chassis);
 
             hull.gameObject.layer = GameLayers.ShipLayer;
@@ -166,7 +162,7 @@ namespace Helpers
 
         public static void InitWeapons(ShipInstance shipInstance)
         {
-            var weaponsSlots = shipInstance.WeaponSlotsContainer.GetComponentsInChildren<WeaponSlot>();
+            var weaponsSlots = shipInstance.AllWeaponSlots;
             shipInstance.MainWeaponsSlots.Clear();
             shipInstance.TurretsSlots.Clear();
 
@@ -180,7 +176,6 @@ namespace Helpers
 
             foreach (var slot in weaponsSlots)
             {
-                slot.CacheDependencies();
                 var weapon = slot.Weapon;
 
                 if (weapon == null) continue;

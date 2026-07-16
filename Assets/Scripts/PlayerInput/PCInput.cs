@@ -12,17 +12,12 @@ namespace PlayerInput
         private readonly InputSystem_Actions _inputActions;
 
         public InputData _inputData;
-        public ref InputData InputData => ref _inputData;
+        public ref readonly InputData InputData => ref _inputData;
 
         [Inject]
         public PCInput(GameFlowSystem gameFlowSystem)
         {
             _inputActions = new InputSystem_Actions();
-
-            _inputData = new InputData()
-            {
-                DamperEnabled = true
-            };
 
             // инпут по удержанию кнопки
             _inputActions.Player.LeftClick.performed += OnAttack;
@@ -42,16 +37,23 @@ namespace PlayerInput
             gameFlowSystem.GameStateChanged += OnGameStateChanged;
         }
 
+        public void ResetComands()
+        {
+            _inputData.ToggleAttackSignal = SignalState.None;
+            _inputData.NewTargetSignal = SignalState.None;
+            _inputData.NewWeaponsGroupKey = Key.None;
+            _inputData.ChangeZoomValue = 0;
+        }
+
         private void OnGameStateChanged(GameState gameState)
         {
             if (gameState == GameState.CoreGameplay) _inputActions.Player.Enable();
-            else
+            else if (_inputActions.Player.enabled)
             {
                 _inputActions.Player.Disable();
-
-                _inputData.ToggleAttackSignal = SignalState.Canceled;
-                _inputData.BoostersEnabled = false;                
-                _inputData.EngineDisabled = false;                
+                ResetComands();
+                _inputData.BoostersEnabled = false;
+                _inputData.EngineDisabled = false;
             }
         }
 

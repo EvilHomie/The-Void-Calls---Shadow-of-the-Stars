@@ -42,7 +42,7 @@ namespace CoreGameSystems
 
             ref var movementRuntimeData = ref playerShip.MovementRuntimeData;
             ref var movementStats = ref playerShip.MovementStats;
-            ref readonly var intentData = ref playerShip.ControlData;
+            ref readonly var controlData = ref playerShip.Control;
 
             var rad = rotation * Mathf.Deg2Rad;
             var shipForward = new Vector2(-Mathf.Sin(rad), Mathf.Cos(rad));
@@ -50,22 +50,22 @@ namespace CoreGameSystems
             var directionToTarget = aimPos - shipPos;
             var targetInsideShip = playerShip.Hull.Collider.OverlapPoint(aimPos);
 
-            if (intentData.DamperEnabled != movementRuntimeData.InertiaDampingIsActive)
+            if (controlData.DamperEnabled != movementRuntimeData.InertiaDampingIsActive)
             {
-                OnToggleDamper(ref movementRuntimeData, intentData.DamperEnabled);
+                OnToggleDamper(ref movementRuntimeData, controlData.DamperEnabled);
             }
 
-            var moveDirection = intentData.MoveDirection;
+            var moveDirection = controlData.MoveDirection;
 
-            if (intentData.EngineDisabled)
+            if (controlData.EngineDisabled)
             {
                 moveDirection.y = 0;
                 movementRuntimeData.DirectThrottle = 0;
             }
 
-            if (intentData.BoostersEnabled != movementRuntimeData.BoostersIsActive)
+            if (controlData.BoostersEnabled != movementRuntimeData.BoostersIsActive)
             {
-                OnToogleBoosters(intentData.BoostersEnabled);
+                OnToogleBoosters(controlData.BoostersEnabled);
             }
 
             UpdateBoostersPower(fixedDT, movementStats, ref movementRuntimeData);

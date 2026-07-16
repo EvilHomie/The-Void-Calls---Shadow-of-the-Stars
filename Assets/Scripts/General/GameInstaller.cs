@@ -4,7 +4,6 @@ using GamePools;
 using General;
 using PlayerInput;
 using Registries;
-using Ships;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -27,14 +26,12 @@ namespace DI
         [SerializeField] ShieldEffectsPool shieldEffectsPool;
         [SerializeField] PlayerControlSystem playerControlSystem;
         [SerializeField] PlayerMovementSystem playerMovementSystem;
-        [SerializeField] PlayerWeaponControlSystem playerWeaponControlSystem;
         [SerializeField] WeaponBehaviourSystem weaponBehaviourSystem;
         [SerializeField] EnvironmentSystem environmentSystem;
-        [SerializeField] PlayerIntentData playerIntentData;
         [SerializeField] CinemachineTargetGroup cinemachineTargetGroup;
         [SerializeField] CinemachineCamera cinemachineCamera;
         [SerializeField] MovementVisualizeSystem movementVisualizeSystem;
-        [SerializeField] AimSystem aimSystem;
+        [SerializeField] PlayerAimSystem aimSystem;
         [SerializeField] ProjectileBehaviourSystem projectileBehaviourSystem;
         [SerializeField] HitRegistrationSystem hitRegistrationSystem;
         [SerializeField] DamageVizualizeSystem damageVizualizeSystem;
@@ -53,19 +50,18 @@ namespace DI
             Container.Bind<ShieldsEffectRegistry>().FromInstance(shieldsEffectRegistry).AsSingleton();
             Container.Bind<PlayerControlSystem>().FromInstance(playerControlSystem).AsSingleton();
             Container.Bind<PlayerMovementSystem>().FromInstance(playerMovementSystem).AsSingleton();
-            Container.Bind<PlayerWeaponControlSystem>().FromInstance(playerWeaponControlSystem).AsSingleton();
             Container.Bind<WeaponBehaviourSystem>().FromInstance(weaponBehaviourSystem).AsSingleton();
             Container.Bind<EnvironmentSystem>().FromInstance(environmentSystem).AsSingleton();
-            Container.Bind<PlayerIntentData>().FromInstance(playerIntentData).AsSingleton();
             Container.Bind<CinemachineTargetGroup>().FromInstance(cinemachineTargetGroup).AsSingleton();
             Container.Bind<CinemachineCamera>().FromInstance(cinemachineCamera).AsSingleton();
             Container.Bind<MovementVisualizeSystem>().FromInstance(movementVisualizeSystem).AsSingleton();
-            Container.Bind<AimSystem>().FromInstance(aimSystem).AsSingleton();
+            Container.Bind<PlayerAimSystem>().FromInstance(aimSystem).AsSingleton();
             Container.Bind<ProjectileBehaviourSystem>().FromInstance(projectileBehaviourSystem).AsSingleton();
             Container.Bind<HitRegistrationSystem>().FromInstance(hitRegistrationSystem).AsSingleton();
             Container.Bind<DamageVizualizeSystem>().FromInstance(damageVizualizeSystem).AsSingleton();
             Container.Bind<ShieldsControlSystem>().FromInstance(shieldsControlSystem).AsSingleton();
             Container.Bind<ShipsPool>().FromInstance(shipsPool).AsSingleton();
+            Container.Bind<PlayerWeaponControler>().AsSingleton();
 
             Container.Bind<HitParticlesPool>().FromInstance(hitParticlesPool).AsSingleton();
             Container.Bind<ProjectilesPool>().FromInstance(projectilesPool).AsSingleton();

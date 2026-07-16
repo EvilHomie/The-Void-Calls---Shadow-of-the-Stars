@@ -11,7 +11,7 @@ using Weapons;
 
 namespace CoreGameSystems
 {
-    public class AimSystem : MonoBehaviour
+    public class PlayerAimSystem : MonoBehaviour
     {
         private Vector3 _deffWeaponMarkerScale = Vector3.one * 0.03f;
         private Vector3 _deffLeadMarkerScale = Vector3.one * 0.075f;
@@ -20,7 +20,6 @@ namespace CoreGameSystems
         private MouseCursorSystem _mouseCursor;
         private GameFlowSystem _gameFlowSystem;
         private CameraRigSystem _cameraRigSystem;
-        private PlayerIntentData _playerIntentData;
 
         [SerializeField] Transform leadMarkerPrefab;
         [SerializeField] Transform weaponAimMarkerPrefab;
@@ -32,13 +31,12 @@ namespace CoreGameSystems
 
 
         [Inject]
-        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursorSystem mouseCursor, GameFlowSystem gameFlowSystem, PlayerIntentData playerIntentData)
+        public void Construct(ShipRegistry shipRegistry, CameraRigSystem cameraRig, MouseCursorSystem mouseCursor, GameFlowSystem gameFlowSystem)
         {
             _mouseCursor = mouseCursor;
             _shipRegistry = shipRegistry;
             _gameFlowSystem = gameFlowSystem;
             _cameraRigSystem = cameraRig;
-            _playerIntentData = playerIntentData;
             _cameraRigSystem.CameraOrtoSizeChanged += UpdateMarkersSizes;
             _gameFlowSystem.GameStateChanged += OnGameStateChanged;
             //EventBus.PlayerSwitchWeaponsGroupAction += OnPlayerSwitchWeaponGroup;
@@ -64,19 +62,18 @@ namespace CoreGameSystems
         public void Execute(float deltaTime)
         {
             ProccedPlayerAim(deltaTime);
-            ProceedEnemyAim(deltaTime);
+            ProceedEnemyAim(deltaTime); // Необходимо будет вынести в отдельную систему для ботов
+        }
+
+        public void OnPlayerSwitchWeaponGroup()
+        {
+            DisableMarkers();
+            EnableMarkers();
         }
 
         private void ProccedPlayerAim(float deltaTime)
         {
             var playerShip = _shipRegistry.PlayerShip;
-
-            ref readonly var controlData = ref playerShip.ControlData;
-
-            if (_playerIntentData.InputSnapshot.NewWeaponsGroupKey != Key.None)
-            {
-                OnPlayerSwitchWeaponGroup();
-            }
 
             var aimData = playerShip.AimData;
             aimData.AimPosition = _mouseCursor.WorldPostition;
@@ -113,11 +110,7 @@ namespace CoreGameSystems
             aimData.TargetRigidBody = newTargetRB;
         }
 
-        private void OnPlayerSwitchWeaponGroup()
-        {
-            DisableMarkers();
-            EnableMarkers();
-        }
+        
 
         private void DisableMarkers()
         {

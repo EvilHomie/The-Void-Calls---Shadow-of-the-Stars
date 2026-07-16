@@ -10,44 +10,58 @@ namespace CoreGameSystems
     {
         private IPlayerInput _playerInput;
         private ShipRegistry _shipRegistry;
-        private PlayerIntentData _playerIntentData;
+        private CameraRigSystem _cameraRigSystem;
+        private PlayerWeaponControler _playerWeaponControler;
+        private PlayerAimSystem _playerAimSystem;
 
 
         [Inject]
-        public void Construct(IPlayerInput playerInput, ShipRegistry shipRegistry, PlayerIntentData playerIntentData)
+        public void Construct(IPlayerInput playerInput, ShipRegistry shipRegistry, CameraRigSystem cameraRigSystem, PlayerAimSystem playerAimSystem, PlayerWeaponControler playerWeaponControler)
         {
             _playerInput = playerInput;
             _shipRegistry = shipRegistry;
-            _playerIntentData = playerIntentData;
+            _cameraRigSystem = cameraRigSystem;
+            _playerWeaponControler = playerWeaponControler;
+            _playerAimSystem = playerAimSystem;
         }
 
         public void Execute()
         {
-            CreateSnapshot();
-            ResetSignals();
+            ApplyInput();
+            _playerInput.ResetComands();
         }
 
-        private void CreateSnapshot()
+        private void ApplyInput()
         {
-            ref readonly var inputSnapshot = ref _playerInput.InputData;
-            _playerIntentData.InputSnapshot = inputSnapshot;
+            ref readonly var inputSnapShot = ref _playerInput.InputData;
 
             var playerShip = _shipRegistry.PlayerShip;
-            ref var shipIntentData = ref playerShip.ControlData;
+            ref var shipControl = ref playerShip.Control;
+            
 
-            shipIntentData.MoveDirection = inputSnapshot.MoveDirection;
-            shipIntentData.DamperEnabled = inputSnapshot.DamperEnabled;
-            shipIntentData.EngineDisabled = inputSnapshot.EngineDisabled;
-            shipIntentData.BoostersEnabled = inputSnapshot.BoostersEnabled;
-            shipIntentData.NewTarget = null;
-        }
-        private void ResetSignals()
-        {
-            ref var inputData = ref _playerInput.InputData;
-            inputData.ToggleAttackSignal = SignalState.None;
-            inputData.NewWeaponsGroupKey = Key.None;
-            inputData.NewTargetSignal = SignalState.None;
-            inputData.ChangeZoomValue = 0;
+            shipControl.MoveDirection = inputSnapShot.MoveDirection;
+            shipControl.DamperEnabled = inputSnapShot.DamperEnabled;
+            shipControl.EngineDisabled = inputSnapShot.EngineDisabled;
+            shipControl.BoostersEnabled = inputSnapShot.BoostersEnabled;
+            
+
+            if (inputSnapShot.ChangeZoomValue != 0)
+            {
+                _cameraRigSystem.OnMouseScroll(inputSnapShot.ChangeZoomValue);
+            }
+
+            if (inputSnapShot.ToggleAttackSignal != SignalState.None)
+            {
+                var isShooting = inputSnapShot.ToggleAttackSignal == SignalState.Performed;
+                shipControl.IsShooting = isShooting;
+                _playerWeaponControler.OnPlayerChangeAttackState(playerShip, isShooting);
+            }
+
+            if (inputSnapShot.NewWeaponsGroupKey != Key.None)
+            {
+                _playerWeaponControler.OnSwitchWeaponGroupAction(inputSnapShot.NewWeaponsGroupKey, playerShip, shipControl.IsShooting);
+                _playerAimSystem.OnPlayerSwitchWeaponGroup();
+            }
         }
     }
 }
