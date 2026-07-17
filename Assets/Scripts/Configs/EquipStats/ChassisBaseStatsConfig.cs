@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Configs
 {
-    [CreateAssetMenu(fileName = "ChassisBaseStatsConfig", menuName = "Scriptable Objects/ChassisBaseStatsConfig")]
+    [CreateAssetMenu(fileName = "ChassisBaseStatsConfig", menuName = "Scriptable Objects/EquipStats/ChassisBaseStatsConfig")]
     public class ChassisBaseStatsConfig : ScriptableObject
     {
         [field: SerializeField] public ChassisBaseStats[] ChassisBaseStats { get; private set; }

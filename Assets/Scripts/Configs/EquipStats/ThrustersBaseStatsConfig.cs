@@ -1,34 +1,36 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Configs
 {
-    [CreateAssetMenu(fileName = "ShieldsBaseStatsConfig ", menuName = "Scriptable Objects/ShieldsBaseStatsConfig ")]
-    public class ShieldsBaseStatsConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "ThrustersBaseStatsConfig ", menuName = "Scriptable Objects/EquipStats/ThrustersBaseStatsConfig ")]
+    public class ThrustersBaseStatsConfig : ScriptableObject
     {
-        [field: SerializeField] public ShieldBaseStats[] BaseStats { get; private set; }
+        [field: SerializeField] public ThrusterBaseStats[] BaseStats { get; private set; }
 
-        private Dictionary<(ShieldId, SizeType), ShieldStatsBySize> _statsByShield;
+        private Dictionary<(ThrusterId, SizeType), ThrusterStatsBySize> _statsByThruster;
 
         public void FillCollection()
         {
-            _statsByShield ??= new();
+            _statsByThruster ??= new();
 
             for (int i = 0; i < BaseStats.Length; i++)
             {
                 for (int j = 0; j < BaseStats[i].StatsBySize.Length; j++)
                 {
                     var stats = BaseStats[i].StatsBySize[j];
-                    _statsByShield.Add((BaseStats[i].Id, stats.Size), stats);
+                    _statsByThruster.Add((BaseStats[i].Id, stats.Size), stats);
                 }
             }
         }
 
-        public ShieldStatsBySize GetStats(ShieldId id, SizeType sizeType)
+        public ThrusterStatsBySize GetStats(ThrusterId id, SizeType sizeType)
         {
-            return _statsByShield[(id, sizeType)];
+            return _statsByThruster[(id, sizeType)];
         }
 
 #if UNITY_EDITOR
@@ -39,12 +41,9 @@ namespace Configs
                 var name = BaseStats[i].Id.ToString();
                 BaseStats[i].Name = name;
 
-                var shape = BaseStats[i].ShieldShape;
-
                 for (int j = 0; j < BaseStats[i].StatsBySize.Length; j++)
                 {
                     BaseStats[i].StatsBySize[j].Name = $"{name} {BaseStats[i].StatsBySize[j].Size} ";
-                    BaseStats[i].StatsBySize[j].ShieldShape = shape;
                 }
             }
 
@@ -55,28 +54,27 @@ namespace Configs
 
 
     [Serializable]
-    public struct ShieldBaseStats
+    public struct ThrusterBaseStats
     {
         [HideInInspector] public string Name;
-        [field: SerializeField] public ShieldId Id { get; private set; }
-        [field: SerializeField] public Sprite ShieldShape { get; private set; }
-        [field: SerializeField] public ShieldStatsBySize[] StatsBySize { get; private set; }
+        [field: SerializeField] public ThrusterId Id { get; private set; }
+        [field: SerializeField] public ThrusterStatsBySize[] StatsBySize { get; private set; }
     }
 
     [Serializable]
-    public struct ShieldStatsBySize
+    public struct ThrusterStatsBySize
     {
         [HideInInspector] public string Name;
-        [HideInInspector] public Sprite ShieldShape;
         [field: SerializeField] public SizeType Size { get; private set; }
-        [field: SerializeField] public float Capacity { get; private set; }
-        [field: SerializeField] public float RegRate { get; private set; }
+        [field: SerializeField] public float StrafeThrust { get; private set; }
+        [field: SerializeField] public float RotateThrust { get; private set; }
     }
 }
 
-public enum ShieldId
+public enum ThrusterId
 {
     None = 0,
-    AroundMK1 = 1,
-    FrontMK1 = 2,
+    RotationMK1 = 1,
+    BalancedMK1 = 2,
+    StrafeMK1 = 3
 }

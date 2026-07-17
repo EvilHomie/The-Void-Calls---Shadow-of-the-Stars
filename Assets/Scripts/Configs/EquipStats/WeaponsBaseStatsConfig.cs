@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Configs
 {
-    [CreateAssetMenu(fileName = "WeaponsBaseStatsConfig", menuName = "Scriptable Objects/WeaponsBaseStatsConfig")]
+    [CreateAssetMenu(fileName = "WeaponsBaseStatsConfig", menuName = "Scriptable Objects/EquipStats/EquipStats/WeaponsBaseStatsConfig")]
     public class WeaponsBaseStatsConfig : ScriptableObject
     {
         [field: SerializeField] public WeaponBaseStats[] BaseStats { get; private set; }
