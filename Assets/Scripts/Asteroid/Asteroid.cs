@@ -10,6 +10,10 @@ namespace Asteroids
         [field: SerializeField] public AsteroidType AsteroidType { get; private set; }
         [field: SerializeField] public AsteroidDefenseLayer AsteroidHullLayer { get; private set; }
 
+        protected override void OnResolveDependencies()
+        {
+        }
+
         private void OnBecameInvisible()
         {
             Rigidbody.simulated = false;

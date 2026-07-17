@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public class ProjectileWeapon : WeaponBase, IRigidBodyDependentWeapon, IPoolDependentWeapon
+    public class ProjectileWeapon : WeaponBase, IRigidBodyDependentWeapon, IProjectileDependentWeapon
     {
         public ParticleSystem ShootEffectPS { get; private set; }
         public Rigidbody2D ShipRB { get; private set; }
@@ -13,17 +13,18 @@ namespace Weapons
         public BoltRepeaterLogicStats LogicStats;
         public float NextShootTime;
 
-        public void CacheRigidBody(Rigidbody2D rb)
+        public void ResolveRigidBodyDependency(Rigidbody2D rb)
         {
             ShipRB = rb;
         }
-        public void CachePool(uint poolId)
+        public void ResolveProjectileDependency(uint poolId)
         {
             ProjectilePoolId = poolId;
         }
 
-        protected override void OnCacheDependencies()
+        protected override void OnResolveDependencies()
         {
+            base.OnResolveDependencies();
             ShootEffectPS = GetComponentInChildren<ShootEffect>().GetComponent<ParticleSystem>();
         }
     }

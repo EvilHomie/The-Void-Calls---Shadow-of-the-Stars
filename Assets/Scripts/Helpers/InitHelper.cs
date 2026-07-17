@@ -171,7 +171,6 @@ namespace Helpers
                 var weaponsCollection = slot.WeaponMountType == WeaponMountType.MainWeapon ? shipInstance.MainWeaponsSlots : shipInstance.TurretsSlots;
                 weaponsCollection.Add(slot);
             }
-
             var shipRb = shipInstance.Rigidbody;
 
             foreach (var slot in weaponsSlots)
@@ -179,19 +178,17 @@ namespace Helpers
                 var weapon = slot.Weapon;
 
                 if (weapon == null) continue;
-                weapon.CacheDependencies();
-                weapon.HullDefenseLayer.CacheDependencies();
                 weapon.SetupBase(shipInstance.AimData, slot.Size, shipInstance.OwnColliders);
-                SetWeaponStats(weapon);
-
+                SetWeaponStats(weapon);                
                 weapon.Transform.gameObject.layer = GameLayers.WeaponLayer;
                 shipInstance.OwnColliders.Add(weapon.HullDefenseLayer.Collider);
 
                 if (weapon is IRigidBodyDependentWeapon dependentWeapon)
                 {
-                    dependentWeapon.CacheRigidBody(shipRb);
+                    dependentWeapon.ResolveRigidBodyDependency(shipRb);
                 }
             }
+            Debug.LogError(3);
         }
 
         public static void InitEngines(ShipInstance shipInstance)
@@ -220,7 +217,6 @@ namespace Helpers
         public static void SetWeaponStats(WeaponBase weaponBase)
         {
             var moduleType = weaponBase.ModuleType;
-
             var statsConfig = moduleType switch
             {
                 ModuleType.MainWeapon => GameConfig.MainWeaponsBaseStats,
@@ -232,20 +228,16 @@ namespace Helpers
             var aimStats = baseStats.AimStats;
             var damageStats = baseStats.DamageStats;
             var hullStats = baseStats.HullStats;
-
             ref var runtimeAimStats = ref weaponBase.RuntimeAimStats;
             runtimeAimStats.MaxDistance = aimStats.Distance;
             runtimeAimStats.MaxRotateAngle = aimStats.RotateAngle;
             runtimeAimStats.RotateSpeed = aimStats.RotateSpeed;
-
             ref var runtimeDamage = ref weaponBase.RuntimeDamage;
             runtimeDamage.DamageArmor = damageStats.DamageKinetic;
             runtimeDamage.DamageShield = damageStats.DamageEnergy;
             runtimeDamage.DamageHull = damageStats.DamageKinetic + damageStats.DamageEnergy;
             runtimeDamage.DamageAsteroid = runtimeDamage.DamageHull + runtimeDamage.DamageHull * damageStats.AsteroidBonusPercent * 0.01f;
-
             weaponBase.HullDefenseLayer.Setup(hullStats.HullPoints, hullStats.ArmorPoints, moduleType);
-
             if (weaponBase is ProjectileWeapon projectileWeapon)
             {
                 var projectileWeaponStats = baseStats.ProjectileWeaponStats;
@@ -262,7 +254,7 @@ namespace Helpers
                 logicStats.ProjectileLifeTime = aimStats.Distance * invProjectileSpeed;
                 logicStats.SpreadTimeMultiplier = projectileWeaponStats.SpreadAngle * 0.01f;
 
-                projectileWeapon.CachePool(projectileWeaponStats.PoolReference.Id);
+                projectileWeapon.ResolveProjectileDependency(projectileWeaponStats.PoolReference.Id);
             }
             else if (weaponBase is ConstantBeamWeapon miningDrill)
             {

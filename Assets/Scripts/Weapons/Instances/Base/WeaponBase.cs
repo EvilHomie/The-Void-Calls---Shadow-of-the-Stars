@@ -1,5 +1,5 @@
 using DefenseLayers;
-using ShipModules;
+using GamePools;
 using Ships;
 using System;
 using System.Collections.Generic;
@@ -7,14 +7,13 @@ using UnityEngine;
 
 namespace Weapons
 {
-    public abstract class WeaponBase : MonoBehaviour, IShipModule
+    public abstract class WeaponBase : PoolObjectBase
     {
         [field: SerializeField] public ModuleType ModuleType { get; private set; }
         public SizeType Size { get; private set; }
         [field: SerializeField] public WeaponType WeaponType { get; private set; }
         public Transform ShootPointTransform { get; private set; }
         public HullDefenseLayer HullDefenseLayer { get; private set; }
-        public Transform Transform { get; private set; }
         public AimData AimData { get; private set; }
         public HashSet<Collider2D> IgnoredColliders { get; private set; }
 
@@ -23,15 +22,12 @@ namespace Weapons
         public WeaponRuntimeDamage RuntimeDamage;
         public WeaponAimStats RuntimeAimStats;
 
-        public void CacheDependencies()
+        protected override void OnResolveDependencies() 
         {
             HullDefenseLayer = GetComponentInChildren<HullDefenseLayer>();
             ShootPointTransform = GetComponentInChildren<ShootPoint>().transform;
-            Transform = transform;
-            OnCacheDependencies();
+            HullDefenseLayer.CacheDependencies();
         }
-
-        protected virtual void OnCacheDependencies() { }
 
         public void SetupBase(AimData targetData, SizeType size, HashSet<Collider2D> ignoredColliders)
         {

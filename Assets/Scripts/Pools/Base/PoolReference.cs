@@ -9,25 +9,20 @@ public class PoolReference : ScriptableObject
 {
     [field: SerializeField] public GameObject Prefab { get; private set; }
 
-    [SerializeField, HideInInspector] // критически важно оставить атрибуты иначе у всех будет значение по умолчанию
+    [SerializeField, HideInInspector] // критически важно оставить атрибуты иначе у всех будет значение по умолчанию в билде и чтобы ручками никто не лез
     private uint _id;
     public uint Id => _id;
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if (_id != 0)
-            return;
-
         string path = AssetDatabase.GetAssetPath(this);
 
         if (string.IsNullOrEmpty(path))
             return;
 
         string guid = AssetDatabase.AssetPathToGUID(path);
-
         _id = ComputeStableHash(guid);
-
         EditorUtility.SetDirty(this);
     }
 

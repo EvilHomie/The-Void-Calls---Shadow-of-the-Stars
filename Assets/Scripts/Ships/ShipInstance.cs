@@ -29,9 +29,8 @@ namespace Ships
 
         public ShipControl Control;
 
-        protected override void OnCacheDependencies()
+        protected override void OnResolveDependencies()
         {
-            base.OnCacheDependencies();
             AimData = new();
             Rigidbody = GetComponent<Rigidbody2D>();
             AllWeaponSlots = GetComponentInChildren<WeaponSlotsContainer>().GetComponentsInChildren<WeaponSlot>();

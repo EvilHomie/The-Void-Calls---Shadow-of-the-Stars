@@ -30,8 +30,13 @@ namespace GamePools
         protected void CreateItemPool(PoolReference reference, int startCapacity, int maxCapacity, Transform parent = null, int prewarmCount = 1)
         {
             var poolId = reference.Id;
-            T cast = reference.Prefab.GetComponent<T>();
-            _prefabs.Add(poolId, cast);
+
+            if (!reference.Prefab.TryGetComponent(out T component))
+            {
+                throw new InvalidOperationException($"Prefab '{reference.Prefab.name}' is missing component '{typeof(T).Name}'.");
+            }
+
+            _prefabs.Add(poolId, component);
 
             var newPool = new ObjectPool<T>(
 
@@ -53,7 +58,7 @@ namespace GamePools
         {
             var prefab = _prefabs[poolId];
             var instance = Instantiate(prefab, parent);
-            instance.CacheDependencies(poolId);
+            instance.ResolveDependencies(poolId);
             instance.Transform.SetParent(_poolsParents[instance.PoolId]);
             return instance;
         }

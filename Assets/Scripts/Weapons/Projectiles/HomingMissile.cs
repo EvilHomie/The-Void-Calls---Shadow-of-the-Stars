@@ -4,12 +4,15 @@ namespace Projectiles
 {
     public class HomingMissile : ProjectileBase
     {
-        public override ProjectileType ProjectileType => ProjectileType.HomingMissile;
-
-        public Transform TargetTransform;
+        public Rigidbody2D Target;
 
         public float AccelerationSpeed;
         public float BrakingSpeed;
         public float RotateSpeed;
+
+        protected override void OnResolveDependencies()
+        {
+            ProjectileType = ProjectileType.HomingMissile;
+        }
     }
 }

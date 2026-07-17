@@ -1,11 +1,10 @@
-using UnityEngine;
-
 namespace Projectiles
 {
     public class Bolt : ProjectileBase
     {
-        public override ProjectileType ProjectileType => ProjectileType.Bolt;
-
-        
+        protected override void OnResolveDependencies()
+        {
+            ProjectileType = ProjectileType.Bolt;
+        }
     }
 }

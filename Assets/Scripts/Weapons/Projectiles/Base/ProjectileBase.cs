@@ -14,7 +14,7 @@ namespace Projectiles
         public WeaponRuntimeDamage DamageData;
         public HashSet<Collider2D> IgnoredColliders = new();
 
-        public abstract ProjectileType ProjectileType { get; }
+        public ProjectileType ProjectileType { get; protected set; }
 
         public Vector2 CurrentPos;
         public Vector2 Velocity;

@@ -11,8 +11,9 @@ namespace Weapons
         public float NextHitTime;
         public float HitDelay;
 
-        protected override void OnCacheDependencies()
+        protected override void OnResolveDependencies()
         {
+            base.OnResolveDependencies();
             BeamLineLR = GetComponentInChildren<BeamLineRenderer>().GetComponent<LineRenderer>();
             ShootSpotPS = GetComponentInChildren<ShootEffect>().GetComponent<ParticleSystem>();
         }

@@ -4,8 +4,9 @@ using General;
 using Helpers;
 using Registries;
 using Ships;
-using System.Threading.Tasks;
+using System;
 using UnityEngine;
+using Weapons;
 
 namespace CoreGameSystems
 {
@@ -26,25 +27,28 @@ namespace CoreGameSystems
             _shipsPool = shipsPool;
         }
 
-        private async Awaitable Start() // временный метод для запуска кор логики
+        private async void Start() // Надо взять за правило что async void от Unity ОБОРАЧИВАТЬ... иногда ошибка просто съедалась
         {
-            var shipPoolId = _shipsPool.GetPoolIdByShipId(testPlayerShip);
+            try
+            {
+                var shipPoolId = _shipsPool.GetPoolIdByShipId(testPlayerShip);
 
-            var playerShipInstance = _shipsPool.Getitem(shipPoolId);
-            playerShipInstance.Transform.position = Vector3.zero;
+                var playerShipInstance = _shipsPool.Getitem(shipPoolId);
+                playerShipInstance.Transform.position = Vector3.zero;
 
+                InitHelper.InitShip(playerShipInstance);
+                _shipRegistry.RegisterPlayerShip(playerShipInstance);
+                EventBus.PlayerShipSpawned?.Invoke(playerShipInstance);
 
-            InitHelper.InitShip(playerShipInstance);
-            _shipRegistry.RegisterPlayerShip(playerShipInstance);
-            EventBus.PlayerShipSpawned?.Invoke(playerShipInstance);
+                SetDepthPos(playerShipInstance, Vector2.zero);
+                await SpawnEnemies();
 
-            SetDepthPos(playerShipInstance, Vector2.zero);
-            await SpawnEnemies();
-
-
-
-
-            _gameFlowSystem.ChangeGameState(GameState.CoreGameplay);
+                _gameFlowSystem.ChangeGameState(GameState.CoreGameplay);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
         private async Awaitable SpawnEnemies()
@@ -64,6 +68,7 @@ namespace CoreGameSystems
                     _shipRegistry.RegisterShip(enemyInstance, SimulationLevel.Lod0);
                     SetDepthPos(enemyInstance, spawnPosition);
                 }
+                ;
             }
         }
 
