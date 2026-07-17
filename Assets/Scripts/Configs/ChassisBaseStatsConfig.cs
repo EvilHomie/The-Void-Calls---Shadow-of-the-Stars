@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -73,6 +72,7 @@ namespace Configs
     {
         [HideInInspector] public string Name;
         [field: SerializeField] public ShipId Id { get; private set; }
+        [field: SerializeField, Min(0.001f)] public float PlacementRadius { get; private set; }
         [field: SerializeField, Min(1)] public int HullPoints { get; private set; }
         [field: SerializeField, Min(0.001f)] public float Mass { get; private set; }
         [field: SerializeField, Min(0.001f)] public float DirectDrag { get; private set; }

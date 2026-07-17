@@ -1,12 +1,10 @@
 using DI;
 using General;
 using Helpers;
-using PlayerInput;
 using Registries;
 using Ships;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Weapons;
 
 namespace CoreGameSystems
@@ -62,7 +60,7 @@ namespace CoreGameSystems
         public void Execute(float deltaTime)
         {
             ProccedPlayerAim(deltaTime);
-            ProceedEnemyAim(deltaTime); // Необходимо будет вынести в отдельную систему для ботов
+            //ProceedEnemyAim(deltaTime); // Необходимо будет вынести в отдельную систему для ботов
         }
 
         public void OnPlayerSwitchWeaponGroup()

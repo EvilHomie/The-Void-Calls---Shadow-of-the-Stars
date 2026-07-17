@@ -308,8 +308,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ship.ShipInstance
   <Id>k__BackingField: 101
-  IsAttacking: 0
-  ActiveWeaponGroup: 0
   AimData:
     TargetRigidBody: {fileID: 0}
     AimPosition: {x: 0, y: 0}
@@ -343,6 +341,7 @@ MonoBehaviour:
   Equip:
     MainEngineId: 2
     ThrusterId: 2
+    ShieldId: 0
   MovementView:
     LastMainEnginePowerValue: 0
     LastBoostersState: 0
@@ -359,14 +358,12 @@ MonoBehaviour:
     - {fileID: 1291452396234237660}
     <ThrustersBR>k__BackingField:
     - {fileID: 3285459771050961716}
-  IntentData:
+  Control:
     MoveDirection: {x: 0, y: 0}
     DamperEnabled: 0
-    ResetThrottle: 0
-    BoostersIsActive: 0
-    AttackChangeSignal: 0
-    ChangeWeaponGroup: 0
-    ChangeZoom: 0
+    EngineDisabled: 0
+    BoostersEnabled: 0
+    IsShooting: 0
 --- !u!1 &5689135385019779876
 GameObject:
   m_ObjectHideFlags: 0

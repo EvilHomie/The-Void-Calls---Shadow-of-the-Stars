@@ -15,6 +15,7 @@ MonoBehaviour:
   <ChassisBaseStats>k__BackingField:
   - Name: ' Courier S'
     <Id>k__BackingField: 1
+    <PlacementRadius>k__BackingField: 1
     <HullPoints>k__BackingField: 500
     <Mass>k__BackingField: 5
     <DirectDrag>k__BackingField: 3
@@ -24,6 +25,7 @@ MonoBehaviour:
     <CargoSize>k__BackingField: 20
   - Name: ' Pulsar S'
     <Id>k__BackingField: 2
+    <PlacementRadius>k__BackingField: 1
     <HullPoints>k__BackingField: 400
     <Mass>k__BackingField: 4
     <DirectDrag>k__BackingField: 2
@@ -33,6 +35,7 @@ MonoBehaviour:
     <CargoSize>k__BackingField: 10
   - Name: ' Manorina M'
     <Id>k__BackingField: 101
+    <PlacementRadius>k__BackingField: 2
     <HullPoints>k__BackingField: 2000
     <Mass>k__BackingField: 20
     <DirectDrag>k__BackingField: 12
@@ -42,6 +45,7 @@ MonoBehaviour:
     <CargoSize>k__BackingField: 80
   - Name: ' Nemesis M'
     <Id>k__BackingField: 100
+    <PlacementRadius>k__BackingField: 2
     <HullPoints>k__BackingField: 1500
     <Mass>k__BackingField: 15
     <DirectDrag>k__BackingField: 10
@@ -51,6 +55,7 @@ MonoBehaviour:
     <CargoSize>k__BackingField: 40
   - Name: ' Odysseus L'
     <Id>k__BackingField: 200
+    <PlacementRadius>k__BackingField: 4
     <HullPoints>k__BackingField: 4000
     <Mass>k__BackingField: 40
     <DirectDrag>k__BackingField: 24
